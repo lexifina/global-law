@@ -1,0 +1,230 @@
+{
+ "country": "MK",
+ "name": "North Macedonia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:33:34"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Закон за персоналниот данок на доход",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/MkGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Данок на додадена вредност",
+   "statute": "Закон за данокот на додадена вредност (18 %, 5 %, 10 %; registration above MKD 2 000 000)",
+   "dated": "PwC, last reviewed 18 February 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the EU-style structure the source describes (health, education, finance, insurance, residential rent), not quoted item by item",
+    "the act's own text not reached: rates from PwC Worldwide Tax Summaries (reliable secondary host)"
+   ],
+   "family_file": "lean/MkGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Закон за акцизите (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/MkGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Данок на добивка",
+   "statute": "Закон за данокот на добивка (10 %)",
+   "dated": "чл. 2 (112/2014), unchanged in 2025 (Службен весник, via lexifina/north-macedonia-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "simplified regime (1 % of income between MKD 3 and 6 million, optional) not modelled"
+   ],
+   "gap": 6,
+   "family_file": "lean/MkGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "withholding tax on payments abroad",
+   "statute": "Закон за данокот на добивка: 10 % (statute read, gap pass); 10 % (statute read, gap pass); 10 % (statute read, gap pass)",
+   "dated": "чл. 21-22 in force in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "treaty rates out of scope (statutory, treaty-free)"
+   ],
+   "gap": 6,
+   "family_file": "lean/MkGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Данок по одбивка (технички услуги) (services)",
+   "statute": "Закон за данокот на добивка (withholding on non-residents)",
+   "dated": "чл. 21-22 in force in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as managerial, technical or consulting services",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "gap": 6,
+   "family_file": "lean/MkGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/MkGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/MkGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "данок на имот (Скопје)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "данок на имот: 0,10-0,20 % of market value as each municipality sets; Skopje decision not read"
+   ],
+   "family_file": "lean/MkGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "Закон за даноците на имот (данок на промет 2-4 %)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "данок на промет на недвижности: 2-4 % set by each municipal council, paid by the seller; Skopje decision not read"
+   ],
+   "family_file": "lean/MkGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Придонеси на товар на работодавачот (not levied)",
+   "statute": "Закон за придонеси од задолжително социјално осигурување (Сл. весник 142/2008 и измени) чл. 12-13, чл. 25 (ред. 247/2018); Службен весник на РМ; read from lexifina/north-macedonia-law `zakon 142/2008, 247/2018` (commit d2f9cfbe2, e97dd9870, in force 2008 / 1.1.2019)",
+   "dated": "texts in force in 2025 (no later change to čl. 12-13, 25 in the repository)",
+   "grade": "A",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 1,
+   "family_file": "lean/MkGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "none recorded",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/MkGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Данок на наследство и подарок",
+   "statute": "Закон за даноците на имот (municipal rates)",
+   "dated": "2025-05-27 (PwC Worldwide Tax Summaries, North Macedonia, Individual - Other taxes, accessed 2025-05-27 (Wayback capture; `law/pwc_indother_wb2025.txt`))",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "first order of succession exempt; second order 2-3 %, third order and unrelated 4-5 %, the rate set by each municipality within the range: the model's municipality and its decision not read"
+   ],
+   "family_file": "lean/MkGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 1,
+  "C": 8
+ },
+ "guards": 11,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

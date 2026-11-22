@@ -1,0 +1,49 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "Self-employment tax (SECA)",
+  "statute": "26 U.S.C. §§ 1401, 1402, 164 (f) (us/lean/TaxCode/Individual/A/SelfEmployment.lean, output line seTax)",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "covered: the vendored 1.x model computes the self-employment tax (§ 1401 (a) 12.4 % to the 2025 base less wages, (b) 2.9 %, on 92.35 % of net earnings; § 1402) and its § 164 (f) deduction",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVUSA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/USA.csv): general government heading 2300 = 2021:73020.0 2022:83663.0 2023:86438.0 2024:90333.6",
+   "MAP.json us 2300: united-states-law title-26"
+  ],
+  "p7_triage_pass": "2026-11-21",
+  "covered_by": "1.x model (Compare.Us seTax)"
+ },
+ {
+  "oecd": "4500",
+  "tax": "Non-recurrent taxes on property",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVUSA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/USA.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published. California special assessments and Mello-Roos special taxes are not booked by the OECD under 4500",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVUSA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/USA.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000)",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVUSA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/USA.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 6000 (other taxes, Guide §85) in 2021-2024; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVUSA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/USA.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

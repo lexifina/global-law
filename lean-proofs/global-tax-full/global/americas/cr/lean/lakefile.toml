@@ -1,0 +1,22 @@
+name = "CrGlobal"
+version = "0.1.0"
+defaultTargets = ["CrGlobal", "crglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); CrTax = the 1.x model, vendored from cmp20/world/B01-oecd5/cr/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CrTax"
+
+[[lean_lib]]
+name = "CrGlobal"
+
+[[lean_exe]]
+name = "crglobal"
+root = "CrGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

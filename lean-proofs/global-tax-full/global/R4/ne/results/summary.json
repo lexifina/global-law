@@ -1,0 +1,348 @@
+{
+ "country": "NE",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI art. 226 (19/10/5 %)",
+   "dated": "CGI MAJ LF 2022 + LF 2025 (art. 226 unchanged)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exemptions art. 222 not read",
+    "5 % staples inside the food line"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Droits d'accises + TIPP",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI art. 260 (LF 2025), art. 271",
+   "dated": "LF 2025",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "energy drinks 20 %",
+    "TIPP on imported fuel (art. 272 tariff)"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les bénéfices + IMF",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI art. 27, art. 37 (LF 2025)",
+   "dated": "LF 2025",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "losses (art. 12) not modelled beyond full offset",
+    "IMF on gross margin"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "IRCM (dividends 10 %, interest 20 %) and retenue non-résidents (16 %)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI art. 74 (LF 2025); CGI 2013 MAJ LF 2022 art. 47-48, 79-81 (twelfth pass)",
+   "dated": "LF 2025",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "LF 2023-2024 not held"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droit de mutation immobilière à titre onéreux",
+   "statute": "CGI art. 466 (3 %)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "LF 2023-2024 not held"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur le revenu des valeurs mobilières, dividends (10 %, final)",
+   "statute": "CGI 2013 updated to LF 2022, art. 69, 74 (Ordonnance 2024-59, LF 2025, checked: art. 69-111 not amended; LF 2023 and LF 2024 not held)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "7 % for listed companies' dividends"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Droits de mutation à titre gratuit (successions, donations)",
+   "statute": "CGI art. 459 (tariff by share and degree), art. 456 (gifts on the same tariff)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "25 % reduction (art. 457)",
+    "LF 2023-2024 not held"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Transfers.lean",
+   "kernel_parts": [
+    "R4.estateBandFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Code général des impôts (loi n° 2012-37 du 20 juin 2012), DGI edition 'CGI 2013 MAJ LF 2022' + Ordonnance n° 2024-59 (LF 2025)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://www.impots.gouv.ne (archived copies))",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Taxe professionnelle (formerly patente: 1 per mille of turnover with floor and caps + 10 % of rental value)",
+   "statute": "CGI 2013 mis à jour LF 2022, art. 174-176 (LF 2025, ordonnance 2024-59, amends only art. 173; LF 2023-2024 not held)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "specific rates 1,5 % / 3 % of rental value under art. 169 sexies (art. 176), transport-sector taxe professionnelle (section III), new-business and young-entrepreneur exemptions (art. 173)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.licenceFamily"
+   ],
+   "guards": 5
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (as a tax)",
+   "statute": "CGI-2013-MAJ-LF2022.txt (whole code)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "NE: the general tax code held (CGI-2013-MAJ-LF2022.txt, 1154k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')",
+   "guards": 0
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "CGI-2013-MAJ-LF2022.txt (whole code)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "NE: the general tax code held (CGI-2013-MAJ-LF2022.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked",
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Vignette (annual motor-vehicle tax by fiscal horsepower)",
+   "statute": "CGI 2013 mis à jour LF 2022 art. 207-212 (LF 2025 does not amend them; LF 2023-2024 not held)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "exemptions (art. 211: below 1 CV, public bodies, invalids, stock for sale)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.vehicleFamily"
+   ],
+   "guards": 5
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur le revenu des créances, interest on deposit and current accounts (10 %)",
+   "statute": "CGI 2013/LF 2022 art. 79-80 (LF 2025 checked; LF 2023-2024 not held)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "other claims, deposits and guarantees 20 % (art. 80)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "IRVM on gains on shares (7 %, final)",
+   "statute": "CGI 2013/LF 2022 art. 74 (LF 2025 checked)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "gains on bonds 5 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.gainsFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les plus-values de cessions immobilières (5 %)",
+   "statute": "CGI 2013/LF 2022 art. 110-111 (LF 2025 checked)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "flat 10 % uplift of the acquisition price for acquisition costs (art. 110): the household's stated costs are used instead",
+    "works at cost or a flat 10 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.gainsFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Taxe d'apprentissage (3 %)",
+   "statute": "CGI Livre I art. 129-130 as replaced by Ordonnance n° 2024-59 (LF 2025) art. 15, from 1 January 2025",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "deductions of art. 129 (new firms, apprentices, net pay of new contracts in the year)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Impôt sur les revenus des baux d'habitation (12 % of annual rental value; main residence exempt)",
+   "statute": "CGI Livre I art. 146-148, 159 as amended by Ordonnance n° 2024-59 (LF 2025) art. 16",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "6 % for dwellings occupied free and secondary homes",
+    "impôt sur les revenus des baux professionnels 12 % (art. 151)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyAnnualFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNSS employer contributions incl. ANPE (family 8,4 %, work accidents 1,75 %, pensions 6,25 %, ANPE 1 %; ceiling 500 000 F a month)",
+   "statute": "CNSS Niger 'Guide de l'employeur' (December 2019; décret n° 2005-64/MFP/T art. 31-32; held ne/law/w5) and CLEISS 'Les cotisations au Niger' (1 Jan 2024, ANPE 1 %)",
+   "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+   "unsupported": [
+    "SMIG floor",
+    "ANPE rate: 0,5 % in the 2019 guide, 1 % in the 2024 CLEISS table (later source used)",
+    "the worker's 5,25 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of Niger as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Niger for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C562&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/ne.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "WAEMU (UEMOA) customs union (origin BJ, BF, CI, GW, ML, SN, TG): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "guards": 4
+  }
+ ],
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

@@ -1,0 +1,22 @@
+name = "BhGlobal"
+version = "0.1.0"
+defaultTargets = ["BhGlobal", "bhglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); BhTax = the 1.x model, vendored from cmp20/world/B15-no-pit/bh/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "BhTax"
+
+[[lean_lib]]
+name = "BhGlobal"
+
+[[lean_exe]]
+name = "bhglobal"
+root = "BhGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

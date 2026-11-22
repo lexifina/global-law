@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Grunderwerbsteuer",
+  "statute": "GrEStG 1987 § 7 (1) Z 3 (3,5 %)",
+  "dated": "RIS Fassung vom 01.07.2025",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "Eintragungsgebühr (GGG TP 9 lit. b Z 1, 1,1 %) not modelled; family and gratuitous transfers (§ 7 (1) Z 2) are not purchases"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Grundsteuer (Wien)",
+  "statute": "GrStG 1955 §§ 18 (1), 19 Z 2 lit. a-c, 27 (1); Verordnung des Gemeinderats, mit der der Hebesatz der Grundsteuer festgesetzt wird (ABl. 1994/07) Art. I [year in force 2025 (pass 16), unchanged-confirmed: the Verordnung's RIS record gives it in force from 1.1.1994 with no later version (500 vH)]",
+  "dated": "GrStG 1955 RIS Fassung vom 01.07.2025; Hebesatz 500 vH in force from 1.1.1994 (RIS Gemeinderecht, current)",
+  "grade": "A",
+  "kernel_parts": [
+   "charge (Einheitswert x Messzahl schedule x Hebesatz)",
+   "Schedule"
+  ],
+  "unsupported": [
+   "Einheitswert (BewG 1955) is an input (asset.assessed)",
+   "realEstate taken as Mietwohngrundstück",
+   "exemptions (§ 2), Baurecht (§ 18 (2)), land- und forstwirtschaftliche Betriebe (Grundsteuer A)"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

@@ -1,0 +1,169 @@
+{
+ "cc": "GH",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transferBands",
+   "fam": "stampConv",
+   "grade": "B",
+   "name": "Stamp duty on conveyances or transfers on sale (rate of the value band on the whole consideration)",
+   "statute": "Stamp Duty Act 2005 (Act 689) Schedule 1, 'Conveyance or transfer on sale of a property'; amounts printed in old cedis, converted at 10 000 old cedis = GH₵ 1 (Currency Redenomination Act 2007, Act 724); later amendments not checked [text version: Act 689 as enacted (2005); later amendments not checked (flag)]",
+   "doc": "Schedule 1: consideration not exceeding ¢100 000 000 (GH₵ 10 000) 0,25 %; above that and not exceeding ¢500 000 000 (GH₵ 50 000) 0,5 %; above ¢500 000 000 1 %; the band's rate applies to the whole consideration.",
+   "unsupported": [
+    "the redenomination conversion of the printed thresholds is applied by the builder (flagged)",
+    "voluntary dispositions at the same rates on the value; other transfers 1 %"
+   ],
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     10000,
+     25
+    ],
+    [
+     50000,
+     50
+    ]
+   ],
+   "top": 100,
+   "marginal": false,
+   "nilUpTo": 0,
+   "testValues": [
+    5000,
+    30000,
+    2000000
+   ],
+   "expect": [
+    12,
+    150,
+    20000
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "triage": "moderate",
+   "name": "Other notable taxes (communications service tax; energy sector levies)",
+   "statute": "Communications Service Tax Act 2008 (Act 754); Energy Sector Levies Act 2015 (Act 899)",
+   "why": "communications service tax and energy sector levies: charging provisions not read (the Growth and Sustainability Levy is modelled separately, twelfth pass)",
+   "tried": "not reached"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 800,
+   "name": "Final withholding tax on dividends paid by resident companies (8 %)",
+   "statute": "Income Tax Act 2015 (Act 896) s. 115, 119(1)(a), First Schedule para 8(1)(b)(i); s. 115 substituted by Act 1094 (2023) and Act 1134 (2025), para 8 amended by Act 1094 and Act 1134 (dividend rate unchanged); other amending Acts 2016-2020 not all held",
+   "doc": "s. 115(1): a resident person withholds tax at the para 8 rate when paying a dividend; para 8(1)(b)(i): dividends 8 %; s. 119(1)(a): dividends paid by a resident company are final withholding payments (s. 1(4): taxed at the First Schedule rate, not aggregated).",
+   "unsupported": []
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "rentWht",
+   "grade": "B",
+   "income": "rent",
+   "rateBp": 800,
+   "name": "Final withholding tax on rent paid to a resident individual for residential property (8 %)",
+   "statute": "Income Tax Act 2015 (Act 896) s. 115, 119(1)(b), First Schedule para 8(1)(b)(iv) (Acts 1094, 1134 checked) [text version: Act 896 as enacted (2015), checked against Act 1094 (2023) and Act 1134]",
+   "doc": "para 8(1)(b)(iv): rent paid to an individual for residential property 8 %; s. 119(1)(b): rent paid to a resident individual under a lease of land or a building in Ghana (other than in a letting business) is a final withholding payment. The household's rent is taken as residential.",
+   "unsupported": [
+    "rent for non-residential property at its own para 8 rate",
+    "interest paid to individuals (1 %) is not a final withholding payment: not modelled here"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "ssnit",
+   "level": "social",
+   "rateBp": 800,
+   "grade": "A",
+   "name": "SSNIT first-tier contribution, employer's part (13 % less the 5 % second tier = 8 %)",
+   "statute": "National Pensions Act 2008 (Act 766) s. 3 (1)-(3), 63 as amended by Act 883 of 2014 (GhaLII consolidation at 2014-12-31, Wayback 2026-04-16, R4/fetch/gh11); SSNIT FAQ 'contribution rates' (2015)",
+   "doc": "s. 3 (2): 'An employer ... shall pay for each month in respect of each worker, an employer's contribution of an amount equal to thirteen per centum of the worker's salary'; (3): out of the total of eighteen and a half per centum the employer transfers thirteen and a half per centum to the first tier (SSNIT) and five per centum to the second tier occupational scheme. The worker pays 5,5 % (s. 3 (1)), so the employer's part of the first tier is 13,5 - 5,5 = 8 %.",
+   "unsupported": [
+    "the second-tier 5 % goes to privately managed occupational schemes (NPRA-licensed trustees): a compulsory payment to a private fund, not a tax (OECD), not modelled",
+    "maximum insurable earnings (s. 63 (3)): the 2025 figure is not held (SSNIT notices for 2024 and 2026 only partly archived): no ceiling applied",
+    "base is basic salary (SSNIT FAQ): applied to wages"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "1200",
+   "kind": "profitLevy",
+   "fam": "gsl",
+   "grade": "A",
+   "rateBp": 250,
+   "tests": [
+    [
+     100000000,
+     10000000
+    ],
+    [
+     0,
+     -5000
+    ]
+   ],
+   "expect": [
+    [
+     250000
+    ],
+    []
+   ],
+   "name": "Growth and Sustainability Levy (category C: 2,5 % of profit before tax)",
+   "statute": "Growth and Sustainability Levy Act 2023 (Act 1095) s. 1, 2, 4 and Schedule category C (gazetted 3 April 2023; held gh/law/GROWTH-AND-SUSTAINABILITY-LEVY-ACT-2023-ACT-1095.txt, OCR) [text version: Act 1095 as gazetted on 3 April 2023 (held OCR); 2025 amending Act not held (flag)]",
+   "doc": "s. 1: a levy 'of the percentage of profit before tax or the percentage of gross production specified in the second column of the Schedule' on the companies and institutions in the first column; s. 3: not an allowable deduction; s. 4: 'payable in respect of profits before tax or production for the 2023, 2024 and 2025 years of assessment'; Schedule: category A (banks, insurers, telecoms, breweries, oil marketing, ...) 5 % of profit before tax; B (mining, upstream oil and gas) 1 % of gross production; C 'All other entities not falling within Category A or Category B' 2,5 % of profit before tax.",
+   "unsupported": [
+    "category A (5 % of profit before tax) and B (1 % of gross production) not distinguished: every company line gets category C",
+    "profit before tax read as the line's profit",
+    "later amendments (extension beyond 2025, mining rate) not read"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "unsupported",
+   "name": "Road use fee (annual road use certificate for private vehicles, by engine capacity)",
+   "statute": "Road (Vehicle Use) Fee Act, 1998 (Act 556) s. 1, 2, 6 and Schedule (GhaLII text via Wayback 20260419091236, R4/fetch/p17/gh_act556_ghalii_wb20260419.html; GhaLII marks it as the latest version of the Act)",
+   "why": "the 2025 amounts are not established: the Schedule of 1998 gives private motor vehicles up to 2000 cc 20 000 cedis and above 2000 cc 30 000 cedis a year (old cedis, i.e. GH¢2 and GH¢3 after the 2007 redenomination), and s. 6 lets the Minister amend the Schedule by legislative instrument; no such instrument was located, so the 1998 amounts cannot be taken as the 2025 fee. The Energy Sector Levies Act, 2015 (Act 899) road fund levy is charged per litre of fuel (an excise on fuel, not a vehicle tax). Worked case under the 1998 Schedule (hand): a private car of 1 800 cc -> GH¢2 a year",
+   "tried": "GhaLII search API; Act 556 via Wayback; no L.I. amending the Schedule found by GhaLII search",
+   "triage": "moderate"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "external",
+   "fam": "ghGainsExt",
+   "module": "Stack.lean",
+   "parts": [
+    "TaxKernel.Global2.Stack (GlobalModel.withStack, StackRule.electFlatBp)"
+   ],
+   "grade": "B",
+   "name": "Income tax on gains from the realisation of investment assets (individuals; 25 % election)",
+   "statute": "Income Tax Act 2015 (Act 896) s. 6 (1) (a) (ii), s. 35 (1), s. 133 'investment asset'; First Schedule para 1 (3) as substituted by Act 1094 (2023) s. 13 (a) [text version: Act 896 as enacted (gazetted OCR, world/B10-anglophone-africa/gh/law/act896_ocr.txt) with Act 1094 (2023), Act 1111 (assent 29 December 2023; para 1 (1) only) and Act 1134 (2025; withholding only); amending Acts 2016-2020 not all held (flag)]",
+   "doc": "Kernel 2.7.0 StackRule ghGains (GhGlobal/Stack.lean): per individual, the gains on disposals of shares, land and buildings (the primary private residence excluded), added to self-employment (assessable in full in the 1.x model); the charge is the lower of the 1.x income tax with the gain less without and 25 % of the gain (para 1 (3) election). Hand cases: self-employment 300 000 and a 50 000 gain on listed shares -> 12 500 (the scale would give 15 000); no other income and a 20 000 gain on land -> 2 189 (the scale is lower than 5 000); a marked main home -> 0. Nineteenth pass (request R4-18-3).",
+   "notes": [
+    "gains: the residence's three-year ownership and two-year occupation conditions are not checked (a disposal marked mainHome is excluded); interests in trusts, bonds and non-company securities, losses carried to other years, non-resident individuals (25 % flat, para 1 (2)) and business assets are not modelled"
+   ],
+   "unsupported": [
+    "primary private residence conditions (3 years owned, 2 of 3 lived in) not checked: mainHome is taken as meeting them",
+    "beneficial interests in trusts; bonds and securities not issued by a company",
+    "non-resident individuals (para 1 (2): 25 % on chargeable income)",
+    "amending Acts 2016-2020 not all held: an exemption for listed securities, if any was enacted, is not applied (none in the held texts)"
+   ]
+  }
+ ]
+}

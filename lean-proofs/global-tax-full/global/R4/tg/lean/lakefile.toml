@@ -1,0 +1,22 @@
+name = "TgGlobal"
+version = "0.1.0"
+defaultTargets = ["TgGlobal", "tgglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); TgTax = the 1.x model, vendored from cmp20/world/B07-west-africa-fr-pt/tg/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "TgTax"
+
+[[lean_lib]]
+name = "TgGlobal"
+
+[[lean_exe]]
+name = "tgglobal"
+root = "TgGlobal.Main"

@@ -1,0 +1,21 @@
+S = {'cc': 'LI', 'fam': 'Corporate', 'doc': '# LI 2025: Ertragssteuer (1200) and withholding on payments abroad\n\nSource: Steuergesetz, gesetze.li (Lilex, Rechtsdienst der Regierung, official) consolidated PDF "Fassung: 01.07.2026" (`li/law/steg_konso.pdf`): Art. 61 carries no amendment footnote since 2010; Art. 62 last amended by LGBl. 2016 Nr. 344 and 524, so the wording read applies in 2025; sha256 in `law/SHA256SUMS`.\n* Art. 61 Steuersatz: "Die Ertragssteuer beträgt 12,5 % des steuerpflichtigen Reinertrags."\n* Art. 62 (1): juristische Personen "unterliegen einer Mindestertragssteuer, welche unabhängig von der Dauer der Steuerpflicht im jeweiligen Steuerjahr geschuldet ist. Diese ist in vollem Umfang auf die Ertragssteuer anrechenbar." (2): "Die Mindestertragssteuer beträgt 1 800 Franken."\n* Art. 62 (3): not levied where the purpose is exclusively a commercial trade and the Bilanzsumme "im Durchschnitt der letzten drei Geschäftsjahre 500 000 Franken nicht überschritten hat"\n', 'lean': 'def cit : CorpRegime :=\n  { name := "Ertragssteuer",\n    sched := Schedule.flat 1250,\n    minFixed := 1800 }\n\ndef citStatute : String := "Steuergesetz (SteG, LGBl. 2010 Nr. 340) Art. 61 (12,5 %), Art. 62 Abs. 1-2 (Mindestertragssteuer 1 800 Franken, anrechenbar)"\n', 'families': [('1200 Ertragssteuer', ['.cit'], '(if g.entity == .company then [cit.citCharge g.company citStatute] else [])')], 'notes': ['LI 1200: SteG Fassung 01.07.2026; Art. 61-62 unchanged since 2010 / 2016'], 'unsupported': [('g.entity == .company && g.company.interestExpense > 0', 'interest limitation (ATAD art. 4 transposition) not modelled'), ('g.entity == .company', 'group regimes, CFC, transfer pricing and treaties out of scope')], 'guards': ['cit.citTax { profit := 100000, turnover := 10000000 } == 12500', 'cit.citTax { profit := 1000000, turnover := 10000000 } == 125000', 'cit.citTax { profit := 0, turnover := 10000000 } == 1800'], 'taxes': [{'oecd': '1200', 'tax': 'Ertragssteuer', 'statute': 'Steuergesetz (SteG, LGBl. 2010 Nr. 340) Art. 61 (12,5 %), Art. 62 Abs. 1-2 (Mindestertragssteuer 1 800 Franken, anrechenbar)', 'dated': 'SteG Fassung 01.07.2026; Art. 61-62 unchanged since 2010 / 2016', 'grade': 'A', 'kernel_parts': ['CorpRegime'], 'unsupported': ['Art. 62 (3) exemption from the minimum tax for small trading companies (Bilanzsumme ≤ 500 000 Fr.) not applied', 'Eigenkapitalzinsabzug (Art. 54) and the GloBE QDMTT not modelled']}, {'oecd': '1200', 'tax': 'Withholding on payments abroad', 'statute': 'none levied (the Couponsteuer was abolished by the SteG 2010)', 'dated': 'PwC, last reviewed 17 June 2025', 'grade': 'B', 'status': 'absent', 'kernel_parts': [], 'unsupported': ['PwC Worldwide Tax Summaries, Liechtenstein, Corporate - Withholding taxes, accessed 2025-06-17 (Wayback capture; `li/law/pwc_wht_wb2025.html`): WHT none; not from a provision']}]}
+
+# ---- pass 8 (R1 Europe, 2026-11-21): withholding under kernel 2.3.0, P5/P6 gaps, P7 surcharges, carry-overs (tools/p8_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+p8_rows(S)
+p6_finish(S)
+
+# ---- pass 16 (R1 Europe, 2026-11-21): year-in-force audit (tools/p16_rows.py, tools/yif16_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+p16_rows(S)
+p6_finish(S)

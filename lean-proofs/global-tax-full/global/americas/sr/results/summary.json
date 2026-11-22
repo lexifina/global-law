@@ -1,0 +1,357 @@
+{
+ "country": "SR",
+ "name": "Suriname",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 19:25:38"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SrGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Belasting over de Toegevoegde Waarde (BTW)",
+   "statute": "Wet BTW 2022 (S.B. 2022 no. 121) art. 4, 21; bijlagen 2, 3, 4 (S.B. 2022 no. 148; S.B. 2023 no. 126)",
+   "dated": "S.B. 2023 no. 126 (5 September 2023; bijlage 2 from 1 Oct 2023, bijlage 4 from 1 Nov 2023), in force throughout 2025",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food relief limited to listed staples",
+    "small landlords below the art. 21 threshold"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SrGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5121",
+   "tax": "Accijnzen",
+   "statute": "Wet Accijnzen",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "belastingdienst.sr wetgeving page lists the BTW texts only",
+   "unsupported": [
+    "would unlock: the Wet Accijnzen tariffs in force 2025"
+   ],
+   "family_file": "lean/SrGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Grondwet art. 155",
+   "dated": "lexifina repository text; pass 13, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 13): Grondwet art. 155 lid 1: \"Belastingen worden geheven krachtens de wet\" (`sr/law/const_art-155.md`). No law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Wet BTW 2022 (S.B. 2022 no. 121) art. 4, 21; Wet Inkomstenbelasting art. 47 lid 1: 36 percent; Wet Inkomstenbelasting 1922 art. 1 lid 3, art. 27 lid 2 (S.B. 2024 no. 3): not a binnenlandse bron of a non-resident: no tax, none withheld; Wet Dividendbelasting 1973 arts. 1-6 (S.B. 1981 no. 184, S.B. 1984 no. 109); 1.x model (see its summary.json); Wet Algemeen Pensioen 2014 (S.B. 2014 no. 113, 9 Sep 2014) art. 8: lid 1 3 % of the bijdragegrondslag).",
+   "family_file": "lean/SrGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Inkomstenbelasting van lichamen",
+   "statute": "Wet Inkomstenbelasting art. 47 lid 1: 36 percent",
+   "dated": "1.x builder copy (`world/B13-caribbean/sr/law/ib.txt`); the 2021 solidarity levy (46 % above SRD 150.000) lapsed on 1 January 2022",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/SrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Wet Inkomstenbelasting 1922 art. 1 lid 3, art. 27 lid 2 (S.B. 2024 no. 3): not a binnenlandse bron of a non-resident: no tax, none withheld",
+   "dated": "Wet IB as last amended by S.B. 2024 no. 3 (world/B13-caribbean/sr/law/ib.txt); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "interest secured by a mortgage on Surinamese real property is a domestic source (art. 27 lid 2 b 1°): not distinguished"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Dividend tax (dividendbelasting)",
+   "statute": "Wet Dividendbelasting 1973 arts. 1-6 (S.B. 1981 no. 184, S.B. 1984 no. 109)",
+   "dated": "DNA consolidation (dna.sr, archived sr/law/dividendbelasting_1973_dna.*); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "Wet Dividendbelasting art. 4 (no withholding on distributions to Surinamese investment companies and continuous Surinamese shareholders) and art. 5 lid 2 (grossing-up when the company bears the tax) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"AOV premium modelled; AOV on self-employment profit not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"AOV premium modelled; AOV on self-employment profit not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "huurwaardebelasting (rental value tax, OECD SR 4100 'Rental value tax')",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): huurwaardebelasting (rental value tax, OECD SR 4100 'Rental value tax'); not in lexifina/suriname-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): huurwaardebelasting (rental value tax, OECD SR 4100 'Rental value tax'); not in lexifina/suriname-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 4100 = 2021:4.9 2022:7.4 2023:3.4 2024:3.4; named lines: 4100 Rental value tax (2024: 3.4)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "Non-recurrent taxes on property",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+   "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/SrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "motorrijtuigenbelasting (wegenbelasting)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): motorrijtuigenbelasting (wegenbelasting); OECD SR 5200 = 0 (booked elsewhere). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): motorrijtuigenbelasting (wegenbelasting); OECD SR 5200 = 0 (booked elsewhere). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 5200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD SR 6200 'Other taxes (algemeen/tussenrek)' 143.6 (2024), unallocated"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD SR 6200 'Other taxes (algemeen/tussenrek)' 143.6 (2024), unallocated",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSUR, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SUR.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:56.4 2024:143.6; named lines: 6200 Other taxes (algemeen/tussenrek) (2024: 143.6)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "registry: none levied (not cited from a text)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "no statute read",
+   "unsupported": [
+    "would unlock: a text showing the abolition or absence"
+   ],
+   "family_file": "lean/SrGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Grondwet art. 155",
+   "dated": "lexifina repository text; pass 13, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 13): Grondwet art. 155 lid 1: \"Belastingen worden geheven krachtens de wet\" (`sr/law/const_art-155.md`). No law read in this build levies a recurrent tax on net wealth (laws read include: Wet BTW 2022 (S.B. 2022 no. 121) art. 4, 21; Wet Inkomstenbelasting art. 47 lid 1: 36 percent; Wet Inkomstenbelasting 1922 art. 1 lid 3, art. 27 lid 2 (S.B. 2024 no. 3): not a binnenlandse bron of a non-resident: no tax, none withheld; Wet Dividendbelasting 1973 arts. 1-6 (S.B. 1981 no. 184, S.B. 1984 no. 109); 1.x model (see its summary.json); Wet Algemeen Pensioen 2014 (S.B. 2014 no. 113, 9 Sep 2014) art. 8: lid 1 3 % of the bijdragegrondslag).",
+   "family_file": "lean/SrGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Algemeen Pensioen premium (employer half)",
+   "statute": "Wet Algemeen Pensioen 2014 (S.B. 2014 no. 113, 9 Sep 2014) art. 8: lid 1 3 % of the bijdragegrondslag; lid 2 +0.5 point yearly from 1 Jan 2016 up to 28 %; lid 3 maximum bijdragegrondslag SRD 5,000 a month; lid 5 none above it; lid 7 50/50 employer/worker",
+   "dated": "S.B. 2014 no. 113 (DNA copy); 2025 rate 8 % by the statutory steps; pass 9, 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "staatsbesluiten changing the bijdragegrondslag (art. 8 lid 6) not read",
+    "yearly steps taken as applied",
+    "parties may shift the split (lid 8): 50/50 taken"
+   ],
+   "family_file": "lean/SrGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "2200",
+   "tax": "Other employer contributions (Wet Nationale Basiszorgverzekering premium)",
+   "statute": "Wet Nationale Basiszorgverzekering (premium decree not held); Wet AOV: the 4 % premium is the insured resident's, no employer share",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P4",
+   "kernel_parts": [],
+   "tried": "basiszorg premium decree not found",
+   "unsupported": [
+    "would unlock: the 2025 basiszorg premium decree"
+   ],
+   "family_file": "lean/SrGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Wet Overdrachtsbelasting",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/SrGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 6,
+  "C": 9
+ },
+ "guards": 13,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

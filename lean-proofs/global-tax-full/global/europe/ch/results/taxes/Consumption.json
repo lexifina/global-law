@@ -1,0 +1,67 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Mehrwertsteuer",
+  "statute": "MWSTG Art. 10 (2), 21 (2), 25",
+  "dated": "fedlex consolidation 2025-03-31",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "reduced-rate list item by item (Art. 25 (2) lit. a Ziff. 3-7, 10; lit. b-c)",
+   "restaurant rule (Art. 25 (3)) not quoted"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Mineralölsteuer + Mineralölsteuerzuschlag (petrol, diesel)",
+  "statute": "MinöStG Art. 12 (1), (2), Anhang 1",
+  "dated": "fedlex consolidation 2025-01-01",
+  "grade": "A",
+  "kernel_parts": [
+   "ExciseRate"
+  ],
+  "unsupported": [
+   "heating oil, gas, renewable-fuel reliefs (Art. 12a, 12b)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Tabaksteuer (cigarettes)",
+  "statute": "TStG (Zigaretten: 11,832 Rp. + 25 %, mindestens 21,210 Rp.)",
+  "dated": "fedlex consolidation 2025-01-01",
+  "grade": "A",
+  "kernel_parts": [
+   "ExciseRate (minimum)"
+  ],
+  "unsupported": [
+   "cigars, fine-cut (46 Fr./kg + 25 %, min 90 Fr./kg), other tobacco"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Alkoholsteuer (spirits)",
+  "statute": "AlkG Art. 22; AlkV Art. 21 [year in force 2025 (pass 18), unchanged-confirmed: fedlex SPARQL endpoint (consolidations of eli/cc/2017/568, queried 2026-11-21): AlkV has two consolidations only, 2018-01-01 and 2022-01-01, so the 2022 text read applies throughout 2025; AlkG (eli/cc/48/425_437_457): last consolidation 2024-06-01, the one read]",
+  "dated": "fedlex AlkV 2022-01-01 (last consolidation; none in 2023-2026) and AlkG 2024-06-01 (last consolidation)",
+  "grade": "A",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol)"
+  ],
+  "unsupported": [
+   "small-producer relief (Art. 22 (2) AlkG)"
+  ],
+  "yif18": "unchanged-confirmed"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Biersteuer",
+  "statute": "Biersteuergesetz (BStG, SR 641.411)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "unsupported": [
+   "BStG consolidation not fetched (fedlex search by title gave only the ordinances); would unlock: BStG SR 641.411 in force 2025"
+  ]
+ }
+]

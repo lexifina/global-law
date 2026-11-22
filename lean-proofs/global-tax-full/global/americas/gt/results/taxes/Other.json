@@ -1,0 +1,117 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment ignored; IGSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment ignored; IGSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Impuesto Único sobre Inmuebles (IUSI, Decreto 15-98: 2, 6, 9 per mil by value band)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Único sobre Inmuebles (IUSI, Decreto 15-98: 2, 6, 9 per mil by value band); text not in lexifina/guatemala-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Único sobre Inmuebles (IUSI, Decreto 15-98: 2, 6, 9 per mil by value band); text not in lexifina/guatemala-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4100 = 2021:1462.7 2022:1603.0 2023:1630.5 2024:1747.0; named lines: 4120 Property municipal tax (2024: 1745.9); 4120 Property tax (2024: 1.2)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 4200 (recurrent taxes on net wealth, Guide §51) in 2021-2024; 2025 not yet published, no 2025 wealth tax identified. The Impuesto de Solidaridad (Decreto 73-2008), proposed for 4200 in pass 15, is booked by the OECD under 6200 ('Solidarity tax'): it is the GT 6000 row",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribución por mejoras (Código Municipal)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribución por mejoras (Código Municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribución por mejoras (Código Municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+  "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "5200",
+  "tax": "use of goods (vehicles) (5200)",
+  "statute": "impuesto sobre circulación de vehículos (Decreto 70-94)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre circulación de vehículos (Decreto 70-94). 2025 schedule not read; needs a VehicleTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre circulación de vehículos (Decreto 70-94). 2025 schedule not read; needs a VehicleTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 5200 = 2021:1011.1 2022:1070.7 2023:1160.4 2024:1251.6"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: the Impuesto de Solidaridad (ISO, Decreto 73-2008: 1 % of the greater of a quarter of total assets or of gross income, creditable against ISR) is booked by the OECD GT table under 6200 ('Solidarity tax' 7,941 in 2024): the right heading for it is 6000, not 4200; Decreto 73-2008 is not in lexifina/guatemala-law (codes only) and was not reached"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: the Impuesto de Solidaridad (ISO, Decreto 73-2008: 1 % of the greater of a quarter of total assets or of gross income, creditable against ISR) is booked by the OECD GT table under 6200 ('Solidarity tax' 7,941 in 2024): the right heading for it is 6000, not 4200; Decreto 73-2008 is not in lexifina/guatemala-law (codes only) and was not reached",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 6000 = 2021:5398.6 2022:6130.4 2023:7268.4 2024:7947.4; named lines: 6200 Extraordinary and temporary solidarity tax (2022: 0.0); 6200 Extraordinary and temporary solidarity tax in support of peace agreements (2024: 6.3); 6200 Other indirect taxes (2024: 0.0); 6200 Solidarity tax (2024: 7941.1)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

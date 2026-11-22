@@ -1,0 +1,20 @@
+[
+ {
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "statute": "customs tariff of Malaysia as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Malaysia for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C458&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/my.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "grade": "B",
+  "kernel_parts": [
+   "TariffRule"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "lines left out (grade C): 2402201000 (MFN duty '5% and RM 14.50 per kg': specific or compound duty, unit/currency not mapped); 2402202000 (MFN duty 'RM0.20 per stk': specific or compound duty, unit/currency not mapped); 2402209000 (MFN duty 'RM0.20 per stk': specific or compound duty, unit/currency not mapped); 2403191100 (MFN duty '5% and RM 40.00 per kg': specific or compound duty, unit/currency not mapped); 2403191900 (MFN duty '5% and RM 40.00 per kg': specific or compound duty, unit/currency not mapped); 2403192000 (MFN duty '5% and RM 40.00 per kg': specific or compound duty, unit/currency not mapped); 2403199100 (MFN duty '5% and RM 40.00 per kg': specific or compound duty, unit/currency not mapped); 2403199900 (MFN duty '5% and RM 40.00 per kg': specific or compound duty, unit/currency not mapped)",
+   "ASEAN free trade area (ATIGA) (origin BN, KH, ID, LA, MM, PH, SG, TH, VN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+  ]
+ }
+]

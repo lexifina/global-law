@@ -1,0 +1,22 @@
+name = "SaGlobal"
+version = "0.1.0"
+defaultTargets = ["SaGlobal", "saglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); SaTax = the 1.x model, vendored from cmp20/world/B15-no-pit/sa/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SaTax"
+
+[[lean_lib]]
+name = "SaGlobal"
+
+[[lean_exe]]
+name = "saglobal"
+root = "SaGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

@@ -1,0 +1,22 @@
+name = "OmGlobal"
+version = "0.1.0"
+defaultTargets = ["OmGlobal", "omglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); OmTax = the 1.x model, vendored from cmp20/world/B15-no-pit/om/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "OmTax"
+
+[[lean_lib]]
+name = "OmGlobal"
+
+[[lean_exe]]
+name = "omglobal"
+root = "OmGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

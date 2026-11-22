@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Φόρος προστιθέμενης αξίας",
+  "statute": "Κώδικας ΦΠΑ (ν. 5144/2024, ΦΕΚ Α' 162/11.10.2024) άρθρο 26 (24 %, 13 %, 6 %), Παράρτημα III, άρθρο 44 (10.000 ευρώ)",
+  "dated": "codification ν. 5144/2024 (in force 2025)",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+   "island rates reduced by 30 % (άρθρο 26 παρ. 4) not modelled; restaurant alcohol and coffee drinks at 24 % not separated",
+   "άρθρο 44 threshold as codified in 2024: a 2025 amendment by ν. 5162/2024 not checked"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Εθνικός Τελωνειακός Κώδικας (ν. 2960/2001) άρθρα 73, 78, 87, 98, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "heating gas oil: a reduced winter rate (280 EUR per 1 000 l from 15 October to 30 April) against 410 the rest of the year; the basket line is undated (not modelled)",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ }
+]

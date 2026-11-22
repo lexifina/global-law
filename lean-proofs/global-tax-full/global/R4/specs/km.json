@@ -1,0 +1,148 @@
+{
+ "cc": "KM",
+ "name": "Comoros",
+ "dated": "CGI 2022 (local OCR) and LF 2024 pages 1-60; LF 2025 not held: grade B",
+ "sources": "Sources: Code général des impôts 2022 (`cmp20/world/B08-central-africa-fr/km/law/cgi2022.txt`), LF 2024 OCR pages 1-60.",
+ "vat": {
+  "name": "Taxe sur la consommation",
+  "standard": 1000,
+  "reduced": 500,
+  "reduced2": 300,
+  "classes": {
+   "restaurants": "reduced",
+   "financial": "reduced",
+   "water": "reduced2",
+   "electricity": "reduced2"
+  },
+  "grade": "B",
+  "statute": "CGI 2022 art. 152 (L.F. 2018, 2019, 2020, L.F.R. 2020): 10 %; 5 % restaurants and banking; 3 % water and electricity",
+  "doc": "art. 152 (layout extraction): \"Le taux de la taxe sur la consommation est fixé à 10 %. Par exception, la taxe sur la consommation est prélevée au taux de : 0 % à l'importation et à l'intérieur pour les produits de première nécessité défini par arrêté du Ministre des Finances et du Budget ; 3 % pour la fourniture d'eau et d'électricité ainsi que pour la vente des titres de transport inter-îles ; 5 % pour la restauration, les activités bancaires et le téléphone fixe ; 7,5 % pour la fourniture des recharges mobile en voix et en Data ; 5 % pour les titres de transport à l'international ; 25 % pour les activités des casinos\". The Comoros levy this tax instead of a VAT. Grade B: CGI 2022 edition; LF 2024 pages 1-60 held (no change to art. 152 found); LF 2025 not held.",
+  "notes": [
+   "art. 152: 0 % on basic necessities listed by order (not held), 3 % inter-island and 5 % international transport tickets, 5 % fixed phone and 7,5 % mobile recharges are not separable from the basket lines (standard rate)",
+   "art. 140: businesses with turnover below 20 000 000 FC are not liable (not applied)"
+  ],
+  "unsupported": [
+   "0 % on basic necessities (order not held)",
+   "transport and telephony rates",
+   "small-business threshold"
+  ]
+ },
+ "excise": {
+  "name": "Taxes intérieures (alcools, tabacs, produits pétroliers, boissons sucrées)",
+  "grade": "B",
+  "statute": "CGI 2022 art. 157 (alcohol and tobacco 10 %), art. 153 (TIPP normal rate), non-codified LF 2018 art. 19 (sugary drinks 25 FC/l)",
+  "doc": "art. 157: \"La taxe intérieure sur les alcools et tabacs est fixée à 10 % du prix de vente appliqué par le fabricant ou l'importateur\"; art. 153: \"La taxe intérieure sur les produits pétroliers (TIPP) est fixée comme suit : taux normal : 230 FC par litre d'essence ; 115 FC par litre de Gas-oil. taux réduit : 211 FC ... 95 FC ...\"; LF 2018 art. 19: \"un Droit d'Accise de 25 FC le litre sur les boissons sucrées\". The LF 2016 cigarette surtax (12 300 FC per 1 000) applies \"dès la création du fonds de couverture maladie universelle\" (date not established): not applied.",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Taxe intérieure sur les alcools (bière)",
+    "advBp": 1000,
+    "vatBp": 1000,
+    "statute": "CGI art. 157 (10 %)"
+   },
+   {
+    "good": "wine",
+    "name": "Taxe intérieure sur les alcools (vin)",
+    "advBp": 1000,
+    "vatBp": 1000,
+    "statute": "CGI art. 157 (10 %)"
+   },
+   {
+    "good": "spirits",
+    "name": "Taxe intérieure sur les alcools (spiritueux)",
+    "advBp": 1000,
+    "vatBp": 1000,
+    "statute": "CGI art. 157 (10 %)"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Taxe intérieure sur les tabacs",
+    "advBp": 1000,
+    "vatBp": 1000,
+    "statute": "CGI art. 157 (10 %)"
+   },
+   {
+    "good": "petrol",
+    "name": "TIPP essence",
+    "perUnitNum": 230000,
+    "perUnitDen": 1000,
+    "vatBp": 1000,
+    "statute": "CGI art. 153 (230 FC per litre, taux normal)"
+   },
+   {
+    "good": "diesel",
+    "name": "TIPP gas-oil",
+    "perUnitNum": 115000,
+    "perUnitDen": 1000,
+    "vatBp": 1000,
+    "statute": "CGI art. 153 (115 FC per litre, taux normal)"
+   },
+   {
+    "good": "nonAlcoholic",
+    "name": "Droit d'accise sur les boissons sucrées",
+    "perUnitNum": 25000,
+    "perUnitDen": 1000,
+    "vatBp": 1000,
+    "statute": "LF 2018 art. 19 (25 FC per litre)"
+   }
+  ],
+  "notes": [
+   "LF 2016 cigarette surtax 12 300 FC per 1 000 not applied (effective on creation of the CMU fund, date not established); TIPP reduced rates for beneficiaries set by regulation not applied; the sugary-drinks duty is applied to the whole non-alcoholic line (plain water not separable)"
+  ],
+  "unsupported": [
+   "cigarette surtax (LF 2016)",
+   "TIPP reduced rate",
+   "rice tax"
+  ]
+ },
+ "cit": {
+  "name": "Impôt sur les sociétés",
+  "rate": 3500,
+  "min": {
+   "bp": 150
+  },
+  "grade": "B",
+  "statute": "CGI 2022 art. 33 (35 %), art. 35 (minimum forfaitaire 1,5 % of turnover)",
+  "doc": "art. 33: \"Le taux de l'impôt sur les sociétés est fixé à 35 %\"; art. 35: \"un minimum forfaitaire égal à 1,5 % du chiffre d'affaires\" (art. 36: 3 % of the turnover realised in the Comoros for a second category, not applied).",
+  "notes": [
+   "CGI 2022 edition (LF 2025 not held)",
+   "CGI art. 36 minimum 3 % for the category it names: not applied"
+  ],
+  "unsupported": [
+   "art. 36 minimum",
+   "2025 changes"
+  ]
+ },
+ "wht": {
+  "name": "Taxe sur les rémunérations extérieures (TRE)",
+  "grade": "B",
+  "statute": "CGI 2022 art. 128-130 (TRE 10 % on services and royalties paid to persons domiciled outside the Comores); twelfth pass: CGI 2022 art. 109 1) (impôt sur le revenu au titre des valeurs mobilières retenu à la source au taux de 10 %; two-column print read across the columns, flag); thirteenth pass: CGI 2022 art. 61 c), 72 1° (revenus des créances are revenus de valeurs mobilières), art. 109 1) (IRVM retenu à la source au taux de 10 %; two-column print read across the columns, flag)",
+  "doc": "art. 128: \"Il est institué une taxe sur les rémunérations extérieures au taux global de 10 % sur les revenus servis aux personnes morales ou physiques domiciliées hors des Comores, par des entreprises ou établissements situés aux Comores, l'État ou les collectivités territoriales décentralisées au titre : des droits d'auteurs ; de la vente ou de la location de licence d'exploitation de brevets, marques de fabrique, procédés et formules secrets ; ... des rémunérations pour études, consultations, assistance technique, ou comptable ; ... et plus généralement, des rémunérations payées au titre d'un service quelconque à l'exception des rémunérations d'emprunts contractés à l'étranger\"; art. 130: base = gross amount. Twelfth pass (kernel 2.3.0 grade-C withholding): dividend 10 %: CGI 2022 art. 109 1) (impôt sur le revenu au titre des valeurs mobilières retenu à la source au taux de 10 %; two-column print read across the columns, flag) Thirteenth pass (kernel 2.3.0 grade-C withholding): interest 10 %: CGI 2022 art. 61 c), 72 1° (revenus des créances are revenus de valeurs mobilières), art. 109 1) (IRVM retenu à la source au taux de 10 %; two-column print read across the columns, flag)",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1000,
+    "statute": "CGI art. 128 (TRE 10 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1000,
+    "statute": "CGI art. 128 (TRE 10 %: copyrights, patents, trademarks)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 1000,
+    "statute": "CGI 2022 art. 109 1) (impôt sur le revenu au titre des valeurs mobilières retenu à la source au taux de 10 %; two-column print read across the columns, flag)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1000,
+    "statute": "CGI 2022 art. 61 c), 72 1° (revenus des créances are revenus de valeurs mobilières), art. 109 1) (IRVM retenu à la source au taux de 10 %; two-column print read across the columns, flag)"
+   }
+  ],
+  "notes": [
+   "art. 128 excludes interest on loans contracted abroad; dividends: art. 109 1) withholds the IRVM at 10 % 'en ce qui concerne les personnes morales' (two-column extraction, scope for non-residents not established): not applied"
+  ],
+  "unsupported": []
+ }
+}

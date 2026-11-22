@@ -5,7 +5,7 @@ import TaxKernel
 
 Money is in **euro cents** (`Int`): the GPMĮ and Sodra compute in euros and cents. Rates in basis points.
 
-Sources (saved under `~/cmp20/baltic/lt/refs/`):
+Sources (saved under `cmp20/baltic/lt/refs/`):
 * [GPMĮ] Gyventojų pajamų mokesčio įstatymas IX-1007, e-TAR TAR.C677663D2202
   (https://www.e-tar.lt/portal/lt/legalAct/TAR.C677663D2202/asr). e-TAR, e-seimas and vmi.lt answer 403
   (Cloudflare) to scripts; the text used is the archived consolidated version "Suvestinė redakcija nuo 2023-01-01"
@@ -58,8 +58,8 @@ structure YP where
 and "viršijanti 60 VDU ... 32 procentų". Threshold = 60 × monthly VDU (annual, cents). -/
 def empSched2 (vdu : Int) : Schedule := Schedule.ofList [(0, 2000), (60 * vdu, 3200)]
 
-/-- 2026 (adopted 2025, XV-343/XV-352): 20 % to 36 VDU, 25 % to 60 VDU, 32 % above [PWC26: "20% for annual income
-up to 36 average wages (AW) (up to EUR 83,237 in 2026); 25% ... 32% for the portion of income exceeding 60 AW"]. -/
+/-- 2026 (adopted 2025, XV-343/XV-352): 20 % to 36 VDU, 25 % to 60 VDU, 32 % above ([PWC26], facts restated: the
+36-VDU limit is EUR 83 237 in 2026). -/
 def empSched3 (vdu : Int) : Schedule := Schedule.ofList [(0, 2000), (36 * vdu, 2500), (60 * vdu, 3200)]
 
 /-- 2025, the model's default year.
@@ -67,8 +67,8 @@ def empSched3 (vdu : Int) : Schedule := Schedule.ofList [(0, 2000), (36 * vdu, 2
 * NPD 747 €, 0.49, thresholds 2 387,29 € / 28 647,48 €: [EM] §2.8.1 "The rules applied for calculation of the basic
   allowance for 2025": "747 – 0.49 × (monthly employment income – 1038)", "8964 – 0.49 × (resident's annual income –
   12456)", "exceeds 2387.29 EUR (28647.48 EUR per year)"; the structure is GPMĮ 20 str. 1-3 d. (2023 text).
-* VDU 2 108,88 €: [EM] Table 1.5 "Average monthly salary (AMS) ... 2108.88"; [PWC25] "PIT at a 20% rate is applied
-  to income amounts not exceeding EUR 126,532 per calendar year in 2025".
+* VDU 2 108,88 €: [EM] Table 1.5 "Average monthly salary (AMS) ... 2108.88"; [PWC25] (facts restated): the 20 % band
+  ends at EUR 126 532 of annual income in 2025 (= 60 VDU).
 * BSI 70 €, VRP 221 €: [EM] Table 1.2 (2025 column). -/
 def y2025 : YP :=
   { year := 2025, mma := 103800, npdMax := 74700, c1 := 49, thrM := 238729, thrY := 2864748, vdu := 210888,
@@ -125,7 +125,7 @@ def dedCap : Int := 150000
 1,81 proc. Sveikatos draudimas – 6,98 proc."; "papildomai priskaičiuojama 3 proc. įmoka" for the II pillar). VSD
 (pension + sickness + maternity = 12.52 %) has the 60 VDU ceiling, PSD and the II pillar have none ([EM] §2.7.1 "the
 ceilings of 60 AMS ... The ceiling does not apply for the healthcare contributions nor to the funded pension scheme";
-[PWC25] "19.5% ... withheld from employees income of EUR 126,532 per calendar year. A 6.98% rate applies above"). -/
+[PWC25], facts restated: 19.5 % in all up to EUR 126 532 of the year's employment income, 6.98 % beyond it). -/
 def vsdRate : Int := 1252
 def psdRate : Int := 698
 def pillar2Rate : Int := 300

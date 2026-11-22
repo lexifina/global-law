@@ -1,0 +1,18 @@
+name = "EeGlobal"
+version = "0.1.0"
+defaultTargets = ["EeGlobal", "eeglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); EeTax = the 1.x model, vendored from cmp20/baltic/ee/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "EeTax"
+
+[[lean_lib]]
+name = "EeGlobal"
+
+[[lean_exe]]
+name = "eeglobal"
+root = "EeGlobal.Main"

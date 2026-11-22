@@ -1,0 +1,115 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "National Insurance Act",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Property Tax Act (unimproved value bands",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (unimproved value bands; OECD JM 4110 'Municipal property tax'); not in lexifina/jamaica-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (unimproved value bands; OECD JM 4110 'Municipal property tax'); not in lexifina/jamaica-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4100 = 2021:9546.0 2022:9716.2 2023:9449.4 2024:9892.2; named lines: 4110 Municipal property tax (2024: 9892.2)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 4200 (recurrent taxes on net wealth, Guide §51) in 2021-2024; 2025 not yet published, no 2025 wealth tax identified",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "Non-recurrent taxes on property",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales tax (single stage)",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 5112 = ?",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 5112 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5200",
+  "tax": "use of goods (vehicles) (5200)",
+  "statute": "Road Traffic Act licence fees by engine size",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Road Traffic Act licence fees by engine size. 2025 schedule not read; needs a VehicleTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Road Traffic Act licence fees by engine size. 2025 schedule not read; needs a VehicleTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 5200 = 2021:8419.3 2022:8797.0 2023:6774.0 2024:7498.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: Contractors Levy (Contractors Levy Act, 2 % of payments to construction contractors; OECD JM 6200 'Contractors levy' 2,827 in 2024): payments to contractors are not an input; text not read"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: Contractors Levy (Contractors Levy Act, 2 % of payments to construction contractors; OECD JM 6200 'Contractors levy' 2,827 in 2024): payments to contractors are not an input; text not read",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 6000 = 2021:1967.4 2022:2551.3 2023:2752.3 2024:2827.1; named lines: 6200 Contractors levy (2024: 2827.1)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

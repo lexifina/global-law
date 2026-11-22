@@ -1,0 +1,18 @@
+name = "IrGlobal"
+version = "0.1.0"
+defaultTargets = ["IrGlobal", "irglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); IrTax = the 1.x model, vendored from cmp20/world/B06-mena/ir/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "IrTax"
+
+[[lean_lib]]
+name = "IrGlobal"
+
+[[lean_exe]]
+name = "irglobal"
+root = "IrGlobal.Main"

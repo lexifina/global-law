@@ -1,0 +1,280 @@
+{
+ "country": "HR",
+ "name": "Croatia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:04:36"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Porez na dohodak od kapitalnih dobitaka",
+   "statute": "Zakon o porezu na dohodak (capital gains on financial assets 12 %; exempt after two years of holding)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-07-14 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "1100 real estate gains (income from property, taxable within 2 years) not modelled: the B source gives no rate",
+    "the B source's family-transfer exemption is not applied (disposals are taken as sales to third parties)"
+   ],
+   "family_file": "lean/HrGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5111",
+   "tax": "Porez na dodanu vrijednost",
+   "statute": "Zakon o PDV-u čl. 38 st. 1-3 (25 %, 5 %, 13 %; NN 39/22), st. 4-5 (NN 35/24: to 31.3.2025); čl. 90 st. 1 (60.000,00 eura; NN 152/24)",
+   "dated": "NN 39/2022 as amended by NN 113/2022, 35/2024, 152/2024 (in force 1.1.2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+    "food at 5 %: the staples of čl. 38 (2) (bread, milk, oils, fresh meat, fish, fruit, vegetables, eggs, baby food); other processed food is 25 %",
+    "gas and district heating at 5 % to 31.3.2025 (st. 4-5), then 13 %: not a household category here"
+   ],
+   "family_file": "lean/HrGlobal/Consumption.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Zakon o trošarinama (NN 106/18 i izmjene) čl. 77, 79, 83, 87, 95 and the Vlada's uredbe o visini trošarine na energente, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "fuel: the TEDB gives the same amounts at 1.1, 1.7 and 31.12.2025; government decrees changing them between those dates are not excluded",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/HrGlobal/Consumption.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "5121",
+   "tax": "Trošarina na cigarete (stope od 1.7.2025.)",
+   "statute": "Zakon o trošarinama (cigarette rates set by government decision); EC TEDB record 4044",
+   "dated": "change on 1.7.2025 as stated by the TEDB record",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (validFrom/validTo, kernel 2.1)"
+   ],
+   "unsupported": [
+    "the government decision fixing the 1.7.2025 rates not read (TEDB only)"
+   ],
+   "gap": 2,
+   "family_file": "lean/HrGlobal/Consumption.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "1200",
+   "tax": "Porez na dobit",
+   "statute": "Zakon o porezu na dobit čl. 28 st. 1 (10 % if revenue below 1.000.000,00 eura, 18 % otherwise); NN 138/2020 (12 -> 10 %), NN 114/2023 čl. 8 (threshold 1.000.000,00 eura from 1.1.2024) [year in force 2025 (pass 17), re-cited 2025: PwC Croatia, Corporate - Taxes on corporate income, Internet Archive 2025-06-22 (hr/law/pwc_cit_wb20250622.*): 18 %, and 10 % where the period's revenue is below EUR 1 000 000, as modelled]",
+   "dated": "NN 114/2023; PwC Croatia CIT page, Internet Archive 2025-06-22",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "the 18 % wording itself read only in the unofficial consolidation (the 2016 act setting it not fetched)",
+    "loss carry-forward (5 years, čl. 17) not modelled"
+   ],
+   "yif17": "re-cited 2025",
+   "family_file": "lean/HrGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad",
+   "statute": "Zakon o porezu na dobit čl. 31 (dividends 10 %, interest and royalties 15 %)",
+   "dated": "PwC WWTS Corporate - Withholding taxes, 2025-05-14 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/HrGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Porez po odbitku (usluge) (services)",
+   "statute": "Zakon o porezu na dobit čl. 31 (izmjena NN 114/2023, st. 12)",
+   "dated": "NN 114/2023; 2025-05-14",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "services are taken as paid to a cooperative jurisdiction (0); 25 % for EU-listed non-cooperative jurisdictions not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/HrGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: porez na cestovna motorna vozila (cars, motorcycles) modelled; posebni porez na motorna vozila (registration) and the annual road-use fee not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: porez na cestovna motorna vozila (cars, motorcycles) modelled; posebni porez na motorna vozila (registration) and the annual road-use fee not modelled",
+   "unsupported": [
+    "would unlock: Zakon o posebnom porezu na motorna vozila (CO2 table and price) with the price of a new car; the Pravilnik on the godišnja naknada za uporabu javnih cesta"
+   ],
+   "family_file": "lean/HrGlobal/Other.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5200",
+   "tax": "Porez na cestovna motorna vozila",
+   "statute": "Zakon o lokalnim porezima (NN 115/16, 101/17, 114/22, 114/23, 152/24) čl. 11, 12",
+   "dated": "consolidated text in force from 1 January 2024 (zakon.hr via the Internet Archive 2025-06-15, `hr/law/zlp_zakonhr_wb20250615.txt`); original NN 115/2016 (`hr/law/nn2016_115_2524_zlp.txt`)",
+   "grade": "B",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "quadricycles, vehicles other than cars and motorcycles",
+    "5200 porez na cestovna motorna vozila: the age is read in calendar years since first registration (2 / 5 / 10-year boundaries fall in the lower column)"
+   ],
+   "family_file": "lean/HrGlobal/Other.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "European Commission TEDB, HR: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 3181, 3201-3213, 3221, 3222) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/HrGlobal/Other.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Porez na promet nekretnina",
+   "statute": "Zakon o porezu na promet nekretnina (3 %; not where VAT is charged)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-08-02 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "exemptions (first home of citizens, close-family transfers) not modelled; inheritances and gifts of real estate also bear the tax (not modelled: purchases only)"
+   ],
+   "family_file": "lean/HrGlobal/Property.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4100",
+   "tax": "Porez na nekretnine",
+   "statute": "Zakon o lokalnim porezima (NN 115/16, 101/17, 114/22, 114/23, 152/24) čl. 26 st. 1-2 (0,60-8,00 EUR per m² of useful area a year, set by the municipal council's decision), čl. 27 st. 1 t. 1-2 (not on property used for permanent residence or let for permanent residence at least ten months), čl. 2 st. 1 t. 12 (residential property)",
+   "dated": "NN 152/2024 (Zakon o izmjenama i dopuni Zakona o lokalnim porezima), in force 1.1.2025 (čl. 15); lexifina/croatia-law zakon/2024/2504",
+   "grade": "A",
+   "kernel_parts": [
+    "LocalTax (2.8.0)"
+   ],
+   "unsupported": [
+    "no capital-city rate declared: the Zagreb decision (odluka o lokalnim porezima) for 2025 was not reached (rate input localRates.propertyTax)",
+    "a dwelling let for permanent residence at least ten months a year is exempt (čl. 27 st. 1 t. 2): give no rate for it",
+    "rates by zone and the increase for age or amenities (čl. 26 st. 5-6) are the municipality's: give the rate that applies",
+    "business premises are not 'nekretnina' (čl. 2 st. 1 t. 12): only residential property other than the main home is read"
+   ],
+   "lfw": 1,
+   "status": "framework (local rate input)",
+   "local_rate": "the municipality's rate is an input: localRates.propertyTax",
+   "family_file": "lean/HrGlobal/Property.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "2200",
+   "tax": "Doprinos za zdravstveno osiguranje",
+   "statute": "Zakon o doprinosima čl. 14 st. 1 t. 1: 16,5 %",
+   "dated": "2025 (via the 1.x model)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/HrGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Croatia, Individual - Other taxes, accessed 2025-08-02 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-08-02 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/HrGlobal/Wealth.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "4300",
+   "tax": "Porez na nasljedstva i darove",
+   "statute": "Zakon o lokalnim porezima čl. 4 (cash, claims, securities, movables above EUR 6 700 each), čl. 8 (4 %), čl. 9 (spouse, lineal descendants and ascendants, public bodies, religious communities and foundations exempt) [year in force 2025 (pass 17), upgraded: PwC Croatia, Individual - Other taxes, Internet Archive 2025-08-02 (hr/law/pwc_indother_wb20250802.*): 4 % on cash, claims, securities and movables above EUR 6 700 each, as modelled; the 2025 text of the act (after NN 152/24) still not read]",
+   "dated": "PwC Croatia individual other taxes, Internet Archive 2025-08-02; NN 115/2016 read",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "real estate is outside this tax (čl. 4): only the transfer's homeValue is excluded, other real estate in the value is taxed here (overstates); movables up to EUR 6 700 each are not separated"
+   ],
+   "yif16": "downgraded",
+   "yif17": "upgraded",
+   "family_file": "lean/HrGlobal/Wealth.lean",
+   "family_guards": 9
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 11,
+  "C": 1
+ },
+ "guards": 50,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

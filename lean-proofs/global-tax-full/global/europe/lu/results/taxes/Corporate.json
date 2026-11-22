@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impôt sur le revenu des collectivités",
+  "statute": "LIR art. 174 (1) (14 % / 24 500 € + 30 % / 16 %), as amended by L. 20.12.24",
+  "dated": "legilux consolidation 2025-01-01 (L. 20.12.24 art. 12)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "contribution au fonds pour l'emploi (7 % of the IRC) not modelled",
+   "impôt commercial communal (Luxembourg-ville) not modelled",
+   "impôt sur la fortune of companies (4200) in P6",
+   "withholding on dividends (art. 146-148, 15 %) not read"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Retenue à la source (revenus de capitaux) (dividend, interest, royalty, services)",
+  "statute": "L.I.R. art. 146, 148, 152",
+  "dated": "loi modifiée du 4 décembre 1967, texte coordonné au 1.1.2025 (`lu/law/LIR_2025-01-01.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "the art. 147 exemption (parent companies, 10 % / EUR 1,2 m) not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

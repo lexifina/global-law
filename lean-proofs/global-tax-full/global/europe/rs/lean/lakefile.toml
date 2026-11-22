@@ -1,0 +1,18 @@
+name = "RsGlobal"
+version = "0.1.0"
+defaultTargets = ["RsGlobal", "rsglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); RsTax = the 1.x model, vendored from cmp20/world/B04-europe-rest/rs/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "RsTax"
+
+[[lean_lib]]
+name = "RsGlobal"
+
+[[lean_exe]]
+name = "rsglobal"
+root = "RsGlobal.Main"

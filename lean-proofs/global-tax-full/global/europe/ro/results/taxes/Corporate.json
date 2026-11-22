@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impozit pe profit",
+  "statute": "Codul fiscal (Legea nr. 227/2015) art. 17 (16 %)",
+  "dated": "art. 17 as in force 2025-03-01 (unchanged since 2016)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "impozitul pe veniturile microîntreprinderilor (art. 47-56: 1 % / 3 % of turnover, mandatory under the conditions) not modelled",
+   "minimum turnover tax (art. 18^3, 1 % for turnover over 50 M€) not modelled",
+   "withholding (art. 224) not read"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Impozit pe veniturile obținute din România de nerezidenți (dividend, interest, royalty, services)",
+  "statute": "Legea 227/2015 privind Codul fiscal art. 223 (1), art. 224 (1), (4)",
+  "dated": "Internet Archive capture 2025-05-02 of the consolidated Code (`ro/law/cf_wb20250502.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "services are taken as management or consultancy services or services performed in Romania (art. 223 (1) i), k))",
+   "the 10% rate for individuals resident in the EU or a treaty state (art. 224 (4) c^1)) is not applied: the input does not give the recipient's state",
+   "the 50% rate (art. 224 (4) c)) and the EU directive exemptions are not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

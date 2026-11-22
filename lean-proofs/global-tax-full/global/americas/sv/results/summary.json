@@ -1,0 +1,421 @@
+{
+ "country": "SV",
+ "name": "El Salvador",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:32"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "see the pass 11 entry below for disposals",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "tax": "Impuesto sobre la ganancia de capital (10 %)",
+   "statute": "LISR arts. 14, 14-A, 42",
+   "dated": "LISR with reforms to D.L. 233/2012 (SSF copy)",
+   "grade": "B",
+   "unsupported": [
+    "sales within 12 months (ordinary income)",
+    "first home (salario mínimo)",
+    "losses"
+   ],
+   "oecd": "1100",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto a la Transferencia de Bienes Muebles y a la Prestación de Servicios (IVA)",
+   "statute": "D.L. 296/1992 arts. 46, 54",
+   "dated": "Asamblea consolidated text with reforms to 20 May 2026 (none to arts. 46, 54 after 2024)",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "private health services"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Contribución de Conservación Vial (FOVIAL)",
+   "statute": "Ley del Fondo de Conservación Vial art. 26",
+   "dated": "MH compilation, Wayback 2022-08-23; reforms after August 2022 not checked (FT reviewer 6: B)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "COTRANS (US$ 0.10/gal) law not held",
+    "D.L. 225/2009 ad valorem by barrel price not charged"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuestos sobre productos del tabaco",
+   "statute": "D.L. 539/2004 art. 4 (reform D.L. 235/2009)",
+   "dated": "MH compilation, Wayback 2022-08-23; reforms after August 2022 not checked (FT reviewer 6: B)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "custom tobDuty"
+   ],
+   "unsupported": [
+    "other tobacco not charged"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuestos sobre bebidas alcohólicas (ad valorem y contenido alcohólico)",
+   "statute": "D.L. 640/1996 art. 43 (reforms D.L. 239/2009, 462/2010)",
+   "dated": "MH compilation 'ref 2010', Wayback 2022-08-23; reforms after August 2022 not checked (FT reviewer 6: B)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "whisky/gin/liqueur rate",
+    "strength needed for the specific part"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto sobre bebidas gaseosas, isotónicas, energizantes, jugos y refrescos",
+   "statute": "D.L. 237/2009 art. 4",
+   "dated": "MH compilation, Wayback 2022-08-23; reforms after August 2022 not checked (FT reviewer 6: B)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "all non-alcoholic drinks read as carbonated"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 231",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 231: \"No pueden imponerse contribuciones sino en virtud de una ley y para el servicio público\" (`sv/law/const_art-231.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: D.L. 296/1992 arts. 46, 54; Ley del Fondo de Conservación Vial art. 26; D.L. 539/2004 art. 4 (reform D.L. 235/2009); D.L. 640/1996 art. 43 (reforms D.L. 239/2009, 462/2010); D.L. 237/2009 art. 4; Ley de Impuesto sobre la Renta (D.L. 134/1991) art. 41 (D.L. 957/2011): 30 %).",
+   "family_file": "lean/SvGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la renta (personas jurídicas)",
+   "statute": "Ley de Impuesto sobre la Renta (D.L. 134/1991) art. 41 (D.L. 957/2011): 30 %; 25 % when rentas gravadas ≤ US$150,000",
+   "dated": "consolidation to D.L. 233 of 14 Dec 2012 (Asamblea Legislativa text, SSF copy fetched 2026-11-21); reforms after 2012 not read",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "pago mínimo (LISR arts. 76-81) not modelled; the US$150,000 test is applied to turnover"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Código Tributario arts. 158, 158-A; LISR art. 72",
+   "dated": "CSJ/UES consolidation of the Código Tributario to D.L. 440 of 2010 (archived sv/law/codigo_tributario_ues.*); LISR SSF copy (sv/law/ssf_lisr.*); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "Código Tributario art. 158 reduced rates (10 % to qualifying foreign financial institutions, 5 % transport, insurance and audiovisual) and art. 158-A (25 % to tax havens) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: not modelled; ignored\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: not modelled; ignored\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSLV, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SLV.csv): general government heading 2300 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SvGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "El Salvador has no general recurrent property tax by statute known here, but the OECD SV table books 3.4 (2024) under 4100, unnamed (municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): El Salvador has no general recurrent property tax by statute known here, but the OECD SV table books 3.4 (2024) under 4100, unnamed (municipal); classification of municipal charges (tasas) not resolved. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): El Salvador has no general recurrent property tax by statute known here, but the OECD SV table books 3.4 (2024) under 4100, unnamed (municipal); classification of municipal charges (tasas) not resolved. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSLV, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SLV.csv): general government heading 4100 = 2021:8.1 2022:10.7 2023:6.9 2024:3.4"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SvGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribuciones especiales (Ley General Tributaria Municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribuciones especiales (Ley General Tributaria Municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribuciones especiales (Ley General Tributaria Municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSLV, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SLV.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SvGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+   "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/SvGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "impuesto especial a la primera matrícula (Decreto 234 de 2009, lexifina/el-salvador-law, single version dated 2025-09-02: the text in force before September 2025 not shown) and circulación fees",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto especial a la primera matrícula (Decreto 234 de 2009, lexifina/el-salvador-law, single version dated 2025-09-02: the text in force before September 2025 not shown) and circulación fees. 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto especial a la primera matrícula (Decreto 234 de 2009, lexifina/el-salvador-law, single version dated 2025-09-02: the text in force before September 2025 not shown) and circulación fees. 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSLV, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SLV.csv): general government heading 5200 = 2021:40.4 2022:47.1 2023:46.6 2024:42.9"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SvGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD SV 6200 87.2 (2024), local government municipal taxes not identified"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD SV 6200 87.2 (2024), local government municipal taxes not identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVSLV, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/SLV.csv): general government heading 6000 = 2021:105.4 2022:113.5 2023:108.2 2024:87.2"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/SvGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for El Salvador (DSD_REV_LAC@DF_REVSLV v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/SLV.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for El Salvador (DSD_REV_LAC@DF_REVSLV v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/SLV.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for El Salvador (DSD_REV_LAC@DF_REVSLV v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/SLV.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/SvGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 231",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 231: \"No pueden imponerse contribuciones sino en virtud de una ley y para el servicio público\" (`sv/law/const_art-231.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: D.L. 296/1992 arts. 46, 54; Ley del Fondo de Conservación Vial art. 26; D.L. 539/2004 art. 4 (reform D.L. 235/2009); D.L. 640/1996 art. 43 (reforms D.L. 239/2009, 462/2010); D.L. 237/2009 art. 4; Ley de Impuesto sobre la Renta (D.L. 134/1991) art. 41 (D.L. 957/2011): 30 %).",
+   "family_file": "lean/SvGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Pension contribution (employer)",
+   "statute": "Ley Integral del Sistema de Pensiones (D.L. 614/2022) arts. 14, 16",
+   "dated": "D.O. 241 of 21 Dec 2022 (SSF copy)",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "aguinaldo not split from the base"
+   ],
+   "status": "modelled",
+   "family_file": "lean/SvGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "3000",
+   "tax": "INSAFORP (employer, 1 %)",
+   "statute": "Ley de Formación Profesional (D.L. 554 of 2 Jun 1993, D.O. 143 of 29 Jul 1993; reformed by D.L. 455/1995) art. 26 c): \"Cotizaciones obligatorias hasta el 1%, pagadas por los patronos del sector privado ... que empleen diez o más trabajadores, calculadas sobre el monto total de las planillas mensuales\"",
+   "dated": "UES jurisprudencia consolidation (estado VIGENTE; reforma 1995); pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "'hasta el 1%' taken at 1 %",
+    "employer taken as having 10+ workers (not agricultural: 1/4 %)"
+   ],
+   "family_file": "lean/SvGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "2200",
+   "tax": "ISSS (employer 7.5 %)",
+   "statute": "Ley del Seguro Social art. 29 (employer 7.50 % for health and occupational risks: read); Reglamento para la Aplicación del Régimen del Seguro Social art. 3 (ceiling: the 2019 ISSS compilation shows C 700 a month as last reformed by D.E. 54 of 1986; the dollar ceiling in force in 2025 not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P4",
+   "kernel_parts": [],
+   "tried": "isss.gob.sv compilation 403 (retried once in pass 9); Wayback 2022 copy read (old colón ceiling); transparencia.gob.sv and jurisprudencia.gob.sv 403 to scripts",
+   "unsupported": [
+    "would unlock: the executive decree fixing the ISSS ceiling in US$"
+   ],
+   "family_file": "lean/SvGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Ley de transferencia de bienes raíces 3 %",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/SvGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 6,
+  "B": 8,
+  "C": 8
+ },
+ "guards": 20,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

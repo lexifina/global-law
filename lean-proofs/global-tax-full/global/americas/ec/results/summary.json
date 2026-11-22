@@ -1,0 +1,349 @@
+{
+ "country": "EC",
+ "name": "Ecuador",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 18:26:19"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "see the pass 11 entry below for disposals",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/EcGlobal/Capital.lean",
+   "guards": 3
+  },
+  {
+   "tax": "Impuesto a la renta único sobre utilidades en la enajenación de acciones (10 %)",
+   "statute": "LRTI art. innumerado (enajenación de acciones), art. 9 num. 14, 24",
+   "dated": "LRTI last reform 24 Oct 2025",
+   "grade": "A",
+   "unsupported": [
+    "listed shares (fracción básica)",
+    "other assets at the progressive scale"
+   ],
+   "oecd": "1100",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/EcGlobal/Capital.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "LRTI arts. 55, 56, 65; D.E. 470 (R.O. S. 700, 10.12.2024)",
+   "dated": "SRI consolidation, última reforma 24.10.2025",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "financial services",
+    "processed food split"
+   ],
+   "status": "modelled",
+   "family_file": "lean/EcGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto a los Consumos Especiales",
+   "statute": "LRTI art. 82",
+   "dated": "SRI consolidation 24.10.2025",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "Grupo I table not in the consolidation (R.O. S. 111, 2019, p. 17) and yearly-adjusted specific rates; would unlock: the R.O. table and the SRI resolution with the 2025 specific rates"
+   ],
+   "family_file": "lean/EcGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 301",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 301: \"Sólo por iniciativa de la Función Ejecutiva y mediante ley sancionada por la Asamblea Nacional se podrá establecer, modificar, exonerar o extinguir impuestos\" (`ec/law/const_art-301.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: LRTI arts. 55, 56, 65; LRTI art. 37 (25 %); LRTI arts. 37, 39, 39.2 num. 4; 1.x model (see its summary.json); LRTI art. innumerado (enajenación de acciones), art. 9 num. 14, 24; IESS Resolución C.D. 515 de 2016, Disposición Transitoria Primera).",
+   "family_file": "lean/EcGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto a la renta (sociedades)",
+   "statute": "LRTI art. 37 (25 %)",
+   "dated": "SRI consolidation, última reforma 24.10.2025",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "reduced rates (art. 37 second paragraph, reinvestment, micro and small enterprises) and the tax haven surcharge not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/EcGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "LRTI arts. 37, 39, 39.2 num. 4",
+   "dated": "SRI LRTI codification, última reforma 24 Oct 2025 (world/B12-latin-america/ec/src/lrti.txt); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "LRTI art. 39 (tax-haven recipients: the top personal rate), art. 39.2 num. 4-5 (12 %/14 % where the beneficial owner is resident in Ecuador or the shareholding is not reported) and the art. 13 deductibility conditions for foreign interest not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/EcGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross income taxed; IESS affiliation of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross income taxed; IESS affiliation of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "impuesto predial urbano (COOTAD arts. 501-513, 0.25-5 per mil set by ordinance",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto predial urbano (COOTAD arts. 501-513, 0.25-5 per mil set by ordinance; Quito ordinance). Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto predial urbano (COOTAD arts. 501-513, 0.25-5 per mil set by ordinance; Quito ordinance). Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 4100 = 2021:195.4 2022:201.8 2023:199.6 2024:232.4; named lines: 4100 Rural land tax (2023: 0.0); 4120 Tax on rural properties (2024: 36.7); 4120 Tax on urban properties (2024: 195.7)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Impuesto a los activos en el exterior",
+   "statute": "Ley Reformatoria para la Equidad Tributaria del Ecuador (2007), not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: the OECD EC table books 'Tax on foreign assets' (4220, 23.6 in 2024): impuesto a los activos en el exterior of financial institutions (Ley Reformatoria para la Equidad Tributaria 2007); entity type not an input, text not read"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: the OECD EC table books 'Tax on foreign assets' (4220, 23.6 in 2024): impuesto a los activos en el exterior of financial institutions (Ley Reformatoria para la Equidad Tributaria 2007); entity type not an input, text not read",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 4200 = 2021:23.8 2022:19.2 2023:18.8 2024:23.6; named lines: 4220 Tax on foreign assets (2024: 23.6)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución especial de mejoras (COOTAD arts. 569-593)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución especial de mejoras (COOTAD arts. 569-593); the 2022-2023 temporary wealth contribution (OECD 4510 'Post-COVID contributions') ended. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución especial de mejoras (COOTAD arts. 569-593); the 2022-2023 temporary wealth contribution (OECD 4510 'Post-COVID contributions') ended. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 4500 = 2021:0.0 2022:635.0 2023:374.3 2024:0.0; named lines: 4510 Post-COVID contributions (2023: 370.2); 4510 Regularisation of assets abroad (2023: 4.0)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "national Arancel de Aduanas (NANDINA, Andean Community)",
+   "customs_note": "customs import duties (5123): national Arancel de Aduanas (NANDINA, Andean Community); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "impuesto a la propiedad de vehículos motorizados (Ley de Reforma Tributaria 2001",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto a la propiedad de vehículos motorizados (Ley de Reforma Tributaria 2001; OECD EC 5211 'Motor vehicle tax'). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto a la propiedad de vehículos motorizados (Ley de Reforma Tributaria 2001; OECD EC 5211 'Motor vehicle tax'). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 5200 = 2021:384.9 2022:403.4 2023:436.2 2024:465.5; named lines: 5211 Environmental tax on vehicle pollution (2023: 3.9); 5211 Motor vehicle tax (2024: 272.3)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD EC 6200 'Other local taxes' 0.1 (2024); the RISE regime ended with its 2021 repeal: residual local taxes not identified"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD EC 6200 'Other local taxes' 0.1 (2024); the RISE regime ended with its 2021 repeal: residual local taxes not identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVECU, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ECU.csv): general government heading 6000 = 2021:21.9 2022:2.0 2023:0.0 2024:-0.5; named lines: 6200 Other local taxes (2024: 0.1); 6200 Other tax refunds (2024: -0.6); 6200 Simplified taxation system of Ecuador (RISE) (2023: 1.4)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/EcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "LRTI (herencias, legados y donaciones: impuesto a la renta)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read in this pass",
+   "unsupported": [
+    "would unlock: the act's 2025 text"
+   ],
+   "family_file": "lean/EcGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "IESS aporte patronal (employer)",
+   "statute": "IESS Resolución C.D. 515 de 2016, Disposición Transitoria Primera",
+   "dated": "C.D. 515 in force from March 2016 (IESS compilation)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "later C.D. resolutions not checked",
+    "XIII/XIV sueldos not split from the base"
+   ],
+   "status": "modelled",
+   "family_file": "lean/EcGlobal/Social.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "COOTAD (alcabala, predial)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/EcGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 3,
+  "C": 10
+ },
+ "guards": 12,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -48,10 +48,9 @@ ci-dessus dont le bénéficiaire est une personne physique. Ce taux s'applique a
 l'année 2025." -/
 def dividendRate : Int := 1700
 
-/-- CNPS (official secondary): "Les cotisations pour la retraite sont à la charge conjointe de l'employeur et du salarié
-à raison de 7,7 % pour l'employeur et 6,3 % pour le salarié"; ceiling "45 fois le SMIG soit actuellement : 19 767 780 F
-par an (... 1 647 315 FCFA par mois) pour la retraite"; base "ne peut être inférieur au SMIG dont le montant actuel est de
-60000 FCFA". -/
+/-- CNPS (official secondary; facts restated): the retirement contribution is shared, 7,7 % employer and 6,3 % employee;
+ceiling 45 times the SMIG, now 19 767 780 F a year (1 647 315 FCFA a month); the base is at least the SMIG, now
+60 000 FCFA a month. -/
 def pensionEmployeeRate : Int := 630
 def pensionCeilingMonthly : Int := 1647315
 def smigMonthly : Int := 60000

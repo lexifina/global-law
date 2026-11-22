@@ -1,0 +1,35 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Transfer, stamp and recurrent property taxes",
+  "statute": "Código Fiscal CDMX (ISAI, predial)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P5",
+  "kernel_parts": [],
+  "tried": "not read in this pass (texts not local)",
+  "unsupported": [
+   "would unlock: the acts and the 2025 municipal rates"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Impuesto sobre Tenencia o Uso de Vehículos (Ciudad de México): new vehicles of 2025",
+  "statute": "Código Fiscal CDMX arts. 160, 161 BIS 2 VII-VIII, 161 BIS 4 (month factor), 161 BIS 5 I (3 %), II (0.245 %), 161 BIS 9 (3 %), 161 BIS 10 (0 %)",
+  "dated": "consolidation to the reform of 26 Dec 2023 (Wayback 2025-08-06, mx/law/codigo_fiscal_cdmx_wb20250806.*); the 2025 decree (G.O.CDMX 27 Dec 2024, SCJN synthesis) amends only the cuotas of 161 BIS 7 and 16 in the chapter; pass 14, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily",
+   "firstRegMonth"
+  ],
+  "unsupported": [
+   "used vehicles (161 BIS 13, 15, 16: INPC factor and 2025 cuotas) not computed",
+   "trucks and buses not computed",
+   "100 % subsidy up to $250,000 not applied",
+   "every vehicle taken as domiciled in CDMX"
+  ]
+ }
+]

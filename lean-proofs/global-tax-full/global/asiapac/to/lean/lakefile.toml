@@ -1,0 +1,18 @@
+name = "ToGlobal"
+version = "0.1.0"
+defaultTargets = ["ToGlobal", "toglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); ToTax = the 1.x model, vendored from cmp20/world/B14-pacific/to/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ToTax"
+
+[[lean_lib]]
+name = "ToGlobal"
+
+[[lean_exe]]
+name = "toglobal"
+root = "ToGlobal.Main"

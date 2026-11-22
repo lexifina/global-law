@@ -1,0 +1,240 @@
+{
+ "country": "KM",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la consommation",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI 2022 art. 152 (L.F. 2018, 2019, 2020, L.F.R. 2020): 10 %; 5 % restaurants and banking; 3 % water and electricity",
+   "dated": "CGI 2022 (local OCR) and LF 2024 pages 1-60; LF 2025 not held: grade B",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "0 % on basic necessities (order not held)",
+    "transport and telephony rates",
+    "small-business threshold"
+   ],
+   "guards": 11
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Taxes intérieures (alcools, tabacs, produits pétroliers, boissons sucrées)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI 2022 art. 157 (alcohol and tobacco 10 %), art. 153 (TIPP normal rate), non-codified LF 2018 art. 19 (sugary drinks 25 FC/l)",
+   "dated": "CGI 2022 (local OCR) and LF 2024 pages 1-60; LF 2025 not held: grade B",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "cigarette surtax (LF 2016)",
+    "TIPP reduced rate",
+    "rice tax"
+   ],
+   "guards": 11
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les sociétés",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI 2022 art. 33 (35 %), art. 35 (minimum forfaitaire 1,5 % of turnover)",
+   "dated": "CGI 2022 (local OCR) and LF 2024 pages 1-60; LF 2025 not held: grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "art. 36 minimum",
+    "2025 changes"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Taxe sur les rémunérations extérieures (TRE)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI 2022 art. 128-130 (TRE 10 % on services and royalties paid to persons domiciled outside the Comores); twelfth pass: CGI 2022 art. 109 1) (impôt sur le revenu au titre des valeurs mobilières retenu à la source au taux de 10 %; two-column print read across the columns, flag); thirteenth pass: CGI 2022 art. 61 c), 72 1° (revenus des créances are revenus de valeurs mobilières), art. 109 1) (IRVM retenu à la source au taux de 10 %; two-column print read across the columns, flag)",
+   "dated": "CGI 2022 (local OCR) and LF 2024 pages 1-60; LF 2025 not held: grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "guards": 8
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droit d'enregistrement (ventes d'immeubles)",
+   "statute": "CGI 2022 art. 273 (9 %)",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [
+    "art. 264 reservations",
+    "LF 2023-2025 not held"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Code général des impôts 2022 + LF 2024 (archived finances.gouv.km)",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [
+    "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://finances.gouv.km (archived))",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Contribution des patentes, stated profession: wholesale general-merchandise trader in a capital of the islands (150 000 F + 1/10 of rental value + 30 % communal centime)",
+   "statute": "CGI 2022 (updated to 1 January 2022) art. 165-166, 171, 179, 193 (L.F. 2021) and the annexed tariff ('Marchandises générales (Marchand de) — en gros'); LF 2023-2025 not checked",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [
+    "the trade of the company is not in the input: one stated profession is applied to every company",
+    "20 % reduction of the fixed duty outside the islands' capitals (art. 166)",
+    "retail traders 50 000 FC and the other activities of the tariff"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.licenceFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (as a tax)",
+   "statute": "cgi2022.txt (whole code)",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "KM: the general tax code held (cgi2022.txt, 529k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')",
+   "guards": 0
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "cgi2022.txt (whole code)",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "KM: the general tax code held (cgi2022.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked",
+   "guards": 1
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Prélèvement libératoire sur les plus-values immobilières des personnes physiques (20 %)",
+   "statute": "CGI 2022 (updated to 1 January 2022) art. 77 2°, 115 (LF 2024 OCR pp. 1-60 held; LF 2023 and 2025 not held)",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [
+    "the gain's computation rules (cost uplift, costs) were not read in the two-column extraction: gain = proceeds − cost − costs"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.gainsFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Impôt sur la propriété foncière (IPF)",
+   "statute": "CGI 2022 art. 185-192",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [
+    "art. 192: fixed amounts per building by type — houses with outbuildings 5 000 FC (2 000 m² or more) / 3 000 FC, dwellings without outbuildings 1 000 FC, professional buildings and land by their own scales: the input carries neither the outbuildings nor the surface"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "cgi2022.raw.txt art. 185-192",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Vignette automobile et droit de stationnement (vehicles up to 5 years old, by fiscal horsepower, + 1 000 FC parking duty)",
+   "statute": "CGI 2022 art. 432 (L.F. 2019); LF 2023-2025 not checked; dating for 2025 (seventeenth pass): the LF 2024 OCR held (world/B08-central-africa-fr/km/law/lf2024.ocr1-60.txt, pp. 1-60) shows the vignette only as a budget revenue line (7142), no amendment of art. 432 seen; LF 2023 and LF 2025 not held (flag)",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [
+    "older vehicles' columns (6-10 and 11-20 years)",
+    "motorcycles 2 000-3 000 FC (art. 433)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.vehicleFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Caisse de prévoyance sociale employer contributions",
+   "statute": "not reached: tried CGI 2022 search, live cnps.km (no answer), CLEISS (no Comores page)",
+   "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+   "unsupported": [
+    "no rate text held; CGI 2022 art. 59 only caps the employee's deductible retentions at 6 % of gross"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "CGI 2022 search, live cnps.km (no answer), CLEISS (no Comores page)",
+   "guards": 0
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

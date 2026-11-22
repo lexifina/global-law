@@ -1,0 +1,348 @@
+{
+ "country": "VE",
+ "name": "Venezuela",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 16:20:37"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VeGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "Ley IVA (reprint in G.O. 6.507 Ext., 29 Jan 2020) arts. 16, 18, 19, 27, 63",
+   "dated": "G.O. 6.507 Ext. of 29 Jan 2020 (16 % until the Executive fixes another rate; no later decree checked)",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food outside the art. 18 list",
+    "house rent from non-taxpayer landlords",
+    "arts. 61, 62, 64 rates"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VeGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuestos sobre alcohol, cigarrillos y combustibles",
+   "statute": "Ley de Impuesto sobre Alcohol y Especies Alcohólicas; Ley de Impuesto sobre Cigarrillos y Manufacturas de Tabaco",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "not reached (G.O. 6.507 Ext. does not carry them)",
+   "unsupported": [
+    "would unlock: the laws' texts and the 2025 amounts"
+   ],
+   "family_file": "lean/VeGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la renta (compañías)",
+   "statute": "Ley de ISLR (Decreto de reforma, G.O. 6.210 Ext., 30 Dec 2015) art. 52 Tarifa N° 2 (15 % to 2,000 U.T., 22 % to 3,000 U.T., 34 % above); U.T. Bs. 43 (G.O. 43.140, in force at the close of 2025: COT art. 3)",
+   "dated": "ISLR text of 30 Dec 2015 (no later reform found); U.T. from 3 Jun 2025",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "banking, financial and insurance income 40 % (ISLR art. 52 Par. 1) not modelled; withholding (Decreto 1.808) and dividend tax not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VeGlobal/Corporate.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P2",
+   "kernel_parts": [],
+   "unsupported": [
+    "the withholding provisions were not read"
+   ],
+   "family_file": "lean/VeGlobal/Corporate.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross taxed with wages; IVSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross taxed with wages; IVSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVVEN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/VEN.csv): general government heading 2300 = 2014:na 2015:na 2016:na 2017:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "impuesto sobre inmuebles urbanos (Ley del Sistema Tributario del Distrito Capital",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre inmuebles urbanos (Ley del Sistema Tributario del Distrito Capital; municipal ordinances); not reached. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre inmuebles urbanos (Ley del Sistema Tributario del Distrito Capital; municipal ordinances); not reached. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVVEN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/VEN.csv): general government heading 4100 = 2014:0.0 2015:0.0 2016:0.0 2017:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "OECD data end in 2017",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD data end in 2017. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD data end in 2017. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVVEN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/VEN.csv): general government heading 4500 = 2014:0.0 2015:0.0 2016:0.0 2017:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "sales taxes (5112)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD VE data end in 2017; IVA is the general tax; no 2025 text cited for an absence"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD VE data end in 2017; IVA is the general tax; no 2025 text cited for an absence",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVVEN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/VEN.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel de Aduanas de Venezuela (presidential tariff decree)",
+   "customs_note": "customs import duties (5123): Arancel de Aduanas de Venezuela (presidential tariff decree); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/VeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "impuesto sobre vehículos (municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre vehículos (municipal). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre vehículos (municipal). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVVEN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/VEN.csv): general government heading 5200 = 2014:0.0 2015:0.0 2016:0.0 2017:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD VE data end in 2017"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD VE data end in 2017",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVVEN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/VEN.csv): general government heading 6000 = 2014:80237.2 2015:158333.0 2016:263061.5 2017:1225170.3"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Impuesto a los Grandes Patrimonios",
+   "statute": "Ley Constitucional que crea el Impuesto a los Grandes Patrimonios (G.O. 41.667, 3 Jul 2019) arts. 1, 4, 11, 13, 23, Disp. Trans. 2a",
+   "dated": "G.O. 41.667 (0.25 % until changed; none found); U.T. Bs. 43 (G.O. 43.140)",
+   "grade": "A",
+   "package": "P6",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "sujeto pasivo especial designation assumed",
+    "legal persons not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VeGlobal/Property.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "4300",
+   "tax": "Impuesto sobre Sucesiones, Donaciones y demás Ramos Conexos",
+   "statute": "Ley de Impuesto sobre Sucesiones, Donaciones y demás Ramos Conexos",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not reached",
+   "unsupported": [
+    "would unlock: the law's text and the 2025 U.T. bands"
+   ],
+   "family_file": "lean/VeGlobal/Property.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "3000",
+   "tax": "Contribución especial para la protección de las pensiones (9 %)",
+   "statute": "Ley de Protección de las Pensiones de Seguridad Social frente al Bloqueo Imperialista (G.O. 6.806 Ext., 8 May 2024) arts. 6, 7, 10, 11; Decreto 4.952 (G.O. 42.880, 16 May 2024) art. 1",
+   "dated": "Decreto 4.952 in force from 16 May 2024 (no later rate decree found)",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "employer taken as a private legal person",
+    "per-worker floor not applied"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VeGlobal/Social.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "IVSS, Régimen Prestacional de Empleo and INCES (employer)",
+   "statute": "Ley del Seguro Social; Ley del Régimen Prestacional de Empleo; Ley del INCES",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P4",
+   "kernel_parts": [],
+   "tried": "the gazettes of these laws (2012-2015) are not in the gazette archive reached (it starts later); not held by the 1.x builder; pass 9: not in lexifina/venezuela-law; gacetaoficial.gob.ve 2024 gazettes reachable but these laws' texts (2012-2014) not found",
+   "unsupported": [
+    "would unlock: the four laws as in force 2025 and the 2025 minimum wage for the IVSS/RPE ceilings"
+   ],
+   "family_file": "lean/VeGlobal/Social.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "FAOV housing savings (employer 2/3 of 3 % of salario integral): compulsory saving credited to the worker's individual account, outside tax",
+   "statute": "Ley del Régimen Prestacional de Vivienda y Hábitat (texto único, G.O. 6.805 Ext. of 2024) art. 33 num. 1: \"El aporte mensual en la cuenta de cada trabajadora o trabajador equivalente al tres por ciento (3%) de su salario integral ... los aportes obligatorios de los patronos a la cuenta de cada trabajador, equivalente a dos tercios (2/3)\"; art. 33 num. 5: the Ministry may raise it (not below 3 %)",
+   "dated": "G.O. 6.805 Ext. (2024), gacetaoficial.gob.ve; pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P4",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "Ministry resolutions changing the 3 % (art. 33 num. 5) not searched"
+   ],
+   "family_file": "lean/VeGlobal/Social.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Ley de Timbre Fiscal; inmuebles urbanos (municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/VeGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 1,
+  "C": 12
+ },
+ "guards": 12,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

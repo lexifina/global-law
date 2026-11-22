@@ -1,0 +1,353 @@
+{
+ "country": "UY",
+ "name": "Uruguay",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 18:32:04"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/UyGlobal/Capital.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1100",
+   "tax": "IRPF Categoría I: incrementos patrimoniales (12 %)",
+   "statute": "T.O. DGI 2023 Título 7 arts. 26, 29, 32, 34, 37, 38",
+   "dated": "IMPO T.O. DGI 2023 Título 7 (2024 edition with Ley 20.446 notes; 2025 wording used); pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "vivienda permanente (art. 38 L) grade C",
+    "art. 38 I UI thresholds not applied",
+    "listed shares and bonds not charged",
+    "loss offset"
+   ],
+   "family_file": "lean/UyGlobal/Capital.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "T.O. 1996 Título 10 arts. 16, 18, 19",
+   "dated": "DGI T.O. 1996 as updated until the T.O. 2023 (04/04/2024)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "2024-2025 changes (T.O. 2023) not read",
+    "subjective exemptions"
+   ],
+   "status": "modelled",
+   "family_file": "lean/UyGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Específico Interno (IMESI)",
+   "statute": "T.O. 1996 Título 11; executive decrees",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "rates by decree; would unlock: the 2025 IMESI decrees (fuels: monthly)"
+   ],
+   "family_file": "lean/UyGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto a las Rentas de las Actividades Económicas (IRAE)",
+   "statute": "T.O. 1996 Título 4 art. 15 (25 %)",
+   "dated": "T.O. 1996 as updated until 04/04/2024",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "IRAE fictitious-income regimes for small companies (Título 4 art. 64 ff.) and minimum payments not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/UyGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "T.O. DGI 2023 Título 8 (IRNR) art. 18 B); art. 10 (agentes de retención)",
+   "dated": "IMPO T.O. DGI 2023 Título 8 (uy/law/todgi_t8_2024.html); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "IRNR 25 % for low- or no-tax jurisdictions (art. 18 B), interest exemptions (art. 19 A, B) and short-term deposit rates (art. 18 A) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/UyGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "Ley 16.713 (uruguay-law ley-16713)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"BPS contributions of non-dependents not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"BPS contributions of non-dependents not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "contribución inmobiliaria (departmental, Montevideo)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): contribución inmobiliaria (departmental, Montevideo); impuesto de primaria; text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): contribución inmobiliaria (departmental, Montevideo); impuesto de primaria; text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 4100 = 2021:24921.3 2022:27926.6 2023:31134.1 2024:32569.2; named lines: 4100 Farm property tax (2024: 1039.1); 4100 Other property taxes (2024: 26010.5); 4100 Primary education tax (2024: 5049.6); 4100 Primary education tax refunds (2024: -1.7); 4100 Property tax surcharge (2024: 471.7)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución por mejoras (departmental)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución por mejoras (departmental). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución por mejoras (departmental). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales tax (single stage)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 5112 = ?",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "MERCOSUR Arancel Externo Común (NCM) with national exception lists",
+   "customs_note": "customs import duties (5123): MERCOSUR Arancel Externo Común (NCM) with national exception lists; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "patente de rodados (SUCIVE, Ley 18.860",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): patente de rodados (SUCIVE, Ley 18.860; Ley 16.739 per the MAP, rates elsewhere). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): patente de rodados (SUCIVE, Ley 18.860; Ley 16.739 per the MAP, rates elsewhere). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 5200 = 2021:14996.1 2022:17072.5 2023:18459.5 2024:19417.2"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: IVA mínimo of small businesses (literal E, T.O. Título 4; OECD UY 6100 'Small business tax (minimum VAT)'): the small-business regime is not an input"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: IVA mínimo of small businesses (literal E, T.O. Título 4; OECD UY 6100 'Small business tax (minimum VAT)'): the small-business regime is not an input",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVURY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/URY.csv): general government heading 6000 = 2021:3959.8 2022:5329.1 2023:5819.7 2024:6324.7; named lines: 6100 Credit card tax (2022: 0.0); 6100 Small business tax (minimum VAT) (2024: 1293.0)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/UyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Impuesto al Patrimonio (personas físicas)",
+   "statute": "T.O. DGI 2023 Título 14 arts. 53 A), 57 (Ley 18.083 art. 48, Ley 19.484); Decreto 334/025 art. 2",
+   "dated": "Decreto 334/025 (mínimo 2025); DGI rate table 2025",
+   "grade": "A",
+   "package": "P6",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "bonds, debts, ajuar ficto, location of assets",
+    "companies not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/UyGlobal/Property.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift taxes",
+   "statute": "none known (ITP applies to inheritances: Título 19)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read",
+   "unsupported": [
+    "would unlock: T.O. Título 19 (Impuesto a las Trasmisiones Patrimoniales) on inheritances"
+   ],
+   "family_file": "lean/UyGlobal/Property.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "BPS contributions (employer: jubilatorio, Fonasa, FRL, FGCL)",
+   "statute": "Ley 16.713; Ley 18.211; Ley 19.690 (BPS guide 2026)",
+   "dated": "BPS guide edición 2026 (rates in force since 2019 or earlier)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "tope of Ley 16.713 art. 14 A) (indexed $ 15,000 of May 1995) not applied: 2025 value not reached",
+    "aguinaldo exoneration from Fonasa",
+    "FGCL 0.025 % rounded to 0.02 %"
+   ],
+   "status": "modelled",
+   "family_file": "lean/UyGlobal/Social.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "T.O. Título 16 (ITP 2 %); contribución inmobiliaria (departamental)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/UyGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 6,
+  "C": 9
+ },
+ "guards": 20,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

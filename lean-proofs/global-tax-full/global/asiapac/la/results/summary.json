@@ -1,0 +1,203 @@
+{
+ "country": "LA",
+ "name": "Laos",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:18:49"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on dividends, interest, rent (10 %)",
+   "statute": "Law on Income Tax 67/NA",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "amended law in force 2025-09-01"
+   ],
+   "family_file": "lean/LaGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value added tax (10 %)",
+   "statute": "Law on Value Added Tax (revised) No. 60/NA of 28 June 2024 arts. 11, 12, 17, 33, 61",
+   "dated": "in force 1 Jan 2025 (art. 61): the whole of 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "partial exemptions (food, insurance, medicines, books) applied by whole class",
+    "micro-enterprise rules (art. 33) not read"
+   ],
+   "family_file": "lean/LaGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "statute": "Law on Excise Tax (2019) as amended",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: Lao Trade Portal legal-document list (the excise law is listed with a Lao scanned PDF; not OCR'd in this pass); would unlock: OCR of the Law on Excise Tax and its 2025 rate table (ad valorem by product)"
+   ],
+   "family_file": "lean/LaGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Profit tax",
+   "statute": "Law on Income Tax No. 67/NA (2019)",
+   "dated": "2019 law",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LaGlobal/Corporate.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Income tax withheld from non-residents (dividends and interest 10 %, royalties 5 %, services: deemed profit tax 3 % to companies, 10 % to individuals)",
+   "statute": "Law on Income Tax No. 67/NA (2019) arts. 12-15, 20, 32, 46-50",
+   "dated": "in force from 2020 (art. 79); no later amendment listed on the Lao Trade Portal legal-document index (checked 2026-11-21)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "dividends, interest and royalties to foreign companies are taken under the non-resident personal income tax (arts. 32, 46-49: persons and organisations not conducting business in Laos)",
+    "services to individuals read as \"remuneration ... and others\" (art. 46 (2)); consultancy fees are 5 % for residents (art. 39 (4)) and not listed for non-residents",
+    "OCR text (Lao, tessdata_fast) read; interest is limited to loan interest (art. 46 (4))"
+   ],
+   "family_file": "lean/LaGlobal/Corporate.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LaGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property",
+   "statute": "Land Tax Law (Law on Land Tax, 2007; revised edition) — per-m2 rates by zone",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): "
+   ],
+   "family_file": "lean/LaGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LaGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LaGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers: not levied",
+   "statute": "Law on Fees and Service Charges (registration fees; not read); PwC WWTS Lao PDR 2025; Deloitte Lao PDR Highlights 2025; OECD Revenue Statistics Lao PDR table",
+   "dated": "2025 (secondary-source sweep: guides dated 2025; OECD table 2021-2024, 2025 figures not yet published)",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "fixed documentary stamps (PwC: LAK 2,000 to 20,000 a document) and document registration fees (Deloitte) are charges on documents with no value base, not modelled"
+   ],
+   "family_file": "lean/LaGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LaGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social security",
+   "statute": "Law 54/NA",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "ceiling"
+   ],
+   "family_file": "lean/LaGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 8,
+  "C": 2
+ },
+ "guards": 9,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

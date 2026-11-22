@@ -1,0 +1,113 @@
+{
+ "country": "ER",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (2 % diaspora tax (Proclamation 17/1991, 67/1995))",
+   "statute": "Income Tax Proclamation No. 62/1994 (as amended)",
+   "dated": "-",
+   "unsupported": [
+    "triage outOfScope: 2 % diaspora (rehabilitation) tax is charged on Eritreans living abroad, not on residents. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "not reached",
+   "triage": "outOfScope",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employer social security contributions",
+   "statute": "not reached: tried SSPTW Africa 2019 Eritrea page (Wayback answered an error page), no Eritrean legal host found",
+   "dated": "-",
+   "unsupported": [
+    "no text on a contributory scheme for private-sector employees reached (public servants' pension only, per general knowledge: not cited)"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "SSPTW Africa 2019 Eritrea page (Wayback answered an error page), no Eritrean legal host found",
+   "guards": 0
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "VAT / sales tax",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "no statute text is held locally (registry: grade C for every heading; the 1.x model's own sources are the income tax proclamations it cites)"
+   ],
+   "tried": "world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "guards": 0
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excises",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "no statute text is held locally (registry: grade C for every heading; the 1.x model's own sources are the income tax proclamations it cites)"
+   ],
+   "tried": "world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "no statute text is held locally (registry: grade C for every heading; the 1.x model's own sources are the income tax proclamations it cites)"
+   ],
+   "tried": "world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding on payments abroad",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "no statute text is held (Income Tax Proclamation 62/1994 and amendments not found online)"
+   ],
+   "tried": "world/B10-anglophone-africa/er (no law files); registry AFRICA_MENA rows",
+   "guards": 0
+  }
+ ],
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

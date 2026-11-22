@@ -1,0 +1,18 @@
+name = "FmGlobal"
+version = "0.1.0"
+defaultTargets = ["FmGlobal", "fmglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); FmTax = the 1.x model, vendored from cmp20/world/B14-pacific/fm/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "FmTax"
+
+[[lean_lib]]
+name = "FmGlobal"
+
+[[lean_exe]]
+name = "fmglobal"
+root = "FmGlobal.Main"

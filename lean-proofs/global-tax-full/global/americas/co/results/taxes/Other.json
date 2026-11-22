@@ -1,0 +1,103 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "Ley 100 de 1993 (colombia-law sistema-de-seguridad-social-integral); Ley 1955 de 2019 art. 244",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: contributions of independents (40 % IBC) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: contributions of independents (40 % IBC) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCOL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/COL.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribución de valorización (Decreto 1604 de 1966) and participación en plusvalía (Ley 388 de 1997)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribución de valorización (Decreto 1604 de 1966) and participación en plusvalía (Ley 388 de 1997); OECD CO 4520 870 in 2024. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribución de valorización (Decreto 1604 de 1966) and participación en plusvalía (Ley 388 de 1997); OECD CO 4520 870 in 2024. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCOL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/COL.csv): general government heading 4500 = 2021:145573.2 2022:233241.5 2023:4986.1 2024:870.3"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5112",
+  "tax": "Impuesto de industria y comercio (ICA)",
+  "statute": "Ley 14 de 1983; Decreto 1333 de 1986; Bogotá Acuerdo 65 de 2002 (not read)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: impuesto de industria y comercio (ICA), booked by the OECD under 5112 ('Industry and commerce state tax' 17.2 trillion in 2024): municipal rate per mil of gross receipts by activity (Bogotá Acuerdo 65 de 2002); company activity and Bogotá 2025 rates not read"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: impuesto de industria y comercio (ICA), booked by the OECD under 5112 ('Industry and commerce state tax' 17.2 trillion in 2024): municipal rate per mil of gross receipts by activity (Bogotá Acuerdo 65 de 2002); company activity and Bogotá 2025 rates not read",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCOL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/COL.csv): general government heading 5112 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "national Arancel de Aduanas (NANDINA, Andean Community)",
+  "customs_note": "customs import duties (5123): national Arancel de Aduanas (NANDINA, Andean Community); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "re-filed in part; kept at C: the GMF (4 por mil, ET arts. 870-881) named in the earlier triage is a 4400 tax (Guide §53): re-filed as its own 4400 C row. Under 6000 the OECD CO table books 'Stamp tax', 'Other' and 'Other (sub-national)' (estampillas departamentales/municipales and other sub-national taxes, 15.7 trillion in 2024): kept at C"
+  ],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "re-filed in part; kept at C: the GMF (4 por mil, ET arts. 870-881) named in the earlier triage is a 4400 tax (Guide §53): re-filed as its own 4400 C row. Under 6000 the OECD CO table books 'Stamp tax', 'Other' and 'Other (sub-national)' (estampillas departamentales/municipales and other sub-national taxes, 15.7 trillion in 2024): kept at C",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCOL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/COL.csv): general government heading 6000 = 2021:10172339.4 2022:12743606.5 2023:15140561.5 2024:15677331.6; named lines: 6200 Other (2024: 1114152.3); 6200 Other (sub-national) (2024: 14314214.8); 6200 Stamp tax (2024: 248964.5)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4400",
+  "tax": "Gravamen a los Movimientos Financieros (GMF, 4 por mil)",
+  "statute": "Estatuto Tributario arts. 870-881, not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "re-filed from the 6000 triage note (Guide §53); needs bank-account debits (not in the canon)"
+  ],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "re-filed from the 6000 triage note (Guide §53); needs bank-account debits (not in the canon)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCOL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/COL.csv): general government heading 4400 = ?"
+  ],
+  "refiled_from": "6000",
+  "p7_triage_pass": "2026-11-21"
+ }
+]

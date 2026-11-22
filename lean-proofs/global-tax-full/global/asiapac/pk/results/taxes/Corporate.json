@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Income tax on companies; super tax (s. 4C)",
+  "statute": "ITO 2001 First Schedule Part I Divisions II, IIB; s. 4C",
+  "dated": "2025, split at 1 July 2025: tax year 2025 (FBR consolidation amended up to 30.06.2024 + Income Tax (Amendment) Act 2025 bank rate) to 30 June, tax year 2026 (FBR consolidation amended up to 31.07.2025, Finance Act 2025) from 1 July; by days",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime",
+   "charge"
+  ],
+  "unsupported": [
+   "minimum tax s. 113, ACT s. 113C",
+   "income under s. 4C taken as taxable income",
+   "split by days (181/365 tax year 2025, 184/365 tax year 2026); special tax year s. 74 (3) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200/1100",
+  "tax": "Tax on dividends; tax on payments to non-residents (royalties and technical fees 15 %, other payments 20 %)",
+  "statute": "ITO 2001 s. 5, s. 6, s. 150, s. 152 (1), (2); First Schedule Part I Divisions III, IV, Part III Division II",
+  "dated": "all of 2025: the modelled rows are the same in tax year 2025 (FBR consolidation to 30.06.2024) and tax year 2026 (to 31.07.2025): Div. III (b) 15 %, Div. IV 15 %, Part III Div. II (2) 20 %",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "contract payments under s. 152 (1A) (7 %) not distinguished from technical fees",
+   "profit on debt to a non-resident person of either kind: s. 152 (2) (20 %, Part III Div. II (2)); s. 152 (3) excludes only amounts under ss. 149, 150, 156, 233, a PE, a representative or a non-chargeable amount (not distinguished); s. 7B (Div. IIIA) taxes only persons other than companies receiving profit on debt from the s. 151 (1) (a)-(d) payers (banks, government securities): the payer is taken not to be one"
+  ]
+ }
+]

@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto sobre la renta (personas jurídicas)",
+  "statute": "Ley de Impuesto sobre la Renta (D.L. 134/1991) art. 41 (D.L. 957/2011): 30 %; 25 % when rentas gravadas ≤ US$150,000",
+  "dated": "consolidation to D.L. 233 of 14 Dec 2012 (Asamblea Legislativa text, SSF copy fetched 2026-11-21); reforms after 2012 not read",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "pago mínimo (LISR arts. 76-81) not modelled; the US$150,000 test is applied to turnover"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "Código Tributario arts. 158, 158-A; LISR art. 72",
+  "dated": "CSJ/UES consolidation of the Código Tributario to D.L. 440 of 2010 (archived sv/law/codigo_tributario_ues.*); LISR SSF copy (sv/law/ssf_lisr.*); pass 8, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "Código Tributario art. 158 reduced rates (10 % to qualifying foreign financial institutions, 5 % transport, insurance and audiovisual) and art. 158-A (25 % to tax havens) not modelled"
+  ],
+  "status": "modelled"
+ }
+]

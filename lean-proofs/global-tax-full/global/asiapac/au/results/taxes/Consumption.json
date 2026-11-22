@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Goods and services tax",
+  "statute": "GST Act 1999 ss. 9-70, 23-15, 38-2, 38-3, 38-7, 38-85, 40-5, 40-35",
+  "dated": "compilation C94 (15 Feb - 31 Oct 2025)",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "the $75,000 threshold is in the GST Regulations (not read)",
+   "GST-free vs taxable food lines beyond s. 38-3"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise and excise-equivalent customs duty (fuel, beer, spirits, tobacco; indexed 2025 rates)",
+  "statute": "Excise Tariff Act 1921 Schedule items 1, 2, 3, 5, 10; ss. 6A-6AA indexation; Customs Tariff Act 1995 (equivalent customs duty)",
+  "dated": "ATO rate tables for 2025 (fuel and alcohol: 3 Feb and 4 Aug 2025; tobacco: 1 Mar and 1 Sep 2025), Internet Archive captures 2025-01-25 to 2025-12-08",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRule"
+  ],
+  "unsupported": [
+   "wine equalisation tax (wholesale value) not modelled",
+   "draught beer rates not applied",
+   "tobacco by weight needs the line's mass"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Motor vehicle registration duty (NSW; $3 per $100, $5 per $100 above $45,000 for passenger cars)",
+  "statute": "Duties Act 1997 (NSW) ss. 261, 263, 265, 266",
+  "dated": "NSW legislation text as at 30 April 2025 (Internet Archive)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax"
+  ],
+  "unsupported": [
+   "cars only; s. 267 exemptions not applied",
+   "annual motor vehicle weight tax (Motor Vehicles Taxation Act 1988) and registration fees not modelled"
+  ]
+ }
+]

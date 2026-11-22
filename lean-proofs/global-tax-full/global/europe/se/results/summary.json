@@ -1,0 +1,309 @@
+{
+ "country": "SE",
+ "name": "Sweden",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:07"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Kapitalvinstskatt (inkomst av kapital)",
+   "statute": "Inkomstskattelagen 41-48 kap., 65 kap. 7 § (30 %; private real property 22/30 of the gain = 22 %)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-06-24 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "the deferral (uppskov) on buying a replacement home is not applied; losses on real property count 50 %/70 % (not modelled)"
+   ],
+   "family_file": "lean/SeGlobal/Capital.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5111",
+   "tax": "Mervärdesskatt",
+   "statute": "ML (2023:200) 9, 10, 18 kap. [year in force 2025 (pass 16), re-cited 2025: riksdagen.se text \"t.o.m. SFS 2024:942\", Internet Archive 2025-08-13 (se/law/ml2023_wb20250813.*): 9 kap. 2 § 25 %, 3 § food 12 %, 4-5 §§ hotels and restaurants 12 %, 18 kap. 120 000 kronor as modelled; the current text carries no Lag (2025:…) note, so no change during 2025; the 2026 changes (Lag 2026:118, food 6 % from 1.4.2026; 2026:119, 841, 1025) are after 2025]",
+   "dated": "riksdagen.se, ändrad t.o.m. SFS 2024:942 (Internet Archive 2025-08-13)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "the 2025 SFS version not fetched as such"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/SeGlobal/Consumption.lean",
+   "family_guards": 17
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Lag (2022:155) om alkoholskatt 8 §; lag (1994:1563) om tobaksskatt 2 §; lag (1994:1776) om skatt på energi 2 kap. 1 §, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "petrol and diesel of environmental class 1; beer above 3.5 % vol; still wine 8.5-15 % vol",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/SeGlobal/Consumption.lean",
+   "family_guards": 17
+  },
+  {
+   "oecd": "5121",
+   "tax": "Energiskatt och koldioxidskatt på bensin, diesel och eldningsolja (ny tabell från 1.7.2025)",
+   "statute": "Lag (1994:1776) om skatt på energi 2 kap. 1 §, amended by SFS 2024:1144 (Prop. 2024/25:30) in force 1.7.2025",
+   "dated": "change on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (validFrom/validTo, kernel 2.1)"
+   ],
+   "unsupported": [
+    "figures from the TEDB (the text of SFS 2024:1144 not read); petrol and diesel at environmental class 1"
+   ],
+   "gap": 1,
+   "family_file": "lean/SeGlobal/Consumption.lean",
+   "family_guards": 17
+  },
+  {
+   "oecd": "1200",
+   "tax": "Statlig inkomstskatt för juridiska personer",
+   "statute": "Inkomstskattelagen (1999:1229) 65 kap. 10 § (20,6 procent), Lag (2018:1206)",
+   "dated": "65 kap. 10 § unchanged since Lag (2018:1206) (in force for years from 2021)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "näringsbetingade andelar (24 kap. 13-17 §§: tax-free dividends) not modelled",
+    "periodiseringsfond (30 kap.) not modelled",
+    "underskott: no cap, but ownership-change limits (40 kap.) not modelled"
+   ],
+   "family_file": "lean/SeGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Kupongskatt (dividend)",
+   "statute": "kupongskattelag (1970:624) 5 § [year in force 2025 (pass 16), unchanged-confirmed: se/law/sfs-1970-624.txt: 5 § (\"trettio procent\") carries no amendment note (1970 wording); the 2026 change (Lag 2026:840) is in 4 and 4 a §§ (exemptions), not used]",
+   "dated": "data.riksdagen.se, fetched 2026-11-21 (`se/law/sfs-1970-624.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "the exemptions for EU/treaty parent companies (4 §) not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/SeGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on interest, royalties, services (interest, royalty, services)",
+   "statute": "inkomstskattelagen (deemed PE for royalties; no tax on interest and service fees)",
+   "dated": "2025-06-17",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "royalties are assessed on the recipient (deemed PE), not withheld: booked as a withheld charge",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/SeGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 10: fordonsskatt on personbilar klass I modelled; other vehicle classes, the bonus and the 11 § reduction not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 10: fordonsskatt on personbilar klass I modelled; other vehicle classes, the bonus and the 11 § reduction not modelled",
+   "unsupported": [
+    "would unlock: vägtrafikskattelag 2 kap. 12 § and bilaga 2 (heavy vehicles); bilaga 1 municipalities (11 §); cars before fordonsår 2006 (weight rates)"
+   ],
+   "family_file": "lean/SeGlobal/Other.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "5200",
+   "tax": "Fordonsskatt",
+   "statute": "Vägtrafikskattelag (2006:227) 2 kap. 7, 8, 9, 9 a, 10 §§",
+   "dated": "data.riksdagen.se, ändrad t.o.m. SFS 2025:1369; 9 a § as worded by Lag (2024:1134) (`se/law/vtsl2006_227.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable",
+    "VehicleTax.partWindows (2.7.0)"
+   ],
+   "unsupported": [
+    "cars of fordonsår before 2006, light buses and lorries, motorcycles (180 kr), heavy vehicles (bilaga 2)",
+    "5200 fordonsskatt: a hybrid is taken as not driven by diesel",
+    "5200 fordonsskatt: the reduction of 2 kap. 11 § (cars at home in a municipality of bilaga 1) is not applied",
+    "9 a § window counted in whole months from the month of first registration (36)"
+   ],
+   "family_file": "lean/SeGlobal/Other.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "European Commission TEDB, SE: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 499, 503, 516, 705, 890, 501, 512, 513, 517, 527-530, 708, 886, 3907, 5022, 5422, 5599, 5700, 5800, 5801) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+   ],
+   "gap": 2,
+   "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVSWE v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/SWE.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6200 total 2 617, 3 294, 2 057, 2 465 million SEK in 2021-2024 (unnamed); the national taxes behind it not read",
+   "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVSWE v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/SWE.csv`, SHA256SUMS; general government S13; 2025 not yet published)",
+   "family_file": "lean/SeGlobal/Other.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "6000",
+   "tax": "Kyrkoavgift (Svenska kyrkan)",
+   "statute": "Lag (1998:1591) om Svenska kyrkan 1 § (the Church of Sweden is an Evangelical Lutheran faith community); lag (1999:291) om avgift till registrerat trossamfund 1 § (state help in fixing, debiting and collecting the fees; kyrkoavgift under 7-8 §§ of the 1998 act), lexifina/sweden-law `1998/1591/1.md`, `1999/291/1.md` (HEAD 2026-11-16, wording since Lag 2024:490)",
+   "dated": "2025 (texts as cited)",
+   "grade": "R",
+   "status": "reclassified",
+   "reclass": "not a tax (OECD guide § 6): since 2000 the Church of Sweden is a registered faith community, not a state body; the Skatteverket only helps to fix, debit and collect the fee (agency capacity); the 1.x model does not charge it",
+   "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+   "law": "Lag (1998:1591) om Svenska kyrkan 1 § (the Church of Sweden is an Evangelical Lutheran faith community); lag (1999:291) om avgift till registrerat trossamfund 1 § (state help in fixing, debiting and collecting the fees; kyrkoavgift under 7-8 §§ of the 1998 act), lexifina/sweden-law `1998/1591/1.md`, `1999/291/1.md` (HEAD 2026-11-16, wording since Lag 2024:490)",
+   "evidence_grade": "A",
+   "kernel_parts": [],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/SeGlobal/Other.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stämpelskatt (lagfart)",
+   "statute": "Lag (1984:404) om stämpelskatt vid inskrivningsmyndigheter 8 § (15 kr per full 1 000 kr; legal persons 42,50 kr)",
+   "dated": "data.riksdagen.se (ändrad t.o.m. SFS 2025:391)",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "the value is not rounded down to full thousands (at most 15 kr); a company buyer pays 4,25 % (not separated); the value may be the taxeringsvärde where higher (not read); pantbrev 2 % not modelled"
+   ],
+   "family_file": "lean/SeGlobal/Property.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4100",
+   "tax": "Kommunal fastighetsavgift (småhus)",
+   "statute": "Lag (2007:1398) om kommunal fastighetsavgift 3 § a) (6 000 kr per småhus for 2008, indexed by the inkomstbasbelopp; at most 0,75 % of the taxeringsvärde) [year in force 2025 (pass 16), unchanged-confirmed: the record fetched 2026-11-21 lists no amendment after SFS 2012:743, so 3 § was unchanged 2013-2026; the 2025 amount comes from Förordning (2024:987) för år 2025]",
+   "dated": "data.riksdagen.se (ändrad t.o.m. SFS 2012:743); Förordning (2007:1023) 48 000 kr; Förordning (2024:987) 80 600 kr för år 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (min of a fixed amount and 0,75 %)"
+   ],
+   "unsupported": [
+    "new dwellings' exemption (6 §) and half-fee years",
+    "a bostadsrätt is charged to the förening, not the member",
+    "the taxeringsvärde is an input (asset.assessed)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/SeGlobal/Property.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "2200",
+   "tax": "Arbetsgivaravgifter",
+   "statute": "Socialavgiftslagen (2000:980) 2 kap. 26 §: 19,80 procent (Lag 2018:2085)",
+   "dated": "riksdagen.se via Internet Archive 2024-12-11 / 2025-07-10",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SeGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "3000",
+   "tax": "Allmän löneavgift",
+   "statute": "Lag (1994:1920) om allmän löneavgift 3 §: 11,62 procent (Lag 2023:749)",
+   "dated": "riksdagen.se via Internet Archive 2024-12-11 / 2025-07-10",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SeGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4200",
+   "tax": "Statlig förmögenhetsskatt (not levied)",
+   "statute": "Lag (1997:323) om statlig förmögenhetsskatt [year in force 2025 (pass 16), unchanged-confirmed: se/law/sfs-1997-323.txt: \"Upphävd: 2008-01-01\"; no later wealth-tax act]",
+   "dated": "data.riksdagen.se record (se/law/sfs-1997-323.html)",
+   "grade": "A",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/SeGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Arvsskatt och gåvoskatt (not levied)",
+   "statute": "Lag (1941:416) om arvsskatt och gåvoskatt [year in force 2025 (pass 16), unchanged-confirmed: se/law/sfs-1941-416.txt: \"Upphävd: 2005-01-01\"]",
+   "dated": "data.riksdagen.se record (se/law/sfs-1941-416.html)",
+   "grade": "A",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/SeGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 9,
+  "B": 5,
+  "C": 2
+ },
+ "guards": 55,
+ "sorry": 0,
+ "cases": 8,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

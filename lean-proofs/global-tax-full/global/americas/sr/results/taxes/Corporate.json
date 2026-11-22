@@ -1,0 +1,42 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Inkomstenbelasting van lichamen",
+  "statute": "Wet Inkomstenbelasting art. 47 lid 1: 36 percent",
+  "dated": "1.x builder copy (`world/B13-caribbean/sr/law/ib.txt`); the 2021 solidarity levy (46 % above SRD 150.000) lapsed on 1 January 2022",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "Wet Inkomstenbelasting 1922 art. 1 lid 3, art. 27 lid 2 (S.B. 2024 no. 3): not a binnenlandse bron of a non-resident: no tax, none withheld",
+  "dated": "Wet IB as last amended by S.B. 2024 no. 3 (world/B13-caribbean/sr/law/ib.txt); pass 7, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "interest secured by a mortgage on Surinamese real property is a domestic source (art. 27 lid 2 b 1°): not distinguished"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Dividend tax (dividendbelasting)",
+  "statute": "Wet Dividendbelasting 1973 arts. 1-6 (S.B. 1981 no. 184, S.B. 1984 no. 109)",
+  "dated": "DNA consolidation (dna.sr, archived sr/law/dividendbelasting_1973_dna.*); pass 8, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "Wet Dividendbelasting art. 4 (no withholding on distributions to Surinamese investment companies and continuous Surinamese shareholders) and art. 5 lid 2 (grossing-up when the company bears the tax) not modelled"
+  ]
+ }
+]

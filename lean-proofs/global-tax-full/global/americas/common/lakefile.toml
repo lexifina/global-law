@@ -1,0 +1,11 @@
+name = "AmerCommon"
+version = "0.1.0"
+defaultTargets = ["AmerCommon"]
+
+# Americas (R2) shared helpers for the kernel-2.0 country models
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "AmerCommon"

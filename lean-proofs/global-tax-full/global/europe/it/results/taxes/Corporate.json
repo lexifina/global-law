@@ -1,0 +1,44 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Imposta sul reddito delle società (IRES)",
+  "statute": "TUIR (DPR 917/1986) art. 77 (24 %), art. 84 c. 1 (perdite: 80 % del reddito), art. 89 c. 2 (utili esclusi per il 95 %)",
+  "dated": "normattiva vigente 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "IRAP (D.Lgs. 446/1997, regional, 3,9 %) not modelled",
+   "IRES premiale 20 % (L. 207/2024 art. 1 c. 436-444) not modelled",
+   "losses of the first three periods usable in full (art. 84 c. 2) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Ritenuta (lavoro autonomo) (services)",
+  "statute": "DPR 600/1973 art. 25 c. 1",
+  "dated": "normattiva vigente 2025-07-01 (`it/law/dpr600_art25.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services are taken as professional services performed in Italy (art. 25: none on work performed abroad)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Ritenuta (dividendi, interessi, canoni) (dividend, interest, royalty)",
+  "statute": "DPR 600/1973 art. 25 c. 4, 26 c. 5, 27 c. 3 (rate 26 %: D.L. 66/2014 art. 3)",
+  "dated": "2025-08-03",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

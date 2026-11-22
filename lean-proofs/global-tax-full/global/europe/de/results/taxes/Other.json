@@ -1,0 +1,67 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Kirchensteuer (Berlin)",
+  "statute": "Kirchensteuerbeschluss Erzbistum Berlin 2025 § 2 (1) (9 % der Einkommensteuer; Kirchensteuergesetz Berlin); EStG § 51a Abs. 1-2 [year in force 2025 (pass 16), re-cited 2025: § 51a captured 2025-11-22 (de/law/estg_51a_wb20251122.*): identical] [gap pass 2: not a tax (OECD guide § 6): the Kirchensteuer is levied by the churches, public-law religious societies outside general government; the Finanzamt collects it for them; the 1.x surtax option (--kist=900) is kept as it is and the default run (not a member) charges nothing; OECD: OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent; law: WRV Art. 137 (6) (via GG Art. 140): the religious societies that are public-law corporations are entitled to levy taxes on the basis of the civil tax lists under Land law (lexifina/germany-law `bund/gesetze/wrv/art-137.md`, commit b1f5fa6b7b04d); Kirchensteuergesetz Berlin as named by the Kirchensteuerbeschluss Erzbistum Berlin 2025 (`de/law/kistb_erzbistum_berlin_2025.txt`; the KiStG Berlin text itself is not held); EStG § 51a (`de/law/estg_51a.txt`); the OECD Revenue Statistics table for Germany (`tools/in_gap2/oecd/DEU.csv`, 2021-2024) has no church-tax line]",
+  "dated": "Amtsblatt des Erzbistums Berlin 12/2024 (2025 ff.); EStG § 51a archived 2025-11-22",
+  "grade": "R",
+  "kernel_parts": [
+   "1.x surtax Kirchensteuer (DeTax.Assess kistBp, option --kist=900 for Berlin)"
+  ],
+  "unsupported": [
+   "membership is an option of the run (--kist): default not a member",
+   "the other 6000 items (none recorded)"
+  ],
+  "yif16": "re-cited 2025",
+  "status": "reclassified",
+  "reclass": "not a tax (OECD guide § 6): the Kirchensteuer is levied by the churches, public-law religious societies outside general government; the Finanzamt collects it for them; the 1.x surtax option (--kist=900) is kept as it is and the default run (not a member) charges nothing",
+  "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+  "law": "WRV Art. 137 (6) (via GG Art. 140): the religious societies that are public-law corporations are entitled to levy taxes on the basis of the civil tax lists under Land law (lexifina/germany-law `bund/gesetze/wrv/art-137.md`, commit b1f5fa6b7b04d); Kirchensteuergesetz Berlin as named by the Kirchensteuerbeschluss Erzbistum Berlin 2025 (`de/law/kistb_erzbistum_berlin_2025.txt`; the KiStG Berlin text itself is not held); EStG § 51a (`de/law/estg_51a.txt`); the OECD Revenue Statistics table for Germany (`tools/in_gap2/oecd/DEU.csv`, 2021-2024) has no church-tax line",
+  "gap": 5,
+  "was_grade": "A"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (rest)",
+  "statute": "not reached: pass 8: Kirchensteuer modelled; no other national tax recorded",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: the TEDB list of 1.7.2025 names no tax for heading 6000 (church tax not a tax, guide § 6; the others under 1100-5000), but OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVDEU v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/DEU.csv`, SHA256SUMS; general government S13; 2025 not yet published) books 6200 revenue without a name (2021-2024: 256, 358, 407, 553 million EUR): what it is was not found, so no absence is cited; the table has no church-tax line (Kirchensteuer outside the general-government figures, as guide § 6)",
+  "unsupported": [
+   "the national account of the 6200 item (Destatis / Bundesministerium der Finanzen tax revenue tables)"
+  ],
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Kraftfahrzeugsteuer",
+  "statute": "KraftStG 2002 § 9 (1) Nr. 2 b, c; § 3d (1) [year in force 2025 (pass 16), re-cited 2025: captures 2025-07-20 (§ 9) and 2025-09-11 (§ 3d): § 9 identical; § 3d in 2025 exempts electric cars first registered by 31.12.2025 until 31.12.2030 (the 2026 text: by 31.12.2030, until 31.12.2035); every car of a 2025 return was registered by 2025, so the charge is the same; statute now quotes the 2025 wording]",
+  "dated": "KraftStG § 9 archived 2025-07-20, § 3d archived 2025-09-11",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "cars first registered before 2009 (Euro-class rates, § 9 (1) Nr. 2 a), hybrids (engine type not given), electric cars of 2011-2015 (weight rates, § 9 (2)), motorcycles, motor caravans, vans and lorries",
+   "5200 Kraftfahrzeugsteuer: a car first registered in 2009 is taken under § 9 (1) Nr. 2 b (only from 1 July 2009; earlier: Nr. 2 a)",
+   "5200 Kraftfahrzeugsteuer: an electric car of 2015 leaves the § 3d exemption during 2025 (not split)"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+  "unsupported": [
+   "registration taxes, licences and permits other than the one modelled"
+  ]
+ }
+]

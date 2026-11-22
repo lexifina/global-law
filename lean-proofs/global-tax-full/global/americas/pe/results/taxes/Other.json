@@ -1,0 +1,106 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "Pension and health contributions of independent workers (voluntary affiliation)",
+  "statute": "TUO Ley del SPP (D.S. 054-97-EF) art. 33; Decreto Ley 19990 art. 4 a); Ley 26790 art. 3, art. 6 c)",
+  "grade": "R",
+  "status": "reclassified: not a tax (voluntary contributions; OECD Guide §11, §42)",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed as cuarta categoría; no contribution computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "lexifina/peru-law ley-sistema-privado-pensiones/art-033.md (4 versions 2023-05-03 to 2025-09-21; art. 33: 0 changes; official source diariooficial.elperuano.pe idNorma=44) and decreto-ley-sistema-nacional-pensiones/art-004.md (official source diariooficial.elperuano.pe idNorma=45) read",
+   "Ley 26790 (Ley de Modernización de la Seguridad Social en Salud), El Peruano 17 May 1997 p. 149283, leyes.congreso.gob.pe/Documentos/Leyes/26790.pdf fetched 2026-11-22 (scan, OCR: americas/gap2/law/pe_ley26790_congreso.*) arts. 3, 6 c): original text; later amendments of art. 3 not read",
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 2300 = 2021:48.3 2022:53.6 2023:58.7 2024:62.1"
+  ],
+  "p7_triage_pass": "2026-11-21",
+  "gap2_outcome": "(c) not a tax",
+  "gap2_note": "not a tax: an independent worker joins a pension system only voluntarily: TUO de la Ley del Sistema Privado de Administración de Fondos de Pensiones art. 33 'El trabajador independiente puede afiliarse al Sistema Nacional de Pensiones (SNP) o al Sistema Privado de Administración de Fondos de Pensiones (SPP) voluntariamente' (unchanged through 2025: Ley 32123, in force 2025-09-06, amended arts. 1, 18-A, 24, 40, 42 and others, not art. 33); Decreto Ley 19990 art. 4: 'Podrán asegurarse facultativamente en el Sistema Nacional de Pensiones ... a) Las personas que realicen actividad económica independiente'; health: Ley 26790 art. 3 (regular affiliates are dependent workers and pensioners; 'Todas las personas no comprendidas en el párrafo anterior se afilian bajo la modalidad de asegurados potestativos'), art. 6 c) (their contribution is that of the plan each chooses). Interpretative Guide §11 and §42: voluntary contributions are not taxes and are excluded from heading 2000.",
+  "gap_pass2": "2026-11-22"
+ },
+ {
+  "oecd": "3000",
+  "tax": "SENATI contribution",
+  "statute": "Ley 26272 (not read)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: SENATI contribution 0.75 % of payroll of industrial (CIIU section C) employers (OECD PE 3000 'Contributions to SENATI'); Ley 26272 not read and the employer's CIIU activity not used"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: SENATI contribution 0.75 % of payroll of industrial (CIIU section C) employers (OECD PE 3000 'Contributions to SENATI'); Ley 26272 not read and the employer's CIIU activity not used",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 3000 = 2021:100.6 2022:112.9 2023:114.7 2024:126.1; named lines: 3000 Contributions to SENATI (2024: 125.5); 3000 Extraordinary solidarity tax (IES) (2024: 0.6); 3000 IES refunds (2024: -0.0)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribución especial de obras públicas (TUO Ley de Tributación Municipal arts. 62-65",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribución especial de obras públicas (TUO Ley de Tributación Municipal arts. 62-65; the MAP's art. 13-A is the predial minimum, off-target). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribución especial de obras públicas (TUO Ley de Tributación Municipal arts. 62-65; the MAP's art. 13-A is the predial minimum, off-target). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "national Arancel de Aduanas (NANDINA, Andean Community)",
+  "customs_note": "customs import duties (5123): national Arancel de Aduanas (NANDINA, Andean Community); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "re-filed in part; kept at C: the ITF (Ley 28194, 0.005 %) named in the earlier triage is a 4400 tax (Guide §53; OECD PE 4400 'Financial transactions tax'): re-filed as its own 4400 C row (the PE 4400 alcabala entry does not model it). Under 6000: the Nuevo RUS (D.Leg. 937; OECD 6100 'Single simplified regime') and others: kept at C (NRUS category quotas need a small-business input)"
+  ],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "re-filed in part; kept at C: the ITF (Ley 28194, 0.005 %) named in the earlier triage is a 4400 tax (Guide §53; OECD PE 4400 'Financial transactions tax'): re-filed as its own 4400 C row (the PE 4400 alcabala entry does not model it). Under 6000: the Nuevo RUS (D.Leg. 937; OECD 6100 'Single simplified regime') and others: kept at C (NRUS category quotas need a small-business input)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 6000 = 2021:5461.3 2022:3573.1 2023:3453.8 2024:4679.6; named lines: 6100 Single simplified regime (2024: 119.0); 6200 Other (2024: 1673.8); 6200 Other tax refunds (2024: -60.3); 6200 Tax Instalment payments (2024: 2947.0)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4400",
+  "tax": "Impuesto a las Transacciones Financieras (ITF, 0.005 %)",
+  "statute": "Ley 28194 arts. 9-10, not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)"
+  ],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 4400 = ?"
+  ],
+  "refiled_from": "6000",
+  "p7_triage_pass": "2026-11-21"
+ }
+]

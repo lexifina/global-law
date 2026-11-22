@@ -1,0 +1,385 @@
+{
+ "country": "MX",
+ "name": "Mexico",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:01:11"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "unlisted shares, bonds, casa habitación (art. 93 XIX a))",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Capital.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "1100",
+   "tax": "ISR enajenación de inmuebles (art. 120: gain / years accumulated, the rest at the average rate)",
+   "statute": "LISR arts. 119-121, 124 (DOF 01-04-2024); tarifa art. 152 (1.x model)",
+   "dated": "LISR texto vigente (Cámara de Diputados, Wayback 2025-06-17)",
+   "grade": "A",
+   "package": "P3",
+   "kernel_parts": [
+    "flatCharge",
+    "StackField.addAll",
+    "1.x personTax"
+   ],
+   "unsupported": [
+    "casa habitación exemption (UDI)",
+    "losses (art. 122)",
+    "five-year average rate option (fr. III b)",
+    "INPC factor only via indexBp"
+   ],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Capital.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "1100",
+   "tax": "ISR 10 % definitivo: acciones en bolsa held 12 months or less (art. 129 fr. I)",
+   "statute": "LISR art. 129 fr. I (DOF 01-04-2024)",
+   "dated": "LISR texto vigente (Cámara de Diputados, Wayback 2025-06-17)",
+   "grade": "A",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "netting across holding classes",
+    "loss carry-forward"
+   ],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Capital.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "LIVA arts. 1o, 2o-A, 9, 15, 20",
+   "dated": "DOF consolidation (última reforma 12-11-2021) archived 2025-06-17",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Especial sobre Producción y Servicios",
+   "statute": "LIEPS art. 2o I A), C), D), G), H)",
+   "dated": "archived 2025-06-18, quotas updated DOF 27-12-2024",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "fuel stimulus decrees",
+    "ad valorem base from consumer price"
+   ],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 31 fr. IV; LIVA art. 41",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 31 fr. IV: \"de la manera proporcional y equitativa que dispongan las leyes\" (`mx/law/const_art-031.md`). LIVA art. 41 fr. I (held `mx/law/LIVA.txt`): states in the Sistema Nacional de Coordinación Fiscal agree 'en no mantener impuestos locales o municipales sobre ... Los actos o actividades por los que deba pagarse el impuesto al valor agregado' (lodging excepted); no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: LIVA arts. 1o, 2o-A, 9, 15, 20; LIEPS art. 2o I A), C), D), G), H); LISR art. 9 (30 %); LISR (DOF 01-04-2024) arts. 140, 164, 156, 166, 167; 1.x model (see its summary.json); LISR arts. 119-121, 124 (DOF 01-04-2024)).",
+   "family_file": "lean/MxGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la renta (personas morales)",
+   "statute": "LISR art. 9 (30 %)",
+   "dated": "DOF consolidation archived 2025-06-17",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "PTU (employees' profit share, 10 %) and losses not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "LISR (DOF 01-04-2024) arts. 140, 164, 156, 166, 167",
+   "dated": "Cámara de Diputados LISR, última reforma DOF 01-04-2024 (mx/law/LISR.txt); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "LISR art. 166 fr. I-IV reduced interest rates (banks 10 %, 4.9 %, reinsurers 15 %, fr. IV 21 %), the 35 % on patent and trademark royalties (art. 167) and the source rule for services rendered abroad by an unrelated provider (art. 156) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "IMSS voluntary incorporation of the self-employed",
+   "statute": "Ley del Seguro Social art. 13 fr. I (lexifina/mexico-law ley/1995/ley-del-seguro-social/art-013.md); OECD Guide §11, §42",
+   "grade": "R",
+   "status": "reclassified: not a tax (voluntary contributions; OECD Guide §11, §42)",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "(c) not a tax",
+   "triage_note": "not a tax: the self-employed join the IMSS régimen obligatorio only voluntarily (LSS art. 13 fr. I: 'Voluntariamente podrán ser sujetos de aseguramiento al régimen obligatorio: I. Los trabajadores independientes o por cuenta propia'); Guide §11 and §42: voluntary contributions are not taxes and are excluded from heading 2000",
+   "evidence": [
+    "LSS art. 13 fr. I text read",
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/MxGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Impuesto Predial of the Ciudad de México (Código Fiscal CDMX art. 130): lexifina/mexico-mexico-city-law holds only the tariff 'REFORMADA EN SUS CUOTAS, G.O. 19 DE DICIEMBRE DE 2025' (2026)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Predial of the Ciudad de México (Código Fiscal CDMX art. 130): lexifina/mexico-mexico-city-law holds only the tariff 'REFORMADA EN SUS CUOTAS, G.O. 19 DE DICIEMBRE DE 2025' (2026); the 2025 cuotas are not in the repository. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Predial of the Ciudad de México (Código Fiscal CDMX art. 130): lexifina/mexico-mexico-city-law holds only the tariff 'REFORMADA EN SUS CUOTAS, G.O. 19 DE DICIEMBRE DE 2025' (2026); the 2025 cuotas are not in the repository. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 4100 = 2021:56148.1 2022:64904.1 2023:70209.5 2024:66291.6; named lines: 4120 Property tax (2024: 66291.6)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/MxGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribuciones de mejoras (Código Fiscal CDMX)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribuciones de mejoras (Código Fiscal CDMX). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribuciones de mejoras (Código Fiscal CDMX). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/MxGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Ley de los Impuestos Generales de Importación y de Exportación (LIGIE)",
+   "customs_note": "customs import duties (5123): Ley de los Impuestos Generales de Importación y de Exportación (LIGIE); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/MxGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD MX 6200: 'Accessories' (recargos and surcharges; fines are not taxes, Guide §2) and 'Additional state and local taxes' (state surcharges on state taxes): not identified for the Ciudad de México"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD MX 6200: 'Accessories' (recargos and surcharges; fines are not taxes, Guide §2) and 'Additional state and local taxes' (state surcharges on state taxes): not identified for the Ciudad de México",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 6000 = 2021:82094.2 2022:115845.9 2023:106884.8 2024:118181.0; named lines: 6200 Accessories (2024: 71110.7); 6200 Additional state and local taxes (2024: 46880.0); 6200 Adjustment (2024: 1253784.0); 6200 Unallocable between 1000 and 5000 caused in exercices fiscal previous liquidation slopes or of payment (2024: 190.3)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/MxGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "none: LISR art. 93 XXII (herencia o legado exempt), XXIII (gifts within the family)",
+   "dated": "LISR, Wayback capture 2025-06-17",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "family_file": "lean/MxGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 31 fr. IV",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 31 fr. IV: \"de la manera proporcional y equitativa que dispongan las leyes\" (`mx/law/const_art-031.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: LIVA arts. 1o, 2o-A, 9, 15, 20; LIEPS art. 2o I A), C), D), G), H); LISR art. 9 (30 %); LISR (DOF 01-04-2024) arts. 140, 164, 156, 166, 167; 1.x model (see its summary.json); LISR arts. 119-121, 124 (DOF 01-04-2024)).",
+   "family_file": "lean/MxGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "IMSS cuotas patronales",
+   "statute": "Ley del Seguro Social arts. 25, 28, 73, 106 (transitorio décimo noveno), 107, 147, 211, 212",
+   "dated": "LSS consolidation (Cámara de Diputados) archived 2025-06; UMA 2025 from the 1.x model",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "riesgos de trabajo at class I prima media",
+    "art. 36 minimum-wage worker quota"
+   ],
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Social.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Retiro, cesantía en edad avanzada y vejez; INFONAVIT",
+   "statute": "LSS art. 168; Ley del INFONAVIT art. 29",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P4",
+   "kernel_parts": [],
+   "unsupported": [
+    "individual-account contributions: non-tax compulsory payments in the OECD classification"
+   ],
+   "family_file": "lean/MxGlobal/Social.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "3000",
+   "tax": "Impuesto sobre Nóminas (Ciudad de México)",
+   "statute": "Código Fiscal de la Ciudad de México arts. 156, 157, 158 (art. 158 reformado G.O. 27-12-2024: 4 %)",
+   "dated": "lexifina/mexico-mexico-city-law codigo/2009/codigo-fiscal (consolidation to G.O. 19-12-2025; art. 158 last reformed G.O. 27-12-2024, in force for all of 2025)",
+   "grade": "A",
+   "package": "P7",
+   "kernel_parts": [
+    "payrollFamily",
+    "PayrollTax"
+   ],
+   "unsupported": [
+    "employer taken as located in the Ciudad de México",
+    "art. 157 exclusions (household workers etc.) not inputs"
+   ],
+   "p7_triage": "(a) modelled in the P7 triage pass 2026-11-21",
+   "status": "modelled",
+   "family_file": "lean/MxGlobal/Social.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Código Fiscal CDMX (ISAI, predial)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/MxGlobal/Transfers.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5200",
+   "tax": "Impuesto sobre Tenencia o Uso de Vehículos (Ciudad de México): new vehicles of 2025",
+   "statute": "Código Fiscal CDMX arts. 160, 161 BIS 2 VII-VIII, 161 BIS 4 (month factor), 161 BIS 5 I (3 %), II (0.245 %), 161 BIS 9 (3 %), 161 BIS 10 (0 %)",
+   "dated": "consolidation to the reform of 26 Dec 2023 (Wayback 2025-08-06, mx/law/codigo_fiscal_cdmx_wb20250806.*); the 2025 decree (G.O.CDMX 27 Dec 2024, SCJN synthesis) amends only the cuotas of 161 BIS 7 and 16 in the chapter; pass 14, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "VehicleTax",
+    "vehicleTaxFamily",
+    "firstRegMonth"
+   ],
+   "unsupported": [
+    "used vehicles (161 BIS 13, 15, 16: INPC factor and 2025 cuotas) not computed",
+    "trucks and buses not computed",
+    "100 % subsidy up to $250,000 not applied",
+    "every vehicle taken as domiciled in CDMX"
+   ],
+   "family_file": "lean/MxGlobal/Transfers.lean",
+   "guards": 8
+  }
+ ],
+ "grades": {
+  "A": 13,
+  "B": 1,
+  "C": 5
+ },
+ "guards": 32,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

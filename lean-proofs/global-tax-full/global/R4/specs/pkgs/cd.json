@@ -1,0 +1,226 @@
+{
+ "cc": "CD",
+ "dated": "Code des impôts 2023",
+ "entries": [
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "Code des impôts 2023 (whole code)",
+   "why": "CD Code des impôts 2023 (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net' finds no charging provision (only treaty clauses)"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (impôt sur les véhicules (vignette), IERE on expatriate pay; provision not located by keyword in the reachable text)",
+   "statute": "Code des impôts (DGI, mis à jour au 10 juillet 2023) + Ordonnance-loi 10/001 (TVA) and loi 23/053 (IRPP from 2026)",
+   "why": "triage minor: impôt sur les véhicules (vignette) is provincial/annual per vehicle class; not modelled. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.dgi.gouv.cd)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "CODE-DES-IMPOTS-2023.txt (whole code)",
+   "why": "CD: the general tax code held (CODE-DES-IMPOTS-2023.txt, 829k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnss",
+   "level": "social",
+   "rateBp": 1300,
+   "grade": "A",
+   "name": "CNSS employer contributions (family 6,5 %, pensions 5 %, occupational risks 1,5 %)",
+   "statute": "Décret n° 18/041 du 24 novembre 2018 fixant les taux de cotisations dues à la CNSS art. 2-4, 8, 10 (droitcongolais.info file 830.11.18.8, R4/fetch/cd11); assiette déplafonnée (Ordonnance 92-087 du 20 août 1992; arrêté du 1er mars 2013) [text version: Décret n° 18/041 du 24 novembre 2018 as published (droitcongolais.info file 830.11.18.8, R4/fetch/cd11); no later rate decree located (flag)]",
+   "doc": "art. 2: prestations aux familles '6,5 %, à charge exclusive de l'employeur'; art. 3: pensions 10 %: '5 % à charge de l'employeur; 5 % à charge du travailleur'; art. 4: risques professionnels '1,5 % à charge exclusive de l'employeur'; art. 8: base not below the SMIG; art. 10: transitional rates only to 1 January 2019.",
+   "unsupported": [
+    "SMIG floor (art. 8)",
+    "risk-rate surcharge for non-compliant employers (art. 5)",
+    "the worker's 5 %",
+    "INPP training contribution (rate by headcount, instrument not read)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "onem",
+   "level": "central",
+   "rateBp": 50,
+   "grade": "A",
+   "name": "Contribution patronale à l'ONEM (0,5 %)",
+   "statute": "Arrêté ministériel n° 028/CAB/MIN/ETPS/MBL/DKL/dag/2013 du 18 mars 2013 art. 1er (droitcongolais.info file 820.03.13) [text version: arrêté of 18 March 2013 as published (droitcongolais.info file 820.03.13, R4/fetch/cd11); no later arrêté located (flag)]",
+   "doc": "art. 1er: 'Le taux de contribution due à l'Office National de l'Emploi, ONEM en sigle, par chaque employeur, tant public, parapublic que privé, est fixé à 0,5 % de la rémunération mensuelle payée par l'employeur à ses travailleurs.'",
+   "unsupported": [
+    "no later order found (the registry note's 0,2 % is not supported by a text held)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "imrDiv",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 2000,
+   "name": "Impôt mobilier on dividends (20 %)",
+   "statute": "Code des impôts (consolidation 2023) Livre I, IIème partie, art. 26 (impôt mobilier); finance laws 2024-2025 not read (flag)",
+   "doc": "art. 26: 'L'impôt mobilier est fixé à 20 %', on income of movable capital (dividends, interest and other income of securities and claims)."
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "imrInt",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 2000,
+   "name": "Impôt mobilier on interest (20 %)",
+   "statute": "Code des impôts (consolidation 2023) art. 26",
+   "doc": "art. 26: 'L'impôt mobilier est fixé à 20 %' (also on interest on claims, deposits and bonds within its scope).",
+   "unsupported": [
+    "exemptions of savings-bank and certain deposit interest not checked"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "employerLevy",
+   "fam": "inpp",
+   "level": "central",
+   "grade": "B",
+   "name": "INPP contribution (employer, vocational training: 3 % / 2 % / 1 % of pay by headcount)",
+   "statute": "Ordonnance-loi 206 of 29 June 1964 and Decree 09/55 of 3 December 2009 (INPP); interministerial rate order after 1984 not read; rates by headcount from PwC Worldwide Tax Summaries, Congo, Democratic Republic of the, Individual - Other taxes, social security section: last reviewed 15 October 2024 (Wayback capture 2025-11-14, R4/fetch/swp/pwc_cd_indother_wb20251114.txt) and the same rates on the page last reviewed 21 April 2026 (R4/fetch/swp/pwc_cd_indother_live20261121.txt)",
+   "doc": "Secondary-source sweep (2026-11-22): the guide gives an employer-only INPP contribution of 3 % for private employers with at most 50 employees and for State-owned companies, 2 % for 51-300 employees and 1 % above 300; the same three rates appear in the PwC review of 15 October 2024 (captured November 2025) and of 21 April 2026, so they held through 2025. Kernel 2.6.0 employer facts: the employer's headcount ('employerEmployees' of an adult, 'employees' of a company); headcount unknown -> no charge, grade C (never guessed). Worked cases (hand): wages 1 000 000 at an employer of 40 -> 30 000; of 120 -> 20 000; of 400 -> 10 000; no headcount -> nothing, listed; company payroll 10 000 000 with 40 employees -> 300 000, with 301 -> 100 000.",
+   "unsupported": [
+    "employer headcount not given: no charge, grade C",
+    "State-owned companies with more than 50 employees (3 % in the guide) are not told apart: the headcount rule is applied",
+    "the interministerial rate order itself not read (B, guide)"
+   ],
+   "levy": "{ name := \"INPP contribution (employer, 3 % / 2 % / 1 % by headcount)\", level := .central, companies := true, rules := [{ rateBp := 300, tests := [.employeesAtMost 50], ifUnknown := .gradeC, statute := \"Ordonnance-loi 206 of 29 June 1964 and Decree 09/55 of 3 December 2009 (INPP); interministerial rate order after 1984 not read; rates by headcount from PwC Worldwide Tax Summaries, Congo, Democratic Republic of the, Individual - Other taxes, social security section: last reviewed 15 October 2024 (Wayback capture 2025-11-14, R4/fetch/swp/pwc_cd_indother_wb20251114.txt) and the same rates on the page last reviewed 21 April 2026 (R4/fetch/swp/pwc_cd_indother_live20261121.txt); up to 50 employees (and State-owned companies): 3 %\" }, { rateBp := 200, tests := [.employeesAtLeast 51, .employeesAtMost 300], ifUnknown := .gradeC, statute := \"Ordonnance-loi 206 of 29 June 1964 and Decree 09/55 of 3 December 2009 (INPP); interministerial rate order after 1984 not read; rates by headcount from PwC Worldwide Tax Summaries, Congo, Democratic Republic of the, Individual - Other taxes, social security section: last reviewed 15 October 2024 (Wayback capture 2025-11-14, R4/fetch/swp/pwc_cd_indother_wb20251114.txt) and the same rates on the page last reviewed 21 April 2026 (R4/fetch/swp/pwc_cd_indother_live20261121.txt); 51 to 300 employees: 2 %\" }, { rateBp := 100, tests := [.employeesAtLeast 301], ifUnknown := .gradeC, statute := \"Ordonnance-loi 206 of 29 June 1964 and Decree 09/55 of 3 December 2009 (INPP); interministerial rate order after 1984 not read; rates by headcount from PwC Worldwide Tax Summaries, Congo, Democratic Republic of the, Individual - Other taxes, social security section: last reviewed 15 October 2024 (Wayback capture 2025-11-14, R4/fetch/swp/pwc_cd_indother_wb20251114.txt) and the same rates on the page last reviewed 21 April 2026 (R4/fetch/swp/pwc_cd_indother_live20261121.txt); more than 300 employees: 1 %\" }] }",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 40
+        }
+       ]
+      }
+     },
+     "expect": [
+      30000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 120
+        }
+       ]
+      }
+     },
+     "expect": [
+      20000
+     ]
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 400
+        }
+       ]
+      }
+     },
+     "expect": [
+      10000
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000
+        }
+       ]
+      }
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "c4",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 10000000,
+       "employees": 40
+      }
+     },
+     "expect": [
+      300000
+     ]
+    },
+    {
+     "line": {
+      "id": "c5",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 10000000,
+       "employees": 301
+      }
+     },
+     "expect": [
+      100000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "unsupported",
+   "name": "Impôt sur les véhicules (vignette) and taxe spéciale de circulation routière (provincial)",
+   "statute": "Code des impôts (DGI, mis à jour au 10 juillet 2023), world/B08-central-africa-fr/cd/law/CODE-DES-IMPOTS-2023.txt: impôt sur les véhicules (Ordonnance-loi 69-006) art. 40-45, rate article 41 with the editorial note on Constitution art. 204 point 16 and Loi n° 11/011 (finances publiques) art. 9 al. 5; taxe spéciale de circulation routière (Ordonnance-loi 88-029) art. 4, same note",
+   "why": "No national rate: both taxes are provincial and local taxes (Constitution art. 204 point 16) whose rates are fixed by each province (LFP art. 9 al. 5); the Code's rate tables (art. 41; TSCR art. 4) are printed blank. A provincial edict (e.g. Kinshasa) for 2025 is not held, so no province's tariff is modelled",
+   "tried": "local copy of the Code des impôts 2023 (art. 36-45 and the TSCR ordinance read); no provincial edict located this pass",
+   "triage": "moderate"
+  }
+ ]
+}

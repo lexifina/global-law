@@ -1,0 +1,62 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Társasági adó",
+  "statute": "1996. évi LXXXI. törvény a társasági adóról és az osztalékadóról 19. § (9 százalék) [year in force 2025 (pass 16), unchanged-confirmed: hu/law/tao.html footnote: 19. § set by 2018. évi LXXXII. tv. 24. §, hatályos 2019. I. 1-től]",
+  "dated": "consolidated text (jogtar), current at fetch (2026-11)",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "helyi iparűzési adó (local business tax, up to 2 % of the net turnover base, Htv.) not modelled",
+   "loss carry-forward limit (50 % of the base, 17. §) not modelled",
+   "Pillar Two top-up (2023. évi LXXXI.) not modelled"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Forrásadó (társaságok) (dividend, interest, royalty, services)",
+  "statute": "1996. évi LXXXI. törvény (Tao.): no withholding on payments to foreign companies",
+  "dated": "2025-06-24",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on royalties and services to individuals paid abroad",
+  "statute": "not read",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 9: no statute or official/secondary source on disk states the rule for these kinds; pass 12: Szja (`hu/law/szja.txt`, consolidated text with the 2025. évi LIV. törvény amendments) 46.-47. §: on self-employed and royalty income the Hungarian payer deducts a tax advance (adóelőleg) and the tax is settled by return; the advance base for a non-resident individual and the treaty relief path were not read clause by clause (the jogtar text interleaves amendment notes)",
+  "unsupported": [
+   "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\"",
+   "would unlock (pass 12): a clean 2025 text of Szja 46.-49. § and 7. § (cost ratio) or NAV's guide for payments to foreign individuals"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Személyi jövedelemadó (külföldi magánszemély: osztalék, kamat) (dividend, interest)",
+  "statute": "1995. évi CXVII. törvény (Szja tv.) 8. § (1), 65. §, 66. § [year in force 2025 (pass 16), unchanged-confirmed: jogtar footnotes in hu/law/szja.html: 8. § (1) 15 % set by 2015. évi LXXXI. tv. 2. §, hatályos 2016. I. 1-től; 65. § (1) by 2006. évi LXI. tv. (mod. 2012. évi CLXXVIII.); 66. § (1) by 2008. évi LXXXI. tv. (2009. I. 1-től); no later amendment]",
+  "dated": "Nemzeti Jogtár, hatályos 2026.X.1. (rate unchanged since 2016) (`hu/law/szja.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "interest is taken as kamatjövedelem (65. §); interest on a private loan is other income, also 15 % (social contribution tax not applied)",
+   "royalties and service fees paid to non-resident individuals (önálló tevékenység: base and source rules) not read (grade C)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

@@ -1,0 +1,73 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 13: Kanton Zürich Verkehrsabgabe on cars (Hubraum + Gesamtgewicht) modelled from the Strassenverkehrsamt's tariff; electric cars, the efficiency rebate, vans, motorcycles, heavy vehicles, the federal Automobilsteuer (4 % on import) and the LSVA not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 13: Kanton Zürich Verkehrsabgabe on cars (Hubraum + Gesamtgewicht) modelled from the Strassenverkehrsamt's tariff; electric cars, the efficiency rebate, vans, motorcycles, heavy vehicles, the federal Automobilsteuer (4 % on import) and the LSVA not modelled",
+  "unsupported": [
+   "would unlock: the Verkehrsabgabengesetz (LS 741.1) and Verkehrsabgabenverordnung (LS 741.11) texts for 2025 (electric cars' tariff, rebate rules); AStG (SR 641.51) art. 13 for the 4 % on imported cars"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Verkehrsabgabe (Kanton Zürich)",
+  "statute": "Verkehrsabgabengesetz des Kantons Zürich (LS 741.1) and Verkehrsabgabenverordnung (LS 741.11), tariff for cars and light motor vehicles up to 3,5 t as published by the Strassenverkehrsamt",
+  "dated": "zh.ch, Verkehrsabgabe für Auto & Kleinbus, via the Internet Archive 2025-04-27 (`ch/law/zh_verkehrsabgabe_auto_wb20250427.html`)",
+  "grade": "B",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "electric and fuel-cell cars (their tariff was not read), cars above 3,5 t or 11 000 cm3, vans, motorcycles, lorries and trailers",
+   "5200 Verkehrsabgabe (Zürich): the input's mass is read as the total weight (Gesamtgewicht, field 33); the canton is taken as Zürich for every vehicle",
+   "5200 Verkehrsabgabe (Zürich): the 80 % / 50 % rebate for efficiency categories A and B (at most 130 g/km) in the first four years is not applied: the category is not an input (grade C)"
+  ]
+ },
+ {
+  "oecd": "6000",
+  "tax": "Personalsteuer (Stadt Zürich)",
+  "statute": "StG ZH § 199, § 200 (Fr. 24 per adult; spouses each)",
+  "dated": "StG ZH Nachtrag 127 (in force for 2025, as the CH model's other ZH entries)",
+  "grade": "A",
+  "kernel_parts": [
+   "1.x line: Personalsteuer 24 per adult (ChTax.Basic)"
+  ],
+  "unsupported": [
+   "booked inside the 1.x pit line, not as a separate 6000 charge"
+  ],
+  "gap": 1
+ },
+ {
+  "oecd": "6000",
+  "tax": "Kirchensteuer (ZH)",
+  "statute": "StG ZH § 201 (Kirchgemeinden der kantonalen kirchlichen Körperschaften)",
+  "dated": "StG ZH Nachtrag 127",
+  "grade": "R",
+  "status": "reclassified",
+  "reclass": "not a tax (OECD guide § 6): levied by the parishes of the cantonal church corporations, not by the canton or the political municipalities; the 1.x option --church reformed|catholic is kept as it is",
+  "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+  "law": "StG ZH § 201 (1)",
+  "kernel_parts": [],
+  "unsupported": [],
+  "gap": 1
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6200: military-service exemption tax and other items)",
+  "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVCHE v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/CHE.csv`, SHA256SUMS; general government S13; 2025 not yet published): 6200 Exemption tax 211,5 and Other 466,7 million CHF (2024); the exemption tax is the federal Wehrpflichtersatzabgabe",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: named by the OECD table; the Wehrpflichtersatzabgabe act (BG über die Wehrpflichtersatzabgabe, SR 661) not read",
+  "unsupported": [
+   "would unlock: SR 661 (3 % of taxable income, minimum CHF 400) and an input for liability"
+  ],
+  "gap": 1
+ }
+]

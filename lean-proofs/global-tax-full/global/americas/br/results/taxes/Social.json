@@ -1,0 +1,75 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "Contribuição patronal previdenciária (20 %)",
+  "statute": "Lei 8.212/1991 art. 22 I",
+  "dated": "planalto compiled text, capture 2025-07-04",
+  "grade": "A",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ]
+ },
+ {
+  "oecd": "2200",
+  "tax": "RAT/GILRAT (employer)",
+  "statute": "Lei 8.212 art. 22 II a)-c)",
+  "dated": "Lei 8.212 compilada (planalto), wording of Lei 9.732/1998",
+  "grade": "B",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "risk band of the employer (1 % charged)",
+   "FAP multiplier"
+  ]
+ },
+ {
+  "oecd": "3000",
+  "tax": "Salário-educação (employer)",
+  "statute": "Lei 9.424/1996 art. 15",
+  "dated": "planalto compiled text fetched 2026-11-21",
+  "grade": "A",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "refiled_note": "filed under 3000 (was 2200) in the P7 triage pass 2026-11-21: OECD BR table \"Payroll-based contribution to education\" (3000); Guide §40, §47"
+ },
+ {
+  "oecd": "3000",
+  "tax": "Contributions to third parties: Sistema S, INCRA",
+  "statute": "DL 4.048/1942; DL 9.403/1946; Lei 8.029/1990; Lei 2.613/1955",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P4",
+  "kernel_parts": [],
+  "tried": "not fetched (rates depend on the employer's sector, FPAS code)",
+  "unsupported": [
+   "would unlock: the FPAS table and the Sistema S acts"
+  ],
+  "refiled_note": "filed under 3000 (was 2200) in the P7 triage pass 2026-11-21: OECD BR table \"S System contributions\" (3000); Guide §40, §47"
+ },
+ {
+  "oecd": "2300",
+  "tax": "Contribuição previdenciária do contribuinte individual (20 %)",
+  "statute": "Lei 8.212/1991 art. 21, art. 28 III, § 3, § 5",
+  "dated": "lexifina/brazil-law lei-de-custeio-da-seguridade-social (art. 21 wording of Lei 12.470/2011, commit 176d47091b; repository versions to 2026-03-27); 2025 teto R$ 8.157,41 and salário mínimo R$ 1.518,00 from the 1.x model (BrTax.inss)",
+  "grade": "A",
+  "package": "P7",
+  "kernel_parts": [
+   "Family",
+   "charge"
+  ],
+  "unsupported": [
+   "11 % / 5 % (MEI) plans of art. 21 § 2",
+   "services to companies: art. 22 III and Lei 10.666 art. 4 withholding",
+   "13th wage in the teto"
+  ],
+  "p7_triage": "(a) modelled in the P7 triage pass 2026-11-21"
+ }
+]

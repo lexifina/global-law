@@ -1,0 +1,53 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés",
+  "statute": "CGI art. 219 I (25 %; b: 15 % jusqu'à 42 500 €, CA < 10 M€), art. 209 I (1 000 000 € + 50 %), art. 216 (quote-part 5 %) [year in force 2025 (pass 16), re-cited 2025: 2025 text = version from 2023-01-01 (Loi 2022-1726; fr/law/y2024/219.md, copied to fr/law/cgi219_v20230101.md); the Légifrance CGI contents captured 2025-03-13 (fr/law/cgi_texte_lc_wb20250313.html) list LEGIARTI000046868562 as art. 219 in force; the 2026-02-21 version (Loi 2026-103 art. 15) changes only the titres de participation definition; I first para. (25 %) and b (15 % to 42 500 €, CA < 10 M€) identical]",
+  "dated": "CGI art. 219 in its version of 1.1.2023-20.2.2026 (Loi 2022-1726; fr/law/cgi219_v20230101.md); 209, 216 versions in force 2025",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "art. 219 read in its 2026 version",
+   "contribution sociale (art. 235 ter ZC) and the 2025 contribution exceptionnelle (LF 2025) not modelled",
+   "withholding (art. 119 bis, 182 B) not in the local copies: not modelled",
+   "PME condition of paid-up capital held by individuals not checked"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Retenue à la source (art. 182 B) (royalty, services)",
+  "statute": "CGI art. 182 B I b et c, II [year in force 2025 (pass 17), re-cited 2025: PwC France, Corporate - Withholding taxes (reviewed 5.6.2025), Internet Archive 2025-06-16 (fr/law/pwc_wht_wb20250616.*): royalties to non-treaty recipients 25 %, the rate modelled under art. 182 B; the art. 182 B text of 2025 itself not read]",
+  "dated": "Légifrance capture 2024-12-01; PwC France WHT page, Internet Archive 2025-06-16",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "StateWht (2.4.0, recipient state)",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "services are taken as provided or used in France",
+   "the art. 182 B exemption for EU associated companies (art. 182 B II bis) not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Retenue / prélèvement (dividendes, intérêts) (dividend, interest)",
+  "statute": "CGI art. 119 bis 1-2, 125 A III, 187",
+  "dated": "2025-06-16",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)",
+   "StateWht (2.4.0, recipient state)",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

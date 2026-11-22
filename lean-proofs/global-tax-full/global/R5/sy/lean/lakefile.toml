@@ -1,0 +1,22 @@
+name = "SyGlobal"
+version = "0.1.0"
+defaultTargets = ["SyGlobal", "syglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); SyTax = the 1.x model, vendored from cmp20/world/B06-mena/sy/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SyTax"
+
+[[lean_lib]]
+name = "SyGlobal"
+
+[[lean_exe]]
+name = "syglobal"
+root = "SyGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

@@ -1,0 +1,40 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Recurrent property tax",
+  "statute": "Finance (Local Property Tax) Act 2012",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "not read in the P5 pass",
+  "unsupported": [
+   "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Stamp duty on conveyances (residential property)",
+  "statute": "SDCA 1999 Sch. 1, CONVEYANCE or TRANSFER on sale: residential property 1 % to EUR 1 000 000, 2 % to EUR 1 500 000, 6 % above",
+  "dated": "Notes for Guidance 2025 (rates for instruments executed from 2 October 2024, Finance Act 2024 s. 90)",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4400",
+  "tax": "Stamp duty on conveyances (non-residential property)",
+  "statute": "SDCA 1999 Sch. 1, CONVEYANCE or TRANSFER on sale: non-residential property 7,5 %",
+  "dated": "Notes for Guidance 2025 (rates for instruments executed from 2 October 2024, Finance Act 2024 s. 90)",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "stamp duty: other real estate is taken as residential property (1 / 2 / 6 %); commercial property bears 7,5 %",
+   "stamp duty: land is taken as non-residential (7,5 %); residential land follows the residential rates",
+   "stamp duty: the apartment-block rates, the s. 31E 15 % rate, consanguinity relief and the aggregation of linked transactions are not applied"
+  ]
+ }
+]

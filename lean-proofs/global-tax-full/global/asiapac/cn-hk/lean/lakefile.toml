@@ -1,0 +1,15 @@
+name = "CnhkGlobal"
+version = "0.1.0"
+defaultTargets = ["CnhkGlobal", "cnhkglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6) for CN-HK: a new jurisdiction without a 1.x PIT model (PLAN.md §2 R3).
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CnhkGlobal"
+
+[[lean_exe]]
+name = "cnhkglobal"
+root = "CnhkGlobal.Main"

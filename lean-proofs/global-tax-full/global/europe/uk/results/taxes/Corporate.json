@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Corporation tax",
+  "statute": "FA 2021 s. 6 (main rate 25 %), s. 7 (small profits rate 19 %, marginal relief fraction 3/200); CTA 2010 Part 3A s. 18B, 18D (£50,000 / £250,000); CTA 2010 Part 7ZA (ss. 269ZB, 269ZD, 269ZF, 269ZW)",
+  "dated": "legislation.gov.uk 2025-07-01",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "FY2025 charge (annual Finance Act) not read",
+   "associated companies divide the limits (s. 18E)",
+   "groups share one £5 m deductions allowance (s. 269ZR): the entity taken as not in a group"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Income tax deducted at source (interest, royalties)",
+  "statute": "ITA 2007 s. 874: income tax at the basic rate (20 %); ITA 2007 s. 906: income tax at the basic rate (20 %)",
+  "dated": "legislation.gov.uk 2025-07-01",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "the basic rate (20 %) is set by the annual income tax charge (not read)",
+   "treaty and EU-derived exemptions out of scope"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Income tax deducted at source (dividends, services) (dividend, services)",
+  "statute": "Income Tax Act 2007 Part 15 (Deduction of income tax at source), Chapters 3-18 [year in force 2025 (pass 16), re-cited 2025: legislation.gov.uk point in time 2025-07-01 of ss. 874 and 906 (uk/law/ita2007_s874_pit20250701.*, _s906_*): deduction at the basic rate on yearly interest and royalties; Part 15 imposes no deduction on dividends or on service fees outside the CIS, as modelled]",
+  "dated": "legislation.gov.uk point in time 2025-07-01 (ITA 2007 ss. 874, 906)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "the construction industry scheme (FA 2004 ss. 57-77) applies only to construction payments: not modelled",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "re-cited 2025"
+ }
+]

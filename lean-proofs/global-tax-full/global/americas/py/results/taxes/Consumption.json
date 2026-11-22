@@ -1,0 +1,40 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto al Valor Agregado",
+  "statute": "Ley 6380/19 arts. 85-100",
+  "dated": "DNIT text of the act as enacted (2019); later amendments not checked",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "later amendments"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Selectivo al Consumo",
+  "statute": "Ley 6380/19 arts. 112-120",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "unsupported": [
+   "rates in force by decree; would unlock: the 2025 ISC decrees"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 179",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 179: \"Todo tributo, cualquiera sea su naturaleza o denominación, será establecido exclusivamente por la ley\" (`py/law/const_art-179.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Ley 6380/19 arts. 85-100; Ley 6380/19 art. 21 (10 %); Ley 6380/19 art. 43 2 (IDU 15 %, non-resident); 1.x model (see its summary.json); Ley 6380/2019 arts. 53, 56, 59, 60; Ley 98/1992 (not read))."
+ }
+]

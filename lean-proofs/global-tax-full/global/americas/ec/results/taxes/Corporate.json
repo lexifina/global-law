@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto a la renta (sociedades)",
+  "statute": "LRTI art. 37 (25 %)",
+  "dated": "SRI consolidation, última reforma 24.10.2025",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "reduced rates (art. 37 second paragraph, reinvestment, micro and small enterprises) and the tax haven surcharge not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "LRTI arts. 37, 39, 39.2 num. 4",
+  "dated": "SRI LRTI codification, última reforma 24 Oct 2025 (world/B12-latin-america/ec/src/lrti.txt); pass 8, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "LRTI art. 39 (tax-haven recipients: the top personal rate), art. 39.2 num. 4-5 (12 %/14 % where the beneficial owner is resident in Ecuador or the shareholding is not reported) and the art. 13 deductibility conditions for foreign interest not modelled"
+  ],
+  "status": "modelled"
+ }
+]

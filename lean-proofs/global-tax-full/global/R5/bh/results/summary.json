@@ -1,0 +1,428 @@
+{
+ "country": "BH",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Individuals capital income and gains",
+   "statute": "no personal income tax on residents (1.x no-PIT stub, with its citation)",
+   "dated": "2025",
+   "grade": "B",
+   "status": "not levied",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "non-resident or business income of individuals (e.g. SA non-Saudi individuals in business, art. 7(a)(2)) not modelled"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Income tax on oil companies; DMTT (DL 11/2024)",
+   "statute": "Legislative Decree 22/1979 art. 1-2 (46 % on bodies corporate directly engaged in crude oil exploration or production); Legislative Decree 11/2024 (domestic minimum top-up tax, 15 %, MNE groups, from 2025)",
+   "dated": "LLOC English texts: L2279 published May 2024, L1124 published June 2025 (law/lloc_FullEn_*.txt)",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime flat 46 % for companies flagged oil"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "DMTT (DL 11/2024) not computed",
+    "other companies: no income tax under DL 22/1979 (nothing charged)",
+    "Arabic Gazette text not read (official English translation used)"
+   ],
+   "withholding": {
+    "grade": "B",
+    "rules": "dividend/interest/royalty/services 0 % cited: LD 22/1979 art. 1(d), 2 (income tax on hydrocarbon producers only)",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "SIO employer contributions (old age, employment injury)",
+   "statute": "DL 24/1976 art. 17 (BHD 4,000/month), art. 33(1) as substituted by Law 14/2022 with its art. 4 steps (14 % in 2025), art. 47(1) injury 3 %; DL 78/2006 art. 6(2) (employer unemployment share borne by the Labour Fund)",
+   "dated": "LLOC consolidated texts read 2026-11-20 (2026 amendments do not touch art. 17, 33, 47)",
+   "grade": "B",
+   "kernel_parts": [
+    "employerOn (17 % Bahraini / 3 % others, BHD 48,000 a year)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "yearly step dates (1 January) taken from the SIO January 2025 circular as reported, statute says only yearly",
+    "expatriate old-age branch not applied",
+    "injury-rate reductions/increases (art. 48-49) not applied"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "الرسم الشهري عن كل عامل أجنبي (LMRA monthly fee per foreign worker)",
+   "statute": "Labour Market Regulation Law 19/2006 art. 4, 42; PM Decision 26/2008 art. 1 (BHD 200 per permit issue/renewal; BHD 10 a month per foreign worker), as amended by Decision 67/2013 (BHD 5 a month for the first five workers, from 01/09/2013); Decision 79/2025 governs from 01/01/2026",
+   "dated": "lloc.gov.bh Legislation/HTM/RCAB2608, RCAB6713, RCAB7925 (fetched 2026-11-21)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge on the employer: 12 x (5 x min(n,5) + 10 x (n-5)+), n = company.expatWorkers"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "without company.expatWorkers: grade C line",
+    "BHD 200 per permit issue/renewal noted, not booked (permit term not an input)"
+   ],
+   "pass": "3m"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Recurrent property taxes (municipal fees)",
+   "statute": "none on owners read; municipal fee on rents not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "municipal fee on rented property (paid with the electricity bill) not read; no recurrent tax on owners found in the texts read",
+    "pass 3o: lloc.gov.bh Municipalities Law DL 35/2001 (`Legislation/HTM/L3501`) read: art. 35-36 leave municipal fees on buildings and land to the executive regulation and Cabinet decisions; the regulation was not found by URL probing (decrees D0102-D5402 of 2002 listed; lloc has no search)"
+   ],
+   "pass": "3j"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Property registration fee on sales",
+   "statute": "Property Registration Law (Law 13/2013) art. 50 First (2 % of the value; 15 % of the fee deducted when registered within 60 days: 1,7 %), art. 34, 51 (charged in advance of registration), 53-54 (value at notarization, price or true value)",
+   "dated": "SLRB English text slrb.gov.bh/uploads/K1313.pdf (unofficial translation), law/bh_K1313.pdf, .txt; SLRB services-fees page shows the same 2 % / 1,7 % (2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty flat 1,7 % (higher of price and assessed value), buyer"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "registration within 60 days assumed (1,7 %)",
+    "fee charged to the buyer as the applicant for registration (law names joint payment only for swaps)",
+    "gift registration fee (art. 50 Third) not computed"
+   ],
+   "pass": "3j"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "ضريبة القيمة المضافة (VAT)",
+   "statute": "DL 48/2018 art. 3 (as amended by Law 33/2021), 53, 54, 55",
+   "dated": "LLOC current consolidation (last amendment Law 33/2021, in force 2022-01-01)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "all food zero-rated (only the Agreement art. 31 basic foods are)",
+    "registration threshold (Executive Regulation) not applied"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "الضريبة الانتقائية (excise)",
+   "statute": "Law 40/2017 art. 3 (tobacco 100 %, soft drinks 50 %, energy drinks 100 %); Executive Regulation (MoF Decision 17/2017) art. 1 (definitions: only tobacco, carbonated drinks, energy drinks) and art. 4(d) (value = retail price less the taxes included); GCC Unified Excise Tax Agreement (Law 39/2017)",
+   "dated": "LLOC English text including amendments (May 2024); Regulation as published in OG 3346 of 28/12/2017; pass 3r re-cite: NBR excise FAQ served 16/02/2025 (Wayback; law/bh_nbr_excise_faq_2025.html): soft drinks 50 %, energy drinks 100 %, tobacco 100 %; legislation listed: Laws 39/2017, 40/2017 and Decision 17/2017 only",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule x4 (beforeTax, VAT 10 %)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "retail/standard price floor not applied",
+    "official Arabic consolidation of the Law and later amendments to the Regulation (Decision 31/2022) not read"
+   ],
+   "notes": "non-carbonated sweetened drinks are not excise goods in Bahrain in 2025 (case bh-h4)",
+   "status": "modelled"
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Bahrain, Kingdom of as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Bahrain, Kingdom of for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C048&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/bh.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, customsFamily)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 240220000000 (MFN duty '100% ad-valorem with minimum charge of BD.10 for 1000 cigar': specific or compou); 240319100000 (MFN duty '100% ad-valorem with minimum charge of BD.4 per kg. Gross .': specific or compou); 240319200000 (MFN duty '100% ad-valorem with minimum charge of BD.4 per kg. Gross .': specific or compou); 240319300000 (MFN duty '100% ad-valorem with minimum charge of BD.4 per kg. Gross .': specific or compou); 240319400000 (MFN duty '100% ad-valorem with minimum charge of BD.4 per kg. Gross .': specific or compou); 240319900000 (MFN duty '100% ad-valorem with minimum charge of BD.4 per kg. Gross .': specific or compou)",
+    "GCC customs union (origin KW, OM, QA, SA, AE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)",
+    "Pan-Arab free trade area (GAFTA) (origin EG, IQ, JO, KW, LB, LY, MA, OM, PS, QA, SA, SD, SY, TN, AE, YE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "module": "Customs.lean"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Constitution of the Kingdom of Bahrain (2002, as amended 2017) art. 107: public taxes are established, amended and abolished only by law (Constitute Project English text, law/cp_Bahrain_2017.txt); no law levies it; tax laws read: Decree-Law 48/2018 (VAT), 40/2017 (excise), LD 22/1979 (income tax, oil companies), LD 11/2024 (DMTT), Law 13/2013 (property registration fees). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Constitution of the Kingdom of Bahrain (2002, as amended 2017) art. 107: public taxes are established, amended and abolished only by law (Constitute Project English text, law/cp_Bahrain_2017.txt); no law levies it; tax laws read: Decree-Law 48/2018 (VAT), 40/2017 (excise), LD 22/1979 (income tax, oil companies), LD 11/2024 (DMTT), Law 13/2013 (property registration fees). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "6000",
+   "why": "6000: no zakat or other tax outside the taxes listed: Constitution of the Kingdom of Bahrain (2002, as amended 2017) art. 107: public taxes are established, amended and abolished only by law (Constitute Project English text, law/cp_Bahrain_2017.txt); no law levies it; tax laws read: Decree-Law 48/2018 (VAT), 40/2017 (excise), LD 22/1979 (income tax, oil companies), LD 11/2024 (DMTT), Law 13/2013 (property registration fees). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "bh-h1",
+   "total": 27234,
+   "byOecd": {
+    "1100": 0,
+    "2100": 3840,
+    "2200": 8160,
+    "4400": 13600,
+    "5111": 725,
+    "5121": 909
+   },
+   "borne": {
+    "consumer": 1634,
+    "employer": 8160,
+    "entity": 17440,
+    "withheld": 0
+   },
+   "net": 312560,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT: only the basic foods of the GCC Agreement art. 31 list are zero-rated; all food taken as zero-rated",
+    "tobacco excise: the published retail price floor not applied",
+    "employer: unemployment 1 % (DL 78/2006 art. 6(2)) borne by the Labour Fund, not charged; art. 48 injury-rate reductions and art. 49 increases not applied; expatriates' old-age branch not applied",
+    "registration fee: registration within 60 days assumed (1,7 %; 2 % after)"
+   ]
+  },
+  {
+   "id": "bh-c1",
+   "total": 200000,
+   "byOecd": {
+    "1200": 0,
+    "5111": 200000
+   },
+   "borne": {
+    "consumer": 200000,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 800000,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Executive Regulation) not applied",
+    "domestic minimum top-up tax on multinational groups (Legislative Decree 11/2024, 15 %) not computed",
+    "3000 LMRA monthly fee (BHD 5 for each of the first five foreign workers, BHD 10 for each further one): company.expatWorkers not given (grade C)",
+    "3000 LMRA work-permit fee BHD 200 per issue or renewal (Decision 26/2008 art. 1): a charge per permit, permit term not an input; noted, not booked"
+   ]
+  },
+  {
+   "id": "bh-h3",
+   "total": 3050,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 550,
+    "5121": 2500
+   },
+   "borne": {
+    "consumer": 3050,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": [
+    "tobacco excise: the published retail price floor not applied"
+   ]
+  },
+  {
+   "id": "bh-h4",
+   "total": 750,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 250,
+    "5121": 500
+   },
+   "borne": {
+    "consumer": 750,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "bh-c2",
+   "total": 460000,
+   "byOecd": {
+    "1200": 460000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 460000,
+    "withheld": 0
+   },
+   "net": 540000,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Executive Regulation) not applied",
+    "domestic minimum top-up tax on multinational groups (Legislative Decree 11/2024, 15 %) not computed",
+    "3000 LMRA monthly fee (BHD 5 for each of the first five foreign workers, BHD 10 for each further one): company.expatWorkers not given (grade C)",
+    "3000 LMRA work-permit fee BHD 200 per issue or renewal (Decision 26/2008 art. 1): a charge per permit, permit term not an input; noted, not booked"
+   ]
+  },
+  {
+   "id": "bh-w1",
+   "total": 0,
+   "byOecd": {
+    "1100": 0,
+    "1200": 0
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 100000,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Executive Regulation) not applied",
+    "domestic minimum top-up tax on multinational groups (Legislative Decree 11/2024, 15 %) not computed",
+    "3000 LMRA monthly fee (BHD 5 for each of the first five foreign workers, BHD 10 for each further one): company.expatWorkers not given (grade C)",
+    "3000 LMRA work-permit fee BHD 200 per issue or renewal (Decision 26/2008 art. 1): a charge per permit, permit term not an input; noted, not booked"
+   ]
+  },
+  {
+   "id": "bh-t1",
+   "total": 9200,
+   "byOecd": {
+    "1100": 0,
+    "2100": 2400,
+    "2200": 5100,
+    "4400": 1700
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 5100,
+    "entity": 4100,
+    "withheld": 0
+   },
+   "net": 25900,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": [
+    "employer: unemployment 1 % (DL 78/2006 art. 6(2)) borne by the Labour Fund, not charged; art. 48 injury-rate reductions and art. 49 increases not applied; expatriates' old-age branch not applied",
+    "registration fee: registration within 60 days assumed (1,7 %; 2 % after)"
+   ]
+  },
+  {
+   "id": "bh-p1",
+   "total": 1140,
+   "byOecd": {
+    "3000": 1140
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 1140,
+    "withheld": 0
+   },
+   "net": 98860,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Executive Regulation) not applied",
+    "domestic minimum top-up tax on multinational groups (Legislative Decree 11/2024, 15 %) not computed",
+    "3000 LMRA work-permit fee BHD 200 per issue or renewal (Decision 26/2008 art. 1): a charge per permit, permit term not an input; noted, not booked"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 16,
+ "theorems": 1
+}

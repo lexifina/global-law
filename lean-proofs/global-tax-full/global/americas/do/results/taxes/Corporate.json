@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto sobre la renta (personas jurídicas)",
+  "statute": "Código Tributario art. 297 (27 %)",
+  "dated": "DGII Título II text (Ley 253-12 amendments)",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "impuesto sobre los activos (1 %, credited against ISR)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "Código Tributario arts. 305, 306, 308 (Ley 253-12)",
+  "dated": "DGII Título II del Código Tributario (world/B13-caribbean/do/law/t2.txt); pass 8, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "Código Tributario art. 308 Párrafo I (dividends paid out of a dividend account of an inter-company dividend: no withholding) not modelled"
+  ],
+  "status": "modelled"
+ }
+]

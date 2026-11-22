@@ -1,0 +1,60 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Direkte Bundessteuer (Gewinnsteuer)",
+  "statute": "DBG Art. 59 (1) lit. a, Art. 68",
+  "dated": "fedlex 2025-01-01",
+  "grade": "A",
+  "kernel_parts": [
+   "charge (custom: tax deductible from its own base)"
+  ],
+  "unsupported": [
+   "Art. 67 losses",
+   "Art. 69-70 Beteiligungsabzug",
+   "joint deduction assumes the company is taxed in the City of Zürich"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Verrechnungssteuer",
+  "statute": "VStG Art. 4 (1), Art. 13 (1) lit. a",
+  "dated": "fedlex 2025-01-01",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "refunds under treaties and to residents (Art. 21 ff.) out of scope"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Staats- und Gemeindesteuer Zürich (Gewinnsteuer)",
+  "statute": "StG ZH § 71, § 65 (1) lit. a; Steuerfüsse 2025 Kanton 98 %, Stadt Zürich 119 %",
+  "dated": "zhlex Nachtrag 127 (1.1.2025); ESTV TaxRates 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Charge"
+  ],
+  "unsupported": [
+   "Kirchensteuer juristischer Personen not modelled",
+   "Beteiligungsabzug (§ 72) not modelled",
+   "patent box and R&D deductions (§§ 64a-64b) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Verrechnungssteuer (royalties, services) (royalty, services)",
+  "statute": "VStG Art. 4 (1) (objects of the Verrechnungssteuer)",
+  "dated": "SR 642.21, Fassung 01.01.2025 (`ch/law/vstg_20250101.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "cantonal source taxes on certain income of non-resident individuals (DBG Art. 91-97: performers, board fees) not read",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

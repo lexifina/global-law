@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Real estate transfer tax (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Estonia, Corporate - Other taxes, accessed 2026-11-21 (live page; `law/pwc_corpother_live.txt`) [year in force 2025 (pass 16), re-cited 2025: PwC Estonia, Corporate - Other taxes, Internet Archive 2025-07-08 (ee/law/pwc_corpother_wb20250708.*): no transfer taxes in Estonia]",
+  "dated": "PwC WWTS Corporate - Other taxes, 2025-07-08 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": [],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "4100",
+  "tax": "Maamaks (land tax)",
+  "statute": "Maamaksuseadus § 5 (wording from 1.1.2025, RT I, 30.06.2024, 1): the council sets the rate by 1 October of the preceding year, 0,1-2,0 % of the land's taxable value a year (residential land and yard land 0,1-1,0 %, profit-yielding land 0,1-0,5 %)",
+  "dated": "Land Tax Act as last amended 19.06.2024 (RT I 30.06.2024, 1), in force 01.01.2025; EC Taxes in Europe Database (TEDB), tax 208, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rate declared: the Tallinn council's 2025 rate decision was not reached (rate input localRates.propertyTax)",
+   "the sub-ranges for residential land (0,1-1,0 %) and profit-yielding land (0,1-0,5 %) are not separated: a rate is checked against 0,1-2,0 %",
+   "the cap on the yearly increase (+50 %, from 2025) needs the previous year's tax: not modelled",
+   "the home-land relief (Maamaksuseadus § 11) and the municipality's own reliefs: not modelled"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rate is an input: localRates.propertyTax"
+ }
+]

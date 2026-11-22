@@ -1,0 +1,114 @@
+{
+ "cc": "NA",
+ "bloc": "sacu",
+ "name": "Customs import duty (SACU common external tariff, Schedule No. 1 Part 1)",
+ "grade": "B",
+ "statute": "Customs and Excise Act 1998 (Act 20 of 1998) s. 54 (1) (Schedules amended to conform to the common customs area under the Customs Union Agreement) [lexifina/namibia-law customs-excise, version from 2022-05-04: the Schedules are not printed there]; rates: the SACU common external tariff",
+ "dated": "SACU common external tariff as printed by South Africa (2025-04-04) and Botswana (01.07.2025); Namibia's Harmonised Customs Tariffs Book not held: grade B",
+ "country": "NA",
+ "vatBp": 1500,
+ "tests": [
+  {
+   "why": "beer from the US: net of VAT 1 000, value 1 000 / 1,05 = 952, 5 % = 47",
+   "good": "beer",
+   "hs": "2203.00.90",
+   "amount": 1150,
+   "quantity": 1000,
+   "abvBp": 500,
+   "origin": "US",
+   "expect": [
+    47
+   ]
+  },
+  {
+   "why": "beer from Germany: EU/UK column free",
+   "good": "beer",
+   "hs": "2203.00.90",
+   "amount": 1150,
+   "quantity": 1000,
+   "abvBp": 500,
+   "origin": "DE",
+   "expect": [
+    0
+   ]
+  },
+  {
+   "why": "beer from another SACU member: free (art. 18)",
+   "good": "beer",
+   "hs": "2203",
+   "amount": 1150,
+   "quantity": 1000,
+   "abvBp": 500,
+   "origin": "ZA",
+   "expect": [
+    0
+   ]
+  },
+  {
+   "why": "cotton T-shirt from China: value 1 000 / 1,45 = 689, 45 % = 310",
+   "good": "clothing",
+   "hs": "6109.10.00",
+   "amount": 1150,
+   "origin": "CN",
+   "expect": [
+    310
+   ]
+  },
+  {
+   "why": "cotton T-shirt from the UK: EU/UK 27 %: value 787, duty 212 (lower than MFN)",
+   "good": "clothing",
+   "hs": "6109.10",
+   "amount": 1150,
+   "origin": "GB",
+   "expect": [
+    212
+   ]
+  },
+  {
+   "why": "10 l of whisky from the US in bottles of 2 li or less: 154c/li x 10 = 15; value 2 000 - 15 = 1 985",
+   "good": "spirits",
+   "hs": "2208.30.10",
+   "amount": 2300,
+   "quantity": 10000,
+   "abvBp": 4000,
+   "origin": "US",
+   "expect": [
+    15
+   ]
+  },
+  {
+   "why": "whisky with a 6-digit code: the two container lines differ, grade C (no charge)",
+   "good": "spirits",
+   "hs": "2208.30",
+   "amount": 2300,
+   "quantity": 10000,
+   "abvBp": 4000,
+   "origin": "US",
+   "expect": []
+  },
+  {
+   "why": "rice from Thailand: free",
+   "good": "food",
+   "hs": "1006.30",
+   "amount": 1150,
+   "origin": "TH",
+   "expect": [
+    0
+   ]
+  },
+  {
+   "why": "a domestic line pays nothing",
+   "good": "beer",
+   "hs": "2203",
+   "amount": 1150,
+   "quantity": 1000,
+   "abvBp": 500,
+   "origin": "domestic",
+   "expect": []
+  }
+ ],
+ "notes": [
+  "NA: VAT 15 % used to take the value out of a tax-inclusive price (duty in the VAT base)"
+ ],
+ "unsupported": []
+}

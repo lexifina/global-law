@@ -1,0 +1,101 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Imposto sobre o Valor Acrescentado (IVA)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Lei n.º 13/2019 (Código do IVA) art. 16.º n.º 1 (taxa 15 %) and art. 17.º (isenções nas operações internas: seguros e resseguros de vida, intermediação financeira, locação de imóveis para fins residenciais)",
+  "dated": "Lei n.º 13/2019 (Código do IVA, D.R. I Série n.º 71 of 6 Nov 2019), Lei n.º 10/2009 (Código do IRC) and Decreto-Lei n.º 6/2016 (contribuição mínima) as amended by the OGE 2024 law (art. 8 n.º 10; its tax changes stay in force until the next OGE law); the OGE 2025 law is not held: grade B",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "Anexo I special regime (50 % base) not read",
+   "OGE 2025 not held"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Imposto Especial sobre o Consumo (IEC)",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "Decreto-Lei n.º 27/2021",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "the rates are in Anexo I of Decreto-Lei n.º 27/2021 (art. on 'Taxas aplicáveis': 'As taxas ... correspondem às constantes da tabela anexa'), and the annex pages (D.R. n.º 87 of 11 Nov 2021, pp. 1299-1300) are blank in the published PDF"
+  ],
+  "tried": "R4/fetch/st10/iec2021.pdf (text and page images); impostos.financas.gov.st ISC decrees (2016, 2019) not fetched"
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Imposto sobre o Rendimento das Pessoas Colectivas (IRC)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Código do IRC (Lei n.º 10/2009) art. 81.º n.º 1 (taxa geral 25 %); contribuição mínima, Decreto-Lei n.º 6/2016 art. 1.º and 3.º n.º 2 as amended by the OGE 2024 law art. 8 n.º 10 (Dbs 2.544,00)",
+  "dated": "Lei n.º 13/2019 (Código do IVA, D.R. I Série n.º 71 of 6 Nov 2019), Lei n.º 10/2009 (Código do IRC) and Decreto-Lei n.º 6/2016 (contribuição mínima) as amended by the OGE 2024 law (art. 8 n.º 10; its tax changes stay in force until the next OGE law); the OGE 2025 law is not held: grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "OGE 2025 not held",
+   "stamp surcharge on the minimum contribution"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "IRC withholding on non-residents (final)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Código do IRC art. 86.º n.º 1 a), c), g), n.º 3-4 and art. 81.º n.º 2: royalties, capital income (dividends, interest) and services performed in São Tomé 20 %, final for non-residents without a permanent establishment",
+  "dated": "Lei n.º 13/2019 (Código do IVA, D.R. I Série n.º 71 of 6 Nov 2019), Lei n.º 10/2009 (Código do IRC) and Decreto-Lei n.º 6/2016 (contribuição mínima) as amended by the OGE 2024 law (art. 8 n.º 10; its tax changes stay in force until the next OGE law); the OGE 2025 law is not held: grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "amendments 2010-2023 and OGE 2025 not read"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Código do Imposto do Selo (São Tomé e Príncipe)",
+  "dated": "-",
+  "unsupported": [
+   "the Selo code and its Tabela are not held: the São Tomé texts held (CIRS 2009, IRC, IVA 2019, IEC 2021, CMT 2016, OGE 2024 and 2025 proposals) do not contain it"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copies in world/B07-west-africa-fr-pt/st (searched); no route to the Diário da República copy (seventeenth pass)",
+  "triage": "moderate"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "INSS employer contribution (6 %)",
+  "statute": "Regulamentação da Protecção Social Obrigatória, Decreto-Lei n.º 19/2022 (DR n.º 53, 15/07/2022) as amended by DL 25/2022 and DL 7/2023, art. 101.º n.º 3, 102.º (INSS consolidated text)",
+  "dated": "-",
+  "unsupported": [
+   "the worker's 4 %"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ }
+]

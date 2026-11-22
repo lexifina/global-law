@@ -1,0 +1,18 @@
+name = "LiGlobal"
+version = "0.1.0"
+defaultTargets = ["LiGlobal", "liglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); LiTax = the 1.x model, vendored from cmp20/world/B04-europe-rest/li/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "LiTax"
+
+[[lean_lib]]
+name = "LiGlobal"
+
+[[lean_exe]]
+name = "liglobal"
+root = "LiGlobal.Main"

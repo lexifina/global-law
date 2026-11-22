@@ -1,0 +1,226 @@
+{
+ "country": "MD",
+ "name": "Moldova",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 16:23:17"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Codul fiscal art. 39-40 (venitul din creșterea de capital)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/MdGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Taxa pe valoarea adăugată",
+   "statute": "Codul fiscal Titlul III art. 96 (20 %, 8 %); registration at MDL 1 200 000",
+   "dated": "PwC, last reviewed 20 January 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the EU-style structure the source describes (health, education, finance, insurance, residential rent), not quoted item by item",
+    "food at the standard rate: the reduced rate covers only bread, bakery and dairy products (8 %) (not separable in the basket's food line)",
+    "the act's own text not reached: rates from PwC Worldwide Tax Summaries (reliable secondary host)"
+   ],
+   "family_file": "lean/MdGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Codul fiscal Titlul IV (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/MdGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impozitul pe venit (persoane juridice)",
+   "statute": "Codul fiscal nr. 1163/1997 art. 15 lit. b) (12 %)",
+   "dated": "PwC, last reviewed 2 July 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "the Code's own text not reached (secondary host)",
+    "4 % regime for small non-VAT companies and 7 % for farming enterprises not modelled"
+   ],
+   "family_file": "lean/MdGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad",
+   "statute": "Codul fiscal art. 71, 72, 73 (dividends 6 %; interest and royalties 12 %)",
+   "dated": "PwC WWTS Corporate - Withholding taxes, 2025-06-24 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/MdGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impozit reținut la sursă (servicii) (services)",
+   "statute": "Codul fiscal nr. 1163/1997 art. 71, 73 (non-residents)",
+   "dated": "2025-06-24",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as Moldovan-source income (art. 71) taxed at the general 12 % rate",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/MdGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/MdGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/MdGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "taxa de stat (no transfer tax as such)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rate articles (and the reference region's rate where regional)"
+   ],
+   "family_file": "lean/MdGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "Codul fiscal Titlul VI (impozitul pe bunurile imobiliare, Chișinău)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/MdGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social contributions and payroll taxes",
+   "statute": "Codul fiscal / Legea bugetului asigurărilor sociale 2025 (angajator 24 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P4 pass (no dated employer rates with quotes in the 1.x model or fetched texts)",
+   "unsupported": [
+    "would unlock: the act's 2025 employer rates and ceilings (official consolidation or the 1.x model's parameters with quotes)"
+   ],
+   "family_file": "lean/MdGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "none recorded (not cited)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/MdGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "none recorded",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/MdGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 0,
+  "B": 4,
+  "C": 9
+ },
+ "guards": 10,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

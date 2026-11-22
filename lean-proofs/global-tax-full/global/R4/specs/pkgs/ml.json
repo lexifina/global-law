@@ -1,0 +1,309 @@
+{
+ "cc": "ML",
+ "dated": "CGI.txt",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts (DGI online code, 2017 consolidation incl. loi 2016-10)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.dgi.gouv.ml/CGI/)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "patente",
+   "grade": "B",
+   "name": "Contribution des patentes (traders, tableau A exceptional class, Bamako: fixed duty by turnover + 10 % of rental value)",
+   "statute": "CGI art. 144 and 144-A tableau A (L.F. 2014, L.F. 2015, L.F.R. 2017; DGI online consolidation of 2017, later finance laws not held)",
+   "doc": "art. 144-A tableau A, exceptional class, trader with turnover excluding tax of at least 1 bn: 1 000 000 F (1st zone, district of Bamako); 600 M to 1 bn: 800 000 F; 300 to 600 M: 600 000 F; art. 144: proportional duty 10 % of the rental value, never below a quarter of the fixed duty.",
+   "unsupported": [
+    "traders below 300 M of turnover (lower classes of tableau A) and the other professions and zones of the tariff"
+   ],
+   "lic": {
+    "tiers": [
+     [
+      599999999,
+      0,
+      600000,
+      600000
+     ],
+     [
+      999999999,
+      0,
+      800000,
+      800000
+     ]
+    ],
+    "top": [
+     0,
+     1000000,
+     1000000
+    ],
+    "fromTurnover": 300000000,
+    "rentPpm": 100000,
+    "propMinDen": 4
+   },
+   "tests": [
+    {
+     "turnover": 3000000000,
+     "rv": 60000000,
+     "expect": [
+      1000000,
+      6000000
+     ]
+    },
+    {
+     "turnover": 400000000,
+     "expect": [
+      600000,
+      150000
+     ]
+    },
+    {
+     "turnover": 200000000,
+     "expect": []
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "CGI.txt (whole code)",
+   "why": "ML: the general tax code held (CGI.txt, 1018k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "auto5": true,
+   "name": "Net wealth tax",
+   "statute": "CGI.txt (whole code)",
+   "why": "ML: the general tax code held (CGI.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "tva",
+   "grade": "B",
+   "name": "Taxe sur les véhicules automobiles (vignette, cars by fiscal horsepower)",
+   "statute": "CGI art. 166, 170 1) (L.F. 2013; DGI consolidation of 2017, later finance laws not held)",
+   "doc": "art. 170: automobiles 2-6 CV 7 000 F, 7-9 CV 13 000, 10-14 CV 32 000, 15-19 CV 50 000, from 20 CV 75 000.",
+   "unsupported": [
+    "two- and three-wheelers by cylinder capacity (art. 170 2)",
+    "half rate for vehicles bought after 1 October (art. 171)",
+    "exemptions (art. 167)"
+   ],
+   "bands": [
+    [
+     6,
+     7000
+    ],
+    [
+     9,
+     13000
+    ],
+    [
+     14,
+     32000
+    ],
+    [
+     19,
+     50000
+    ]
+   ],
+   "top": 75000,
+   "tests": [
+    {
+     "hps": [
+      9,
+      12
+     ],
+     "expect": [
+      13000,
+      32000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "irvmDiv",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1000,
+   "name": "Impôt sur les revenus de valeurs mobilières, dividends (10 %)",
+   "statute": "CGI art. 41-42 1) (L.F. 2012, L.F. 2013; consolidation of August 2017 incl. L.F.R. 2017 — later finance laws not held, flagged)",
+   "doc": "art. 42: 1) dividends 10 % (7 % from companies listed on a CREPMF-approved exchange); 2) bonds 6 % (3 %/0 % for State bonds of 5-10 / over 10 years); 3) negotiable bonds of companies 13 %; 4) interest on sight or term deposits and current accounts 9 %; 5) bond lots 15 %; 6) other income 18 %.",
+   "unsupported": [
+    "7 % on dividends of listed companies (art. 42 1)",
+    "exemptions of art. 31"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "irvmInt",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 900,
+   "name": "Impôt sur les revenus de valeurs mobilières, interest on deposits and current accounts (9 %)",
+   "statute": "CGI art. 42 4) (consolidation 2017; later finance laws not held, flagged)",
+   "unsupported": [
+    "bonds 6 % / 3 % / 0 % and company bonds 13 % (art. 42 2-3)",
+    "other income 18 % (art. 42 6)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "irf",
+   "grade": "B",
+   "income": "rent",
+   "rateBp": 1200,
+   "name": "Impôt sur les revenus fonciers (12 % of gross rent)",
+   "statute": "CGI art. 17-19, 22 (L.F. 2012; consolidation 2017; later finance laws not held, flagged)",
+   "doc": "art. 17-19: base = gross rent received in the year, with no abatement of any kind; art. 22: 12 % for buildings in hard and semi-hard materials, 8 % for banco buildings; base rounded down to the thousand.",
+   "unsupported": [
+    "8 % for banco (earth) buildings",
+    "rounding of the base down to the thousand francs"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "tpvShares",
+   "grade": "B",
+   "rateBp": 700,
+   "kinds": [
+    "listedShares",
+    "unlistedShares"
+   ],
+   "name": "Taxe sur les plus-values de cession réalisées par les particuliers, shares (7 %)",
+   "statute": "CGI art. 121-124, 129 (loi n° 11-078, L.F. 2013, L.F.R. 2017; consolidation 2017, flagged)",
+   "doc": "art. 124: net gain = net sale price less the acquisition price; art. 129: 7 % on shares and partnership interests, 5 % on bonds, 15 % short-term and 5 % long-term on other gains.",
+   "unsupported": [
+    "immovable gains: within two years taxed as short-term at 15 %, after two years 5 % with a 5 %-a-year abatement from the second year up to 50 % (art. 126-127, 129): the reading of 'from the second year' is not settled",
+    "bonds 5 %",
+    "exemptions (art. 123)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "cfe",
+   "grade": "B",
+   "rateBp": 350,
+   "name": "Contribution forfaitaire à la charge des employeurs (3,5 %)",
+   "statute": "CGI art. 159-160 (consolidation 2017; later finance laws not held, flagged)",
+   "doc": "art. 160: 3,5 % of gross remuneration including benefits in kind, payable by all individuals and companies paying wages.",
+   "unsupported": [
+    "exemption of young graduates hired under 40 (art. 161) and other recruits (art. 162)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "tfp",
+   "grade": "B",
+   "rateBp": 200,
+   "name": "Taxe de formation professionnelle (2 %)",
+   "statute": "CGI art. 183-184 (consolidation 2017, flagged)",
+   "doc": "art. 184: 2 % of gross remuneration paid by persons liable to IS, BIC or agricultural profits tax.",
+   "unsupported": [
+    "employers not liable to IS/BIC/BA are outside (art. 183)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "tej",
+   "grade": "B",
+   "rateBp": 200,
+   "name": "Taxe-emploi jeunes (2 %)",
+   "statute": "CGI art. 185-A, 185-B (loi n° 2008-020; consolidation 2017, flagged)",
+   "doc": "art. 185-B: 2 % of gross remuneration paid by persons liable to IS, BIC or BA and subject to the contribution forfaitaire.",
+   "unsupported": []
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyAnnual",
+   "fam": "tf",
+   "grade": "B",
+   "rateBp": 300,
+   "kinds": [
+    "realEstate"
+   ],
+   "name": "Taxe foncière (3 % of annual rental value; owner-occupied home exempt)",
+   "statute": "CGI art. 185-E to 185-L (loi n° 2011-035; consolidation 2017, flagged)",
+   "doc": "art. 185-H: base = annual rental value; art. 185-L: rate 3 %; art. 185-G 10°: buildings not let and occupied by the owner or dependent family members are exempt — the household's home is exempt, other buildings are taxed on their annual value.",
+   "unsupported": [
+    "bare land used commercially or held over three years (art. 185-F)",
+    "other exemptions of art. 185-G"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "mutImm",
+   "grade": "B",
+   "rateBp": 1500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Droit d'enregistrement sur les mutations d'immeubles à titre onéreux (15 %)",
+   "statute": "CGI art. 269-270 (loi n° 10-014; consolidation 2017, flagged)",
+   "doc": "art. 269: base = price plus charges or an expert estimate; art. 270 (the only tariff of 'Mutations à titre onéreux — Les immeubles — B. Tarifs'): 15 %, reduced to 7 % for housing without a land title and for business acquisitions entered in the balance sheet.",
+   "unsupported": [
+    "the consolidation prints art. 270 as applying to 'biens immeubles domaniaux'; it is read as the general rate (only tariff of the sub-section)",
+    "7 % for housing without a land title (titre foncier) and for business premises (art. 270-271)",
+    "halving for land bought to build housing (art. 276)"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "unsupported",
+   "name": "Droits de mutation à titre gratuit (successions, donations)",
+   "statute": "CGI art. 301-305, 323 (consolidation 2017)",
+   "why": "art. 301 tariff by fraction of the net share depends on the number of children (direct line 3-25 %) and has an overall 'Maximum' rate per class (e.g. siblings 20/27/33/40 %, maximum 35 %); art. 304 abatement of 2,5 M + 1,5 M per child shared among heirs: the household input carries neither the number of children nor the shared abatement",
+   "tried": "CGI.txt lines 7148-7440 (Section 2 Mutations à titre gratuit)"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "inps",
+   "level": "social",
+   "rateBp": 1790,
+   "grade": "B",
+   "name": "INPS / AMO employer contributions (family 8 %, AMO 3,5 %, work accidents 1 %, old age 3,4 %, invalidity-death 2 %)",
+   "statute": "INPS Mali, 'Le guide du cotisant' (Code de prévoyance sociale art. 187; held copy ml/law/w5/ml_inps_guide_cotisant.pdf) [text version: INPS guide PDF of 10 August 2013 (file date); no later guide reached (flag)]",
+   "doc": "Guide: 'Les prestations familiales 8 % ; L'assurance maladie obligatoire : part de l'employeur 3,50 %, part du salarié 3,06 % ; Les accidents du travail ... 1 % à 4 % ; Assurance vieillesse : part de l'employeur 3,4 %, part du salarié 3,6 % ; L'invalidité et le décès 2 %'; base: 'l'ensemble des rémunérations du salarié' (art. 187).",
+   "unsupported": [
+    "work-accident rate by activity (1-4 %): the lowest applied",
+    "guide undated (flag)",
+    "invalidity-death 2 % read as employer-only (the guide splits only AMO and old age)"
+   ]
+  }
+ ]
+}

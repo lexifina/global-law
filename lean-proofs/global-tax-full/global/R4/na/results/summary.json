@@ -1,0 +1,288 @@
+{
+ "country": "NA",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on transfer deeds of immovable property purchased by natural persons (N$10 per N$1 000 above N$600 000)",
+   "statute": "Stamp Duties Act 15 of 1993 Schedule 1 item 16 (substituted by Act 12 of 2011, amended by Act 7 of 2013; NamRA annotated copy, Wayback capture 2025-12-10, R4/fetch/p13/na_sda.pdf). Liability: the purchaser",
+   "dated": "-",
+   "unsupported": [
+    "'or part thereof': the rounding up to whole thousands is not applied (at most N$10)",
+    "other instruments of Schedule 1 (bonds, leases, share transfers, policies)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferBandFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (land tax on commercial agricultural land)",
+   "statute": "Agricultural (Commercial) Land Reform Act 6 of 1995 (land tax)",
+   "dated": "-",
+   "unsupported": [
+    "triage minor: land tax on commercial agricultural land: not in the household grid. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "not reached",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Maternity Leave, Sick Leave and Death Benefit Fund, employer contribution (0,9 % up to N$11 000 a month)",
+   "statute": "Social Security Act 34 of 1994 s. 21; Regulations GN 198 of 1995 (GG 1181) reg. 8 (a)-(b) (rate, read); earnings band N$500-11 000 a month: Social Security Commission MSD page as captured on 9 August 2025 (Wayback 20250809174558, R4/fetch/p19/na_ssc_msd_wb20250809.html: msdContributionPercentage 1.8, msdMinContributionWages 500, msdMaxContributionWages 11000), which replaces the 2026 copy (na/law/ssc_msd.html) as the source [text version: regulations as gazetted 1995; SSC page as served in August 2025]",
+   "dated": "-",
+   "unsupported": [
+    "the N$500 floor",
+    "the earlier 2025 ceiling for January-February (not held): N$11 000 applied to the whole year",
+    "Employees' Compensation Fund (employer assessment by industry class, not held)",
+    "VET levy 1 % (Vocational Education and Training Act 1 of 2008 s. 35, employers with payroll over N$1 m): the NamibLII copy is behind a JavaScript check, not reached"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 7
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Transfer duty on acquisitions by natural persons (marginal bands, nil to N$600 000)",
+   "statute": "Transfer Duty Act 14 of 1993 s. 2 (1) (a) as amended by Act 6 of 2013 (NamRA annotated copy, Wayback capture 2025-12-10, R4/fetch/p13/na_tda.pdf); NamRA brochure 'Stamp and Transfer Duties' (14 July 2024, R4/fetch/p13/na_std_2024.pdf) gives the same table. Liability: the acquirer",
+   "dated": "-",
+   "unsupported": [
+    "agricultural land acquired with an Agribank advance (s. 2 (1) (b): nil to N$1 500 000, 1 %, N$10 000 plus 3 %)",
+    "exemptions of s. 9 (state, surviving or divorced spouse, public-character institutions)",
+    "value under s. 5-8 (higher of consideration and declared value): the model uses max(price, assessed)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferBandFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Transfer duty on acquisitions by persons other than natural persons (12 %)",
+   "statute": "Transfer Duty Act 14 of 1993 s. 2 (1) (c) (substituted by Act 6 of 2013; NamRA annotated copy, R4/fetch/p13/na_tda.pdf). Liability: the acquirer [text version: Transfer Duty Act 14 of 1993 as amended to Act 6 of 2013 (NamRA annotated copy listing the amending Acts to 2013)]",
+   "dated": "-",
+   "unsupported": [
+    "exemptions of s. 9",
+    "deemed acquisitions through shares or member's interests in property-holding companies"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on transfer deeds of immovable property purchased by persons other than natural persons (N$12 per N$1 000)",
+   "statute": "Stamp Duties Act 15 of 1993 Schedule 1 item 16 (persons other than natural persons, trusts included; R4/fetch/p13/na_sda.pdf). Liability: the purchaser [text version: Stamp Duties Act 15 of 1993 as amended to Act 7 of 2013 (annotated copy listing the amending Acts)]",
+   "dated": "-",
+   "unsupported": [
+    "'or part thereof' rounding not applied"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Vocational Education and Training levy (1 % of the annual payroll of employers with a payroll of N$1 000 000 or more)",
+   "statute": "Vocational Education and Training Act 1 of 2008 s. 35 (1), (4), 41; Imposition of Vocational Education and Training Levy on Employers, GN 67 of 2021 (GG 7498, 1 April 2021) paras 2, 3, 5 (LAC annotated text and the Gazette, R4/fetch/p14/na_vetlevy_regs_anno.txt, na_gg7498_vetlevy2021.pdf) [text version: Act 1 of 2008 as annotated (LAC); GN 67 of 2021 as gazetted (GG 7498, 1 April 2021)]",
+   "dated": "-",
+   "unsupported": [
+    "exempt employers (State, regional councils, local authorities, educational, faith-based, charitable, NGO, diplomatic: para. 4) not distinguished"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollMinFamily"
+   ],
+   "guards": 7
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employees' Compensation Fund assessment (employer)",
+   "statute": "Employees' Compensation Act 30 of 1941 s. 68-69 (LAC annotated statute, R4/fetch/p14/na_eca1941.txt)",
+   "dated": "-",
+   "unsupported": [
+    "s. 69 (1)-(2): each employer is assessed on 'such percentage of the annual wages of his employees as the Commission deems necessary', the rates 'fixed by the Commission from time to time in his discretion according to the estimated risk and cost of accidents': the rate depends on the employer's risk class, which is not an input"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "LAC annotated Act read; SSC pages (JavaScript-only) give no table",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Annual motor vehicle licence fees (road user charge, by tare)",
+   "statute": "Road Fund Administration Act, 1999 s. 18 (1) (c) 'registration and annual licence fees in respect of motor vehicles registered in Namibia' (NamibLII consolidation at 22 August 2025); amounts by Road Fund Administration notice",
+   "dated": "-",
+   "unsupported": [
+    "the tariff in force in 2025 is not established: the RFA page 'Annual registration & licence fees (Effective 1 July 2020)' (Wayback 20201130040103, R4/fetch/p17/na_rfa_fees_wb20201130.html: motorcars 0-750 kg N$480, 751-1000 N$672, 1001-1250 N$732, 1251-1500 N$780, 1501-2000 N$900, 2001-3000 N$1 488 ...) and the current page 'Effective 1 August 2026' (N$576 / 816 / 876 / 936 / 1 092 / 1 812 ...) are held, but no notice or capture dated 2021-2025 shows whether the 2020 table was still in force throughout 2025 (an intermediate change is not excluded). Worked case under the 2020 table (hand): a car of 1 100 kg tare -> N$732 a year"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "NamibLII search (no fee notice found among gazettes 2018-2026; GN 205 of 2025 concerns waivers only); RFA site Wayback CDX (no fee page captured 2021-2025)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Vocational Education and Training levy on household wages (1 % where the employer's annual payroll is N$1 000 000 or more)",
+   "statute": "Vocational Education and Training Act 1 of 2008 s. 35 (1), (4), 41; Imposition of Vocational Education and Training Levy on Employers, GN 67 of 2021 (GG 7498, 1 April 2021) paras 2, 3, 5 (R4/fetch/p14/na_vetlevy_regs_anno.txt, na_gg7498_vetlevy2021.pdf); household side through the employer facts of kernel 2.6.0 (Global2.Employer, R4-14-1) [text version: Act 1 of 2008 as annotated (LAC); GN 67 of 2021 as gazetted (GG 7498, 1 April 2021)]",
+   "dated": "-",
+   "unsupported": [
+    "an adult whose employer's payroll is not given: grade C line (no presumption)",
+    "the employer's payroll is taken as given (annual remuneration as in the Income Tax Act Schedule 2 Part I)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "EmployerLevy.family (kernel Global2.Employer)"
+   ],
+   "guards": 7
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value-Added Tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Value-Added Tax Act 2000 s. 6 (1) (15 %), NamibLII point-in-time 2023-01-01 (Act 14 of 2022)",
+   "dated": "Income Tax Act 1981 as in force from 2024-09-16 (Act 4 of 2024), NamibLII archived 2026-02-12",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "zero-rated and exempt supplies"
+   ],
+   "guards": 33
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise duties (SACU common excise tariff, Schedule 1 Part 2)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Customs and Excise Act 1998 (Act 20 of 1998) s. 1 ('\"excise duty\" ... means any duty leviable under Part 2 of Schedule 1 on any goods manufactured in Namibia'; excisable goods: goods specified in Part 2 of Schedule 1) and s. 54 (1) (the Minister amends any Schedule by notice 'in order to conform to any amendment made by any other country in the common customs area and in accordance with the obligations imposed by or under the Customs Union Agreement') [text version: lexifina/namibia-law, customs-excise, version in force from 2022-05-04 (source NamibLII akn/na/act/1998/20); its 'Schedules 1-8' unit prints no rates and lists the amending notices to GN 317 of 2022]; SACU Agreement 2002 (as amended 12 April 2013) art. 21 (1): the Ministers responsible for Finance of all Member States 'meet and agree on the rates of specific excise and ad valorem excise duties ... to be applied to goods grown, produced or manufactured in or imported into the Common Customs Area'; art. 22: similar legislation [text version: sacu.int SACU-Agreement.pdf, Wayback 20210517172146, R4/fetch/gap/sacu_agreement_wb20210517.pdf]; rates: the SACU common rates as in SA Act 45 of 2024 Part I (to 11 March 2025) and Act 3 of 2026 Sch. II (from 12 March 2025); the Namibia dollar is at par with the rand",
+   "dated": "Income Tax Act 1981 as in force from 2024-09-16 (Act 4 of 2024), NamibLII archived 2026-02-12",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc",
+    "ExciseRule (2.1, date windows: R4.Exc.toRule)",
+    "exciseRuleFamily"
+   ],
+   "unsupported": [
+    "Namibian notices for 2024/2025 and 2025/2026 not read (dates assumed equal to SA's)",
+    "fuel levy",
+    "ad valorem excise (Part 2 Section B)",
+    "environmental levies (s. 58A-58B)"
+   ],
+   "guards": 33
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Normal tax on companies",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "ITA Schedule 4 para. 3 (1) (a) (ii) (30 cents per N$ for years of assessment from 1 Jan 2025; Act 4 of 2024 s. 6 (b))",
+   "dated": "Income Tax Act 1981 as in force from 2024-09-16 (Act 4 of 2024), NamibLII archived 2026-02-12",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax",
+    "SectorCorp (company.sector)"
+   ],
+   "unsupported": [
+    "Petroleum (Taxation) Act, 1991 (Act 3 of 1991): petroleum companies get no charge here and are listed (grade C)",
+    "split of mining and other income",
+    "loss rules not read"
+   ],
+   "guards": 21
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding on payments to non-residents",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "ITA s. 35A (3) (a) (10 % on management and consultancy fees); s. 45 (non-resident shareholders' tax 10 % / 20 %); twelfth pass: ITA s. 35B (2)-(4) (withholding tax on foreign interest 10 %, final; consolidation as in force 2024-09-16); ITA s. 35 (1)-(2) (withholding tax on royalties 10 %, final; substituted by Act 13 of 2015)",
+   "dated": "Income Tax Act 1981 as in force from 2024-09-16 (Act 4 of 2024), NamibLII archived 2026-02-12",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "guards": 21
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (SACU common external tariff, Schedule No. 1 Part 1)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Customs and Excise Act 1998 (Act 20 of 1998) s. 54 (1) (Schedules amended to conform to the common customs area under the Customs Union Agreement) [lexifina/namibia-law customs-excise, version from 2022-05-04: the Schedules are not printed there]; rates: the SACU common external tariff; SACU Agreement 2002 (as amended 12 April 2013) art. 18 (1) (goods of the Common Customs Area free of customs duties between Member States) and art. 20 (1) (the Council approves the customs duties applied to goods imported into the Common Customs Area) [R4/fetch/gap/sacu_agreement_wb20210517.pdf]; common external tariff: Schedule No. 1 Part 1, 'Rate of Duty' columns General, EU/UK, EFTA, SADC, as printed in South Africa's consolidation dated 2025-04-04 (SARS Legal-LPrim-CE-Sch1P1Chpt1-to-99, Wayback 20250405095800, R4/fetch/gap/za_sch1p1_wb20250405095800.pdf) and Botswana's dated 01.07.2025 (BURS Tariff Volume I, R4/fetch/bw10/tariff_vol1_july2025.pdf): the same rates on every line below",
+   "dated": "SACU common external tariff as printed by South Africa (2025-04-04) and Botswana (01.07.2025); Namibia's Harmonised Customs Tariffs Book not held: grade B",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "SADC FTA, MERCOSUR and AfCFTA preference columns not applied (MFN charged for those origins)",
+    "rebates and suspensions (Schedules No. 3 and 4), anti-dumping and safeguard duties (Part 2B and Part 3)",
+    "lines of other HS headings (grade C)"
+   ],
+   "guards": 9
+  }
+ ],
+ "cases": 14,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

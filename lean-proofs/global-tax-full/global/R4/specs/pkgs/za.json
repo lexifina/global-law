@@ -1,0 +1,365 @@
+{
+ "cc": "ZA",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stt",
+   "grade": "B",
+   "rateBp": 25,
+   "kinds": [
+    "listedShares",
+    "unlistedShares"
+   ],
+   "name": "Securities transfer tax (0,25 % on the purchase of shares)",
+   "statute": "Securities Transfer Tax Act 25 of 2007 s. 2; SARS 'Securities Transfer Tax' page (updated 19/08/2026, R4/fetch/za11/stt.html)",
+   "doc": "SARS 'Securities Transfer Tax' page (facts, paraphrased): rate 0,25 %, charged when listed or unlisted shares are bought or transferred; for listed securities bought through a member, the member is liable and may recover it from the buyer.",
+   "unsupported": [
+    "taxable amount for listed purchases is the consideration (or the closing price if higher / no consideration): the purchase price is used",
+    "exemptions (e.g. collective investment schemes, lending arrangements)",
+    "Act text not read"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (carbon tax)",
+   "statute": "Carbon Tax Act 15 of 2019",
+   "why": "triage high: carbon tax (Carbon Tax Act 15 of 2019) not read; the health promotion levy on sugary beverages of the same registry line is modelled separately (thirteenth pass). listed by the registry (background (unverified)); charging provision not read/modelled in this pass | Re-triage for kernel 2.5.0 (seventeenth pass): the Carbon Tax Act 2019 charges emitters on tonnes of CO2e (no input for emissions: stays C); its fuel component is the carbon fuel levy per litre of petrol and diesel collected with the fuel levy (Customs and Excise Act Schedule 1 Part 3D), which would fit a per-litre fuel excise line in P1, split at the 2025 change date, once the 2025 Part 3D amounts are held (not held)",
+   "tried": "not reached",
+   "triage": "high"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "uif",
+   "level": "social",
+   "rateBp": 100,
+   "cap": 212544,
+   "grade": "B",
+   "name": "Unemployment Insurance Fund, employer contribution (1 % up to R17 712 a month)",
+   "statute": "Unemployment Insurance Contributions Act 4 of 2002 s. 6; earnings ceiling from 1 June 2021 (SARS page 'Unemployment Insurance Fund', fetched 2026-11-21, R4/fetch/za11)",
+   "doc": "SARS 'Unemployment Insurance Fund' page (facts, paraphrased): 2 % in all, 1 % from the employee and 1 % from the employer; earnings ceiling R17 712 a month (R212 544 a year) since 1 June 2021.",
+   "unsupported": [
+    "the employee's 1 %",
+    "act text not read (SARS guide)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "employerLevy",
+   "fam": "sdl",
+   "level": "central",
+   "grade": "B",
+   "name": "Skills Development Levy (1 % of remuneration)",
+   "statute": "Skills Development Levies Act 9 of 1999 s. 3, 4 (SARS page 'Skills Development Levy', fetched 2026-11-21)",
+   "doc": "SARS 'Skills Development Levy' page (facts, paraphrased): 1 % of total salaries; exempt: employers expecting remuneration of at most R500 000 in the coming 12 months, public service employers, some public entities, religious/charitable bodies. Eighteenth pass: the R500 000 exemption is applied through kernel 2.6.0 employer facts (companies := true): payroll above R500 000 -> 1 %; R500 000 or less -> nothing; no payroll given -> presumed above (as before). Worked cases (hand): wages R300 000 with an employer payroll of R2 000 000 -> R3 000; payroll R500 000 -> nothing; not given -> R3 000; company payroll R1 000 000 -> R10 000; R450 000 -> nothing.",
+   "unsupported": [
+    "employer payroll not given (household 'employerPayroll'): the employer is presumed above the R500 000 exemption threshold (declared; the charge's statute says so)",
+    "the exemption looks at expected remuneration over the next 12 months: the model tests the year's payroll",
+    "public service employers, some public entities and religious or charitable bodies (exempt) not distinguished",
+    "act text not read (SARS guide)"
+   ],
+   "levy": "{ name := \"Skills Development Levy (1 % of remuneration)\", level := .central, companies := true, rules := [{ rateBp := 100, tests := [.payrollAtLeast 500001], ifUnknown := .presume, statute := \"Skills Development Levies Act 9 of 1999 s. 3, 4 (b) (SARS page 'Skills Development Levy'): 1 % of remuneration; an employer whose remuneration over the next 12 months will not exceed R500 000 is exempt (tested on the employer's annual payroll; model presumption when it is not given: above the threshold)\" }] }",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 300000,
+         "employerPayroll": 2000000
+        }
+       ]
+      }
+     },
+     "expect": [
+      3000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 300000,
+         "employerPayroll": 500000
+        }
+       ]
+      }
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 300000
+        }
+       ]
+      }
+     },
+     "expect": [
+      3000
+     ]
+    },
+    {
+     "line": {
+      "id": "c3",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 1000000,
+       "employees": 12
+      }
+     },
+     "expect": [
+      10000
+     ]
+    },
+    {
+     "line": {
+      "id": "c4",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 450000,
+       "employees": 3
+      }
+     },
+     "expect": []
+    }
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transferBands",
+   "fam": "transferDuty",
+   "grade": "B",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     1210000,
+     0
+    ],
+    [
+     1663800,
+     300
+    ],
+    [
+     2329300,
+     600
+    ],
+    [
+     2994800,
+     800
+    ],
+    [
+     13310000,
+     1100
+    ]
+   ],
+   "top": 1300,
+   "marginal": true,
+   "nilUpTo": 0,
+   "testValues": [
+    1500000,
+    3000000,
+    20000000
+   ],
+   "expect": [
+    8700,
+    107356,
+    2111156
+   ],
+   "name": "Transfer duty on the acquisition of property (marginal bands from 1 April 2025)",
+   "statute": "Transfer Duty Act 40 of 1949 s. 2 (1) as amended by the 2025 rates; SARS 'Transfer Duty' rates page (fetched 2026-11-21, R4/fetch/za11/transfer_duty.html)",
+   "doc": "SARS, 2026 year (from 1 April 2025): 0 % to R1 210 000; 3 % on the part from R1 210 000 to R1 663 800; R13 614 + 6 % above R1 663 800 to R2 329 300; R53 544 + 8 % above R2 329 300 to R2 994 800; R106 784 + 11 % above R2 994 800 to R13 310 000; R1 241 456 + 13 % above R13 310 000.",
+   "unsupported": [
+    "purchases from 1 January to 31 March 2025 fall under the 2025 table (R1 100 000 nil band): the April 2025 table is used for the whole year",
+    "VAT-registered sellers: VAT instead of transfer duty",
+    "municipal property rates (Municipal Property Rates Act 6 of 2004: rates set by each municipality) not modelled"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateWhole",
+   "fam": "estateDuty",
+   "grade": "B",
+   "bands": [
+    [
+     30000000,
+     2000
+    ]
+   ],
+   "top": 2500,
+   "nilBand": 3500000,
+   "exempt": [
+    "spouse",
+    "charity"
+   ],
+   "testValues": [
+    20000000,
+    20000000
+   ],
+   "expect": [
+    7625000
+   ],
+   "name": "Estate duty (20 % of the dutiable value to R30 million, 25 % above; R3,5 million abatement; spouse and PBO deductions), on the estate",
+   "statute": "Estate Duty Act 45 of 1955 s. 2, 4 (h), 4 (q), 4A; SARS 'Estate Duty' page (fetched 2026-11-21, R4/fetch/za11/estate.html). Liability: the deceased estate (executor). Declared reading: the entity's inheritances are the legacies of ONE estate; one charge (event 'estate') on their sum less legacies to the spouse and to charities, after the abatement (kernel estateCharge)",
+   "doc": "SARS 'Estate Duty' page (facts, paraphrased): dutiable value = net value of the estate less a R3,5 million abatement; duty 20 % up to R30 million of dutiable value, 25 % above; paid by the executor. Property passing to the surviving spouse (s. 4 (q)) and bequests to public benefit organisations (s. 4 (h)) are deductible. Twelfth pass: one charge on the estate instead of a charge on each inheritance received.",
+   "unsupported": [
+    "the estate is read as the sum of the line's inheritances (no other assets, debts or s. 4 deductions than the spouse and charity bequests)",
+    "unused spouse abatement roll-over (s. 4A (2))",
+    "duty recoverable from a beneficiary (s. 13) not modelled"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "donorGift",
+   "fam": "donationsTax",
+   "grade": "B",
+   "bands": [
+    [
+     30000000,
+     2000
+    ]
+   ],
+   "top": 2500,
+   "annualExempt": 150000,
+   "exempt": [
+    "spouse",
+    "charity"
+   ],
+   "lookbackYears": 7,
+   "testValue": 1150000,
+   "testPrior": 29500000,
+   "expect": [
+    225000,
+    200000,
+    0
+   ],
+   "name": "Donations tax (20 % of donations to R30 million aggregated since 1 March 2018, 25 % above; first R150 000 a year exempt; spouses and PBOs exempt), on the donor",
+   "statute": "Income Tax Act 58 of 1962 s. 54, 56 (1) (b), (h), 56 (2) (b), 59, 64 (1); SARS 'Donations Tax' page (fetched 2026-11-21, R4/fetch/za11/donations.html). Liability: the donor (s. 59). Declared reading: each gift record is read from the donor's side (event 'gift i'), the donor's only gift of the year, on top of the record's 'prior' gifts made within 7 years (since 1 March 2018)",
+   "doc": "SARS 'Donations Tax' page (facts, paraphrased): since 1 March 2018, 20 % on donations up to R30 million in aggregate and 25 % on the excess (s. 64 (1)); the aggregate is counted net of exemptions (s. 56); a natural person's first R150 000 of donations in a year of assessment is exempt (s. 56 (2) (b)); gifts to a spouse or to an approved public benefit organisation are exempt (s. 56 (1)). Twelfth pass: the donor's tax on the gift (aggregation through 'prior') instead of a tax on each gift received.",
+   "unsupported": [
+    "prior gifts read as taxable donations after exemptions; the look-back of 7 years approximates 'since 1 March 2018'",
+    "donors that are not natural persons (R20 000 casual gifts, s. 56 (2) (a))",
+    "non-resident donors are not liable (not distinguished)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divTax",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 2000,
+   "name": "Dividends tax on dividends received by individuals (20 %, withheld, final)",
+   "statute": "Income Tax Act 58 of 1962 s. 64D-64N (s. 64E (1): 20 % from 22 February 2017); SARS 'Dividends Tax' page (fetched 2026-11-21, R4/fetch/za12/dividends-tax.html, official secondary)",
+   "doc": "SARS 'Dividends Tax' page (facts, paraphrased): 20 % (15 % before) on dividends paid from 22 February 2017 whatever the declaration date, save exemptions and reduced rates. Local dividends are exempt from normal income tax (s. 10 (1) (k)), so the withheld 20 % is the whole tax on them.",
+   "unsupported": [
+    "dividends are read as dividends of South African resident companies (foreign dividends: s. 10B partial exemption, not modelled)",
+    "exemptions of s. 64F (companies, PBOs, retirement funds) do not concern a household"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "SARS 'Types of tax' (fetched 2026-11-21, R4/fetch/za12/types-of-tax.html)",
+   "why": "ZA: no national net wealth tax. SARS's list of the taxes it administers (19: air passenger tax, capital gains tax, corporate and personal income tax, dividends tax, donations tax, estate duty, IOPC levy, mineral and petroleum royalty, PAYE, provisional tax, securities transfer tax, skills development levy, transfer duty, turnover tax, UIF, VAT, withholding taxes on interest and royalties) has none (municipal rates on property are 4100)"
+  },
+  {
+   "package": "P7",
+   "oecd": "5121",
+   "kind": "sugarLevy",
+   "fam": "healthPromotionLevy",
+   "grade": "B",
+   "good": "nonAlcoholic",
+   "thrMg": 4000,
+   "num": 21,
+   "den": 10,
+   "testLines": [
+    [
+     100000,
+     10000
+    ],
+    [
+     100000,
+     4000
+    ],
+    [
+     330,
+     20000
+    ]
+   ],
+   "expect": [
+    126,
+    0,
+    1
+   ],
+   "name": "Health Promotion Levy on sugary beverages (2,1 c per gram of sugar above 4 g per 100 ml)",
+   "statute": "Customs and Excise Act 91 of 1964 Schedule 1 Part 7 Section A, inserted by the Rates and Monetary Amounts and Amendment of Revenue Laws Act 14 of 2017 (in force 1 April 2018); SARS page 'Health Promotion Levy on Sugary Beverages' (fetched 2026-11-21, R4/fetch/p13/za_hpl.html; facts restated: 2,1 cents a gram on sugar above 4 g per 100 ml, the first 4 g per 100 ml free of levy). Levied on the manufacturer or importer, borne in the price (charged on the household's basket line like an excise)",
+   "doc": "Per basket line of non-alcoholic beverages with a sugar content (sugarMg100ml) and a quantity in litres: levy = litres × grams of sugar per litre above 40 g/l × 2,1 cents, in whole rand (rounded down once). Thirteenth pass.",
+   "unsupported": [
+    "lines without a sugar content: not computed (the deemed 20 g per 100 ml for products without a certified test report is not applied)",
+    "powders and concentrates (sugar per prepared volume)",
+    "Schedule 1 Part 7 Section A tariff text not read (official secondary)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "external",
+   "module": "Stack.lean",
+   "parts": [
+    "TaxKernel.Global2.Stack (GlobalModel.withStack)"
+   ],
+   "grade": "B",
+   "name": "Capital gains tax (taxable capital gain included in taxable income, natural persons)",
+   "statute": "Income Tax Act 58 of 1962 s. 26A; Eighth Schedule para 5 (1) (annual exclusion R40 000), para 10 (a) (inclusion rate 40 %), para 45 (1) (primary residence: R2 000 000 of the gain disregarded); rates s. 5 (1) and Rates and Monetary Amounts Act (the 1.x model's tables); the amounts as stated on SARS's capital gains tax page as captured on 25 June 2025 (Wayback 20250625235556; page last modified 21 May 2025; R4/fetch/p19/za_sars_cgt_wb20250625.html), which replaces the 2026 copy (world/B02-g20/za/law/sars_cgt.html) as the source [text version: SARS page of 21 May 2025]",
+   "doc": "Kernel 2.5.0 StackRule zaCgt (ZaGlobal/Stack.lean): per natural person, the net gain of the year on the household's disposals (losses offset), less R40 000, times 40 %, added to the person's taxable income; the charge is the 1.x income tax with the included amount less without. Probe: wages R600 000, gain R240 000 -> 80 000 included -> R29 010 (36 % / 39 % bands, rebate unchanged). Fourteenth pass (request R4-13-1).",
+   "notes": [
+    "CGT: personal-use assets (para 53), the R300 000 death-year exclusion, the R1 800 000 small-business exclusion (para 57) and assessed capital losses carried forward (para 7) are not modelled; companies and trusts (80 % inclusion) not modelled"
+   ],
+   "unsupported": [
+    "companies and trusts (inclusion 80 %): not modelled",
+    "assessed capital losses brought forward (para 7)",
+    "personal-use assets excluded (para 53): every disposal of the listed kinds is counted",
+    "small-business exclusion R1 800 000 (para 57)"
+   ],
+   "source": "grade B: the amounts (R40 000 annual exclusion, 40 % inclusion, R2 000 000 primary-residence exclusion) were read from SARS's capital gains tax page (world/B02-g20/za/law/sars_cgt.html, official secondary); the Income Tax Act's Eighth Schedule text is not held"
+  }
+ ]
+}

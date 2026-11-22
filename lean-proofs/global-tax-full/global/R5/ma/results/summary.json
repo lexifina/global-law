@@ -1,0 +1,342 @@
+{
+ "country": "MA",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "IR revenus fonciers, produits des actions, profits fonciers",
+   "statute": "CGI art. 73-II-B-5°, C-4°, F-6°, 247-XXXVII-C",
+   "dated": "CGI 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (whole-amount rate)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "gains on shares",
+    "interest",
+    "main-home exemption",
+    "profits fonciers minimum (art. 144-II)"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les sociétés + cotisation minimale",
+   "statute": "CGI art. 19-I, 144-D, 247-XXXVII-A",
+   "dated": "CGI 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime (minimum on turnover)",
+    "slab by profit size (own)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "losses (art. 12) and dividend exemption (art. 6-I-C) not read",
+    "CM reduced rates (0,15 %, 4 %) and floor not modelled"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenue à la source (dividends, non-residents)",
+   "statute": "CGI art. 19-IV-B, 247-XXXVII-C",
+   "dated": "CGI 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "20 % on fixed-income products to residents (art. 19-IV-C) not modelled (domestic payments)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNSS and AMO employer contributions",
+   "statute": "Dahir 1-72-184; Law 65-00; CNSS barème: prestations familiales 6,40 %, court terme 1,05 % and long terme 7,93 % (MAD 6,000 a month cap), AMO 4,11 %",
+   "dated": "CNSS employer page captured 2025-03-25",
+   "grade": "B",
+   "kernel_parts": [
+    "employerOn (two bases)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "rate decrees not read (fund page used)",
+    "fishing crews scheme not distinguished"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Taxe de formation professionnelle",
+   "statute": "CNSS barème: 1,6 % of actual salaries",
+   "dated": "CNSS employer page captured 2025-03-25",
+   "grade": "B",
+   "kernel_parts": [
+    "payroll charge on wages"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "instituting dahir not read"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Droits d enregistrement on gifts",
+   "statute": "CGI art. 127-I-A-1° (gifts of immovables, businesses, unlisted shares are registered deeds), art. 133-I-C-4° (1,5 % in the direct line, between spouses and siblings), art. 133-I-F-1° (4 % built premises), G-1° (5 % land, 'à titre onéreux ou gratuit'), A-1° (6 % businesses) outside that circle; art. 129-IV-25° (shares of non-real-estate companies exempt)",
+   "dated": "CGI 2025 (law/cgi2025fr.txt), as for 4400",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "PartDuty x4 (kernel 2.1.1 TransferX: assetKind)"
+   ],
+   "guards": 5,
+   "unsupported": [
+    "F-1° read as covering acquisitions by gift (the paragraph says 'l'acquisition' without 'à titre onéreux'); the family rate applies anyway in the direct line",
+    "a gift without 'assetKind' is listed, not charged",
+    "kafala and grandparent relations are not in the record (family rate not reachable for them)",
+    "unlisted shares of real-estate companies (art. 3-3°, 61-II) not told apart: charged as exempt",
+    "gifts to public-utility bodies (art. 129) not modelled",
+    "inheritance: not taxed by the CGI (no succession duty)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droits d enregistrement (real-estate transfers)",
+   "statute": "CGI art. 133-I-F-1° (4 %: acquisition of built premises and their land up to 5x the covered area), art. 133-I-G-1° (5 %: bare land), art. 133-I-A-1° with art. 127-I-A-1-b) (6 %: fonds de commerce)",
+   "dated": "CGI 2025 (law/cgi2025fr.txt; A-1° narrowed to 127-I-A-1-b by LF 73-16 for 2017, footnote 924); gap-closing pass: corrected (was 6 % under A-1° on every real-estate purchase)",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty x3 by asset kind"
+   ],
+   "guards": 4,
+   "pass": "gap",
+   "unsupported": [
+    "first-home and social-housing reductions (art. 129, 133)",
+    "conservation foncière fee (outside the CGI)",
+    "taxe d habitation / services communaux (4100, law 47-06) not read"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "statute": "CGI 2025 art. 91, 99, 247-XXXXI A, B, G",
+   "dated": "DGI CGI edition 2025 (LF 60-24)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat (four rate classes)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "food taken as exempt (only bread, flour, milk, meat are)",
+    "medicines and health at 20 % (not read)",
+    "no turnover threshold applied"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Taxes intérieures de consommation",
+   "statute": "Dahir portant loi 1-77-340 art. 9 tableau G (cigarettes) as scheduled by LF 76-21 (2022), 4th year from 1/1/2025: 400 DH/1000 + 61 % of the retail price net of TVA and specific TIC, minimum 900,9 DH/1000; tableau L (LF 55-23, 2nd step from 1/1/2025): drinks with added sugar per 100 ml above the thresholds, DH per 100 kg: juice-based drinks > 7 g 37,5; milk drinks > 8 g and flavoured milk > 8,5 g 120; syrups > 49 g 450",
+   "dated": "customs circular 6619/210 of 26/12/2024 (LF 60-24 for 2025), Annex V restating tableau G as in force from 1/1/2025; douane.gov.ma copy archived 2024-12-27; pass 3r: tableau L from the same circular, section VIII.2 and Annex V pp. 42-43",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule cigarettes (netOfVat 61 % + 156 DH/1000 identity, minimum 900,9 DH/1000)",
+    "ExciseRule x4 sugarBands (tableau L drinks)"
+   ],
+   "guards": 6,
+   "unsupported": [
+    "other TIC tables (sodas and other beverages, beer, wine, spirits, fuels, other tobacco) not read for 2025; tableau L foods (biscuits, confectionery, chocolate, dairy desserts, jam, cereals, sauces) are not basket goods",
+    "the official brand price list (assiette of the ad valorem part) is replaced by the line amount",
+    "source is the customs circular restating the law (B)",
+    "pass 3n: route to the other tables: adala.justice.gov.ma Arabic consolidation of Dahir 1-77-340 uploaded 2025-05-27 (api/uploads/2025/05/27/...1748352540492.pdf): refused from the build server, a second machine and WebFetch; not in Wayback",
+    "pass 3o: adala.justice.gov.ma retried once (2026-11-21): connect timeout from a second machine and the build server; ADII (douane.gov.ma) Wayback PDF list from 2024 holds no TIC table (documents are served by dms/loadDocument ids, not archived)",
+    "pass 3p: adala.justice.gov.ma retried (connect timeout). The customs circular 6619/210 on disk restates for 2025: tableau C quotités changed by LF 2025 art. 5 (heavy fuel oil 24,24 DH/100 kg, coal 12,48, bitumen 51, lubricants 234; petrol and gas oil lines not reprinted: unchanged, values not in the circular), tableau H (nicotine substitutes 220 DH/kg; disposable e-cigarettes) and Annex V tableau L (sugar-content tiers for sweets and drinks, from 1/1/2025). Next: model tableau L where the drink's sugar content can be given; the petrol/gas-oil quotités need the 1-77-340 text (LF 2014-2024 changes).",
+    "pass 3r: tableau L drinks modelled (sub juiceDrinks, milkDrinks, flavouredMilk, syrups with sugarMg100ml); 100 kg read as 100 l (density not in the text)"
+   ]
+  },
+  {
+   "package": "P8",
+   "oecd": "5200",
+   "tax": "taxe spéciale annuelle sur les véhicules (vignette)",
+   "statute": "CGI art. 259 (scope), 260-15° (electric and hybrid exempt), 261-I and 262-II (1/12 per month for vehicles put into circulation in the year), 262-I-A (up to 3 000 kg: petrol 350 / 650 / 3 000 / 8 000 DH, diesel 700 / 1 500 / 6 000 / 20 000 DH by fiscal horsepower below 8, 8-10, 11-14, 15 and above)",
+   "dated": "CGI DGI 2025 edition (law/cgi2025fr.txt; LF 60-24 for 2025 footnoted)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (kernel 2.4.0) x3: petrol, diesel by fiscalHp (QtyTable.ofCeilings), electric/hybrid cited zero"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "weight tariffs above 3 000 kg (262-I-B, C) and LPG/other fuels: no rule (listed per vehicle)",
+    "diesel pick-ups of natural persons (petrol tariff), taxis (exempt) not distinguished"
+   ],
+   "pass": "3k"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Constitution of the Kingdom of Morocco (2011) art. 39: all bear the public charges which only the law may create and apportion; art. 71: the fiscal regime, the base, rate and collection of imposts are of the domain of the law (Constitute Project English text, law/cp_Morocco_2011.txt); no law levies it; tax laws read: Code général des impôts 2025 (IS, IR, TVA, droits d'enregistrement, taxe spéciale annuelle sur les véhicules), dahir 1-77-340 (TIC). convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "ma-h1",
+   "total": 168396,
+   "byOecd": {
+    "1100": 129966,
+    "2100": 7745,
+    "2200": 27485,
+    "3000": 3200
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 30685,
+    "entity": 137711,
+    "withheld": 0
+   },
+   "net": 592289,
+   "notModelled": [
+    "2300",
+    "4100",
+    "4300",
+    "4500",
+    "5112",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "employer: rates from the CNSS barème (rate decrees not read); fishing crews' scheme not distinguished"
+   ]
+  },
+  {
+   "id": "ma-c1",
+   "total": 527500,
+   "byOecd": {
+    "1200": 527500
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 455000,
+    "withheld": 72500
+   },
+   "net": 1545000,
+   "notModelled": [
+    "2300",
+    "4100",
+    "4300",
+    "4500",
+    "5112",
+    "5120",
+    "6000"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "ma-h3",
+   "total": 4362,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 1000,
+    "5121": 3362
+   },
+   "borne": {
+    "consumer": 4362,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4100",
+    "4300",
+    "4500",
+    "5112",
+    "5120",
+    "6000"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "ma-v1",
+   "total": 35827,
+   "byOecd": {
+    "1100": 7218,
+    "2100": 5937,
+    "2200": 19077,
+    "3000": 1920,
+    "5200": 1675
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 20997,
+    "entity": 14830,
+    "withheld": 0
+   },
+   "net": 105170,
+   "notModelled": [
+    "2300",
+    "4100",
+    "4300",
+    "4500",
+    "5112",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "employer: rates from the CNSS barème (rate decrees not read); fishing crews' scheme not distinguished",
+    "5200 taxe spéciale annuelle sur les véhicules: vehicle 4 (asset 4, car): fiscalHp not given (grade C)",
+    "vignette: cars taken as up to 3 000 kg (262-I-A); diesel pick-ups of natural persons (petrol tariff) and taxis (exempt) not distinguished"
+   ]
+  },
+  {
+   "id": "ma-s1",
+   "total": 560,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 433,
+    "5121": 127
+   },
+   "borne": {
+    "consumer": 560,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4100",
+    "4300",
+    "4500",
+    "5112",
+    "5120",
+    "6000"
+   ],
+   "unsupported": []
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 23,
+ "theorems": 1
+}

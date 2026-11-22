@@ -1,0 +1,29 @@
+{
+ "version": "1.3.0",
+ "packagesDir": ".lake/packages",
+ "packages": [
+  {
+   "type": "path",
+   "scope": "",
+   "name": "AmerCommon",
+   "manifestFile": "lake-manifest.json",
+   "inherited": false,
+   "dir": "../../common",
+   "copy": false,
+   "configFile": "lakefile.toml"
+  },
+  {
+   "type": "path",
+   "scope": "",
+   "name": "TaxKernel",
+   "manifestFile": "lake-manifest.json",
+   "inherited": false,
+   "dir": "../../../../kernel",
+   "copy": false,
+   "configFile": "lakefile.toml"
+  }
+ ],
+ "name": "BoGlobal",
+ "lakeDir": ".lake",
+ "fixedToolchain": false
+}

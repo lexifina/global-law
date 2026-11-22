@@ -6,17 +6,18 @@ import TaxKernel.World
 Access tier B. The Income Tax Act 58 of 1962 is not in Global law and SARS serves it only through a LexisNexis portal;
 the rates for each year are fixed by Parliament (s. 5 (2)) in the annual Rates and Monetary Amounts Act, which was not
 found for 2026 on gov.za's act list (the 2024-2025 acts there amend customs/excise and retirement rules). Every amount
-below is therefore SARS's own published table, cited as official secondary (pages saved in `za/law/`, 2026-11-20):
-* "Rates of Tax for Individuals" (sars_ind.html): "2026 tax year (1 March 2025 – 28 February 2026) 12 March 2025 – No
-  changes"; "2025 tax year … No changes from last year"; the 2024 table: "Not exceeding 237 100 18% … 237 101 – 370 500
-  42 678 + 26% … 1 817 001 and above 644 489 + 45%". Rebates (s. 6): "Primary … 2026 R17 235; Secondary (65 and older)
-  R9 444; Tertiary (75 and older) R3 145". Thresholds 2026: R95 750 / R148 217 / R165 689 (checked by `#guard`).
-* "Interest and Dividends" (sars_intdiv.html): interest exemption (s. 10 (1) (i)) "Person younger than 65 … 2026
-  R23 800; Person 65 and older R34 500"; "Dividends received by individuals from South African companies are
-  generally exempt from income tax, but dividends tax at a rate of 20% is withheld".
-* UIF (sars_uif.html; Unemployment Insurance Contributions Act 4 of 2002): "The amount of the contribution due by an
-  employee, must be 1% of the remuneration"; "As from 1 June 2021, the maximum earnings ceiling is R17 712 per month or
-  R212 544 annually".
+below is therefore taken from SARS's own published tables, cited as official secondary (pages saved in `za/law/`,
+2026-11-20); the facts are restated here, not quoted:
+* SARS, Rates of Tax for Individuals (sars_ind.html): the 2026 year of assessment (March 2025 to February 2026) and
+  the 2025 year both keep the 2024 table. Bands: 18 % up to R237 100; 26 % to R370 500 (R42 678 due at the band's
+  start); ... 45 % from R1 817 001 (R644 489 due at the band's start). Rebates (s. 6) for 2026: primary R17 235,
+  secondary (age 65 and over) R9 444, tertiary (age 75 and over) R3 145. Thresholds 2026: R95 750 / R148 217 /
+  R165 689 (checked by `#guard`).
+* SARS, Interest and Dividends (sars_intdiv.html): the s. 10 (1) (i) interest exemption for 2026 is R23 800 below
+  age 65 and R34 500 from age 65; South African company dividends paid to an individual are not part of income for
+  normal tax, and the 20 % dividends tax is withheld at source.
+* SARS, UIF page (sars_uif.html; Unemployment Insurance Contributions Act 4 of 2002): the employee pays 1 % of
+  remuneration, on earnings capped since 1 June 2021 at R17 712 a month (R212 544 a year).
 Unit: individual (spouses taxed separately; investment income split equally between spouses, contract rule).
 -/
 
@@ -27,7 +28,7 @@ open TaxKernel
 def sched : Schedule :=
   Schedule.ofList [(0, 1800), (237100, 2600), (370500, 3100), (512800, 3600), (673000, 3900), (857900, 4100), (1817000, 4500)]
 
-/- The printed cumulative column ("42 678 + 26% of taxable income above 237 100", …) equals the band sum. -/
+/- SARS's cumulative amount at each band start (R42 678 at R237 100, …) equals the band sum. -/
 #guard [(237100, 42678), (370500, 77362), (512800, 121475), (673000, 179147), (857900, 251258), (1817000, 644489)].all
   fun (t, base) => sched.ticks t = base * BP
 

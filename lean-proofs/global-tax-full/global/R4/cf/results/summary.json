@@ -1,0 +1,303 @@
+{
+ "country": "CF",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI art. 257 (taux général 19 %, réduit 5 %, 0 %)",
+   "dated": "CGI édition officielle mise à jour 2023 (DGID); LF 2025 pages 1-60 (no change found to these articles)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "exemptions not read",
+    "5 % list inside the food line"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Droits d'accises",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "CGI art. 292-293",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "CGI art. 292: \"Les montants et taux des droits d'accises sont fixés par la loi de finances\"; the LF 2025 pages available (1-60 OCR) do not hold the table"
+   ],
+   "tried": "lf2025.ocr1-60.txt, cgi2023.txt",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les sociétés",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI art. 133 (30 %; 20 % agriculture)",
+   "dated": "CGI édition officielle mise à jour 2023 (DGID); LF 2025 pages 1-60 (no change found to these articles)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "minimum tax rates",
+    "loss age"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenues sur paiements à l'étranger",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI 2017 édition officielle mise à jour 2023 art. 166 bis 1 (15 % final on services paid abroad; 15 % on capital income); art. 52 e and art. 84 (IRCM 15 % on capital income paid to persons domiciled abroad)",
+   "dated": "CGI édition officielle mise à jour 2023 (DGID); LF 2025 pages 1-60 (no change found to these articles)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "guards": 8
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Code général des impôts 2017 mise à jour 2023 + LF 2025 (scanned)",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://finances.gouv.cf (documentations))",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Contribution des patentes (rate of the turnover class on the whole turnover)",
+   "statute": "CGI 2017 mis à jour 2023 art. 189; LF 2025, LFR 2024-2025 and LF 2026 as held contain no patente amendment (budget pages only partly OCR'd)",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "turnover below 30 M (outside the classes of art. 189)",
+    "assessment at ten times the purchases when no accounts (art. 190)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.licenceFamily"
+   ],
+   "guards": 5
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (as a tax)",
+   "statute": "cgi2023.txt (whole code)",
+   "dated": "cgi2023.txt",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "CF: the general tax code held (cgi2023.txt, 955k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')",
+   "guards": 0
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "cgi2023.txt (whole code)",
+   "dated": "cgi2023.txt",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "CF: the general tax code held (cgi2023.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked",
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Taxe de circulation des véhicules à moteur (by fiscal horsepower)",
+   "statute": "CGI 2017 mis à jour 2023 art. 245 bis, 245 bis 1 (LF 2018)",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "category A motorcycles of 150 cm3 and more (5 000 F)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.vehicleFamily"
+   ],
+   "guards": 5
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "IRPP on income from movable capital, dividends (15 % of gross)",
+   "statute": "CGI 2017, official edition updated 2023 (DGID), art. 84 (LF 2025 OCR pp. 1-60 checked: art. 84 not amended; the rest of LF 2025 not read)",
+   "dated": "cgi2023.txt",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "IRPP on income from movable capital, interest on claims, deposits and current accounts (15 %)",
+   "statute": "CGI 2017 (edition 2023) art. 49-50, 84",
+   "dated": "cgi2023.txt",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Contribution foncière des propriétés bâties (15 % of rental value less 40 %, at least 30 000 F; main home exempt)",
+   "statute": "CGI 2017 (edition 2023) art. 169 12°, 170, 177",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "rental value not below 12 % of market value or cost (art. 172)",
+    "rounding to the nearest 10 F",
+    "rural dwellings of individuals exempt (art. 169 11°)",
+    "30 % rate for IS payers"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyAnnualFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Contribution foncière des propriétés non bâties (27,5 % of 12 % of market value in urban centres)",
+   "statute": "CGI 2017 (edition 2023) art. 180 a), 184",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "rural land assessed per hectare (art. 180 b)",
+    "rounding to the nearest 10 F and the two-step rounding of 12 % then 27,5 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyValueFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droit d'enregistrement, mutations d'immeubles bâtis (7,5 %)",
+   "statute": "CGI 2017 (edition 2023) art. 77, 301",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "6 % for rural built immovables (art. 301)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droit d'enregistrement, mutations d'immeubles urbains non bâtis (6 %)",
+   "statute": "CGI 2017 (edition 2023) art. 301",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "rural unbuilt land and concessions of State land at the 15 % rate of art. 77"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Droits de mutation à titre gratuit (successions, donations)",
+   "statute": "CGI 2017 (edition 2023) art. 304-313",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "art. 304 tariff per net share by degree; art. 306 shared abatement of 5 M F plus 3 M F per child or dependent ascendant across direct-line heirs and spouse, art. 308 reductions for children: the household input carries neither the number of children nor the shared abatement"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "cgi2023.txt offsets 567900-570000",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNSS employer contributions (pensions 4 %, work injury 3 %, family and maternity 12 %; up to 600 000 FCFA a month)",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019, Central African Republic (Wayback 2020-08-02, R4/fetch/p14/ssptw_central-african-republic.txt): employer 4 % (old age), 3 % (work injury), 12 % (family allowances, also maternity), each with maximum monthly earnings of 600,000 CFA francs; official secondary, edition 2019 (flagged)",
+   "dated": "cgi2023.txt",
+   "unsupported": [
+    "edition 2019",
+    "the minimum base (legal minimum wage 35 000 FCFA)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

@@ -1,0 +1,30 @@
+[
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Croatia, Individual - Other taxes, accessed 2025-08-02 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-08-02 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4300",
+  "tax": "Porez na nasljedstva i darove",
+  "statute": "Zakon o lokalnim porezima čl. 4 (cash, claims, securities, movables above EUR 6 700 each), čl. 8 (4 %), čl. 9 (spouse, lineal descendants and ascendants, public bodies, religious communities and foundations exempt) [year in force 2025 (pass 17), upgraded: PwC Croatia, Individual - Other taxes, Internet Archive 2025-08-02 (hr/law/pwc_indother_wb20250802.*): 4 % on cash, claims, securities and movables above EUR 6 700 each, as modelled; the 2025 text of the act (after NN 152/24) still not read]",
+  "dated": "PwC Croatia individual other taxes, Internet Archive 2025-08-02; NN 115/2016 read",
+  "grade": "B",
+  "kernel_parts": [
+   "InheritanceTax",
+   "TaxClass"
+  ],
+  "unsupported": [
+   "real estate is outside this tax (čl. 4): only the transfer's homeValue is excluded, other real estate in the value is taxed here (overstates); movables up to EUR 6 700 each are not separated"
+  ],
+  "yif16": "downgraded",
+  "yif17": "upgraded"
+ }
+]

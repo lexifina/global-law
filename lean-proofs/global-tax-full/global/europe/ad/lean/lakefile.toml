@@ -1,0 +1,18 @@
+name = "AdGlobal"
+version = "0.1.0"
+defaultTargets = ["AdGlobal", "adglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); AdTax = the 1.x model, vendored from cmp20/world/B04-europe-rest/ad/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AdTax"
+
+[[lean_lib]]
+name = "AdGlobal"
+
+[[lean_exe]]
+name = "adglobal"
+root = "AdGlobal.Main"

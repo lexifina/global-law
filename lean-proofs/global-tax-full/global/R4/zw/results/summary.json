@@ -1,0 +1,197 @@
+{
+ "country": "ZW",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Finance Act [Chapter 23:04] Chapter IV Schedule Part I ('fifteen per centum'), as shown by Finance Act 2025 s. 34 (15,5 % only from 1 Jan 2026)",
+   "dated": "Finance Act 2025 (No. 7 of 2025) s. 34 (quotes the 2025 wording of the VAT general rate); Finance Acts 2023, 2024, 2024 (No. 2)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "zero-rated and exempt supplies (VAT Act Schedules) not applied"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excises",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried world/B09-southern-africa/zw/law",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "Finance Acts 2024 and Veritas pages are held; the Income Tax Act rates (Charging Schedule) and the VAT Act were not resolved in this pass"
+   ],
+   "tried": "world/B09-southern-africa/zw/law",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Finance Act [Chapter 23:04] s. 14 (2) (c) and Schedule to Chapter I Part II (taxable income of a company or trust 25 %), ZIMRA consolidation to 1 December 2024 incl. the Finance (No. 2) Act 2024 changes from 1 January 2025; the Finance Act 2025 does not amend s. 14 (2) (c)",
+   "dated": "Finance Act 2025 (No. 7 of 2025) s. 34 (quotes the 2025 wording of the VAT general rate); Finance Acts 2023, 2024, 2024 (No. 2)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "AIDS levy (3 % of tax)",
+    "sector and incentive rates",
+    "loss rules"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Non-residents' taxes",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Finance Act [Chapter 23:04] s. 15 (c) (non-resident shareholders' tax 15 % on unlisted dividends), s. 19 (non-residents' tax on fees 15 %, substituted from 1 January 2025), s. 21 (non-residents' tax on royalties 15 %), ZIMRA consolidation to 1 December 2024; twelfth pass: Income Tax Act [Chapter 23:06] s. 29 (non-residents' tax on interest) repealed by Act 5/2009 w.e.f. 30 September 2009: no withholding on interest paid to non-residents",
+   "dated": "Finance Act 2025 (No. 7 of 2025) s. 34 (quotes the 2025 wording of the VAT general rate); Finance Acts 2023, 2024, 2024 (No. 2)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "listed-share dividend rates",
+    "remittances tax (s. 20)"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on the registration of acquisitions of immovable property (Item 6 (1) marginal bands)",
+   "statute": "Finance Act [Chapter 23:04] Chapter II (stamp duties under the Stamp Duties Act [Chapter 23:09]) Schedule Item 6 (1) (Schedule substituted by Act 3 of 2009; consolidation to 2024, R4/fetch/zw8/zw_4235.txt). Liability: the acquirer (duty on registering the acquisition in the Deeds Registry)",
+   "dated": "-",
+   "unsupported": [
+    "the Item 6 (1) bands are printed in '$' with no conversion after the 2024 ZWG redenomination: read as ZWG (flag)",
+    "acquisitions paid in foreign currency (Item 6 (2), US$ bands): no currency field",
+    "'per $100 or part thereof' rounding not applied",
+    "other Schedule items (bonds 0,40 %, brokers' notes, off-market share transfers, insurance)",
+    "exemptions to Item 6"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferBandFamily"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Securities transaction tax",
+   "statute": "Capital Gains Tax Act Cap. 23:01",
+   "dated": "-",
+   "unsupported": [
+    "triage minor: securities transaction tax on listed-share trades: small base for households, not read. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (official source)",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (intermediated money transfer tax (IMTT), AIDS levy (Finance Act); provision not located by keyword in the reachable text)",
+   "statute": "Income Tax Act Cap. 23:06 + Finance Act Cap. 23:04 (rates) as amended by Finance (No. 2) Act 7 of 2024",
+   "dated": "-",
+   "unsupported": [
+    "triage high: intermediated money transfer tax 2 % on electronic transfers: no transaction base in the model. listed by the registry (background (unverified)); charging provision not read/modelled in this pass | Re-triage for kernel 2.5.0 (seventeenth pass): IMTT read in the Finance Act, 2024 (No. 2) s. 7 (world/B09-southern-africa/zw/law/fa_2024.txt l. 315-371): Finance Act [Chapter 23:04] s. 22G from 3 May 2024: 2 cents on every ZiG or US$ transacted (2 %), flat US$10 150 for a transaction of US$500 000 or more; no 2.5.0 input carries the volume of a household's electronic transfers, so it stays C (the Finance Act 2025 copy held is a bot-check page: changes for 2025 not checked)"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://www.veritaszim.net)",
+   "triage": "high",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "NSSA employer contributions and ZIMDEF levy",
+   "statute": "not reached: tried Wayback captures of nssa.org.zw contribution pages (redirect stubs only)",
+   "dated": "-",
+   "unsupported": [
+    "NSSA rates/insurable-earnings ceiling (set in ZWG/US$ by SI) and the ZIMDEF levy (Manpower Planning and Development Act) not held"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "Wayback captures of nssa.org.zw contribution pages (redirect stubs only)",
+   "guards": 0
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Resident shareholders' tax on dividends (15 %; 10 % on listed securities)",
+   "statute": "Finance Act [Chapter 23:04] s. 17 (resident shareholders' tax under s. 28 of the Taxes Act: (a) 10 % on dividends from securities listed on a registered securities exchange, (b) 15 % on any other dividend; rates reduced by Finance (No. 3) Act 10 of 2009 w.e.f. 1 January 2010); consolidation to 2024, R4/fetch/zw8/zw_4235.txt",
+   "dated": "-",
+   "unsupported": [
+    "dividends from listed securities (10 %): the model cannot tell listed from unlisted (15 % applied)",
+    "Finance Acts 2025 not checked for s. 17"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Vehicle licence fees (ZINARA; annual, by vehicle mass, in US$)",
+   "statute": "Vehicle Registration and Licensing Act [Chapter 13:14] s. 52; Vehicle Registration and Licensing Regulations, 1999 (SI 427 of 1999) Third Schedule Part II as substituted by the Vehicle Registration and Licensing (Amendment) Regulations, 2024 (No. 26) (SI 67 of 2024, Gazette 12 April 2024; Veritas copy R4/fetch/p17/zw_si67_2024_veritas.pdf, p. 514) [text version: SI 67 of 2024 as gazetted; next replaced by SI 10 of 2026 (January 2026), no 2025 amendment listed by Veritas or ZimLII]. US$ amounts converted at the line's fxRates.USD, else at the declared RBZ interbank ZWG mid rate of 1 July 2025 (26.9502; RBZ 'RATES_01_JULY_2025.pdf', Wayback 20250822114844, R4/fetch/p19/zw_rbz_rates_20250701_wb20250822114844.pdf) (kernel 2.7.0 Fx)",
+   "dated": "-",
+   "unsupported": [
+    "the ruling exchange rate of the payment day: a line without fxRates.USD is converted at the RBZ mid rate of 1 July 2025 (declared, dated; flag)",
+    "a vehicle without massKg: listed (grade C)",
+    "the 4-10-month licences are the 12-month amount × months / 12 (as the table prints); licensing periods across 2024/2026 not split",
+    "registration and other Part I fees (one-off fees, not the annual licence)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "vehicleTaxFamily (kernel Global2.Vehicle)"
+   ],
+   "guards": 8
+  }
+ ],
+ "cases": 9,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

@@ -1,0 +1,212 @@
+{
+ "country": "TL",
+ "name": "Timor-Leste",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 15:45:17"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Withholding on rents (10 %)",
+   "statute": "Lei 8/2008 art. 55",
+   "dated": "Lei 8/2008",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "VAT (not levied)",
+   "statute": "Lei 8/2008 Anexo III b) (sales tax 0 % on domestic supplies)",
+   "dated": "JR 2008; OGE 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5126",
+   "tax": "Imposto sobre serviços",
+   "statute": "Lei 8/2008 art. 5.º, Anexo I",
+   "dated": "JR Série I N.º 26 of 30 June 2008 (rates unchanged in the later amending laws on the build server)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "which services are 'specified' (art. 4.º) taken from the basket classes"
+   ],
+   "family_file": "lean/TlGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5121",
+   "tax": "Imposto seletivo de consumo (beer, wine, sweetened drinks, spirits, fuel)",
+   "statute": "Lei 8/2024 art. 3.º n.º 4 a)-d); Lei 8/2008 Anexo II",
+   "dated": "OGE 2025 (JR 26 Nov 2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "Excise",
+    "charge"
+   ],
+   "unsupported": [
+    "tobacco by weight",
+    "vehicles (10/20/30 % of value above thresholds)",
+    "sales tax 2.5 % on imports"
+   ],
+   "family_file": "lean/TlGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Imposto sobre o rendimento (pessoas colectivas)",
+   "statute": "Lei 8/2008, tabela do imposto sobre o rendimento",
+   "dated": "Lei 8/2008 (in force 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Lei 8/2008 arts. 29, 49, 57, 60 (Lei Tributária)",
+   "dated": "Lei 8/2008 (in force 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services performed outside Timor-Leste other than management fees are not Timor-Leste-source (art. 49): not distinguished"
+   ],
+   "family_file": "lean/TlGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties): not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social security",
+   "statute": "Lei 12/2016; DL 20/2017",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TlGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 8,
+  "C": 0
+ },
+ "guards": 13,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

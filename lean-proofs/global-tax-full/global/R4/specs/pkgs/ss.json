@@ -1,0 +1,38 @@
+{
+ "cc": "SS",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Taxation Act 2009 (amended 2016); Financial Act 2023/2024 and 2024/2025",
+   "why": "no ad valorem stamp duty on conveyances found: the Financial Act 2023/2024 lists 'Stamp Duty Fee' items of 1-2 SSP on documents in ministry fee schedules and a 'Stamp Duty' revenue line, the Taxation Act text holds excise stamps only; whether a land-transfer duty exists under the Land Act or state laws is not established, so neither a rate nor a cited absence is given",
+   "tried": "local copies (taxation_act_2016, financial_act_2023_2024, fa2425 OCR; full-text search 'stamp', 'conveyance', 'transfer of land'), seventeenth pass",
+   "triage": "moderate"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "reclassified",
+   "name": "Other notable taxes (personal income tax schedules in the annual Financial Act; provision not located by keyword in the reachable text)",
+   "statute": "Taxation Act 2009 (amended 2016) + Financial Act 2023/2024 and 2024/2025",
+   "classification": "duplicate (covered elsewhere)",
+   "oecdGuide": "OECD Interpretative Guide (Revenue Statistics 2026, Annex A; R4/fetch/gap/oecd_guide.txt) §28 (classification by base: one personal income tax, heading 1100)",
+   "why": "The registry row names the personal income tax schedules printed in the annual Financial Act (Taxation Act 2009 as amended 2016; Financial Act 2024/2025 Schedule 1 rates). That is the personal income tax computed by the vendored 1.x model (heading 1100); the row is not a second tax. (The 1.x model's July-December 2025 rates depend on the Financial Act 2025/2026, not held: a PIT matter, recorded in the twentieth pass.)",
+   "unsupported": [],
+   "was": "grade C (triage notATax: registry note on PIT schedules in the Financial Act (covered by the 1.x PIT), not a separate tax. listed by the registry (background (unverified)); charging provision not read/modelled)"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "unsupported",
+   "name": "Employer pension / social security contributions",
+   "grade": "C",
+   "why": "pension contributions for private employers (if any) not found in the Financial Act 2024/25 or texts held",
+   "tried": "Financial Act 2024/25 search, live sss.gov.ss (no answer), SSPTW (no page answered)",
+   "statute": "not reached: tried Financial Act 2024/25 search, live sss.gov.ss (no answer), SSPTW (no page answered)"
+  }
+ ]
+}

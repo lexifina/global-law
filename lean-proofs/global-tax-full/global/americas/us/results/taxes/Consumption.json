@@ -1,0 +1,74 @@
+[
+ {
+  "oecd": "5112",
+  "tax": "California sales and use tax (City of Los Angeles)",
+  "statute": "R&TC Part 1 (Sales and Use Tax Law), Bradley-Burns and district taxes; CDTFA rate table",
+  "dated": "CDTFA table effective 2025-07-01 (archived 2025-07-03)",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exemption sections not read item by item"
+  ]
+ },
+ {
+  "oecd": "5111",
+  "tax": "VAT",
+  "statute": "26 U.S.C. Subtitle D",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Federal excises (fuel, tobacco, alcohol)",
+  "statute": "26 U.S.C. 4081, 5001, 5041, 5051, 5701",
+  "dated": "current US Code; rates unchanged in 2025",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "other tobacco",
+   "small-producer rates"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "California excises (fuel, cigarettes, alcohol)",
+  "statute": "R&TC 7360, 60050, 30101 ff., 32151 ff. (via CDTFA)",
+  "dated": "CDTFA special-tax table archived 2024-07-17 (rates from 2024-07-01)",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "July 2025 fuel adjustment"
+  ]
+ },
+ {
+  "oecd": "5120",
+  "tax": "Customs duties (HTSUS column 1)",
+  "statute": "HTSUS (19 U.S.C. 1202) 2025: 0207.14.00 17.6 c/kg; 1006.30.10 11.2 %, .90 1.4 c/kg; 2202.10.00 0.2 c/l; 2203.00 Free; 2204.21.50 6.3 c/l, .80 16.9 c/l; 2208.30 Free; 2402.20.80 $1.05/kg + 2.3 %, .90 $1.50/kg + 3.2 %; 2710.12.15 52.5 c/bbl; 2710.19.11 10.5 c/bbl; 3004.90, 4901.99, 8471.30, 8517.13 Free; 6109.10.00 16.5 %; 8703.23.01, 8703.80.00 2.5 %; Special column Free for USMCA (S), CAFTA-DR (P) and the bilateral FTAs",
+  "dated": "USITC HTS REST export (hts.usitc.gov/reststop/exportList, release=2025HTSBasic and 2025HTSRev32: every line used identical in both, so unchanged through 2025), us/law/hts_2025HTS{Basic,Rev32}_NNNN.json; gap pass 2026-11-21",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P7",
+  "kernel_parts": [
+   "TariffRule",
+   "customsFamily",
+   "consumptionC"
+  ],
+  "unsupported": [
+   "2025 Chapter 99 additional duties (IEEPA, reciprocal, s. 232, s. 301) not computed: every foreign-origin line is flagged grade C",
+   "only the listed HS lines are modelled; any other code is grade C (no tariff line)",
+   "GSP (A, A+, A*) expired on 31 Dec 2020 and is not applied; CBERA/AGOA not modelled",
+   "specific duties need the line's quantity (litres) or mass (\"massG\")"
+  ],
+  "gap_pass": "2026-11-21 approach 1 (customs, kernel 2.8.0)"
+ }
+]

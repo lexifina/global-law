@@ -1,0 +1,18 @@
+name = "ChGlobal"
+version = "0.1.0"
+defaultTargets = ["ChGlobal", "chglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); ChTax = the 1.x model, vendored from cmp20/germanic/ch/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ChTax"
+
+[[lean_lib]]
+name = "ChGlobal"
+
+[[lean_exe]]
+name = "chglobal"
+root = "ChGlobal.Main"

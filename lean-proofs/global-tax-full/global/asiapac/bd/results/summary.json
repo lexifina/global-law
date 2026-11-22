@@ -1,0 +1,201 @@
+{
+ "country": "BD",
+ "name": "Bangladesh",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:07:10"
+ },
+ "taxes": [
+  {
+   "oecd": "4400",
+   "tax": "Tax on stock-exchange transactions (0.05 % to 30 June 2025, 0.03 % from 1 July 2025)",
+   "statute": "ITA 2023 s. 137; Finance Ordinance 2025 (No. 28 of 2025) s. 84",
+   "dated": "2025, split at 1 July 2025 by the sale's date: s. 137 text before (bdlaws, Internet Archive 2025-02-13: 0.05 %) and after (2026-01-23: 0.03 %, footnote: Finance Ordinance 2025 s. 84, from 1 July 2025); session 12 year in force",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "undated listed-share sales: grade C",
+    "collected from the exchange member: booked on the seller's proceeds"
+   ],
+   "family_file": "lean/BdGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on dividends, interest and listed-share gains",
+   "statute": "ITA 2023; Finance Ordinance 2025",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/BdGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value added tax and supplementary duty",
+   "statute": "VAT and SD Act 2012 (15 %), Finance Ordinance 2025",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried (session 4): nbr.gov.bd regulations/acts/vat (table loaded by script: empty in the HTML), VAT Instruction PDFs (only 2026-27 published), bdlaws.minlaw.gov.bd (no answer), Wayback (offline 2026-11-21); would unlock: the VAT and SD Act 2012 as amended to 2025 (First Schedule exemptions, Third Schedule reduced rates) and the 2024-25/2025-26 VAT Instructions",
+    "session 6: read (bdlaws act-1106 full text, Wayback 20230611183741, bd/law/bd_vatsd2012_bdlaws_wb20230611.html; table of contents of 2025): s. 15 (3) 15 % (substituted by Finance Act 2019), s. 2 (57) registration threshold Tk 3 crore, s. 2 (48) enlistment threshold Tk 50 lakh, s. 63 (1) turnover tax 4 %. Not modelled: the First Schedule (exempt goods and services) and Third Schedule (reduced rates) are not in the bdlaws text; the NBR gazettes (Finance Act 2024, Finance Ordinance No. 28 of 2 June 2025) are Bijoy-encoded and only amend those schedules (2025 OCR of the Ordinance by the 1.x builder: ss. 26-28 amend entries). Would unlock: a Unicode or OCR copy of the First and Third Schedules as in force 2024-25"
+   ],
+   "family_file": "lean/BdGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5121",
+   "tax": "Supplementary duty",
+   "statute": "VAT and SD Act 2012 schedules",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried (session 4): as above; would unlock: the Third Schedule supplementary duty rates",
+    "session 6: s. 55 (supplementary duty on Second Schedule goods and services) read; the Second Schedule itself not reached (as for 5111)"
+   ],
+   "family_file": "lean/BdGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "ITA 2023; Finance Act 2024 (Act No. 5 of 2024) s. 88, তফসিল-৩; Finance Ordinance 2025 (No. 28 of 2025) s. 136, তফসিল-২",
+   "dated": "2025, split at 1 July 2025 by days: income year 2024-25 (Finance Act 2024 schedule for the tax year from 1 July 2025, gazette of 30 June 2024, Internet Archive 2025-08-13) and income year 2025-26 (Finance Ordinance 2025 schedule for the tax year from 1 July 2026, gazette of 2 June 2025); session 12 year in force",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "split by days (181/365, 184/365); minimum tax s. 163; sector rates; one-person companies; publicly traded with 10 % or less by IPO"
+   ],
+   "family_file": "lean/BdGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Tax deducted from payments to non-residents (20 %; dividends to non-company persons 30 %)",
+   "statute": "Income Tax Act 2023 s. 119 (bdlaws, Wayback 20250418124050: \"prescribed rate, not exceeding 30 %\"); উৎসে কর কর্তন বিধিমালা, ২০২৪ (SRO 161-Ain/Aikor/2024, Bangladesh Gazette Extraordinary 29 May 2024) rule 5 (1) Table",
+   "dated": "income year 2025-26 (rules of 2024; 2025 amendments of the Table not checked; Finance Ordinance 2025 moved the s. 119 (6) exclusions into rule 5)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "contractors 7.5 %, advertising 15 %, insurance 10 % and the other Table items not distinguished from the 20 % services rate",
+    "rule 5 (3) excluded payments (tuition, liaison office costs) not modelled"
+   ],
+   "family_file": "lean/BdGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Bangladesh as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Bangladesh for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C050&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/bd.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 17019900 (MFN duty 'BDT 4000 per MT': specific or compound duty, unit/currency not mapped)"
+   ],
+   "family_file": "lean/BdGlobal/Customs.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BdGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on conveyances",
+   "statute": "Stamp Act 1899 Sch. I art. 23",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "local government tax on transfers",
+    "s. 125 advance tax"
+   ],
+   "family_file": "lean/BdGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Holding tax and land development tax",
+   "statute": "City Corporation Act 2009; Land Development Tax Act 2023",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/BdGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Surcharge on net wealth (Tk 4 crore+)",
+   "statute": "Finance Ordinance 2025, ITA 2023 Sixth Schedule",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/BdGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Gift tax",
+   "statute": "Gift Tax Act 1990",
+   "dated": "status not confirmed",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/BdGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 3,
+  "C": 6
+ },
+ "guards": 18,
+ "sorry": 0,
+ "cases": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

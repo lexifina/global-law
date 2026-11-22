@@ -1,0 +1,190 @@
+{
+ "country": "TV",
+ "name": "Tuvalu",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 21:29:37"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "Tuvalu consumption tax",
+   "statute": "Tuvalu Consumption Tax Act 2008",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: not on the build server (income tax acts and regulations); would unlock: the TCT Act from tuvalu-legislation.tv"
+   ],
+   "family_file": "lean/TvGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5121",
+   "tax": "Import levies and excise",
+   "statute": "Customs Revenue and Border Protection Act; Import Levy Act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+   ],
+   "family_file": "lean/TvGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on resident companies (30 %)",
+   "statute": "Income Tax Act (Cap. 26.16) s. 5, Schedule 6 para. 1 (i)",
+   "dated": "not modelled (session 11 year-in-force audit: Income Tax (Cap. 26.16) 2022 Revised Edition with later amendments not checked; no 2025 version or official 2025 source reached: grade C)",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "session 11 year-in-force audit: Income Tax (Cap. 26.16) 2022 Revised Edition with later amendments not checked; no 2025 version or official 2025 source reached: grade C"
+   ],
+   "family_file": "lean/TvGlobal/Corporate.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Non-resident withholding (15 % dividends, service fees, interest, royalties)",
+   "statute": "Income Tax Act (Cap. 26.16) s. 37, Schedule 5 Part A (2)",
+   "dated": "not modelled (session 11 year-in-force audit: Income Tax (Cap. 26.16) 2022 Revised Edition with later amendments not checked; no 2025 version or official 2025 source reached: grade C)",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "session 11 year-in-force audit: Income Tax (Cap. 26.16) 2022 Revised Edition with later amendments not checked; no 2025 version or official 2025 source reached: grade C"
+   ],
+   "family_file": "lean/TvGlobal/Corporate.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "Income Tax Act (Cap. 26.16, 2022 Revised Edition) and Income Tax Regulations (Cap. 26.16.1)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade A (the build server): "
+   ],
+   "family_file": "lean/TvGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TvGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TvGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TvGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TvGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties): not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TvGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TvGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (provident fund, non-tax)",
+   "statute": "Provident Fund Act (Cap. 32.08)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TvGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 0,
+  "B": 7,
+  "C": 5
+ },
+ "guards": 3,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

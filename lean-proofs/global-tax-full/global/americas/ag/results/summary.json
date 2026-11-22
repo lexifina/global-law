@@ -1,0 +1,329 @@
+{
+ "country": "AG",
+ "name": "Antigua and Barbuda",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:11"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/AgGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Antigua and Barbuda Sales Tax (ABST)",
+   "statute": "ABST Act 2006 s. 8 (3), Scheds. 3, 4; Act 32 of 2019 s. 4",
+   "dated": "Acts as published on laws.gov.ag (no consolidation; annual lists 2023-2025 checked)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food limited to Regulation kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/AgGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise / consumption taxes",
+   "statute": "Customs (Control and Management) Act; Revenue (Miscellaneous Provisions) Act 2023 (additional 10 % excise)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "Revenue (Misc.) Acts 2023/2024 read (additional 10 % excise on listed goods); base duty schedules not reached",
+   "unsupported": [
+    "would unlock: the 2025 consumption-tax tariff schedules"
+   ],
+   "family_file": "lean/AgGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax (companies)",
+   "statute": "Income Tax Act Cap. 212 s. 32 (1) (b) as substituted by Act No. 3 of 2008 s. 4: 25 % from 1 Jan 2008",
+   "dated": "laws.gov.ag: Cap. 212 (1992 ed.), Acts 4 of 2003, 3 of 2008, 20 of 2022 (ag/law/ita_cap212_1992.*, ita_amd_2003-4.*, ita_amd_2008-3.*, ita_amd_2022-20.txt); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "s. 32 (2)-(4) rates for banks (22.5 % with rate conditions), and the 10 % provision of s. 32 (4) (Act No. 20 of 2022) for banks, insurers, petroleum, energy and telecommunications companies not modelled; s. 33 dividend imputation not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/AgGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "ITA Cap. 212 s. 39 (1) as substituted by Act No. 4 of 2003 s. 5; ITA Cap. 212 s. 40 (1): any other payment chargeable under s. 5 to a non-resident: 25 cents on every dollar",
+   "dated": "laws.gov.ag: Cap. 212 (1992 ed.), Acts 4 of 2003, 3 of 2008, 20 of 2022 (ag/law/ita_cap212_1992.*, ita_amd_2003-4.*, ita_amd_2008-3.*, ita_amd_2022-20.txt); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "s. 39 (1) proviso: interest on bank deposits paid to non-residents exempt: not distinguished; treaty rates not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/AgGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment: Unincorporated Business Tax Act 2016 and self-employed contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment: Unincorporated Business Tax Act 2016 and self-employed contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Education Levy (employer part)",
+   "statute": "Education Levy Act (not read; not in lexifina/antigua-and-barbuda-law)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: the OECD table books 0 under 3000 (2021-2024), but the Education Levy on wages (Education Levy Act) has an employer part whose heading was not settled from a text; earlier triage flagged it"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: the OECD table books 0 under 3000 (2021-2024), but the Education Levy on wages (Education Levy Act) has an employer part whose heading was not settled from a text; earlier triage flagged it",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Property Tax Act (rates by use on market value) and Land Tax",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (rates by use on market value) and Land Tax; not in lexifina/antigua-and-barbuda-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (rates by use on market value) and Land Tax; not in lexifina/antigua-and-barbuda-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 4100 = 2021:24.1 2022:32.4 2023:22.3 2024:26.9; named lines: 4110 Land tax (2024: 1.4); 4110 Non-citizens undeveloped land tax (2024: 0.3); 4110 Property tax (2024: 25.2)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "Non-recurrent taxes on property",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "Revenue Recovery Charge (probable)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: the OECD AG table books 108.9 (2024) under 5112 beside the ABST (5111), unnamed: most likely the Revenue Recovery Charge on imports; its act and 2025 rates not read"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: the OECD AG table books 108.9 (2024) under 5112 beside the ABST (5111), unnamed: most likely the Revenue Recovery Charge on imports; its act and 2025 rates not read",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+   "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "Vehicles and Road Traffic Act licence fees",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Vehicles and Road Traffic Act licence fees. 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Vehicles and Road Traffic Act licence fees. 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 5200 = 2021:3.0 2022:3.6 2023:4.2 2024:4.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 6000 (other taxes, Guide §85) in 2021-2024; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVATG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ATG.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/AgGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Antigua and Barbuda (DSD_REV_LAC@DF_REVATG v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/ATG.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for Antigua and Barbuda (DSD_REV_LAC@DF_REVATG v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/ATG.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for Antigua and Barbuda (DSD_REV_LAC@DF_REVATG v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/ATG.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/AgGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Inland Revenue Department (ird.gov.ag): list of taxes administered",
+   "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Inland Revenue Department (ird.gov.ag) list of the taxes it administers, `ag/law/ird_home_2025-01-14.*` (Wayback 2025-01-14) with its linked list 'Taxes, Duties, Levies & Fees Administered by the IRD' (`ag/law/ird_taxes_administered_2021.*`), names: (2021 table, OCR `ag/law/ird_taxes_administered_2021.ocr.txt`) Antigua and Barbuda Sales Tax, Unincorporated Business Tax, property tax, undeveloped land tax, non-citizen land holding tax, stamp duty, travel tax, slot machine tax, withholding tax, insurance and money-transfer levies, licences; the 2025 home page adds corporate income tax and the Tourism Guest Levy; consolidated index of revenue Acts not held; none of them is a recurrent tax on net wealth.",
+   "family_file": "lean/AgGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Social Security and Medical Benefits (employer)",
+   "statute": "Social Security Act Cap. 408, Collection Regs Sched. 1 (S.I. 60 of 2016); Medical Benefits Regulations 2011",
+   "dated": "2025 row of the S.I. 60/2016 schedule",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "status": "modelled",
+   "family_file": "lean/AgGlobal/Social.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Stamp Act; Property Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/AgGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 6,
+  "C": 8
+ },
+ "guards": 13,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

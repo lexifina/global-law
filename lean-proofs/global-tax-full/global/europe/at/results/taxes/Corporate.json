@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Körperschaftsteuer",
+  "statute": "KStG 1988 § 22 (1) (23 % ab 2024), § 8 (4) Z 2 (75 %), § 10 (1), § 24 (4) Z 1 (Mindeststeuer)",
+  "dated": "RIS Fassung vom 01.07.2025",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "Mindeststeuer taken for a GmbH (500 euro; AG 3 500 euro)",
+   "§ 10 (2) international participations",
+   "§ 12 (1) Z 10 interest limitation (Zinsschranke)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "withholding tax on payments abroad",
+  "statute": "EStG 1988 § 27a (1) Z 2, § 93: KESt 27,5 %",
+  "dated": "RIS Fassung vom 01.07.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "KESt on dividends to foreign companies (refund/reduction under § 94, § 21 (1) Z 1a KStG) not modelled",
+   "§ 99 Abzugsteuer on royalties not read"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Abzugsteuer / KESt on payments abroad (interest, royalty, services)",
+  "statute": "EStG 1988 § 98 (1) Z 5 lit. b, § 99 (1) Z 3 and Z 5, § 100 (1)",
+  "dated": "RIS Fassung vom 01.07.2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "services are taken as commercial or technical consulting carried out in Austria (§ 99 (1) Z 5): other services, or consulting done abroad, bear none",
+   "§ 99a exemption for royalties to associated EU companies not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

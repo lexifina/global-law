@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Impuesto sobre Transmisiones Patrimoniales Onerosas (inmuebles)",
+  "statute": "TRLITPAJD art. 11.1 a) (6 %, tipo supletorio) [year in force 2025 (pass 16), unchanged-confirmed: es/law/itpajd.txt: art. 11 last redacción en vigor 01/01/2002]",
+  "dated": "BOE consolidado (current text with amendment notes)",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "the Comunidad de Madrid's own rate (DLeg 1/2010, not reached) replaces the 6 % default; new dwellings sold by developers bear IVA + AJD instead (not separated)"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "4100",
+  "tax": "Impuesto sobre Bienes Inmuebles (Madrid)",
+  "statute": "TRLRHL (RDLeg 2/2004) arts. 65, 71; Ordenanza Fiscal reguladora del IBI de Madrid arts. 3.2, 8.2 (modificación BOCM núm. 308, 27.12.2024)",
+  "dated": "ordinance amendment in force 1.1.2025 (BOCM-20241227-61); TRLRHL BOE consolidated text",
+  "grade": "B",
+  "kernel_parts": [
+   "charge (valor catastral x tipo)"
+  ],
+  "unsupported": [
+   "differentiated non-residential rates (art. 8.3) not read",
+   "base-liquidable reduction (TRLRHL arts. 66-70), bonificaciones, recargo on empty dwellings",
+   "valor catastral is an input (asset.assessed)"
+  ]
+ }
+]

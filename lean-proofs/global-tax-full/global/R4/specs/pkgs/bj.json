@@ -1,0 +1,301 @@
+{
+ "cc": "BJ",
+ "dated": "CGI 2023",
+ "entries": [
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI 2023 (whole code)",
+   "why": "BJ CGI 2023 (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net' finds no charging provision"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts 2023 (loi n° 2021-15 du 23 décembre 2021, mise à jour LF 2023 loi 2022-33)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://finances.bj/wp-content/uploads/2023/01/63c7b8d3eef3c_Benin-CGI-2023-officiel.pdf)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "patente",
+   "grade": "B",
+   "name": "Contribution des patentes (fixed duty on turnover + proportional duty on rental value; Cotonou, 1st zone)",
+   "statute": "CGI 2023 art. 199, 202, 204-205 (loi n° 2021-15 du 20 décembre 2021; edition 2023, later finance laws not held)",
+   "doc": "art. 202: general tariff, 1st zone 70 000 F up to 1 billion of the previous year's turnover, plus 10 000 F per billion or fraction above; art. 205: proportional duty on the premises' rental value, 17 % in Cotonou and Porto-Novo, at least a third of the fixed duty.",
+   "unsupported": [
+    "importer/exporter tariff on imports and exports (art. 203), 2nd zone (60 000 F) and the other communes' rates (12-25 %, art. 205), household-waste levy 2 000-50 000 F set by councils (art. 199-2), supplementary patente 0,5 % on public contracts (art. 207), first-12-months exemption (art. 198)"
+   ],
+   "lic": {
+    "tiers": [
+     [
+      1000000000,
+      0,
+      70000,
+      70000
+     ]
+    ],
+    "top": [
+     0,
+     70000,
+     70000
+    ],
+    "stepSize": 1000000000,
+    "stepAmt": 10000,
+    "rentPpm": 170000,
+    "propMinDen": 3
+   },
+   "tests": [
+    {
+     "turnover": 3000000000,
+     "rv": 60000000,
+     "expect": [
+      90000,
+      10200000
+     ]
+    },
+    {
+     "turnover": 500000000,
+     "rv": 100000,
+     "expect": [
+      70000,
+      23333
+     ]
+    },
+    {
+     "turnover": 12000000000,
+     "expect": [
+      180000,
+      60000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "CGI-2023.txt (whole code)",
+   "why": "BJ: the general tax code held (CGI-2023.txt, 627k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "tvm",
+   "grade": "B",
+   "name": "Taxe sur les véhicules à moteur (private vehicles by fiscal horsepower; company passenger cars)",
+   "statute": "CGI 2023 art. 166, 168 1) and 4) (edition 2023, later finance laws not held)",
+   "doc": "art. 168: private transport vehicles up to 7 CV 20 000 F, 8-10 CV 30 000, 11-15 CV 40 000, above 15 CV 60 000; passenger vehicles owned or used by companies 150 000 F up to 7 CV, 200 000 F above.",
+   "unsupported": [
+    "public transport tariff by seats / tonnage and three-wheelers (art. 168 2-3)",
+    "prorata for vehicles first registered during the year (art. 169)"
+   ],
+   "bands": [
+    [
+     7,
+     20000
+    ],
+    [
+     10,
+     30000
+    ],
+    [
+     15,
+     40000
+    ]
+   ],
+   "top": 60000,
+   "companyBands": [
+    [
+     7,
+     150000
+    ]
+   ],
+   "companyTop": 200000,
+   "tests": [
+    {
+     "hps": [
+      9,
+      16
+     ],
+     "expect": [
+      30000,
+      60000
+     ]
+    },
+    {
+     "hps": [
+      7,
+      12
+     ],
+     "company": true,
+     "expect": [
+      150000,
+      200000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmDiv",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1000,
+   "name": "IRCM on dividends (10 %)",
+   "statute": "CGI 2023 art. 86 2) (edition 2023, later finance laws not held)",
+   "doc": "art. 86: 10 % on dividends other than those paid to non-residents or by listed companies (5 %); 15 % on other capital income.",
+   "unsupported": [
+    "5 % on dividends of companies listed on the BRVM and to non-residents (art. 86 1)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmInt",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 1500,
+   "name": "IRCM on interest from claims and deposits (15 %)",
+   "statute": "CGI 2023 art. 88",
+   "unsupported": [
+    "bonds 6 % / 3 % / 0 % (art. 87)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "irf",
+   "grade": "B",
+   "income": "rent",
+   "rateBp": 1200,
+   "name": "Impôt sur les revenus fonciers (12 %)",
+   "statute": "CGI 2023 art. 104",
+   "unsupported": [
+    "4 000 F ORTB fee per assessment (art. 104 2)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "tpvi",
+   "grade": "B",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Taxe sur les plus-values immobilières (5 % of the gain)",
+   "statute": "CGI 2023 art. 108, 111, 115 (as amended by LF 2023)",
+   "unsupported": [
+    "minimum of 1 % of the sale price (art. 115 2)",
+    "exemptions (art. 110)",
+    "construction gain set at 10 % of its price (art. 113)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "vps",
+   "grade": "B",
+   "rateBp": 400,
+   "name": "Versement patronal sur salaires (4 %)",
+   "statute": "CGI 2023 art. 191, 194",
+   "unsupported": [
+    "2 % for private schools (art. 194)",
+    "exemptions (art. 192)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "property",
+   "fam": "tfu",
+   "grade": "B",
+   "builtBp": 600,
+   "landBp": 500,
+   "name": "Taxe foncière unique (default rates 6 % built on rental value, 5 % unbuilt on administrative value)",
+   "statute": "CGI 2023 art. 157-159 (art. 159 as amended by LF 2023)",
+   "doc": "art. 159: councils set rates within 4-8 % (built) and 3-7 % (unbuilt); where no rate is adopted, 6 % built and 5 % unbuilt; art. 157: built property on its rental value; art. 158: land on its administrative value.",
+   "unsupported": [
+    "council rates within the 3-8 % ranges",
+    "additional levies on top of the TFU (art. 159 3)",
+    "temporary exemption of new owner-occupied buildings (art. 154)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "mutImm",
+   "grade": "B",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Registration duty on transfers of immovable property (5 %)",
+   "statute": "CGI 2023 art. 331 1)",
+   "unsupported": [
+    "exchanges 2 % (art. 332)"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "donation",
+   "grade": "B",
+   "onlyKind": "gift",
+   "name": "Registration duty on gifts inter vivos (5 %)",
+   "statute": "CGI 2023 art. 394 2)",
+   "classes": [],
+   "default": {
+    "bands": [],
+    "top": 500
+   },
+   "testValue": 10000000
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "notLevied",
+   "name": "Inheritance tax",
+   "statute": "CGI 2023 art. 394 1)",
+   "why": "BJ: art. 394 1) — transfers on death are registered free of duty (gifts inter vivos 5 %, modelled)"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnss",
+   "level": "social",
+   "rateBp": 1640,
+   "grade": "B",
+   "name": "CNSS employer contributions (family benefits 9 %, pensions 6,4 %, occupational risks 1 %)",
+   "statute": "CNSS Bénin, page 'Recouvrement' (taux de cotisation; Code de sécurité sociale, loi n° 98-019 du 21 mars 2003), held copy w5/bj_cnss_recouvrement.html",
+   "doc": "CNSS Bénin 'Recouvrement' page (facts restated): family benefits 9 % and occupational risks 1 to 4 % by the firm's activity, both paid by the employer; pension 10 %, of which 6,4 % employer and 3,6 % employee; the base is all the worker's pay (no ceiling).",
+   "unsupported": [
+    "occupational-risk rate by activity (1 to 4 %): the lowest class (1 %) is applied",
+    "the employee's 3,6 % (1.x PIT side)",
+    "rates read on the fund's page, not in the decree"
+   ]
+  }
+ ]
+}

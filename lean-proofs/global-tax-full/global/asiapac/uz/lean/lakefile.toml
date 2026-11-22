@@ -1,0 +1,18 @@
+name = "UzGlobal"
+version = "0.1.0"
+defaultTargets = ["UzGlobal", "uzglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); UzTax = the 1.x model, vendored from cmp20/world/B05-former-ussr/uz/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "UzTax"
+
+[[lean_lib]]
+name = "UzGlobal"
+
+[[lean_exe]]
+name = "uzglobal"
+root = "UzGlobal.Main"

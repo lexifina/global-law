@@ -1,0 +1,157 @@
+[
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Código do Imposto do Selo (Lei n.º 33/VIII/2013)",
+  "dated": "-",
+  "unsupported": [
+   "triage moderate: imposto do selo (lusophone): table of fixed and ad valorem items (credit, insurance, receipts, contracts); the household-relevant items (credit use, property acquisition) need the Tabela, not read. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (official source)",
+  "triage": "moderate"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (contribuição turística (tourist levy); provision not located by keyword in the reachable text)",
+  "statute": "Lei do Orçamento do Estado para 2025 (B.O. I Série n.º 125 Sup., 30.12.2024)",
+  "dated": "-",
+  "unsupported": [
+   "triage minor: contribuição turística: per-night levy on tourists, outside the household grid. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.mf.gov.cv/web/dnre/legislacao)",
+  "triage": "minor"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "INPS employer contribution (15 %)",
+  "statute": "INPS Cabo Verde, page 'Contribuições' (Wayback 2020-05-15; Decreto-Lei 5/2004 art. 'Contribuições': rates 'definidas por Portaria', portaria not held)",
+  "dated": "-",
+  "unsupported": [
+   "the rate portaria is not held; page captured 2020 (flag)",
+   "the worker's 8 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Imposto Único sobre o Património (IUP) on onerous transfers of immovable property (3 %, on the acquirer)",
+  "statute": "Lei n.º 79/V/98 de 7 de Dezembro (Boletim Oficial I série n.º 45 of 7 December 1998, pp. 657-659; boe.incv.cv Bulletins/Download/11888, PDF sha256 e267c35b..., text R4/fetch/p16/cv_bo45_1998_lei79V98.txt) art. 6.º n.º 1 (incidence: 'o valor das transmissões gratuitas ou onerosas de móveis ou imóveis sujeitos a registo'), art. 7.º (due by the acquirer), art. 12.º ('A taxa ... é única e de 3%'). In force through 2025: the OE 2025 (world/B07-west-africa-fr-pt/cv/src/OE-2025.txt art. 61) still grants IUP exemptions on transfers; the IUP is replaced by the ITI and IPI codes (Leis 54/X/2025 and 55/X/2025) only from 1 January 2026 (secondary report). B: the 1998 law with its 1999 amendment and the Regulamento do IUP not read (flag)",
+  "dated": "-",
+  "unsupported": [
+   "the taxable value may be the fiscal valuation (valor patrimonial, art. 6.º) where higher: the price is used",
+   "the annual IUP on the fiscal value of property (4100) and the IUP on capital gains of the seller (art. 6.º n.º 1 e)) not modelled",
+   "gratuitous transfers and transfers of registered movables (vehicles) not modelled",
+   "exemptions of the budget laws (e.g. OE 2025 art. 61: rural property of certified farmers) not modelled"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Imposto sobre o Valor Acrescentado (IVA)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Código do IVA (not held): standard rate 15 % from PwC Worldwide Tax Summaries, Cabo Verde, Individual - Other taxes (last reviewed 15 July 2025, Wayback capture 2025-12-16, R4/fetch/swp/pwc_cv_indother_wb20251216.txt); 8 % on electricity and water supplied to private consumers: OE 2025 art. 73.º (held, world/B07-west-africa-fr-pt/cv/src/OE-2025) and the same guide",
+  "dated": "Código do IRPC (Lei n.º 82/VIII/2015) and Código do IRPS (Lei n.º 78/VIII/2014) as republished by Lei n.º 86/IX/2020 (B.O. I Série n.º 53, 28 Apr 2020); Lei n.º 16/X/2022 and Lei n.º 35/X/2023 (which also amend the CIRPC) not held; Orçamento do Estado 2025 checked (art. 25 amends CIRPC art. 68 only): grade B",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "exemptions of the Código do IVA not held: all goods but electricity and water at 15 %",
+   "reduced taxable base for fuels and gas set by the authorities (the guide lists base percentages) not applied"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excises",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "not reached: tried world/B07-west-africa-fr-pt/cv/src",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "the 2025 State Budget law and the 2020-2021 tax laws are held; IVA and IRPC rates were not located in the extraction"
+  ],
+  "tried": "world/B07-west-africa-fr-pt/cv/src"
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Cabo Verde as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Cabo Verde for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C132&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/cv.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Imposto sobre o Rendimento das Pessoas Coletivas (IRPC)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Código do IRPC art. 84.º n.º 1 (republished by Lei n.º 86/IX/2020): 22 % for taxpayers under organised accounting; OE 2025 art. 25 amends art. 68.º only [text version: the codes as republished by Lei n.º 86/IX/2020 (B.O. I Série n.º 53, 28 April 2020); Lei n.º 16/X/2022 and Lei n.º 35/X/2023 not held (flag)]",
+  "dated": "Código do IRPC (Lei n.º 82/VIII/2015) and Código do IRPS (Lei n.º 78/VIII/2014) as republished by Lei n.º 86/IX/2020 (B.O. I Série n.º 53, 28 Apr 2020); Lei n.º 16/X/2022 and Lei n.º 35/X/2023 (which also amend the CIRPC) not held; Orçamento do Estado 2025 checked (art. 25 amends CIRPC art. 68 only): grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "Lei n.º 16/X/2022 and 35/X/2023 not read",
+   "REMPE 4 % turnover regime"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenção na fonte sobre não residentes sem estabelecimento estável",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CIRPC art. 89.º n.º 1 a) (non-residents without a permanent establishment: the CIRPS withholding rates, final) with CIRPS art. 48.º (category B 15 %), 50.º (category D 20 %, except art. 14.º n.º 2 f) and j) 10 %) and 52.º, as republished by Lei n.º 86/IX/2020 [text version: the codes as republished by Lei n.º 86/IX/2020 (B.O. I Série n.º 53, 28 April 2020); Lei n.º 16/X/2022 and Lei n.º 35/X/2023 not held (flag)]",
+  "dated": "Código do IRPC (Lei n.º 82/VIII/2015) and Código do IRPS (Lei n.º 78/VIII/2014) as republished by Lei n.º 86/IX/2020 (B.O. I Série n.º 53, 28 Apr 2020); Lei n.º 16/X/2022 and Lei n.º 35/X/2023 (which also amend the CIRPC) not held; Orçamento do Estado 2025 checked (art. 25 amends CIRPC art. 68 only): grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "Lei n.º 16/X/2022 and 35/X/2023 not read",
+   "bond / deposit interest 10 %"
+  ]
+ }
+]

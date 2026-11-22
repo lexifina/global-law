@@ -1,0 +1,28 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Taxes on use of goods (motor vehicle taxes)",
+  "statute": "the country's motor-vehicle tax act",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "not read in the P7 pass",
+  "unsupported": [
+   "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+  ],
+  "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes",
+  "statute": "none recorded by the registry",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "registry row: no other notable tax; no provision read",
+  "unsupported": [
+   "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+  ],
+  "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes"
+ }
+]

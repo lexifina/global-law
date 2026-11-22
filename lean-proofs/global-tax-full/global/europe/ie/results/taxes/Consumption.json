@@ -1,0 +1,48 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Value-added tax",
+  "statute": "VATCA 2010 s. 2 (1), s. 46 (1), Sch. 1-3 [year in force 2025 (pass 16), re-cited 2025: revisions updated to 6 March 2025 and to 8 July 2025 (Internet Archive 2025-06-19 and 2025-12-13: ie/law/vatca_rev_wb20250619.*, _wb20251213.*): s. 46 (1) (a) 23 %, (c) 13.5 %, (ca) 9 %, services threshold €42,500 as used; (caa) 9 % on electricity and gas to 30.4.2025 (FA 2024 s. 79(b)), extended on 3.4.2025 to 31.10.2025 (Act 6/2025 s. 14) and on 8.10.2025 to 31.12.2030 (FA 2025 s. 69): 9 % all year; (cb) 9 % for restaurants ended 31.8.2023 and returns only from 1.7.2026 (FA 2025 s. 71), so 13.5 % all 2025 as modelled. Note corrected: the 26.11.2025 (cac) period concerns apartments (Sch. 3 para. 9B), not restaurants]",
+  "dated": "Revised Act updated to 6 March 2025 and to 8 July 2025 (Internet Archive 2025-06-19, 2025-12-13)",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "the 2025 revision not read",
+   "Schedules item by item",
+   "goods threshold €85,000"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Finance Act 2003 Part 2 Ch. 1 and Sch. 2 (alcohol products tax), Finance Act 2005 Part 2 (tobacco products tax), Finance Act 1999 Part 2 Ch. 1 and Sch. 2A (mineral oil tax incl. carbon charge), rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "beer above 2.8 % vol; still wine at 5.5-15 % vol",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Mineral oil tax with carbon charge, heating oil (rate from 1 May 2025)",
+  "statute": "Finance Act 1999 Part 2 Ch. 1 and Sch. 2A (mineral oil tax and carbon charge); EC TEDB record 4093",
+  "dated": "change on 1.5.2025 (carbon charge on non-auto fuels)",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRule (validFrom/validTo, kernel 2.1)"
+  ],
+  "unsupported": [
+   "the Finance Act 2024 section setting the 1 May 2025 carbon charge not read (TEDB only)"
+  ],
+  "gap": 2
+ }
+]

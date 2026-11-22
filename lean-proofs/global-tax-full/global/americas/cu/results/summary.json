@@ -1,0 +1,315 @@
+{
+ "country": "CU",
+ "name": "Cuba",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 18:26:16"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5112",
+   "tax": "Impuestos sobre las Ventas y los Servicios",
+   "statute": "Ley 113 arts. 132-150; Ley 174 de 2024 arts. 74-83",
+   "dated": "Ley 174, GOC-2024-O127 (30/12/2024), for 2025",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "rationed basket split",
+    "MFP exonerations (art. 83.1 k)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5111",
+   "tax": "VAT",
+   "statute": "Ley 113; Ley 174 art. 61",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "family_file": "lean/CuGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Especial a Productos y Servicios",
+   "statute": "Ley 113 arts. 140-145; Ley 174 art. 85",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "rates per product by MFP resolution; would unlock: the MFP resolutions in force in 2025"
+   ],
+   "family_file": "lean/CuGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre Utilidades",
+   "statute": "Ley 174 (2025) art. 69; Ley 113 art. 97",
+   "dated": "Ley 174, GOC-2024-O127",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "foreign-investment (Ley 118, 15 %) and Mariel (12 %) rates, cooperative minimum (art. 71) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Corporate.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Ley 113/2012 arts. 73 párr. 2, 98, 99: personas jurídicas extranjeras sin establecimiento permanente 4 % of gross income, retenido por el pagador; Ley 113/2012 arts. 27, 33 párr. 2: personas naturales no residentes permanentes 15 % of the total income, retención definitiva",
+   "dated": "Ley 113 consolidated text held by the 1.x builder (world/B13-caribbean/cu/law/l113.txt); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "dividend exemptions for foreign investment (Ley 118) and Mariel not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Corporate.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed (trabajadores por cuenta propia): Ley 174 art. 65 scale and quotas not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed (trabajadores por cuenta propia): Ley 174 art. 65 scale and quotas not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CuGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "impuesto sobre la propiedad o posesión de tierras / viviendas (Ley 113)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre la propiedad o posesión de tierras / viviendas (Ley 113); OECD CU 4100 not available. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre la propiedad o posesión de tierras / viviendas (Ley 113); OECD CU 4100 not available. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 4100 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CuGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "no OECD 4500 data",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: no OECD 4500 data. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: no OECD 4500 data. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 4500 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CuGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel de Aduanas de la República de Cuba",
+   "customs_note": "customs import duties (5123): Arancel de Aduanas de la República de Cuba; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/CuGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "impuesto sobre la propiedad o posesión de vehículos (Ley 113)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre la propiedad o posesión de vehículos (Ley 113); OECD CU 5200 = 0. 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre la propiedad o posesión de vehículos (Ley 113); OECD CU 5200 = 0. 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 5200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CuGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD CU 6000 31,551 (2024), unnamed (contribución territorial para el desarrollo local, Ley 113, not read)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD CU 6000 31,551 (2024), unnamed (contribución territorial para el desarrollo local, Ley 113, not read)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 6000 = 2021:11292.9 2022:26068.9 2023:20358.9 2024:31551.5"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CuGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contribución a la Seguridad Social",
+   "statute": "Ley 174 art. 19; Ley 113 art. 289",
+   "dated": "GOC-2024-O127",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "3000",
+   "tax": "Impuesto por la Utilización de la Fuerza de Trabajo",
+   "statute": "Ley 174 art. 91; Ley 113 arts. 224-231",
+   "dated": "GOC-2024-O127",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "PayrollTax"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Impuesto sobre Transmisión de Bienes",
+   "statute": "Ley 113 arts. 196-205 a); Ley 174 art. 90",
+   "dated": "Ley 113 as modified (GO 4.2.2021); Ley 174 for 2025",
+   "grade": "A",
+   "package": "P5",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Transfers.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "4300",
+   "tax": "Impuesto sobre Herencias",
+   "statute": "Ley 113 art. 205 d), Anexo No. 3",
+   "dated": "as above",
+   "grade": "B",
+   "package": "P6",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "marginal vs whole-amount reading",
+    "gifts"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CuGlobal/Transfers.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución (2019) art. 108 m)",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución (2019) art. 108 m): \"establecer, modificar o extinguir los tributos\" (`cu/law/const_art-108.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: Ley 113 arts. 132-150; Ley 174 (2025) art. 69; Ley 113/2012 arts. 73 párr. 2, 98, 99: personas jurídicas extranjeras sin establecimiento permanente 4 % of gross income, retenido por el pagador; 1.x model (see its summary.json); Ley 174 art. 19; Ley 174 art. 91).",
+   "family_file": "lean/CuGlobal/Transfers.lean",
+   "guards": 4
+  }
+ ],
+ "grades": {
+  "A": 8,
+  "B": 2,
+  "C": 7
+ },
+ "guards": 19,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

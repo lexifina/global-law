@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Stämpelskatt (lagfart)",
+  "statute": "Lag (1984:404) om stämpelskatt vid inskrivningsmyndigheter 8 § (15 kr per full 1 000 kr; legal persons 42,50 kr)",
+  "dated": "data.riksdagen.se (ändrad t.o.m. SFS 2025:391)",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "the value is not rounded down to full thousands (at most 15 kr); a company buyer pays 4,25 % (not separated); the value may be the taxeringsvärde where higher (not read); pantbrev 2 % not modelled"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Kommunal fastighetsavgift (småhus)",
+  "statute": "Lag (2007:1398) om kommunal fastighetsavgift 3 § a) (6 000 kr per småhus for 2008, indexed by the inkomstbasbelopp; at most 0,75 % of the taxeringsvärde) [year in force 2025 (pass 16), unchanged-confirmed: the record fetched 2026-11-21 lists no amendment after SFS 2012:743, so 3 § was unchanged 2013-2026; the 2025 amount comes from Förordning (2024:987) för år 2025]",
+  "dated": "data.riksdagen.se (ändrad t.o.m. SFS 2012:743); Förordning (2007:1023) 48 000 kr; Förordning (2024:987) 80 600 kr för år 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "charge (min of a fixed amount and 0,75 %)"
+  ],
+  "unsupported": [
+   "new dwellings' exemption (6 §) and half-fee years",
+   "a bostadsrätt is charged to the förening, not the member",
+   "the taxeringsvärde is an input (asset.assessed)"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

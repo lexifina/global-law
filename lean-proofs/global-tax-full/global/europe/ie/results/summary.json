@@ -1,0 +1,281 @@
+{
+ "country": "IE",
+ "name": "Ireland",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:13"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Capital gains tax",
+   "statute": "Taxes Consolidation Act 1997 s. 28 (33 %), s. 601 (annual exemption EUR 1 270)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "the EUR 1 270 annual exemption is not deducted",
+    "land and buildings (33 %, principal private residence relief) not modelled: the relief's conditions are not in the B source"
+   ],
+   "family_file": "lean/IeGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value-added tax",
+   "statute": "VATCA 2010 s. 2 (1), s. 46 (1), Sch. 1-3 [year in force 2025 (pass 16), re-cited 2025: revisions updated to 6 March 2025 and to 8 July 2025 (Internet Archive 2025-06-19 and 2025-12-13: ie/law/vatca_rev_wb20250619.*, _wb20251213.*): s. 46 (1) (a) 23 %, (c) 13.5 %, (ca) 9 %, services threshold €42,500 as used; (caa) 9 % on electricity and gas to 30.4.2025 (FA 2024 s. 79(b)), extended on 3.4.2025 to 31.10.2025 (Act 6/2025 s. 14) and on 8.10.2025 to 31.12.2030 (FA 2025 s. 69): 9 % all year; (cb) 9 % for restaurants ended 31.8.2023 and returns only from 1.7.2026 (FA 2025 s. 71), so 13.5 % all 2025 as modelled. Note corrected: the 26.11.2025 (cac) period concerns apartments (Sch. 3 para. 9B), not restaurants]",
+   "dated": "Revised Act updated to 6 March 2025 and to 8 July 2025 (Internet Archive 2025-06-19, 2025-12-13)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "the 2025 revision not read",
+    "Schedules item by item",
+    "goods threshold €85,000"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/IeGlobal/Consumption.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Finance Act 2003 Part 2 Ch. 1 and Sch. 2 (alcohol products tax), Finance Act 2005 Part 2 (tobacco products tax), Finance Act 1999 Part 2 Ch. 1 and Sch. 2A (mineral oil tax incl. carbon charge), rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "beer above 2.8 % vol; still wine at 5.5-15 % vol",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/IeGlobal/Consumption.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "5121",
+   "tax": "Mineral oil tax with carbon charge, heating oil (rate from 1 May 2025)",
+   "statute": "Finance Act 1999 Part 2 Ch. 1 and Sch. 2A (mineral oil tax and carbon charge); EC TEDB record 4093",
+   "dated": "change on 1.5.2025 (carbon charge on non-auto fuels)",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (validFrom/validTo, kernel 2.1)"
+   ],
+   "unsupported": [
+    "the Finance Act 2024 section setting the 1 May 2025 carbon charge not read (TEDB only)"
+   ],
+   "gap": 2,
+   "family_file": "lean/IeGlobal/Consumption.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporation tax",
+   "statute": "Taxes Consolidation Act 1997 s. 21(1) (12½ per cent for the financial year 2003 and each subsequent year); s. 21A (25 per cent on Case III, IV, V and excepted-trade income)",
+   "dated": "Revenue Notes for Guidance, Finance Act 2024 edition (the law as amended to FA 2024, in force for 2025); the statute's own revised text not reached",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "read from Revenue's notes for guidance, not from a revised text of the Act",
+    "25 % rate of s. 21A (passive and excepted-trade income) not separated: the line's profit is taken as trading income",
+    "Pillar Two (Part 4A) and the participation exemption for gains (s. 626B) not modelled"
+   ],
+   "family_file": "lean/IeGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad (DWT, interest, patent royalties) (dividend, interest, royalty, services)",
+   "statute": "TCA 1997 ss. 172B, 238, 246",
+   "dated": "2025-06-13; Revenue Notes for Guidance (Wayback 2025-10)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "royalties are taken as patent royalties (s. 238); other royalties bear none",
+    "the DWT exemptions for EU/treaty companies (s. 172D) and the s. 246 (3) interest exclusions not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/IeGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 10: motor tax on M1 cars registered from July 2008 modelled; VRT, older cars and other classes not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 10: motor tax on M1 cars registered from July 2008 modelled; VRT, older cars and other classes not modelled",
+   "unsupported": [
+    "would unlock: Finance Act 1992 s. 132-133 (VRT on OMSP by CO2 and NOx); Sch. Part I para. 3 (e) (engine cc for cars before July 2008)"
+   ],
+   "family_file": "lean/IeGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Motor tax",
+   "statute": "Finance (Excise Duties) (Vehicles) Act 1952 s. 1, Schedule Part I para. 3 (d), (o) [year in force 2025 (pass 16), unchanged-confirmed: ie/law/fedva1952_rev.txt annotations: (d) F35 and (o) F39 substituted/inserted 19.12.2020 by Finance Act 2020 s. 35(3); the only 2026 change (F40, 1.6.2026) is in para. 3 (public service vehicles), not used]",
+   "dated": "Revised Acts, updated to 1 June 2026 (`ie/law/fedva1952_rev.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "cars registered before July 2008 (engine-size rates, para. 3 (e)), goods vehicles, motorcycles and other classes",
+    "5200 motor tax: a car of 2008 is taken as registered from 1 July 2008 (para. 3 (d)); earlier ones pay by engine size (para. 3 (e), not modelled)",
+    "5200 motor tax: CO2 of a car registered before 2021 is read as the NEDC value of para. 3 (d)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/IeGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "European Commission TEDB, IE: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 634, 860, 3342, 6522, 329, 642, 644-646, 855, 857-862, 2301) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+   ],
+   "gap": 2,
+   "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVIRL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/IRL.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6200 total 10,0, 13,2, 14,4, 31,3 million EUR in 2021-2024 (unnamed); the national taxes behind it not read",
+   "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVIRL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/IRL.csv`, SHA256SUMS; general government S13; 2025 not yet published)",
+   "family_file": "lean/IeGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "Finance (Local Property Tax) Act 2012",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/IeGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on conveyances (residential property)",
+   "statute": "SDCA 1999 Sch. 1, CONVEYANCE or TRANSFER on sale: residential property 1 % to EUR 1 000 000, 2 % to EUR 1 500 000, 6 % above",
+   "dated": "Notes for Guidance 2025 (rates for instruments executed from 2 October 2024, Finance Act 2024 s. 90)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IeGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on conveyances (non-residential property)",
+   "statute": "SDCA 1999 Sch. 1, CONVEYANCE or TRANSFER on sale: non-residential property 7,5 %",
+   "dated": "Notes for Guidance 2025 (rates for instruments executed from 2 October 2024, Finance Act 2024 s. 90)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "stamp duty: other real estate is taken as residential property (1 / 2 / 6 %); commercial property bears 7,5 %",
+    "stamp duty: land is taken as non-residential (7,5 %); residential land follows the residential rates",
+    "stamp duty: the apartment-block rates, the s. 31E 15 % rate, consanguinity relief and the aggregation of linked transactions are not applied"
+   ],
+   "family_file": "lean/IeGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer PRSI (Class A)",
+   "statute": "Social Welfare Consolidation Act 2005 s. 13 (2) (d) (i)-(ii), as amended by SW(MP)A 2024 s. 3 and Table cols. (4)-(5): 7.9 % / 10.15 % to 30.9.2025, 8 % / 10.25 % from 1.10.2025, the whole week's pay at one rate; weekly threshold €527 (Social Welfare Act 2024)",
+   "dated": "2025: SW(MP)A 2024 cols. (4)-(5); Social Welfare Act 2024 threshold",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (hand-written schedule)"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IeGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4300",
+   "tax": "Capital acquisitions tax (gift and inheritance tax)",
+   "statute": "Capital Acquisitions Tax Consolidation Act 2003 Sch. 2 Part 1 paras. 1, 3, 4; ss. 69, 70, 71",
+   "dated": "Revenue Notes for Guidance, CATCA 2003 as amended up to and including Finance Act 2024 (Wayback 2025-08-09)",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass",
+    "withLookback"
+   ],
+   "unsupported": [
+    "figures from Revenue's Notes for Guidance (the Act's text not read)",
+    "aggregation across disponers in the same group",
+    "agricultural and business relief, dwelling-house exemption, charities",
+    "parent inheriting an absolute interest (Group A)"
+   ],
+   "family_file": "lean/IeGlobal/Wealth.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, IE, Individual - Other taxes, accessed  (live page; `law/pwc_indother_wb2025.txt`) [year in force 2025 (pass 16), re-cited 2025: PwC Ireland, Individual - Other taxes, Internet Archive 2025-06-12 (ie/law/pwc_indother_wb20250612.*): no net wealth taxes on individuals]",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-12 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/IeGlobal/Wealth.lean",
+   "family_guards": 7
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 10,
+  "C": 3
+ },
+ "guards": 50,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

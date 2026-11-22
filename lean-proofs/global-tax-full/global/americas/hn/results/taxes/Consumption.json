@@ -1,0 +1,43 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto Sobre Ventas",
+  "statute": "Decreto-Ley 24 de 1963 arts. 6, 15 (texto consolidado al Decreto 59-2022)",
+  "dated": "SAR consolidation (to Decreto 59-2022), fetched 2026-11-21",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "Anexo I food list",
+   "750 kWh electricity cap"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto selectivo al consumo / producción y consumo",
+  "statute": "Ley del Impuesto Selectivo al Consumo; Ley de Impuesto sobre Producción y Consumo",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "kernel_parts": [],
+  "tried": "sar.gob.hn law list (not fetched)",
+  "unsupported": [
+   "would unlock: the 2025 ISC and producción-y-consumo schedules"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 205 num. 35",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 205 num. 35: \"Establecer impuestos y contribuciones así como las cargas públicas\" (`hn/law/const_art-205.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Decreto-Ley 24 de 1963 arts. 6, 15 (texto consolidado al Decreto 59-2022); LISR art. 22 (25 %); LISR (Decreto-Ley 25, SAR consolidation to Acuerdo SAR 07-2025) art. 5 num. 3), 5), 6), 7); 1.x model (see its summary.json); LISR art. 10; Reglamento de Aplicación de la Ley del Seguro Social (Acuerdo 193/1971) art. 28)."
+ }
+]

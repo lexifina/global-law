@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "Helyi iparűzési adó (local business tax on adjusted turnover, up to 2 %); KATA/KIVA small-business regimes; windfall/sector surtaxes (2022-2025)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVHUN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/HUN.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6000 unallocable tax penalties 46 509 and 6100 medicine tax 28 657 million HUF (2024); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "model (high revenue): helyi iparűzési adó up to 2 % of adjusted turnover (Budapest 2 %); KATA/KIVA optional regimes",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: gépjárműadó on cars modelled (2025 indexed rates); cégautóadó (company cars), buses, lorries and motorcycles not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: gépjárműadó on cars modelled (2025 indexed rates); cégautóadó (company cars), buses, lorries and motorcycles not modelled",
+  "unsupported": [
+   "would unlock: Gjt. 17/A-17/G. § and 1. melléklet (cégautóadó by kW and environmental class); 7. § (2) heavy vehicles with mass"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Gépjárműadó",
+  "statute": "1991. évi LXXXII. törvény a gépjárműadóról (Gjt.) 5. § g), 6. § (1), 7. § (1), 7/A. §",
+  "dated": "Gjt. via the Internet Archive 2025-06-17 (`hu/law/gjt1991_wb2025.txt`); 2025 rates as published by NAV under 7/A. § (`hu/law/nav_gjt_valorizalt_2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "motorcycles, buses, lorries (7. § (2) per 100 kg), trailers",
+   "5200 gépjárműadó: the year of first registration is read as the year of manufacture (7. § (1) counts from the year of manufacture)",
+   "5200 gépjárműadó: a plug-in hybrid is taxed by kW; it is exempt only if classed környezetkímélő (KöHÉM 2. § (6)), which the input does not give",
+   "5200 cégautóadó (Gjt. 17/A-17/G. §, company cars, gépjárműadó deductible under 17/F. §) not modelled (grade C)"
+  ]
+ }
+]

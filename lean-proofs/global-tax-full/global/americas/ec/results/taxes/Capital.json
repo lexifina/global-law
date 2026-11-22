@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "see the pass 11 entry below for disposals",
+   "other income kinds"
+  ]
+ },
+ {
+  "tax": "Impuesto a la renta único sobre utilidades en la enajenación de acciones (10 %)",
+  "statute": "LRTI art. innumerado (enajenación de acciones), art. 9 num. 14, 24",
+  "dated": "LRTI last reform 24 Oct 2025",
+  "grade": "A",
+  "unsupported": [
+   "listed shares (fracción básica)",
+   "other assets at the progressive scale"
+  ],
+  "oecd": "1100",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ]
+ }
+]

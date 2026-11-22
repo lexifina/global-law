@@ -1,0 +1,32 @@
+S = {'cc': 'BG', 'fam': 'Consumption', 'family_name': '5111 Данък върху добавената стойност', 'doc': '# BG 2025: Данък върху добавената стойност (5111); excises not modelled in this pass\n\nSource: Закон за данък върху добавената стойност, lex.bg (private publisher of the consolidated text with the amendment notes of each provision), `bg/law/zdds.html`; sha256 in `law/SHA256SUMS`.\n* чл. 66 (изм. ДВ бр. 52 от 2022 г., в сила от 01.07.2022 г.) "(1) Стандартната ставка на данъка е 20 на сто"\n* чл. 66а (в сила от 01.01.2023 г.) "Ставката на данъка е 9 на сто за: 1. доставка на услуга по настаняване, предоставяно в хотели ...; 2. доставка на книги ...; 3. доставки на храни, подходящи за бебета"\n', 'vat': {'name': 'Данък върху добавената стойност', 'standard': 2000, 'threshold': 0, 'statute': 'ЗДДС чл. 66 ал. 1 (20 %), чл. 66а (9 %); чл. 38-50 (освободени доставки); чл. 96 (регистрация)', 'classes': {'hotels': 'reduced', 'books': 'reduced', 'health': 'exempt', 'education': 'exempt', 'financial': 'exempt', 'insurance': 'exempt', 'rent': 'exempt'}, 'reduced': 900}, 'notes': ['BG 5111: lex.bg current text; arts. 66, 66a unchanged since 2022/2023 per their notes'], 'unsupported': [('g.entity == .company', 'registration threshold (чл. 96) read only in its 2026 wording (EUR): not applied for 2025'), ('g.consumption.any (fun s => s.good == .petrol || s.good == .diesel || s.good == .cigarettes || s.good == .beer || s.good == .wine || s.good == .spirits)', 'excise (Закон за акцизите и данъчните складове) not modelled in this pass')], 'guards': ['vat.embedded { good := .clothing, amount := 12000 } == 2000', 'vat.embedded { good := .hotels, amount := 10900 } == 900'], 'taxes': [{'oecd': '5111', 'tax': 'Данък върху добавената стойност', 'statute': 'ЗДДС чл. 66 ал. 1 (20 %), чл. 66а (9 %); чл. 38-50 (освободени доставки); чл. 96 (регистрация)', 'dated': 'lex.bg current text; arts. 66, 66a unchanged since 2022/2023 per their notes', 'grade': 'B', 'kernel_parts': ['Vat'], 'unsupported': ['registration threshold (чл. 96) read only in its 2026 wording (EUR): not applied for 2025']}, {'oecd': '5121', 'tax': 'Excise duties', 'statute': 'Закон за акцизите и данъчните складове', 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'unsupported': ["not read in the P1 pass: would unlock with the act's 2025 rate articles"]}]}
+
+# ---- pass 16 (R1 Europe, 2026-11-21): year-in-force audit (tools/p16_rows.py, tools/yif16_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+p16_rows(S)
+p6_finish(S)
+
+# ---- gap pass (R1 Europe, 2026-11-21): gap-closing pass (tools/pgap_rows.py, tools/gap_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/pgap_rows.py")).read())
+pgap_rows(S)
+p6_finish(S)

@@ -1,0 +1,61 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Land Transfer Tax (Ontario)",
+  "statute": "Land Transfer Tax Act s. 2 (1) (a), (b); s. 9.2 (2), (2.1) (b)",
+  "dated": "e-Laws consolidation from 2026-04-24; section amendment notes: s. 2 (1) last amended 2016 (in force 08/12/2016), s. 9.2 (2.1) 2016: the 2025 wording",
+  "grade": "B",
+  "package": "P5",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "s. 9.2 refund: age, earlier ownership, s. 9.2 (2.0.1)",
+   "NRST (s. 2 (2.1)) not modelled"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Toronto Municipal Land Transfer Tax",
+  "statute": "Toronto Municipal Code ch. 760 § 760-9.2 and first-time purchaser rebate",
+  "dated": "consolidation to 2023-09-06 (By-law 824-2023 rates from 1 Jan 2024); rates checked against the City's MLTT and MNRST Rates page, Wayback 2025-08-02",
+  "grade": "A",
+  "package": "P5",
+  "kernel_parts": [
+   "TransferDuty",
+   "charge"
+  ],
+  "unsupported": [
+   "MNRST (10 % for foreign buyers from 1 January 2025) not modelled",
+   "rebate: age, earlier ownership, the 18-month grant (§ 760-60 G)"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Property tax (Toronto, residential)",
+  "statute": "City of Toronto 2025 tax-rate by-law; O. Reg. education rates (via the toronto.ca 2025 rate table)",
+  "dated": "toronto.ca rate table, capture 2025-07-16",
+  "grade": "B",
+  "package": "P5",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "non-residential classes",
+   "vacant home tax"
+  ]
+ },
+ {
+  "oecd": "4300",
+  "tax": "Estate administration tax (Ontario)",
+  "statute": "Estate Administration Tax Act, 1998",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P6",
+  "kernel_parts": [],
+  "tried": "e-Laws API (code for the 1998 Act not resolved)",
+  "unsupported": [
+   "would unlock: Estate Administration Tax Act, 1998 s. 2"
+  ]
+ }
+]

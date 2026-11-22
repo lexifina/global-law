@@ -1,0 +1,162 @@
+{
+ "country": "SC",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Stamp Duty Act (Cap. 226) Schedule",
+   "dated": "-",
+   "unsupported": [
+    "the Schedule (conveyance of immovable property) is not held: no copy reached"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "seylii.org (new site, no search API answering; legislation pages not reached), no Wayback copy located (seventeenth pass)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (corporate social responsibility tax, tourism marketing tax; provision not located by keyword in the reachable text)",
+   "statute": "Business Tax Act 2009 (as amended to Act 31 of 2022; SI 107/2024)",
+   "dated": "-",
+   "unsupported": [
+    "triage moderate: corporate social responsibility tax on business turnover: company-level. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://staging.src.gov.sc/wp-content/uploads/2023/04/Business-Tax-Act-2009-1.pdf)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Seychelles Pension Fund employer contribution",
+   "statute": "not reached: tried src.gov.sc uploads (SI 88 of 2010 read, R4/fetch/sc11), SPF Act 2005 consolidation to 2023 (held)",
+   "dated": "-",
+   "unsupported": [
+    "SPF Act 2005 s. 18 leaves the employer's sum to regulations; the only regulation read (S.I. 88 of 2010) is superseded by later rate increases not held (OCR of its rate is unclear)"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "src.gov.sc uploads (SI 88 of 2010 read, R4/fetch/sc11), SPF Act 2005 consolidation to 2023 (held)",
+   "guards": 0
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value added tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Value Added Tax Act 2010 s. 6 (1)-(3) and Third Schedule (\"The rate of VAT for the purposes of section 6 is 15%\") as substituted by the Value Added Tax (Amendment of Schedules) Regulations 2014 (S.I. 4 of 2014); First Schedule Part II exempt supplies [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+   "dated": "Value Added Tax Act 2010 (Cap 244) with its Schedules as replaced by S.I. 4 of 2014 (rate in the Third Schedule) and later amendments to 2025; Business Tax Act 2009 (Cap 20) First Schedule as replaced by S.I. 27 of 2010 and amended to S.I. 107 of 2024 (from 1 Jan 2025); Excise Tax (Rates) Regulations 2023 (S.I. 110 of 2023, from 1 Jan 2024) as amended by S.I. 31 and 56 of 2024; sugar tax S.I. 55 of 2023",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "exempt food imports (First Schedule Part I para 6, basket convention)",
+    "general insurance taxable"
+   ],
+   "guards": 11
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Excise Tax Act 2022 (Act 27 of 2022) s. 84; Excise Tax (Rates) Regulations 2023 (S.I. 110 of 2023, from 1 Jan 2024) Schedule, as amended by S.I. 31 of 2024 (2205.1021, cars) and S.I. 56 of 2024 (chassis); Excise Tax (Imposition of Sugar Tax on Drinks) Regulations 2023 (S.I. 55 of 2023) reg. 3 [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+   "dated": "Value Added Tax Act 2010 (Cap 244) with its Schedules as replaced by S.I. 4 of 2014 (rate in the Third Schedule) and later amendments to 2025; Business Tax Act 2009 (Cap 20) First Schedule as replaced by S.I. 27 of 2010 and amended to S.I. 107 of 2024 (from 1 Jan 2025); Excise Tax (Rates) Regulations 2023 (S.I. 110 of 2023, from 1 Jan 2024) as amended by S.I. 31 and 56 of 2024; sugar tax S.I. 55 of 2023",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "sugar content of the non-alcoholic line (assumed above 5 g/100 ml)",
+    "spirits other than rum/vodka"
+   ],
+   "guards": 11
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Business tax (entities)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Business Tax Act 2009 (Cap 20) s. 6 and First Schedule item 1 (a) as substituted by the Business Tax (Amendment of Schedules) Regulations 2021 (S.I. 108 of 2021, from 1 Jan 2022): entities 15 % on the first SCR 1,000,000 of taxable income and 25 % on the remainder [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+   "dated": "Value Added Tax Act 2010 (Cap 244) with its Schedules as replaced by S.I. 4 of 2014 (rate in the Third Schedule) and later amendments to 2025; Business Tax Act 2009 (Cap 20) First Schedule as replaced by S.I. 27 of 2010 and amended to S.I. 107 of 2024 (from 1 Jan 2025); Excise Tax (Rates) Regulations 2023 (S.I. 110 of 2023, from 1 Jan 2024) as amended by S.I. 31 and 56 of 2024; sugar tax S.I. 55 of 2023",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax",
+    "SectorCorp (company.sector)"
+   ],
+   "unsupported": [
+    "turnover levies of the Seventh Schedule"
+   ],
+   "guards": 18
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Business tax on payments to non-residents (s. 8)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Business Tax Act 2009 s. 8 and First Schedule item 3 (S.I. 27 of 2010 as amended by S.I. 92 of 2010, S.I. 66 of 2012 and S.I. 107 of 2024): dividend, royalty, natural resource amount or technical service fee 15 %; interest paid by a non-financial institution to a non-financial institution 15 % (2025 table) [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+   "dated": "Value Added Tax Act 2010 (Cap 244) with its Schedules as replaced by S.I. 4 of 2014 (rate in the Third Schedule) and later amendments to 2025; Business Tax Act 2009 (Cap 20) First Schedule as replaced by S.I. 27 of 2010 and amended to S.I. 107 of 2024 (from 1 Jan 2025); Excise Tax (Rates) Regulations 2023 (S.I. 110 of 2023, from 1 Jan 2024) as amended by S.I. 31 and 56 of 2024; sugar tax S.I. 55 of 2023",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "managerial fees paid by financial institutions (33 %)",
+    "bank-deposit interest tables"
+   ],
+   "guards": 18
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of Seychelles as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Seychelles for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C690&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/sc.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 22021010 (MFN duty 'SCR 10/l': specific or compound duty, unit/currency not mapped); 22021020 (MFN duty 'SCR 10/l': specific or compound duty, unit/currency not mapped); 22021030 (MFN duty 'SCR 10/l': specific or compound duty, unit/currency not mapped); 22021090 (MFN duty 'SCR 10/l': specific or compound duty, unit/currency not mapped); 22030031 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030032 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030033 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030039 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030041 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030042 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030043 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030049 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030051 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030052 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030053 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030059 (MFN duty 'SCR 25.93/l': specific or compound duty, unit/currency not mapped); 22030061 (MFN duty 'SCR 31.23/L': specific or compound duty, unit/currency not mapped); 22030062 (MFN du",
+    "COMESA free trade area (origin SO, TN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "guards": 4
+  }
+ ],
+ "cases": 7,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

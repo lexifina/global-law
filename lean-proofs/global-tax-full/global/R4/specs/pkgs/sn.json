@@ -1,0 +1,360 @@
+{
+ "cc": "SN",
+ "dated": "CGI annoté janvier 2025 (LFI 2025)",
+ "entries": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "income": "dividend",
+   "rateBp": 1000,
+   "grade": "A",
+   "name": "Retenue à la source sur les produits des actions (IRVM)",
+   "statute": "CGI art. 173-2 (10 %), art. 203-2 a) (libératoire)",
+   "doc": "art. 173-2: \"en ce qui concerne les revenus de capitaux mobiliers, il est fait application d'une retenue à la source aux taux suivants : ... 10 %, pour les produits des actions, parts sociales et parts d'intérêts des sociétés passibles de l'impôt sur les sociétés ; 13 %, pour les revenus d'obligations ... 16 %, pour les autres revenus de capitaux mobiliers ... revenus des créances, dépôts et cautionnements. Ce taux est ramené à 8 % pour les intérêts ... des comptes de dépôts ... ouverts dans les comptes d'une banque\"; art. 203-2 a): \"Le montant de la retenue à la source ... est libératoire de l'impôt sur le revenu des personnes physiques\".",
+   "unsupported": []
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "intWht",
+   "income": "interest",
+   "rateBp": 800,
+   "grade": "A",
+   "name": "Retenue à la source sur les intérêts de comptes de dépôt",
+   "statute": "CGI art. 173-2 (8 % on bank deposit accounts; 16 % other claims; 13 % bonds)",
+   "notes": [
+    "CGI art. 173-2: household interest taken as bank-deposit interest (8 %); other claims 16 %, bonds 13 % (6 % for 5-year Senegalese bonds), bons de caisse 20 %"
+   ],
+   "unsupported": [
+    "16 % / 13 % / 20 % cases need the instrument type"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "unsupported",
+   "name": "Plus-values (valeurs mobilières, immeubles)",
+   "statute": "CGI art. 173-2 (25 % via a Senegalese intermediary), art. 156, 259",
+   "why": "gains are taxed at 25 % only when realised through a Senegalese intermediary, otherwise declared in the progressive IR (stacking through the 1.x model not done); real-estate gains art. 156 not read",
+   "tried": "CGI-2025.txt"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "cfce",
+   "rateBp": 300,
+   "level": "central",
+   "grade": "A",
+   "name": "Contribution forfaitaire à la charge de l'employeur",
+   "statute": "CGI art. 267 (3 %)",
+   "doc": "art. 267: the employer contribution (CFCE) at 3 % of salaries paid.",
+   "unsupported": []
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "css",
+   "level": "social",
+   "rateBp": 800,
+   "cap": 756000,
+   "grade": "B",
+   "name": "CSS family benefits 7 % and work accidents 1 % (employer, up to 63 000 F a month)",
+   "statute": "CLEISS 'Les cotisations au Sénégal' (1 Jan 2026, R4/fetch/cleiss11/senegal.html); Code de la sécurité sociale not read; dating for 2025: the CLEISS page 'Cotisations au 1er janvier 2023' (Wayback 20231119193713, R4/fetch/p16/cleiss_senegal_wb20231119.html) shows the same rates and ceilings as the 2026 page, so they held through 2025",
+   "doc": "CLEISS Senegal page (facts restated): family benefits 7 % on pay up to 63 000 F a month; work injury 1, 3 or 5 % by risk class, same ceiling (employer only).",
+   "unsupported": [
+    "work-accident rate by risk class (1/3/5 %): the lowest applied",
+    "SMIG floor"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "property",
+   "fam": "foncier",
+   "builtBp": 500,
+   "landBp": 500,
+   "grade": "A",
+   "name": "Contribution foncière",
+   "statute": "CGI art. 290, 294 (5 % of rental value), art. 302 (5 % of land value)",
+   "doc": "art. 290 \"La contribution foncière des propriétés bâties est réglée en raison de la valeur locative annuelle de ces propriétés\"; art. 294 \"Le taux de la contribution foncière des propriétés bâties est fixé à 5 %. Ce taux est appliqué sur la valeur locative\"; art. 302 \"Le taux de la contribution foncière des propriétés non bâties est fixé à 5 % de la valeur vénale\".",
+   "notes": [
+    "CGI art. 290: built property without an annual rental value (annualValue) is not taxed here; exemptions art. 291-293 and the surtaxe on unbuilt land not applied"
+   ],
+   "unsupported": [
+    "exemptions art. 291-293",
+    "surtaxe on unbuilt land"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "regImm",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "A",
+   "name": "Droit d'enregistrement (ventes d'immeubles)",
+   "statute": "CGI art. 472 II 1° (5 %)",
+   "doc": "art. 472 II: \"Sont enregistrées au taux de 5 % : 1. les adjudications, ventes, reventes, cessions, rétrocessions ... de tous autres actes civils et judiciaires de biens immeubles à titre onéreux, ainsi que les mêmes actes translatifs de droits immobiliers\"; V: 1 % for social-housing sales by approved developers (not applied).",
+   "notes": [
+    "CGI art. 472 II 1°: 5 % on the price (or a higher assessed value); the 1 % social-housing rate (art. 472 V 1°) and the land-registry fees (art. 536 ff.) not applied"
+   ],
+   "unsupported": [
+    "1 % social-housing sales",
+    "conservation foncière fees"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estate",
+   "fam": "mutGratuit",
+   "inh": {
+    "spouse": 200,
+    "child": 200,
+    "grandchild": 200,
+    "parent": 200
+   },
+   "gift": {
+    "spouse": 200,
+    "child": 200,
+    "grandchild": 200,
+    "parent": 200
+   },
+   "inhDefault": 500,
+   "giftDefault": 1000,
+   "allowance": 0,
+   "grade": "A",
+   "name": "Droits de mutation à titre gratuit (successions, donations)",
+   "statute": "CGI art. 472 I (10 % gifts), II 7° (5 % successions), IV 5° (2 % between spouses and in the direct line)",
+   "doc": "art. 472: \"I. Sont enregistrées au taux de 10% les mutations à titre gratuit entre vifs autres que celles visées au 5° du IV ... II. Sont enregistrées au taux de 5% : ... 7. les mutations par décès autres que celles visées au 5° du IV ... IV. Sont enregistrées au taux de 2% : ... 5. les mutations à titre gratuit entre époux et en ligne directe\".",
+   "notes": [
+    "CGI art. 472: abatements and exemptions of the succession chapter not applied"
+   ],
+   "unsupported": [
+    "abatements and exemptions not read"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI annoté janvier 2025 (whole code)",
+   "why": "SN CGI annoté janvier 2025 (complete code, Livres I-III): no tax on net wealth; the full text has no 'fortune' or 'patrimoine net' charging provision"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts (loi n° 2012-31 du 31 décembre 2012), DGID edition mise à jour janvier 2025 (incl. LFI 2025)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.dgid.sn/storage/docs/CGI-2025.pdf)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "cel",
+   "grade": "A",
+   "name": "Contribution économique locale (CEL: rental value of premises + value added; replaced the patente in 2019)",
+   "statute": "CGI art. 320-321, 329-330, 336-337 (loi n° 2018-10 du 30 mars 2018; CGI annoté janvier 2025)",
+   "doc": "art. 330: 15 % of the rental value of rented or freely occupied premises, 20 % of premises entered in the balance sheet; art. 337: 1 % of the previous year's value added (art. 336: products less purchases, external services excluding rents over 3 months, other operating charges and taxes; capped at 70 % of turnover, art. 336-4), at least 0,15 % of turnover. Value added defaults to profit + payroll when the line gives none.",
+   "unsupported": [
+    "0,075 % minimum for low-margin / regulated-price sectors (art. 337-3, arrêté 011492 of 24 May 2018), telecoms 0,30 % and joint hydrocarbon fields 0,02 % of turnover (art. 337-8/9), port operators 1,5 % (art. 340), simplified-regime limitation to the minimum (art. 337-7), exemptions (art. 322-324), first-year VA exemption (art. 338)"
+   ],
+   "lic": {
+    "rentPpm": 150000,
+    "ownedPpm": 200000,
+    "vaPpm": 10000,
+    "vaCapPpm": 700000,
+    "vaMinPpm": 1500
+   },
+   "tests": [
+    {
+     "turnover": 3000000000,
+     "rv": 60000000,
+     "profit": 360000000,
+     "payroll": 240000000,
+     "expect": [
+      9000000,
+      6000000
+     ]
+    },
+    {
+     "turnover": 12000000000,
+     "rv": 240000000,
+     "owned": true,
+     "profit": -180000000,
+     "payroll": 900000000,
+     "expect": [
+      48000000,
+      18000000
+     ]
+    },
+    {
+     "turnover": 1000000000,
+     "va": 900000000,
+     "expect": [
+      7000000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "ipres",
+   "level": "social",
+   "rateBp": 840,
+   "cap": 5184000,
+   "grade": "B",
+   "name": "IPRES general pension scheme, employer share (8,4 % up to 432 000 F a month)",
+   "statute": "CLEISS 'Les cotisations au Sénégal' (2026); dating for 2025: the CLEISS page 'Cotisations au 1er janvier 2023' (Wayback 20231119193713, R4/fetch/p16/cleiss_senegal_wb20231119.html) shows the same rates and ceilings as the 2026 page, so they held through 2025",
+   "doc": "CLEISS Senegal page (facts restated): IPRES old age and death, 8,4 % employer and 5,6 % employee (14 % in all), on pay up to 432 000 F a month; supplementary scheme for managers 3,6 % / 2,4 % on 432 000 - 1 296 000.",
+   "unsupported": [
+    "managers' supplementary scheme (cadres) 3,6 %",
+    "IPM health insurance 2-7,5 % employer (rate set per inter-company body; includes the 2 % AMO levy)",
+    "the employee's 5,6 %"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "tsvpm",
+   "grade": "A",
+   "name": "Taxe spéciale sur les voitures particulières des personnes morales (annual, by fiscal horsepower; companies only)",
+   "statute": "CGI 2025 (CGI annoté, janvier 2025), world/B07-west-africa-fr-pt/sn/src/CGI-2025.txt art. 550-554 (l. 13683-13800). Liability: the company or public establishment that held, used or maintained the car (art. 552)",
+   "doc": "art. 551: 'véhicule d'une puissance fiscale inférieure ou égale à 4 CV : 50.000 FCFA par an ; comprise entre 5 et 11 CV : 100.000 FCFA par an ; supérieure à 11 CV : 200.000 FCFA par an'. Worked case (hand): a company with cars of 4, 9 and 12 CV -> 50 000 + 100 000 + 200 000 = 350 000. Households' cars are outside this tax (nil tariff here). Sixteenth pass.",
+   "unsupported": [
+    "quarterly liquidation (a quarter of the annual rate per quarter held, art. 552): a car held all year assumed",
+    "hired cars (per 90-day period of hire)",
+    "exemptions of art. 550 (dealers, taxis and public transport, driving schools, competition cars, cars for hire without driver): fleet taken as taxable"
+   ],
+   "bands": [],
+   "top": 0,
+   "companyBands": [
+    [
+     4,
+     50000
+    ],
+    [
+     11,
+     100000
+    ]
+   ],
+   "companyTop": 200000,
+   "tests": [
+    {
+     "hps": [
+      4,
+      9,
+      12
+     ],
+     "company": true,
+     "expect": [
+      50000,
+      100000,
+      200000
+     ]
+    },
+    {
+     "hps": [
+      9
+     ],
+     "expect": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicleTax",
+   "fam": "timbreCarteGrise",
+   "grade": "A",
+   "unknown": true,
+   "name": "Droit de timbre on the registration certificate (carte grise) of a motor vehicle (2 000 F per fiscal horsepower)",
+   "statute": "CGI 2025 (CGI annoté, janvier 2025), world/B07-west-africa-fr-pt/sn/src/CGI-2025.txt art. 524 (Loi n° 2015-06 du 23 mars 2015), l. 13227-13235: 'Sont soumis à un droit de timbre de 2 000 francs : par cheval vapeur, les récépissés de déclaration de mise en circulation de véhicules automobiles ...'; public transport vehicles 1 000 F per CV",
+   "taxes": "[{ name := \"Droit de timbre sur le récépissé de mise en circulation (carte grise)\", occasion := .registration, kinds := [\"car\"], parts := [(.fiscalHp, QtyTable.perUnit 2000 1)], statute := \"CGI art. 524 (Loi 2015-06): 2 000 F per cheval vapeur on the récépissé de déclaration de mise en circulation\" }]",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 12000000,
+        "fiscalHp": 8,
+        "fuel": "petrol",
+        "registeredThisYear": true
+       }
+      ]
+     },
+     "expect": [
+      16000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 6000000,
+        "fiscalHp": 8,
+        "fuel": "petrol",
+        "firstRegYear": 2019,
+        "registeredThisYear": false
+       }
+      ]
+     },
+     "expect": []
+    }
+   ],
+   "doc": "Worked case (hand): a car of 8 CV registered in 2025 -> 8 x 2 000 = 16 000 F; a car registered in 2019: nothing in 2025. Senegal has no annual vignette on private cars in the CGI 2025 (full-text search: 'vignette' occurs only for the patente); the 10 % taxe sur les véhicules de tourisme of 13 CV and more (art. 439-440) is an indirect tax on the supply or import (excise side), not modelled here. Sixteenth pass.",
+   "unsupported": [
+    "the duty on a new récépissé after a change of owner (not a first registration) is not modelled",
+    "public transport vehicles at 1 000 F per CV; motorcycles above 125 cm3, vans and trucks (kinds other than car): not modelled",
+    "art. 535 reception fees (37 000 / 7 000 F) and the 10 % tax on passenger cars of 13 CV and more (art. 439-440, on the supply/import) not modelled",
+    "a car without fiscalHp: grade C line"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,3 @@
+import IdTax.Basic
+
+def legacyMain (args : List String) : IO UInt32 := TaxKernel.worldMain IdTax.country args

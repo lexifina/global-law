@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Vehicle excise duty",
+  "statute": "Vehicle Excise and Registration Act 1994 Sch. 1 paras. 1, 1B, 1GC, 1GD, 1GE, 1GF (price = list price)",
+  "dated": "legislation.gov.uk point in time 01/06/2025 (licences from 1.4.2025)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "cars first registered before 1985 (historic vehicles), motorcycles, vans, lorries and other vehicles",
+   "5200 Vehicle excise duty: a new diesel car is taken as meeting Euro 6d (Table 2 for other diesels not applied)",
+   "5200 Vehicle excise duty: registration-year boundaries (1 April 2017, 23 March 2006, 1 March 2001) are taken by calendar year",
+   "a car first registered from 2020 without a list price (para. 1GF): grade C"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+  "unsupported": [
+   "registration taxes, licences and permits other than the one modelled"
+  ]
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000) (none levied)",
+  "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVGBR v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/GBR.csv`, SHA256SUMS; general government S13; 2025 not yet published): heading 6000 total 0 in 2021-2024",
+  "dated": "OECD Revenue Statistics 2021-2024 (2025 not yet published); no 6000 tax known in the national law read",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": [],
+  "gap": 2
+ }
+]

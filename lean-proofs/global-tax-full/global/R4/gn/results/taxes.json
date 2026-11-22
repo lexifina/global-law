@@ -1,0 +1,291 @@
+[
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts (loi L/2021/032/AN, applicable 1 January 2022) + LF 2025 (L/2024/023/CNT)",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://journal-officiel.sgg.gov.gn/textes-officiels/lois/2021/Guinee-Loi-2021-32.pdf)",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Contribution des patentes (fixed duty by turnover class + 15 % of rental value)",
+  "statute": "CGI (loi L/2021/032/AN) art. 289, 296, 300 bis; LF 2025 (L/2024/0235/CNT) and LFR 2024 do not amend them; LF 2022-2024 not held",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "industrial establishments 5 % and extraction / convention companies 10 % (art. 300 bis III-IV)",
+   "turnover below 800 M: the printed 5th class reads 'turnover below 1 000 000 000 GNF: outside the patente', inconsistent with the 4th class floor of 800 M (layout loss in the official PDF): no charge modelled below 800 M",
+   "first-year patente at the 4th class (art. 295-II)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "cgi2021.txt (whole code)",
+  "dated": "cgi2021.txt",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "GN: the general tax code held (cgi2021.txt, 664k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "cgi2021.txt (whole code)",
+  "dated": "cgi2021.txt",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "GN: the general tax code held (cgi2021.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked"
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les revenus de capitaux mobiliers, dividends to resident individuals (15 %)",
+  "statute": "CGI 2021 (loi L/2021/0032) art. 170, 189 (LF 2025 L/2024/0235/CNT checked: art. 170-195 not amended; LF 2022-2024 not held)",
+  "dated": "cgi2021.txt",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les revenus de capitaux mobiliers, interest (15 %)",
+  "statute": "CGI 2021 art. 190 (LF 2025 checked; LF 2022-2024 not held)",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "interest on savings accounts and bank term deposits over three months is not withheld (art. 190 II): the household's interest is taken to be other interest"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les plus-values immobilières non professionnelles (15 % final levy)",
+  "statute": "CGI 2021 art. 162-163 (LF 2025 checked; LF 2022-2024 not held)",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "exemptions and the acquisition value by comparison when no deed exists (art. 162 IV)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.gainsFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Versement forfaitaire sur les salaires (6 %)",
+  "statute": "CGI 2021 art. 201 (LF 2025 checked; LF 2022-2024 not held)",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "taxe d'apprentissage 2 % of wages (art. 210), due only by employers not subject to the 1,5 % vocational-training contribution (art. 206 3°): which applies is set outside the CGI"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière unique, owner-occupied housing (5 % of annual rental value)",
+  "statute": "CGI 2021 art. 264-265 1° (LF 2025 checked; LF 2022-2024 not held)",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "10 % for professional premises occupied by the owner (art. 265 2°)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyAnnualFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière unique, let property (15 % of annual rental value)",
+  "statute": "CGI 2021 art. 264-265 3° (LF 2025 checked)",
+  "dated": "cgi2021.txt",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyAnnualFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Droit d'enregistrement, mutation à titre onéreux d'immeubles (5 %)",
+  "statute": "CGI 2021 art. 534 II, tariff I (LF 2025 checked; LF 2022-2024 not held)",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "2 % reduced cases (art. 534 II I i-iii)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation à titre gratuit (donations, successions)",
+  "statute": "CGI 2021 art. 534 II tariff IV",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "the tariff row for gifts and successions (direct line / spouses 'droit progressif', non-relatives 20 % / 30 %) is garbled in the two-column extraction; the progressive scale was not located"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "cgi2021.txt art. 534 table (offsets 399000-403500)"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNSS employer contributions (18 % up to 2 500 000 GNF a month)",
+  "statute": "CNSS Guinée, page 'Cotisations sociales employeurs' as captured on 8 May 2025 (Wayback 20250508102103; page last modified 18 August 2023; R4/fetch/p19/gn_cnss_wb20250508.html): the same ceiling, floor and rates as the held 2026 copy (gn/law/w5/gn_cnss_cotisations_employeurs.html) [text version: 2023 page as served in May 2025]",
+  "dated": "cgi2021.txt",
+  "unsupported": [
+   "the 550 000 GNF floor",
+   "the employee's 5 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 373 (18 %)",
+  "dated": "CGI 2021 (Loi 2021-32) with LF 2024 OCR; LF 2025 not held: grade B",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "exemptions",
+   "LF 2025"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Droits d'accises (produits fabriqués en Guinée)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2021 (official text, local file Loi-2021-32) art. 435 I (domestic rates), art. 436 III (base: ex-factory price excluding VAT); LF 2025 (L/2024/0235/CNT) has no excise change in the pages held",
+  "dated": "CGI 2021 (Loi 2021-32) with LF 2024 OCR; LF 2025 not held: grade B",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc"
+  ],
+  "unsupported": [
+   "excise on imported goods (customs tariff not held)",
+   "other alcoholic drinks 30 % (art. 435 I e) not separable"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2021 art. 229 II 3 (25 % for other companies; base rounded down to 1 000 GNF)",
+  "dated": "CGI 2021 (Loi 2021-32) with LF 2024 OCR; LF 2025 not held: grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax",
+   "SectorCorp (company.sector)"
+  ],
+  "unsupported": [
+   "IMF not read",
+   "loss rules not read"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenues à la source (non-résidents)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2021 art. 187 I and III (15 % on dividends and fixed-income products paid to non-residents, final); art. 198 (15 % on services paid to non-residents); twelfth pass: CGI 2021 art. 198 I-III with art. 356 Ter I ('une prestation de services peut consister notamment en l'utilisation ou en la cession d'un bien incorporel'): 15 %",
+  "dated": "CGI 2021 (Loi 2021-32) with LF 2024 OCR; LF 2025 not held: grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": []
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Guinea as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Guinea for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C324&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/gn.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+  ]
+ }
+]

@@ -1,0 +1,57 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "FICA employer (OASDI, HI)",
+  "statute": "26 U.S.C. § 3111",
+  "dated": "current Code; 2025 wage base $176,100 (89 FR 85276)",
+  "grade": "A",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ]
+ },
+ {
+  "oecd": "2200",
+  "tax": "FUTA",
+  "statute": "26 U.S.C. §§ 3301, 3302, 3306",
+  "dated": "current Code",
+  "grade": "A",
+  "package": "P4",
+  "kernel_parts": [
+   "Contribution"
+  ],
+  "unsupported": [
+   "California credit reduction"
+  ]
+ },
+ {
+  "oecd": "2200",
+  "tax": "California UI (employer)",
+  "statute": "California Unemployment Insurance Code",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P4",
+  "unsupported": [
+   "would unlock: the EDD 2025 rates and the Code sections"
+  ],
+  "refiled_note": "ETT moved to its own 3000 entry in the P7 triage pass 2026-11-21 (Guide §40, §47)"
+ },
+ {
+  "oecd": "3000",
+  "tax": "Employment Training Tax (California)",
+  "statute": "Cal. Unemployment Insurance Code § 976.6 (Stats. 2001, Ch. 111), § 930",
+  "dated": "lexifina/united-states-california-law snapshot 2016-11-27 (3e9e994dd132); no 2025 text read",
+  "grade": "B",
+  "package": "P7",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "employers of UIC §§ 676, 684, 685 and reimbursable-method employers not inputs",
+   "2025 wording not read from a 2025 text"
+  ],
+  "p7_triage": "(a)+(b) re-filed from the P4 2200 C entry and modelled in the P7 triage pass 2026-11-21"
+ }
+]

@@ -1,0 +1,18 @@
+name = "KhGlobal"
+version = "0.1.0"
+defaultTargets = ["KhGlobal", "khglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); KhTax = the 1.x model, vendored from cmp20/world/B03-asia-east-se/kh/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KhTax"
+
+[[lean_lib]]
+name = "KhGlobal"
+
+[[lean_exe]]
+name = "khglobal"
+root = "KhGlobal.Main"

@@ -1,0 +1,44 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Данък върху добавената стойност",
+  "statute": "ЗДДС чл. 66 ал. 1 (20 %), чл. 66а (9 %); чл. 38-50 (освободени доставки); чл. 96 (регистрация) [year in force 2025 (pass 16), unchanged-confirmed: bg/law/zdds.txt: чл. 66 изм. ДВ 52/2022 (в сила 01.07.2022), чл. 66а изм. ДВ 102/2022 (в сила 01.01.2023), no later note; чл. 96 изм. ДВ 115/2025 в сила от 01.01.2026 (EUR 51 130 threshold): the model applies no registration threshold, so the 2026 change does not reach it]",
+  "dated": "lex.bg current text; arts. 66, 66a unchanged since 2022/2023 per their notes",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "registration threshold (чл. 96) read only in its 2026 wording (EUR): not applied for 2025"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Закон за акцизите и данъчните складове (ЗАДС) чл. 29-39, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties whose 2025 rate changed during the year (cigarettes)",
+  "statute": "Закон за акцизите и данъчните складове (ЗАДС) чл. 29-39; TEDB situations 1.1, 1.7 and 31.12.2025",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: the lexifina/bulgaria-law index holds no 2025 amendment of the ЗАДС; the TEDB record 4053 states dates only for tobacco substitutes and e-liquids (1.5.2025), not for cigarettes",
+  "unsupported": [
+   "would unlock: the day the rate changed, from the act or decree (then dated kernel 2.1 ExciseRule rules, validFrom / validTo, as IT fuel)"
+  ],
+  "gap_note": true
+ }
+]

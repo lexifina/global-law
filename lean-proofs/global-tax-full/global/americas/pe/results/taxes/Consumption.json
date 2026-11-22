@@ -1,0 +1,58 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto General a las Ventas + Impuesto de Promoción Municipal",
+  "statute": "TUO Ley del IGV e ISC art. 17, Apéndices I-II; D. Leg. 776 art. 76",
+  "dated": "SUNAT text with amendment notes to Ley 32387 (16.6.2025, effective 2026)",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "IPM from the 1993 text of D. Leg. 776 (TUO 2004 not read)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Selectivo al Consumo (combustibles, otros tabacos, bebidas azucaradas)",
+  "statute": "TUO Título II, Nuevo Apéndice III, Apéndice IV literal A",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "unsupported": [
+   "SUNAT's Apéndice III text dated 3.4.2022 (later fuel decrees not read); sugared-drink and other-tobacco rows of literal A not read"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Selectivo al Consumo (cigarrillos, cervezas, vinos y licores)",
+  "statute": "TUO Ley del IGV e ISC Título II; Nuevo Apéndice IV literals B and D (D.S. 093-2018-EF, 181-2019-EF, 115-2024-EF; R.M. 021-2022-EF/15)",
+  "dated": "SUNAT updated appendix texts fetched 2026-11-21 (beer row from 1.7.2024); pass 10, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "ExciseRule",
+   "exciseRuleFamily"
+  ],
+  "unsupported": [
+   "al valor base read from the consumer price",
+   "pisco rate not distinguished",
+   "strength defaults"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 74",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 74: \"Los tributos se crean, modifican o derogan, o se establece una exoneración, exclusivamente por ley o decreto legislativo\" (`pe/law/const_art-074.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: TUO Ley del IGV e ISC art. 17, Apéndices I-II; TUO Ley del IGV e ISC Título II; TUO LIR art. 55 (29,5 %); TUO LIR art. 56 a), d), e), f); 1.x model (see its summary.json); LIR TUO arts. 2, 21.1, 36, 52-A)."
+ }
+]

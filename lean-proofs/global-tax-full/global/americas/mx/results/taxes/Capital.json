@@ -1,0 +1,52 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "unlisted shares, bonds, casa habitación (art. 93 XIX a))",
+   "other income kinds"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "ISR enajenación de inmuebles (art. 120: gain / years accumulated, the rest at the average rate)",
+  "statute": "LISR arts. 119-121, 124 (DOF 01-04-2024); tarifa art. 152 (1.x model)",
+  "dated": "LISR texto vigente (Cámara de Diputados, Wayback 2025-06-17)",
+  "grade": "A",
+  "package": "P3",
+  "kernel_parts": [
+   "flatCharge",
+   "StackField.addAll",
+   "1.x personTax"
+  ],
+  "unsupported": [
+   "casa habitación exemption (UDI)",
+   "losses (art. 122)",
+   "five-year average rate option (fr. III b)",
+   "INPC factor only via indexBp"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "ISR 10 % definitivo: acciones en bolsa held 12 months or less (art. 129 fr. I)",
+  "statute": "LISR art. 129 fr. I (DOF 01-04-2024)",
+  "dated": "LISR texto vigente (Cámara de Diputados, Wayback 2025-06-17)",
+  "grade": "A",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "netting across holding classes",
+   "loss carry-forward"
+  ]
+ }
+]

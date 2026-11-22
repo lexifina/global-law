@@ -20,9 +20,9 @@ W5 pattern A (2026-11-20), social insurance (`eg/law/w5/`):
   (1) (b) old-age, disability and death "الحصة التي يلتزم بها المؤمن عليه بواقع (9٪) من أجره شهريًا"; art. 36 (1) the
   end-of-service reward scheme "حصة يلتزم بها المؤمن عليه بواقع (1٪) من أجر الاشتراك شهريًا" (unemployment, art. 86,
   and injury are employer-only): employee 10 % of the monthly contribution wage. Art. 1 (definition of the contribution
-  wage): the executive regulation sets "الحد الأدنى والأقصى لأجر الاشتراك", raised yearly; for 2025 NOSI's notice of
-  30/11/2025: "الحد الأدنى لأجر الاشتراك التأميني سيرتفع من 2300 جنيه إلى 2700 جنيه، بينما يرتفع الحد الأقصى من 14500
-  جنيه إلى 16700 جنيه" (from 1 January 2026), i.e. 2,300-14,500 a month in 2025 (official secondary for the limits;
+  wage): the executive regulation sets "الحد الأدنى والأقصى لأجر الاشتراك", raised yearly; for 2025 NOSI's news item of
+  30/11/2025 (facts restated, not quoted): from 1 January 2026 the monthly contribution wage has a floor of EGP 2,700
+  (up from 2,300) and a ceiling of EGP 16,700 (up from 14,500), i.e. 2,300-14,500 a month in 2025 (official secondary for the limits;
   the regulation's table was not read). The 1 % health contribution of the Universal Health Insurance Law 2/2018 is a
   different law, not reached (unsupported).
 * Income Tax Law 91/2005 art. 13 (ETA's circular 1/2005 printing the deductions): "حصة الموظف أو العامل فى التأمين

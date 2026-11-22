@@ -1,0 +1,35 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Bénéfices de spéculation (art. 99bis), stacked",
+  "statute": "L.I.R. art. 99bis, 102bis; L. 04.04.25 art. 1, L. 27.06.25 art. 1",
+  "dated": "texte coordonné en vigueur au 1er janvier 2025 (`lu/law/LIR_2025-01-01.txt`); Mémorial A 2025 n° 121 and n° 271 (`lu/law/loi_2025_a121.txt`, `loi_2025_a271.txt`)",
+  "grade": "A",
+  "unsupported": [
+   "the 500 EUR Freigrenze is applied to each rule (movables, real estate) rather than to their total",
+   "real estate sold 1.7-30.9.2025: the compromis registration by 30.6.2025 is not an input (taken as registered)",
+   "an undated real-estate disposal is not priced (grade C)"
+  ],
+  "kernel_parts": [
+   "StackRule (2.5.0; 2.7.0 dateFrom / dateTo)",
+   "GainRule"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "Plus-values de cession (art. 99ter: quart du taux global to 30.9.2025, demi-taux global from 1.10.2025; art. 100: demi-taux global), stacked",
+  "grade": "A",
+  "statute": "L.I.R. art. 99ter, 100, 102 (6), 102bis, 130 (4), 131 (1) c, d, 132 (2); Loi du 22 mai 2024 art. 14 (as amended by L. 04.04.25 art. 7 and L. 27.06.25 art. 7); L. 04.04.25 art. 2, L. 27.06.25 art. 2",
+  "dated": "texte coordonné en vigueur au 1er janvier 2025 (`lu/law/LIR_2025-01-01.txt`); Mémorial A 2024 n° 219 (art. 14), A 2025 n° 121 (art. 2, 7; effect 1.1.2025, art. 9) and n° 271 (art. 2, 7; in force 1.7.2025, art. 8), legilux filestore PDFs read (`lu/law/loi_2024_a219.txt`, `loi_2025_a121.txt`, `loi_2025_a271.txt`)",
+  "kernel_parts": [
+   "StackRule (2.6.0: averageRate, shareBp; 2.7.0: dateFrom / dateTo, rateFromStack)",
+   "GainRule"
+  ],
+  "unsupported": [
+   "the art. 130 (4) ten-year look-back and the art. 130 (5) 75 000 euros for inherited buildings not applied",
+   "the abattement is counted once per rule (more than once with two of: real estate to 30.9.2025, from 1.10.2025, participations)",
+   "an undated real-estate disposal is not priced (grade C)",
+   "real estate sold 1.7-30.9.2025 more than two years after acquisition: the compromis registration by 30.6.2025 is not an input"
+  ]
+ }
+]

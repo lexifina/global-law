@@ -1,0 +1,22 @@
+name = "GeGlobal"
+version = "0.1.0"
+defaultTargets = ["GeGlobal", "geglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); GeTax = the 1.x model, vendored from cmp20/world/B05-former-ussr/ge/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GeTax"
+
+[[lean_lib]]
+name = "GeGlobal"
+
+[[lean_exe]]
+name = "geglobal"
+root = "GeGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

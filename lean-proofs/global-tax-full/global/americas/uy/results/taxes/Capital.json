@@ -1,0 +1,36 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "real estate, unlisted shares and short-held gains rules",
+   "other income kinds"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "IRPF Categoría I: incrementos patrimoniales (12 %)",
+  "statute": "T.O. DGI 2023 Título 7 arts. 26, 29, 32, 34, 37, 38",
+  "dated": "IMPO T.O. DGI 2023 Título 7 (2024 edition with Ley 20.446 notes; 2025 wording used); pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "vivienda permanente (art. 38 L) grade C",
+   "art. 38 I UI thresholds not applied",
+   "listed shares and bonds not charged",
+   "loss offset"
+  ]
+ }
+]

@@ -1,0 +1,343 @@
+{
+ "country": "CI",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Code général des impôts (DGI online edition cgici.com, wording of Ord. 2023-719) + Annexe fiscale 2025 (loi 2024-1109)",
+   "dated": "-",
+   "unsupported": [
+    "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://cgici.com/ ; https://www.dgi.gouv.ci/assets/documents/EBOOK/ANNEXE_FISCALE_2025/)",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (patente / contribution des patentes or contribution des licences (CGI); provision not located by keyword in the reachable text)",
+   "statute": "Code général des impôts (DGI online edition cgici.com, wording of Ord. 2023-719) + Annexe fiscale 2025 (loi 2024-1109)",
+   "dated": "-",
+   "unsupported": [
+    "triage moderate: patente / contribution des patentes: business tax on traders and professions, not a household tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://cgici.com/ ; https://www.dgi.gouv.ci/assets/documents/EBOOK/ANNEXE_FISCALE_2025/)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Contributions à la charge des employeurs, local staff (contribution nationale 1,2 %, taxe d'apprentissage 0,4 %, FPC 1,2 %)",
+   "statute": "CGI (DGI online edition cgici.com, V2025) art. 134 4°, 143, 146 as amended by loi n° 2024-1109 du 18 déc. 2024 (annexe fiscale 2025) art. 16-2, 16-3",
+   "dated": "-",
+   "unsupported": [
+    "expatriate staff (12 %): the household is local staff",
+    "exemptions for disabled staff and zone incentives (art. 134-142)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNPS old-age insurance, employer share (7,7 % up to the retirement ceiling)",
+   "statute": "CNPS Côte d'Ivoire, page 'Employeur' as captured on 14 September 2025 (Wayback 20250914213707; page last modified 3 January 2023; R4/fetch/p19/ci_cnps_employeur_wb20250914.html), Code de prévoyance sociale art. 23; the same rates and ceilings as the 2026 copy held earlier (ci/src/cnps_employeur.html) [text version: 2023 page as served in September 2025]",
+   "dated": "-",
+   "unsupported": [
+    "the printed ceiling does not equal 45 x the SMIG the page prints (flag: possibly stale); used as printed",
+    "SMIG floor on the contributory wage",
+    "the employee's 6,3 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNPS family benefits 5 %, maternity 0,75 % and work accidents 2 % (employer only, up to 70 000 F a month)",
+   "statute": "CNPS Côte d'Ivoire, page 'Employeur' as captured on 14 September 2025 (Wayback 20250914213707; page last modified 3 January 2023; R4/fetch/p19/ci_cnps_employeur_wb20250914.html), Code de prévoyance sociale art. 23; the same rates and ceilings as the 2026 copy held earlier (ci/src/cnps_employeur.html) [text version: 2023 page as served in September 2025]",
+   "dated": "-",
+   "unsupported": [
+    "work-accident rate by sector (2 to 5 %): the lowest (2 %) is applied",
+    "SMIG floor"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Impôt sur le patrimoine foncier, built property producing rent (9 % of rental value)",
+   "statute": "CGI (cgici.com V2025) art. 157-158 as amended by loi n° 2024-1109 (annexe fiscale 2025) art. 28-4",
+   "dated": "-",
+   "unsupported": [
+    "minimum of the previous year's amount for non-productive buildings",
+    "zone and sector exemptions (art. 158 bis, ter)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyAnnualFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Impôt sur le patrimoine foncier, owner-occupied main home (0,5 % of market value)",
+   "statute": "CGI (cgici.com V2025) art. 157 al. 2, 158 as amended by loi n° 2024-1109 art. 28-4",
+   "dated": "-",
+   "unsupported": [
+    "one secondary residence at the same rate with a certificate",
+    "market value per the commission: the household's statutory value is used"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyValueFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Impôt sur le patrimoine foncier des propriétés non bâties (1 % of market value)",
+   "statute": "CGI (cgici.com V2025) art. 159-161, 164 1° [text version: CGI, DGI edition 2025 ('V2025' on cgici.com, incorporating the LF 2025 annex; R4/fetch/ci8/cgi2025_cgici.txt)]",
+   "dated": "-",
+   "unsupported": [
+    "rural land outside art. 160 is not taxable (the household's land is treated as urban)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyValueFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droit de mutation à titre onéreux d'immeubles (4 %)",
+   "statute": "CGI (cgici.com V2025) art. 760 1° as amended by loi n° 2023-1000 (annexe fiscale 2024) art. 2-7",
+   "dated": "-",
+   "unsupported": [
+    "half rate for charities and lessors in property leasing (art. 760 3°)",
+    "conservation foncière fees"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "IRVM on dividends received by individuals (17 %)",
+   "statute": "CGI (cgici.com V2025) art. 182 as amended by loi n° 2024-1109 (annexe fiscale 2025) art. 37-1",
+   "dated": "-",
+   "unsupported": [
+    "dividends of BRVM-listed companies 12 % for individuals (art. 183 1-)",
+    "bonds of 5+ years 3 % (art. 183 2-)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur le revenu des créances on individuals' bank deposit interest (13,5 %)",
+   "statute": "CGI (cgici.com V2025) art. 192-193 [text version: CGI, DGI edition 2025 ('V2025' on cgici.com, incorporating the LF 2025 annex; R4/fetch/ci8/cgi2025_cgici.txt)]",
+   "dated": "-",
+   "unsupported": [
+    "longer deposit terms 10 / 5 / 1 % and other claims 18 %: the 13,5 % short-term / current-account rate is applied to all household interest"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Droits de mutation à titre gratuit (successions and gifts: 1-5 % direct line and spouse after F 100 m; 6-12 % others)",
+   "statute": "CGI (cgici.com V2025) art. 730, 735, 737 (loi n° 2016-1116, annexe fiscale 2017, art. 3)",
+   "dated": "-",
+   "unsupported": [
+    "reduction for heirs with three or more children (art. 738)",
+    "50 % abatement on the home occupied by the surviving spouse",
+    "aggregation of earlier gifts from the same donor (art. 731)",
+    "25 % reduction for gifts by marriage contract (art. 730)",
+    "progressive bands read as marginal fractions ('Fraction de part nette taxable')"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Transfers.lean",
+   "kernel_parts": [
+    "R4.estateBandFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "CGI (cgici.com V2025, whole code, R4/fetch/ci8/cgi2025_cgici.txt)",
+   "dated": "-",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "CI CGI 2025 (complete DGI online code): no tax on net wealth; full-text search for 'impôt sur la fortune', 'patrimoine net', 'impôt de solidarité sur la fortune' finds nothing (the 'impôt sur le patrimoine foncier' is a recurrent property tax, P5)",
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Taxe sur les véhicules à moteur (vignette: annual, by power and age)",
+   "statute": "CGI art. 910-917 (tariff art. 915 as amended by Loi n° 2013-908 and Loi n° 2014-861, art. 916 quarter abatement, art. 917 vehicles over 10 years, Ord. n° 2002-77), CGI 2025 (DGI edition dgi.cgici.com, R4/fetch/ci8/cgi2025_cgici.txt l. 11953-12050); the LF 2025 tax annex (annexe2025.txt) does not amend art. 910-918",
+   "dated": "-",
+   "unsupported": [
+    "administrative vehicles (art. 918: 5 000 / 10 000 F) and exempt vehicles (art. 961) not distinguished",
+    "the art. 916 quarter is read as not applying on the art. 917 tariff (flag)",
+    "a vehicle without fiscal horsepower or first-registration year: listed (grade C)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "vehicleTaxFamily (kernel Global2.Vehicle)"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI 2025 art. 359 (18 % on a base excluding tax; 9 % for milk, infant milk, durum-wheat pasta, petroleum products, luxury meat (LF 2025 art. 1-4) and luxury rice)",
+   "dated": "Code général des Impôts 2025 (DGI online edition at cgici.com/V2025, the CGI link of dgi.gouv.ci; includes the annexe fiscale 2025, loi n° 2024-1109 du 18 déc. 2024)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "art. 355 exemptions",
+    "9 % food items (basket convention)"
+   ],
+   "guards": 9
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Taxe spécifique sur les boissons et les tabacs",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI 2025 art. 418 (tariffs: beer 17 %, ordinary wine 35 %, other alcoholic drinks < 35° 40 %, >= 35° 45 %, non-alcoholic drinks 14 %, tobacco 57 %) and art. 419 (base: ex-factory price excluding VAT, or customs value plus duties)",
+   "dated": "Code général des Impôts 2025 (DGI online edition at cgici.com/V2025, the CGI link of dgi.gouv.ci; includes the annexe fiscale 2025, loi n° 2024-1109 du 18 déc. 2024)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "minimum tobacco base",
+    "taxe spécifique unique on petroleum products",
+    "taxe additionnelle on alcoholic drinks"
+   ],
+   "guards": 9
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les bénéfices industriels et commerciaux (sociétés)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI 2025 art. 51 (25 %; base rounded down to 100 F) and art. 39 (impôt minimum forfaitaire, régime du réel normal: 0,5 % of turnover, minimum 3 000 000 F, maximum 35 000 000 F)",
+   "dated": "Code général des Impôts 2025 (DGI online edition at cgici.com/V2025, the CGI link of dgi.gouv.ci; includes the annexe fiscale 2025, loi n° 2024-1109 du 18 déc. 2024)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax",
+    "SectorCorp (company.sector)"
+   ],
+   "unsupported": [
+    "IMF on turnover including taxes",
+    "simplified regime"
+   ],
+   "guards": 29
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenues sur paiements à l'étranger",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI 2025 art. 92 (BNC of persons without a professional installation: 25 % on 80 % of the gross, i.e. 20 %); art. 182 3 (IRVM 15 %; 17 % only for individuals from 2025); art. 193 1° (IRC 18 %)",
+   "dated": "Code général des Impôts 2025 (DGI online edition at cgici.com/V2025, the CGI link of dgi.gouv.ci; includes the annexe fiscale 2025, loi n° 2024-1109 du 18 déc. 2024)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "art. 183 bis surcharge",
+    "listed-share rate"
+   ],
+   "guards": 29
+  }
+ ],
+ "cases": 11,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

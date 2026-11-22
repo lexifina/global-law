@@ -1,0 +1,278 @@
+{
+ "cc": "NG",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stampConveyance",
+   "grade": "B",
+   "rateBp": 150,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Stamp duty on conveyances or transfers on sale of any property (75 kobo per N50 of the consideration, on the vendee)",
+   "statute": "Stamp Duties Act Cap. S8 LFN 2004 s. 3 and Schedule, heading 'CONVEYANCE OR TRANSFER ON SALE, of any property' (L.N. 49 of 1961; LFN 2004 print, PLAC copy via Wayback 2017-01-10, R4/fetch/p16/ng_S8_lfn2004_placng_wb20170110.pdf, Schedule pages scanned: OCR R4/fetch/p16/ng_S8_sched.ocr.txt, page 52, figure read in the N/k column); persons liable: 'Conveyance on sale: the vendee or transferee' (table under s. 18); s. 4 as amended by the Finance Act 2019 s. 53: FIRS where a company is a party, the State tax authority for instruments between individuals 'at such rates ... as may be agreed with the Federal Government'. The Finance Acts 2019 (ss. 2, 4, 89), 2020 (ss. 2, 89, 89A), 2021 (s. 89A) and 2023 (s. 89A) held do not touch the Schedule; the Nigeria Tax Act 2025 (from 1 January 2026) is not applied. B: the 2004 edition with the Finance Acts held, Finance Act 2022 and any order under s. 116 not checked (flag)",
+   "doc": "Schedule: 'CONVEYANCE OR TRANSFER ON SALE, of any property. For every N50, and also for every fractional part of N50, of the amount or value of the consideration for the sale: 75 [kobo]' = 1,5 %. Sixteenth pass (year-in-force fix: replaces the NTA 2025 model of the fifteenth pass, downgraded to C by FT reviewer 6). ng-p1: N15 000 000 -> 225 000; N8 000 000 -> 120 000 (no N10 000 000 relief before 2026).",
+   "unsupported": [
+    "'every fractional part of N50' rounding up not applied (at most 75 kobo)",
+    "instruments between individuals: State stamp duty laws (e.g. Lagos) at rates agreed with the Federal Government: the federal Schedule rate is applied (flag)",
+    "Schedule orders under s. 116 and the Finance Act 2022 not checked",
+    "conveyances of property other than land and buildings; voluntary dispositions (s. 63) charged as conveyances on the value: gifts not modelled",
+    "the N10 000 000 relief of the Nigeria Tax Act 2025 applies only from 1 January 2026"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "triage": "moderate",
+   "name": "Other notable taxes (NITDA levy, Police Trust Fund levy; Nigeria Tax Act 2025 consolidates from 2026)",
+   "statute": "NITDA Act 2007 s. 12; Nigeria Police Trust Fund (Establishment) Act 2019",
+   "why": "NITDA levy (1 % of profit before tax of listed companies) and Police Trust Fund levy: statutes not read (tertiary education tax modelled separately, twelfth pass)",
+   "tried": "not reached"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "employerLevy",
+   "fam": "itf",
+   "level": "central",
+   "grade": "A",
+   "name": "Industrial Training Fund contribution (1 % of total annual payroll)",
+   "statute": "Industrial Training Fund (Amendment) Act 2011 (Act No. 19, Official Gazette No. 108 of 22 June 2011) s. 6 substituting s. 6 of Cap. I9 (itf.gov.ng PDF via Wayback, OCR, R4/fetch/ng11) [text version: Act No. 19 of 2011 as gazetted (Official Gazette No. 108, 22 June 2011)]",
+   "doc": "new s. 6 (1): 'Every employer having either 5 or more employees in his establishment, or having less than 5 employees but with a turnover of N50m and above per annum, shall, in respect of each calendar year ... contribute to the Fund one per centum of his total annual payroll.' 'payroll' = basic pay, allowances and other emoluments. Eighteenth pass: the five-employee test of s. 6 (1) is applied through kernel 2.6.0 employer facts (companies := true). Worked cases (hand): wages N1 000 000, employer of 10 -> N10 000; of 3 -> nothing (turnover branch not read); no headcount -> N10 000 (presumed); company payroll N1 000 000 with 40 employees -> N10 000; with 4 -> nothing. Nineteenth pass: the second branch (fewer than five employees, turnover N50 m and above) is applied through kernel 2.7.0 employer turnover (adult 'employerTurnover'; a company's own 'turnover'); an employer with fewer than five employees whose turnover is not given gets no charge and is listed (grade C). Worked cases (hand): employer of 3 with turnover N60 m -> N10 000; with N40 m -> nothing; turnover not given -> listed; company of 4 with turnover N50 000 000 -> N10 000 (inclusive), N49 999 999 -> nothing, not given -> listed.",
+   "unsupported": [
+    "employer headcount not given: the employer is presumed to have five or more employees (declared; the charge's statute says so)",
+    "an employer with fewer than five employees whose turnover is not given (adult 'employerTurnover', company 'turnover'): no charge, listed (grade C)"
+   ],
+   "levy": "{ name := \"Industrial Training Fund contribution (1 % of total annual payroll)\", level := .central, companies := true, rules := [{ rateBp := 100, tests := [.employeesAtLeast 5], ifUnknown := .presume, statute := \"Industrial Training Fund (Amendment) Act 2011 s. 6 (1): 1 % of the total annual payroll of an employer with five or more employees (model presumption when the headcount is not given: in scope)\" }, { rateBp := 100, tests := [.employeesAtMost 4, .turnoverAtLeast 50000000], ifUnknown := .gradeC, statute := \"Industrial Training Fund (Amendment) Act 2011 s. 6 (1): 1 % of the total annual payroll of an employer with fewer than five employees and a turnover of N50 m or more a year\" }] }",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 10
+        }
+       ]
+      }
+     },
+     "expect": [
+      10000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 3
+        }
+       ]
+      }
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000
+        }
+       ]
+      }
+     },
+     "expect": [
+      10000
+     ]
+    },
+    {
+     "line": {
+      "id": "c3",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 1000000,
+       "employees": 40
+      }
+     },
+     "expect": [
+      10000
+     ]
+    },
+    {
+     "line": {
+      "id": "c4",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 1000000,
+       "employees": 4
+      }
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t5",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t5",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 3,
+         "employerTurnover": 60000000
+        }
+       ]
+      }
+     },
+     "expect": [
+      10000
+     ]
+    },
+    {
+     "line": {
+      "id": "t6",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t6",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 3,
+         "employerTurnover": 40000000
+        }
+       ]
+      }
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "c7",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 1000000,
+       "employees": 4,
+       "turnover": 50000000
+      }
+     },
+     "expect": [
+      10000
+     ]
+    },
+    {
+     "line": {
+      "id": "c8",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 1000000,
+       "employees": 4,
+       "turnover": 49999999
+      }
+     },
+     "expect": []
+    }
+   ],
+   "unknown": true
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "nsitf",
+   "level": "social",
+   "rateBp": 100,
+   "grade": "B",
+   "name": "Employees' Compensation Fund (NSITF), employer contribution (1 % of monthly payroll)",
+   "statute": "Employees' Compensation Act 2010 (No. 13) s. 33 (1)-(2) (gazette copy on nsitf.gov.ng via Wayback, R4/fetch/ng11) [text version: Employees' Compensation Act 2010 (No. 13) as gazetted]",
+   "doc": "s. 33 (1): 'Every employer shall, within the first 2 years of the commencement of this Act, make a minimum monthly contribution of 1.0 per cent of the total monthly payroll into the Fund'; (2): the Board shall make regulations prescribing risk classes and assessment rates.",
+   "unsupported": [
+    "rate after the first two years is set by Board regulations by risk class (not held): 1 % kept (flag)",
+    "Pension Reform Act 2014 employer 10 %: paid into privately managed retirement savings accounts (PFAs): not a tax (OECD), not modelled",
+    "National Housing Fund (employee only)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "1200",
+   "kind": "profitLevy",
+   "fam": "tet",
+   "grade": "B",
+   "rateBp": 300,
+   "tests": [
+    [
+     100000000,
+     10000000
+    ]
+   ],
+   "expect": [
+    [
+     300000
+    ]
+   ],
+   "name": "Tertiary education tax (3 % of assessable profit)",
+   "statute": "Tertiary Education Trust Fund (Establishment, etc.) Act 2011 s. 1 (2) as substituted by the Finance Act 2020 s. 34 and amended by the Finance Act 2023 s. 26 (2,5 % -> 3 %); held ng/law/finance_act_ocr.txt, finance_act_2023_ocr.txt",
+   "doc": "Finance Act 2020 s. 34: '(2) The tax, at the rate of two percent, shall be charged on the assessable profit of a company registered in Nigeria, other than a small company as defined under the Companies Income Tax Act'; Finance Act 2023 s. 26: 'Section 1 (2) of the Principal Act is amended by substituting for the figure \"2.5%\", the figure \"3%\"' (the 2,5 % of the Finance Act 2021 is not held).",
+   "unsupported": [
+    "small companies (as defined in CITA, not read) are exempt: the model charges every company line",
+    "assessable profit read as the line's profit",
+    "Finance Act 2021 not held"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1000,
+   "name": "Withholding tax on dividends received by individuals (10 %, final)",
+   "statute": "PITA / CITA withholding regulations, per the FIRS public notice on WHT (PDF dated 2015-06-10, R4/fetch/p13/ng_wht_notice.pdf) s. 3 item 1 ('Interest, Rents & Dividend: 10 % (individuals)'); the Deduction of Tax at Source (Withholding) Regulations 2024 not reached (flag); dividends taxed at source are franked (final) for individuals",
+   "doc": "FIRS notice s. 3: rates for individuals: interest, rents and dividend 10 %. Thirteenth pass.",
+   "unsupported": [
+    "2024 withholding regulations not read",
+    "individuals' interest (10 %): finality not established, not modelled"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "unsupported",
+   "name": "National Health Insurance Authority contribution (employer)",
+   "statute": "National Health Insurance Authority Act 2022 (gazetted copy on nhia.gov.ng, not read); NHIA Operational Guidelines 2023",
+   "why": "the Act does not print the rates; the official download of the Operational Guidelines 2023 (nhia.gov.ng, R4/fetch/p14/ng_nhia_og2023.pdf, OCR'd) holds only the front matter and table of contents (22 pages), not section 2.2.4 'Financing mechanism for contributory schemes'",
+   "tried": "NHIA site and Wayback CDX; one web search (secondary sources only)"
+  }
+ ]
+}

@@ -1,0 +1,417 @@
+{
+ "country": "OM",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Individuals capital income and gains",
+   "statute": "no personal income tax on residents (1.x no-PIT stub, with its citation)",
+   "dated": "2025",
+   "grade": "B",
+   "status": "not levied",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "non-resident or business income of individuals (e.g. SA non-Saudi individuals in business, art. 7(a)(2)) not modelled"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "ضريبة الدخل (income tax on companies)",
+   "statute": "ITL (RD 28/2009) art. 112 and 159 bis (15) as amended by RD 9/2017; art. 69-71 losses",
+   "dated": "Qanoon.om (RD 9/2017 archived 2026-04-21); in force from tax year 2017; pass 3q year-in-force audit: re-cited: qanoon.om RD 28/2009 page identical in captures of 15/07/2025, 14/11/2025 and 15/04/2026; no 2025 amending decree (RD 56/2025 is the separate individuals' law, from 2028)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime",
+    "R5Common.corpFamily"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "small establishments by flag (smallEstablishment, smallExempt)",
+    "5-year loss limit assumed met",
+    "participation exemption not read"
+   ],
+   "withholding": {
+    "grade": "B",
+    "rules": "royalty and management services 10 % (ITL art. 52, 113); dividend and interest 0 % cited: art. 52(5) 10 % suspended by the Royal directive of 11 Jan 2023 (text unpublished; Deloitte 2026 highlights)",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "ضريبة الاستقطاع (withholding, art. 52)",
+   "statute": "ITL art. 52(1)-(4), 113 (10 %)",
+   "dated": "as above; pass 3q year-in-force audit: re-cited: as the 1200 entry (art. 52, 113)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "dividends and interest (art. 52(5)): suspension decisions not read"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Social Protection Fund employer contributions (Omani employees)",
+   "statute": "Social Protection Law (RD 52/2023) art. 52, 70(1) (11 %), 90 (1 %), 116(1) (0.5 %), 128 (1 %); RD art. 6 commencement",
+   "dated": "Qanoon.om consolidated (1.x law folder); sickness branch from July 2026 excluded; pass 3q year-in-force audit: re-cited: RD 60/2025 (OG 1604 of 13/07/2025, in force 14/07/2025; qanoon.om capture 16/07/2025) re-sets decree art. 6(2), (3), (5) before the sickness chapter's original start (19/07/2025): it starts 19/07/2026; rate articles unchanged (qanoon.om capture 16/11/2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "R5Common.employerOn"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "non-Omani savings scheme 9 % (start date by board decision) not computed"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Per-worker fees on employers (work permits of foreign workers)",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "3000 taxes on payroll and workforce: fees for licences to employ non-Omani workers, per worker (Labour Law RD 53/2023 and the Ministry of Labour fee decisions; not read). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l).",
+    "pass 3p: MD 340/2016 read (qanoon.om, Wayback 2025-05-15, original text): OMR 301 per two-year licence (1 + 300), domestic workers 141 / 241, farm workers 201 / 301, temporary 60 / 90 / 135. Amended by MD 129/2021 (OG 1401, 1/8/2021; its PDF on data.qanoon.om via Wayback has a legacy-font text layer, not OCRed) and by occupation-category tables not found; MD 602/2025 (OG 1619 of 26/10/2025) replaces it only from 26/01/2026. Kept C: the 2025 occupation-category amounts are not established."
+   ],
+   "pass": "3l"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "رسوم تسجيل عقود الإيجار (lease registration fee, Muscat)",
+   "statute": "Muscat Municipality Decision 20/2016 art. 1 (OG 1133 of 31/01/2016; in force 01/02/2016): the lessor pays 5 % of the total contract value for its term; reduced to 3 % (municipality via Oman Daily, 2021; amending decision not found; Muscat fee decisions 1/2018 and 96/2019 hold no lease fee)",
+   "dated": "qanoon.om p/2016/mm20160020 (fetched 2026-11-21); omandaily.om article 4308; pass 3r re-cite: Muscat Municipality page on lease-contract fees (Wayback 18/04/2025; law/om_mm_rentcontract_2025.html): fee = monthly rent x term x 3 % (example 100 x 12 x 0.03 = 36)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge per let realEstate: 3 % of annualValue, lessor, local"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "Muscat as model governorate",
+    "3 % reduction instrument not found (press)",
+    "let property without annualValue not computed"
+   ],
+   "pass": "3m",
+   "status": "modelled"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "رسوم تسجيل عقود البيع (registration fee on property sales)",
+   "statute": "MD 570/2025 (Ministry of Housing and Urban Planning) regulation, Annex 7 item 1 (3 % of the value of the property on sales and gifts from third parties); art. 3 (in force from 27/01/2025); repeals MD 92/2016 (printed 5 %)",
+   "dated": "qanoon.om/p/2025/mhup20250570/ (Gazette 1581, 26/01/2025), law/om_md570_2025.txt; MD 92/2016 law/om_md92_2016.txt",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty flat 3 %, buyer"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "payer not named by the regulation: charged to the buyer",
+    "January 2025 under MD 92/2016 as amended (reduction to 3 % not read): 3 % applied to the whole year",
+    "1 % / 0,5 % special cases not distinguished",
+    "pass 3n (FT reviewer 6 Y-7): part year: A -> B; MD 570/2025 from 27/01/2025, 1-26 January under MD 92/2016 (5 % printed; the 3 % reduction not read); purchases carry no date"
+   ],
+   "pass": "3n"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "ضريبة القيمة المضافة (VAT)",
+   "statute": "Royal Decree 121/2020 art. 36, 47, 51",
+   "dated": "qanoon.om as published (2020); no amendment shown; pass 3q year-in-force audit: re-cited: qanoon.om RD 121/2020 page captured 11/12/2025 links no amending decree",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "foods zero-rated by decision: all food zero-rated",
+    "registration threshold (Executive Regulation) not applied"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "الضريبة الانتقائية (excise)",
+   "statute": "RD 23/2019 (rates by decision); MD 112/2019 art. 2, 5 (tobacco, pork, alcohol, energy drinks 100 %, carbonated 50 %); TA Decision 34/2020 art. 3 (sweetened drinks 50 %, from 2020-10-01)",
+   "dated": "Qanoon.om pages archived 2025-03-27, 2025-06-20, 2025-07-20",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (beforeTax, VAT 5 %)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "standard price list floor not applied",
+    "pork: no basket good",
+    "amendments between 2020 and 2025 not listed on the pages read (TA 192/2026 is after 2025)"
+   ]
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Basic Statute of the State (Royal Decree 6/2021) art. 14 (economic principles): public taxes are created, amended and abolished only by law (Arabic text qanoon.om/p/2021/rd2021006/, law/om_rd6_2021.txt); no law levies it; tax laws read: Income Tax Law (RD 28/2009 as amended by RD 9/2017), VAT Law (RD 121/2020), Excise Tax Law (RD 23/2019), MD 570/2025 (registration fees). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Basic Statute of the State (Royal Decree 6/2021) art. 14 (economic principles): public taxes are created, amended and abolished only by law (Arabic text qanoon.om/p/2021/rd2021006/, law/om_rd6_2021.txt); no law levies it; tax laws read: Income Tax Law (RD 28/2009 as amended by RD 9/2017), VAT Law (RD 121/2020), Excise Tax Law (RD 23/2019), MD 570/2025 (registration fees). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "om-h1",
+   "total": 35228,
+   "byOecd": {
+    "1100": 0,
+    "2100": 3300,
+    "2200": 6120,
+    "4400": 24000,
+    "5111": 380,
+    "5121": 1428
+   },
+   "borne": {
+    "consumer": 1808,
+    "employer": 6120,
+    "entity": 27300,
+    "withheld": 0
+   },
+   "net": 302700,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT: zero rate only for the foods named by decision (art. 51(1)), not read: all food zero-rated",
+    "tobacco excise: the standard price list floor (MD 112/2019 art. 5) not applied",
+    "registration fee charged to the buyer (the regulation names no payer); 1-26 January 2025 under MD 92/2016 as amended (not read): 3 % applied to the whole year; transfers to own companies, funds and Islamic-bank sales (1 % / 0,5 %) not distinguished"
+   ]
+  },
+  {
+   "id": "om-c1",
+   "total": 210000,
+   "byOecd": {
+    "1200": 110000,
+    "5111": 100000
+   },
+   "borne": {
+    "consumer": 100000,
+    "employer": 0,
+    "entity": 105000,
+    "withheld": 5000
+   },
+   "net": 695000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Executive Regulation) not applied",
+    "withholding on dividends and interest: art. 52(5) taken as suspended (Royal directive of 11 Jan 2023, text not read; grade B)",
+    "3000 taxes on payroll and workforce: fees for licences to employ non-Omani workers, per worker (Labour Law RD 53/2023 and the Ministry of Labour fee decisions; not read). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "om-h2",
+   "total": 7980,
+   "byOecd": {
+    "1100": 0,
+    "2100": 2940,
+    "2200": 5040
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 5040,
+    "entity": 2940,
+    "withheld": 0
+   },
+   "net": 45060,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "om-c2",
+   "total": 155000,
+   "byOecd": {
+    "1200": 155000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 150000,
+    "withheld": 5000
+   },
+   "net": 850000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Executive Regulation) not applied",
+    "3000 taxes on payroll and workforce: fees for licences to employ non-Omani workers, per worker (Labour Law RD 53/2023 and the Ministry of Labour fee decisions; not read). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "om-h3",
+   "total": 2775,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 275,
+    "5121": 2500
+   },
+   "borne": {
+    "consumer": 2775,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "tobacco excise: the standard price list floor (MD 112/2019 art. 5) not applied"
+   ]
+  },
+  {
+   "id": "om-w1",
+   "total": 55000,
+   "byOecd": {
+    "1100": 20000,
+    "1200": 35000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 15000,
+    "withheld": 40000
+   },
+   "net": 85000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Executive Regulation) not applied",
+    "withholding on dividends and interest: art. 52(5) taken as suspended (Royal directive of 11 Jan 2023, text not read; grade B)",
+    "3000 taxes on payroll and workforce: fees for licences to employ non-Omani workers, per worker (Labour Law RD 53/2023 and the Ministry of Labour fee decisions; not read). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "om-t1",
+   "total": 9450,
+   "byOecd": {
+    "1100": 0,
+    "2100": 2400,
+    "2200": 4050,
+    "4400": 3000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 4050,
+    "entity": 5400,
+    "withheld": 0
+   },
+   "net": 24600,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "registration fee charged to the buyer (the regulation names no payer); 1-26 January 2025 under MD 92/2016 as amended (not read): 3 % applied to the whole year; transfers to own companies, funds and Islamic-bank sales (1 % / 0,5 %) not distinguished"
+   ]
+  },
+  {
+   "id": "om-p1",
+   "total": 2760,
+   "byOecd": {
+    "1100": 0,
+    "2100": 960,
+    "2200": 1620,
+    "4100": 180
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 1620,
+    "entity": 1140,
+    "withheld": 0
+   },
+   "net": 10860,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "4100 lease registration fee: Muscat taken as the model governorate; `realEstate` with `annualValue` taken as let; the 3 % reduction's decision not found"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 10,
+ "theorems": 1
+}

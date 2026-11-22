@@ -1,0 +1,42 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto al Valor Agregado",
+  "statute": "LRTI arts. 55, 56, 65; D.E. 470 (R.O. S. 700, 10.12.2024)",
+  "dated": "SRI consolidation, última reforma 24.10.2025",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "financial services",
+   "processed food split"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto a los Consumos Especiales",
+  "statute": "LRTI art. 82",
+  "dated": "SRI consolidation 24.10.2025",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "unsupported": [
+   "Grupo I table not in the consolidation (R.O. S. 111, 2019, p. 17) and yearly-adjusted specific rates; would unlock: the R.O. table and the SRI resolution with the 2025 specific rates"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 301",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 301: \"Sólo por iniciativa de la Función Ejecutiva y mediante ley sancionada por la Asamblea Nacional se podrá establecer, modificar, exonerar o extinguir impuestos\" (`ec/law/const_art-301.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: LRTI arts. 55, 56, 65; LRTI art. 37 (25 %); LRTI arts. 37, 39, 39.2 num. 4; 1.x model (see its summary.json); LRTI art. innumerado (enajenación de acciones), art. 9 num. 14, 24; IESS Resolución C.D. 515 de 2016, Disposición Transitoria Primera)."
+ }
+]

@@ -1,0 +1,28 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Taxes on use of goods (motor vehicle taxes)",
+  "statute": "the country's motor-vehicle tax act",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "not read in the P7 pass",
+  "unsupported": [
+   "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+  ],
+  "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000) (none levied)",
+  "statute": "European Commission TEDB, SI: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 812, 6880, 536, 537, 543, 545, 714, 811, 813, 814, 3741) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": [],
+  "gap": 5
+ }
+]

@@ -1,0 +1,72 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto al Valor Agregado",
+  "statute": "DL 825 arts. 8 g), 12 E, 13, 14",
+  "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto adicional art. 42 (bebidas)",
+  "statute": "DL 825 arts. 42, 43",
+  "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "wholesale base approximated by the consumer price net of IVA"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto al tabaco",
+  "statute": "DL 828 arts. 4, 5",
+  "dated": "LeyChile get_norma_json idVersion=2025-07-01; pass 13: UTM by month (SII utm2025.htm, day-weighted)",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "Excise"
+  ],
+  "unsupported": [
+   "UTM: each sale at its month's UTM; undated annual quantity at the 2025 day-weighted UTM (SII table)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto específico a las gasolinas",
+  "statute": "Ley 18.502 art. 6",
+  "dated": "LeyChile get_norma_json idVersion=2025-07-01; pass 13: UTM by month (SII utm2025.htm, day-weighted)",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "variable component (Ley 20.765)",
+   "UTM: each sale at its month's UTM; undated annual quantity at the 2025 day-weighted UTM (SII table)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto específico al petróleo diesel",
+  "statute": "Ley 18.502 art. 6 inc. 5 (2 UTM/m3 ceiling) + SII guide (1,5 UTM/m3)",
+  "dated": "LeyChile get_norma_json idVersion=2025-07-01; SII 'Impuestos indirectos' page fetched 2026-11-21; pass 10, 2026-11-21; pass 13: UTM by month (SII utm2025.htm, day-weighted)",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "variable component (Ley 20.765)",
+   "UTM: each sale at its month's UTM; undated annual quantity at the 2025 day-weighted UTM (SII table)"
+  ]
+ }
+]

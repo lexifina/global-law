@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Φόρος κληρονομιών και δωρεών",
+  "statute": "ν. 2961/2001 (Κώδικας φορολογίας κληρονομιών, δωρεών, γονικών παροχών), scales of categories Α', Β', Γ' (art. 29 and 44, as stated by PwC; the act itself not read)",
+  "dated": "PwC Worldwide Tax Summaries, Greece, Individual - Other taxes, last reviewed 4 March 2025 (Internet Archive 2025-06-17)",
+  "grade": "B",
+  "kernel_parts": [
+   "InheritanceTax",
+   "TaxClass"
+  ],
+  "unsupported": [
+   "parental grant (γονική παροχή, parent to child): EUR 800 000 tax-free with the category A' rates above it; the scale above the 800 000 is not stated clearly enough to compute, so a gift to a child is charged 0 here (grade C)",
+   "an 'other relative' is taken as category Γ' (distant relatives); uncles and aunts, step-children, in-laws, grandparents and great-grandchildren are category Β'; legal entities and charities have their own rates (not read)",
+   "earlier gifts and parental grants from the same person, which the act adds to the later acquisition, are not looked back on; real estate at its objective value is not in the input (the value given stands in); disability reliefs not applied"
+  ]
+ },
+ {
+  "oecd": "4200",
+  "tax": "Taxes on net wealth (4200)",
+  "statute": "European Commission TEDB, GR: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 838, 210, 3561, 216, 6961, 215, 222, 223, 961, 1141, 6960)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "unsupported": [
+   "the national taxes the OECD books under 4200 (named above) and their 2025 statutes"
+  ],
+  "gap": 2,
+  "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVGRC v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/GRC.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 4200: heading 4200 total 1 157, 1 295, 1 308 million EUR in 2021-2023 (unnamed); the national taxes behind it not read",
+  "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVGRC v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/GRC.csv`, SHA256SUMS; general government S13; 2025 not yet published)"
+ }
+]

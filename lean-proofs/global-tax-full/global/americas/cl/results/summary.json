@@ -1,0 +1,383 @@
+{
+ "country": "CL",
+ "name": "Chile",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:20:53"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Mayor valor (bienes raíces, acciones, art. 107)",
+   "statute": "LIR arts. 17 N° 8, 107",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+   "grade": "A",
+   "package": "P3",
+   "kernel_parts": [
+    "GainRule",
+    "stackedTax"
+   ],
+   "unsupported": [
+    "lifetime 8.000 UF limit taken as unused"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Capital.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "DL 825 arts. 8 g), 12 E, 13, 14",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Consumption.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto adicional art. 42 (bebidas)",
+   "statute": "DL 825 arts. 42, 43",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "wholesale base approximated by the consumer price net of IVA"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Consumption.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto al tabaco",
+   "statute": "DL 828 arts. 4, 5",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01; pass 13: UTM by month (SII utm2025.htm, day-weighted)",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Excise"
+   ],
+   "unsupported": [
+    "UTM: each sale at its month's UTM; undated annual quantity at the 2025 day-weighted UTM (SII table)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Consumption.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto específico a las gasolinas",
+   "statute": "Ley 18.502 art. 6",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01; pass 13: UTM by month (SII utm2025.htm, day-weighted)",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "variable component (Ley 20.765)",
+    "UTM: each sale at its month's UTM; undated annual quantity at the 2025 day-weighted UTM (SII table)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Consumption.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto específico al petróleo diesel",
+   "statute": "Ley 18.502 art. 6 inc. 5 (2 UTM/m3 ceiling) + SII guide (1,5 UTM/m3)",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01; SII 'Impuestos indirectos' page fetched 2026-11-21; pass 10, 2026-11-21; pass 13: UTM by month (SII utm2025.htm, day-weighted)",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "variable component (Ley 20.765)",
+    "UTM: each sale at its month's UTM; undated annual quantity at the 2025 day-weighted UTM (SII table)"
+   ],
+   "family_file": "lean/ClGlobal/Consumption.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto de primera categoría",
+   "statute": "LIR arts. 14 A, 14 D, 20",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "losses (art. 31 N° 3)",
+    "thin cap (art. 41 F)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Corporate.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto adicional (withholding)",
+   "statute": "LIR arts. 58 N° 2, 59, 63",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Corporate.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "DL 3.500 arts. 89-92 (Ley 21.133); MAP: chile-law dl-3500",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: the independent worker's contributions (DL 3.500 art. 89-92) are not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: the independent worker's contributions (DL 3.500 art. 89-92) are not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 2300 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ClGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ClGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Ley 17.235 impuesto territorial (lexifina/chile-law ley-17235, read): art. 7 nominal rates 1.2 % / 1.4 % (habitacional, tramo of $37.526.739 of 2003) and 1.4 %, 'se rebajarán proporcionalmente' after each reavalúo and 'se fijarán por Decreto Supremo'",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 17.235 impuesto territorial (lexifina/chile-law ley-17235, read): art. 7 nominal rates 1.2 % / 1.4 % (habitacional, tramo of $37.526.739 of 2003) and 1.4 %, 'se rebajarán proporcionalmente' after each reavalúo and 'se fijarán por Decreto Supremo'; art. 2 exempt avalúo reajusted: the 2025 decree rates and amounts (SII) not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 17.235 impuesto territorial (lexifina/chile-law ley-17235, read): art. 7 nominal rates 1.2 % / 1.4 % (habitacional, tramo of $37.526.739 of 2003) and 1.4 %, 'se rebajarán proporcionalmente' after each reavalúo and 'se fijarán por Decreto Supremo'; art. 2 exempt avalúo reajusted: the 2025 decree rates and amounts (SII) not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 4100 = 2021:2002413.3 2022:2284252.8 2023:2807381.3 2024:2992934.6"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ClGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "aportes al espacio público (Ley 20.958) on development permits",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: aportes al espacio público (Ley 20.958) on development permits. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: aportes al espacio público (Ley 20.958) on development permits. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ClGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales tax (single stage)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 5112 = ?",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ClGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: the OECD CL table shows only negative unallocated amounts under 6200 (refund and adjustment items), no named 6000 tax; a cited absence needs a text"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: the OECD CL table shows only negative unallocated amounts under 6200 (refund and adjustment items), no named 6000 tax; a cited absence needs a text",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 6000 = 2021:-1062352.4 2022:-722554.6 2023:-854527.3 2024:-1269680.4"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ClGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "DL 3.475 (timbres y estampillas); Ley 17.235 (impuesto territorial)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/ClGlobal/Property.lean",
+   "guards": 15
+  },
+  {
+   "oecd": "5200",
+   "tax": "Impuesto por permiso de circulación (automobiles, vans, pickups, motorcycles)",
+   "statute": "DL 3.063 (Ley de Rentas Municipales), texto refundido D. 2.385/1996 art. 12 a) (LeyChile idNorma 18967, version 2025-07-01): automobiles, station wagons, vans, pickups, motorcycles: progressive and cumulative scale on the precio corriente en plaza (SII list): to 60 UTM 1 %, to 120 UTM 2 %, to 250 UTM 3 %, to 400 UTM 4 %, above 4.5 %; at least half a UTM; art. 12 last paragraph and art. 15 N° 1: UTM of January 2025 (67.429, SII); first permits: art. 18 (months left, the invoice month included), art. 12 last paragraph (UTM of two months before), art. 17 (invoice price)",
+   "dated": "LeyChile get_norma_json idNorma 18967 idVersion=2025-07-01; pass 10, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "VehicleTax",
+    "vehicleTaxFamily"
+   ],
+   "unsupported": [
+    "value taken as the SII precio corriente en plaza",
+    "art. 12 b) fixed amounts (taxis, buses, trucks) not computed",
+    "UTM of January 2025 for the March renewal (vehicles first registered up to 2024); first permits of 2025 by firstRegMonth (no month: grade C); a vehicle without firstRegYear: grade C"
+   ],
+   "family_file": "lean/ClGlobal/Property.lean",
+   "guards": 15
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 65 inc. 4 num. 1",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 65 inc. 4 num. 1: \"Imponer, suprimir, reducir o condonar tributos de cualquier clase o naturaleza\" (`cl/law/const_art-065.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: DL 3.063 (Ley de Rentas Municipales), texto refundido D. 2.385/1996 art. 12 a) (LeyChile idNorma 18967, version 2025-07-01): automobiles, station wagons, vans, pickups, motorcycles: progressive and cumulative scale on the precio corriente en plaza (SII list): to 60 UTM 1 %, to 120 UTM 2 %, to 250 UTM 3 %, to 400 UTM 4 %, above 4.5 %).",
+   "family_file": "lean/ClGlobal/Property.lean",
+   "guards": 15
+  },
+  {
+   "oecd": "5120",
+   "tax": "Derechos de aduana (import duties, 6 % general rate)",
+   "statute": "Ley 18.687 art. 1 inc. 1 (6 % ad valorem, Ley 19.589 art. 1 e)), inc. 2 (0 % for goods originating in least-developed countries, Ley 20.690), inc. 3 (0 % capital goods, Ley 18.634); DL 825 art. 16 a) (IVA on the duty-inclusive customs value)",
+   "dated": "cl/law/ley18687_leychile.{json,txt} (LeyChile get_norma_json?idLey=18687, versión vigente desde 2013-11-01 with no end date, i.e. in force throughout 2025); cl/law/ley19589_leychile.{json,txt}; gap pass 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P7",
+   "kernel_parts": [
+    "TariffRule",
+    "customsFamily",
+    "consumptionC"
+   ],
+   "unsupported": [
+    "trade-agreement preferences (Chile has agreements with most origins) not read: the 6 % MFN rate is booked and the line flagged (grade C)",
+    "0 % for least-developed-country origin (Ley 20.690; the decree listing the countries not read) and for capital goods (Ley 18.634) not applied",
+    "the price is taken before IVA and duty only: an excise inside the price needs \"customsValue\""
+   ],
+   "gap_pass": "2026-11-21 approach 1 (customs, kernel 2.8.0)",
+   "family_file": "lean/ClGlobal/Property.lean",
+   "guards": 15
+  },
+  {
+   "oecd": "2200",
+   "tax": "Seguro de cesantía (employer), SIS, Ley 21.735 employer contribution",
+   "statute": "Ley 19.728 art. 5; DL 3.500 art. 59; Ley 21.735",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P4",
+   "kernel_parts": [],
+   "tried": "pass 13: Ley 19.728 read (LeyChile get_norma_json idNorma 184979, version 2025-07-01, `cl/law/ley19728_184979_2025-07-01.*`): art. 5 b) employer 2,4 % (indefinite contracts) / 3 % (fixed-term); art. 6 ceiling 90 UF 'reajustado anualmente' by the Índice de Remuneraciones Reales (2025 value not in the law). The 2025 ceilings (cesantía 131,9 UF, AFP 87,8 UF), SIS 1,88 % and the Ley 21.735 employer 1 % (0,1 % + 0,9 %) were seen only in Previred's 'Indicadores previsionales' (Wayback 2025-09-04, `cl/law/previred_indicadores_2025-09-04.*`), a secondary source: not modelled (employer rows from primary sources only); needs the Superintendencia de Pensiones' 2025 tope resolution and Ley 21.735's text",
+   "unsupported": [
+    "would unlock: LeyChile versions of Ley 19.728 and Ley 21.735 (from 1.8.2025)"
+   ],
+   "family_file": "lean/ClGlobal/Social.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Impuesto a las herencias, asignaciones y donaciones",
+   "statute": "Ley 16.271 arts. 2, 3, 23",
+   "dated": "LeyChile get_norma_json idVersion=2025-07-01",
+   "grade": "A",
+   "package": "P6",
+   "kernel_parts": [
+    "InheritanceTax",
+    "withLookback"
+   ],
+   "unsupported": [
+    "charity exemptions art. 18"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ClGlobal/Transfers.lean",
+   "guards": 3
+  }
+ ],
+ "grades": {
+  "A": 11,
+  "B": 3,
+  "C": 6
+ },
+ "guards": 34,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

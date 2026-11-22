@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Корпоративен данък",
+  "statute": "Закон за корпоративното подоходно облагане чл. 20 (10 на сто) [year in force 2025 (pass 16), unchanged-confirmed: bg/law/zkpo.txt: чл. 20 carries no amendment note (wording of the 2006 act, in force since 1.1.2007)]",
+  "dated": "lex.bg current text (2026-11); чл. 20 has no amendment note",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "loss carry-forward (5 years, чл. 70) not modelled",
+   "withholding on dividends to non-residents (чл. 194, 5 %) not read"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad",
+  "statute": "ЗКПО чл. 194-195, 200 (dividends 5 %, interest and royalties 10 %)",
+  "dated": "PwC WWTS Corporate - Withholding taxes, 2025-04-19 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Данък при източника (технически услуги) (services)",
+  "statute": "ЗКПО чл. 12 (5) т. 4, чл. 195 (1), § 1 т. 9 ДР; rate 10 % as for the other чл. 195 income [year in force 2025 (pass 16), unchanged-confirmed: bg/law/zkpo.txt: чл. 195 (1) last доп. ДВ 94/2010 (в сила 01.01.2011); чл. 200 (1) изм. ДВ 110/2007; no 2024-2026 note]",
+  "dated": "ЗКПО as on lex.bg (`bg/law/zkpo.txt`); rate: PwC Worldwide Tax Summaries, Bulgaria, Corporate - Withholding taxes, accessed 2025-04-19 (Wayback capture; `law/pwc_wht_wb2025.txt`)",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services are taken as technical services (§ 1 т. 9 ДР); other services bear none",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

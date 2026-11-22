@@ -1,0 +1,51 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Inheritance, gift and wealth taxes",
+  "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Belize (DSD_REV_LAC@DF_REVBLZ v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BLZ.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+  "dated": "OECD Revenue Statistics detailed table for Belize (DSD_REV_LAC@DF_REVBLZ v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BLZ.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table for Belize (DSD_REV_LAC@DF_REVBLZ v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BLZ.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+  ],
+  "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)"
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "Belize Tax Service (bts.gov.bz): list of taxes administered; consolidated laws index",
+  "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Belize Tax Service (bts.gov.bz) list of the taxes it administers, `bz/law/bts_home_2025-01-25.*` (Wayback 2025-01-25), names: General Sales Tax, Business & Income Tax, Employee Income Tax, Contract Tax Withholding; consolidated index: lexifina/belize-law@43dfad3b11af `laws.csv` (`bz/law/lexifina_bz_laws_index.csv`: Revised Edition 2020 and Acts 2021-2026): the revenue Acts are Caps. 48 Customs and Excise Duties, 50 Departure Tax, 55 Income and Business Tax, 58 Land Tax, 60 Produce Export Duties, 63 General Sales Tax, 64 Stamp Duties, 64.01 Environmental Tax, 278.01 Cruise Ship Passenger Tax, and their amending Acts; none of them is a recurrent tax on net wealth."
+ },
+ {
+  "oecd": "5200",
+  "tax": "Motor vehicle licence duty",
+  "statute": "Motor Vehicles and Road Traffic Act Cap. 230 s. 20 (licence duties prescribed by Order); Motor Vehicles and Road Traffic (Fees and Duties) Order (S.I. 182 of 2003, 41 of 2013) para. 2 (i), (xix)",
+  "dated": "lexifina/belize-law cap/230/20.md and sub/230/8 (Revised Edition 2020, as at 31 December 2020; official source Laws of Belize, agm.gov.bz/laws); no amending Order under s. 20 (2) among the repository's statutory instruments of 2021-2026 (the S.I.s under Cap. 230 of 2023-2026 are regulations under s. 112: electronic devices, seat belts, speed devices, fares); 235 scanned S.I.s of 2020-2026 are not in the repository (data/si-not-built.csv)",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P7",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily"
+  ],
+  "unsupported": [
+   "goods-vehicle, taxi, omnibus, trailer and tractor rates (paras. (iii)-(xviii))",
+   "cane farmers' half rate",
+   "3/6/9-month licences (s. 20 (4))"
+  ],
+  "gap_pass2": "2026-11-22 approach 1 (lexifina law repository) + 5200 vehicles (Interpretative Guide §12, §14: vehicle licences are taxes)"
+ }
+]

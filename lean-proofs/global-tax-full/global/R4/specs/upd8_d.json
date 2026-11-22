@@ -1,0 +1,33 @@
+{
+"UG": {
+ "sources_add": "VAT: URA guide pages (Wayback captures of ura.go.ug/en/value-added-tax-vat/ 2025-09-04 and thetaxman.ura.go.ug); excise: Excise Duty Act 2014 ULII consolidation at 2023-12-31 (Wayback 2025-05-21) and the Excise Duty (Amendment) Act 2024 (parliament.go.ug CMIS PDF); saved in `cmp20/global/R4/fetch/ug8/` with SHA256SUMS.",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 1800,
+  "classes": {"financial": "exempt", "insurance": "exempt", "education": "exempt", "transport": "exempt", "petrol": "exempt", "diesel": "exempt", "medicines": "zero"},
+  "grade": "B",
+  "statute": "Value Added Tax Act Cap. 349 s. 24 (standard rate 18 %), Second Schedule (exempt supplies), Third Schedule (zero-rated supplies), per the Uganda Revenue Authority guide (official secondary)",
+  "doc": "URA, 'Value Added Tax (VAT)' (Wayback capture 2025-09-04): \"Standard rated supplies : These are supplies on which VAT is charged at a rate of 18%. These include all supplies excluding supplies that are included under the second and third schedules of the VAT law\"; \"Exempt supplies are listed under the second schedule to the VAT law and include; Health insurance and life insurance services Petroleum fuels Social welfare services Educational services Financial Services Passenger transportation services\". URA 'A simplified guide to Value Added Tax': \"Zero-rated supplies : These are supplies charged VAT at a rate of 0%. Such supplies are listed in the third schedule to the VAT Act. They, among others, include all exports and supply of drugs and medicines\". Grade B: the Act itself was not read.",
+  "notes": ["insurance is exempt only for health and life insurance; all insurance taken as exempt", "other Second/Third Schedule items (unprocessed food, residential rent, water, etc.) not applied: the schedules were not read"],
+  "unsupported": ["Second and Third Schedule items not listed in the URA guide"]
+ },
+ "excise": {
+  "name": "Excise duty",
+  "grade": "B",
+  "statute": "Excise Duty Act 2014 Schedule 2 Part I (ULII consolidation at 31 December 2023) as amended by the Excise Duty (Amendment) Act 2024 s. 3 (in force 1 July 2024); the 2025 amendment (from 1 July 2025) not held",
+  "doc": "Schedule 2 Part I (consolidation at 31 Dec 2023): \"1. Cigarettes ... (b) Hinge lid (i) locally manufactured Ushs. 80,000 per 1000 sticks (ii) imported Ushs. 100,000 per 1000 sticks ... 2. Beer (a) Malt beer 60% or Ushs. 2050 per litre, whichever is higher ... 5. Non-alcoholic beverages (a) Non-alcoholic beverages not including fruit or vegetable juices 12% or Ushs. 250 per litre, whichever is higher\". Excise Duty (Amendment) Act 2024 s. 1: \"This Act shall come into force on 1st July, 2024\"; s. 3 (c): \"(c) Any other un-denatured spirits (i) that are locally produced, of alcoholic strength by volume of less than 80%; or (ii) that are imported, of alcoholic strength by volume of less than 80%: 80% or Shs 1700 per litre, whichever is higher\"; (d): \"(b) Other wines 100% or Shs 10,000 per litre, whichever is higher\"; (h): \"(a) Motor spirit (gasoline) Shs 1550 per litre (b) Gas oil (automotive, light, amber for high speed engine) Shs 1230 per litre\". Percentages are taken on the value before excise and VAT. Grade B: the Excise Duty (Amendment) Act 2025 was not reached.",
+  "items": [
+   {"good": "beer", "name": "Excise duty malt beer", "advBp": 6000, "minNum": 2050, "minDen": 1, "vatBp": 1800, "statute": "Excise Duty Act 2014 Sch. 2 item 2 (a): 60 % or Ushs 2050 per litre"},
+   {"good": "wine", "name": "Excise duty other wines", "advBp": 10000, "minNum": 10000, "minDen": 1, "vatBp": 1800, "statute": "Excise Duty Act 2014 Sch. 2 item 4 (b) (Act 2024 s. 3 (d)): 100 % or Shs 10,000 per litre"},
+   {"good": "spirits", "name": "Excise duty un-denatured spirits < 80 %", "maxAbvBp": 7999, "advBp": 8000, "minNum": 1700, "minDen": 1, "vatBp": 1800, "statute": "Excise Duty Act 2014 Sch. 2 item 3 (c) (Act 2024 s. 3 (c)): 80 % or Shs 1700 per litre"},
+   {"good": "cigarettes", "name": "Excise duty cigarettes hinge lid (local)", "perUnitNum": 80000, "perUnitDen": 1000, "imported": false, "vatBp": 1800, "statute": "Excise Duty Act 2014 Sch. 2 item 1 (b) (i): Ushs 80,000 per 1000 sticks"},
+   {"good": "cigarettes", "name": "Excise duty cigarettes hinge lid (imported)", "perUnitNum": 100000, "perUnitDen": 1000, "imported": true, "vatBp": 1800, "statute": "Excise Duty Act 2014 Sch. 2 item 1 (b) (ii): Ushs 100,000 per 1000 sticks"},
+   {"good": "nonAlcoholic", "name": "Excise duty non-alcoholic beverages", "advBp": 1200, "minNum": 250, "minDen": 1, "vatBp": 1800, "statute": "Excise Duty Act 2014 Sch. 2 item 5 (a): 12 % or Ushs 250 per litre"},
+   {"good": "petrol", "name": "Excise duty motor spirit", "perUnitNum": 1550000, "perUnitDen": 1000, "vatBp": 0, "statute": "Excise Duty Act 2014 Sch. 2 item 8 (a) (Act 2024 s. 3 (h)): Shs 1550 per litre"},
+   {"good": "diesel", "name": "Excise duty gas oil", "perUnitNum": 1230000, "perUnitDen": 1000, "vatBp": 0, "statute": "Excise Duty Act 2014 Sch. 2 item 8 (b) (Act 2024 s. 3 (h)): Shs 1230 per litre"}
+  ],
+  "notes": ["local-content beers (30 %), soft-cap cigarettes, opaque beer, local wine (20 %) and bottled water (10 %) not separable from the basket lines", "petroleum fuels are VAT-exempt (vatBp 0 in the excise base split)", "the Excise Duty (Amendment) Act 2025 (from 1 July 2025) was not reached"],
+  "unsupported": ["Excise Duty (Amendment) Act 2025", "local-content beer and wine rates", "soft-cap cigarettes", "bottled water 10 %"]
+ }
+}
+}

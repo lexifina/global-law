@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Davek na dodano vrednost",
+  "statute": "ZDDV-1 čl. 41 (22 %, 9,5 %, 5 %; Priloga I, Priloga IV), čl. 94 (1) (60.000 eurov, ZDDV-1O, Uradni list RS 104/2024)",
+  "dated": "FURS guide April 2025; ZDDV-1O in force 1.1.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+   "non-alcoholic drinks at 22 % (drinks with added sugar left Priloga I in 2025; unsweetened drinks are 9,5 %)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Zakon o trošarinah (ZTro-1) 53, 62, 70-71 člen and the Uredba o določitvi zneskov trošarine za energente, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate"
+  ],
+  "unsupported": [
+   "fuel: the excise duty only; the strategic-stock fee and the end-use efficiency and CO2 surcharges in the TEDB total not modelled",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties whose 2025 rate changed during the year (cigarettes, beer, spirits, diesel, heatingOil)",
+  "statute": "Zakon o trošarinah (ZTro-1) 53, 62, 70-71 člen and the Uredba o določitvi zneskov trošarine za energente; TEDB situations 1.1, 1.7 and 31.12.2025",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: the rates are set by government decrees (uredbe), fuels every two weeks; the decree dates not read (no decree index found in lexifina/slovenia-law)",
+  "unsupported": [
+   "would unlock: the day the rate changed, from the act or decree (then dated kernel 2.1 ExciseRule rules, validFrom / validTo, as IT fuel)"
+  ],
+  "gap_note": true
+ }
+]

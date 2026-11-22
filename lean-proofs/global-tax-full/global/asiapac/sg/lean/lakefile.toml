@@ -1,0 +1,18 @@
+name = "SgGlobal"
+version = "0.1.0"
+defaultTargets = ["SgGlobal", "sgglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); SgTax = the 1.x model, vendored from cmp20/world/B03-asia-east-se/sg/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SgTax"
+
+[[lean_lib]]
+name = "SgGlobal"
+
+[[lean_exe]]
+name = "sgglobal"
+root = "SgGlobal.Main"

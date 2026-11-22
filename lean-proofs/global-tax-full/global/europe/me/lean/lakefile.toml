@@ -1,0 +1,18 @@
+name = "MeGlobal"
+version = "0.1.0"
+defaultTargets = ["MeGlobal", "meglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); MeTax = the 1.x model, vendored from cmp20/world/B04-europe-rest/me/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MeTax"
+
+[[lean_lib]]
+name = "MeGlobal"
+
+[[lean_exe]]
+name = "meglobal"
+root = "MeGlobal.Main"

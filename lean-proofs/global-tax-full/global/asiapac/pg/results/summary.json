@@ -1,0 +1,194 @@
+{
+ "country": "PG",
+ "name": "Papua New Guinea",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 16:48:43"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "Goods and Services Tax (10 %)",
+   "statute": "Goods and Services Tax Act 2003 s. 8, s. 21 (1) (a), s. 25 (1), (4), (5), (7)",
+   "dated": "PacLII certified text as amended by No. 20 of 2004 and No. 13 of 2005 (Wayback 2025-01-03); later amendments not read",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "registration threshold s. 43 (1) (a) printed 'K1000,000.00' (ambiguous): not applied"
+   ],
+   "family_file": "lean/PgGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duty",
+   "statute": "Excise Tariff Act 1956 (Ch. 107) s. 4, Schedule 1",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: PacLII consolidation (Wayback 20250130102407) prints Schedule 1 with the note 'the updated schedules to this Act were not available at time of going to press' (pre-2000 rates); would unlock: the Excise Tariff schedule as amended by the 2025 Budget (parliament.gov.pg / IRC)"
+   ],
+   "family_file": "lean/PgGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "Income Tax Act 1959 / Income Tax (Rates) Act (resident companies)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PgGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Income Tax Act 1959 Divs. 11A-11C",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services abroad are taken as management fees (ITA 1959 s. 4 definition; Div. III.14C); the Rates Act text is the PacLII consolidation (Wayback 20241027212428), its date not printed; ITA 2025 (No. 11 of 2025) not in force for 2025"
+   ],
+   "family_file": "lean/PgGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "Income Tax Act 1959 (Ch. 105) Part VI Div. 3 (dividend WHT 17%), interest WHT 15%, no CGT; Income Tax (Salary or Wages Tax)(Rates) Acts; Income Tax Act 2025 in force 2026-01-01 (not 2025)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade A (the build server): "
+   ],
+   "family_file": "lean/PgGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none (training levy abolished)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PgGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property (partly)",
+   "statute": "land rents and NCD council rates",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): "
+   ],
+   "family_file": "lean/PgGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PgGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PgGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties)",
+   "statute": "Stamp Duties Act 1952 (property transfer up to 5%)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): "
+   ],
+   "family_file": "lean/PgGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PgGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (provident fund, non-tax)",
+   "statute": "Superannuation (General Provisions) Act 2000",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PgGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 0,
+  "B": 8,
+  "C": 4
+ },
+ "guards": 10,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

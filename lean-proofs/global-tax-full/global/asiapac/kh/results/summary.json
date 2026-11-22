@@ -1,0 +1,206 @@
+{
+ "country": "KH",
+ "name": "Cambodia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:30:44"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "Value added tax (10 %)",
+   "statute": "Law on Taxation (Royal Kram NS/RKM/0523/0059, 2023) arts. 58, 59, 63, 65",
+   "dated": "Law on Taxation 2023 as promulgated (Khmer OCR); later amendments not searched",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "self-declaration regime thresholds (Prakas) not applied",
+    "art. 63 (4), (7) partial exemptions not applied to the basket"
+   ],
+   "family_file": "lean/KhGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Specific tax on certain goods and services",
+   "statute": "Law on Taxation 2023 arts. 88-90; sub-decree on specific tax rates",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: Law on Taxation 2023 arts. 88-90 read (OCR): rates are set by sub-decree (art. 89) and the base by Prakas (art. 90); would unlock: the sub-decree on specific tax rates in force in 2025 (tax.gov.kh)"
+   ],
+   "family_file": "lean/KhGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Tax on income (companies)",
+   "statute": "Law on Taxation 2023 (tax on income 20 %)",
+   "dated": "2023 law",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KhGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Law on Taxation 2023 (withholding on non-residents 14 %)",
+   "dated": "2023 law",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KhGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Cambodia as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Cambodia for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C116&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/kh.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 27101211 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101212 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101213 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101221 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101222 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101223 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101224 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101225 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101226 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101227 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101228 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101229 (MFN duty '0.02$/l': specific or compound duty, unit/currency not mapped); 27101971 (MFN duty '0.04$/l': specific or compound duty, unit/currency not mapped); 27101972 (MFN duty '0.04$/l': specific or compound duty, unit/currency not mapped)",
+    "ASEAN free trade area (ATIGA) (origin BN, ID, LA, MY, MM, PH, SG, TH, VN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "family_file": "lean/KhGlobal/Customs.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "Law on Taxation 2023 (Royal Kram NS/RKM/0523/004 of 16 May 2023): tax on income of individuals' businesses, WHT on interest (4%/6%), rent (10%), dividends (14% to non-residents); capital gains tax on individuals (20%) deferred to 2026 by MEF Prakas",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade A (the build server): Khmer OCR available on the build server."
+   ],
+   "family_file": "lean/KhGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KhGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KhGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none (registration tax exemptions for transfers within family)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KhGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Tax on immovable property",
+   "statute": "Law on Financial Management 2010",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "unused land tax"
+   ],
+   "family_file": "lean/KhGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Registration tax on property transfers",
+   "statute": "Law on Taxation 2023",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KhGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "2200",
+   "tax": "NSSF employer contributions (occupational risks 0.8 %, health 2.6 %, pension 2 %; base capped at KHR 1.2 million a month)",
+   "statute": "Law on Social Security Schemes 2019 and NSSF Prakas (not read); PwC Worldwide Tax Summaries, Cambodia, Individual - Other taxes, last reviewed 8 September 2025 (Wayback capture 2025-12-15, asiapac/kh/law/pwc_kh_indother_wb20251215.txt); Deloitte Cambodia Highlights 2025 (updated August 2025), 'Social security contributions' (asiapac/kh/law/deloitte_kh_2025.txt)",
+   "dated": "2025: both guides dated 2025 (pension first stage Oct 2022 - Sep 2027); secondary-source sweep C -> B",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "pension minimum contributory wage KHR 400,000 a month not applied",
+    "USD caps of the occupational-risk and health parts taken as the KHR 1.2 million base",
+    "eight-employee registration threshold (PwC) and public-sector rules not modelled"
+   ],
+   "family_file": "lean/KhGlobal/Social.lean",
+   "family_guards": 2
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 9,
+  "C": 2
+ },
+ "guards": 17,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

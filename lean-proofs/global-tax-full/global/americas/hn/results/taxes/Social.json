@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "IHSS contributions (employer: Enfermedad y Maternidad 5 %, IVM 3.5 %)",
+  "statute": "Reglamento de Aplicación de la Ley del Seguro Social (Acuerdo 193/1971) art. 28; Decreto 48-2024 arts. 1, 2",
+  "dated": "Decreto 48-2024, La Gaceta 36,545 of 28 May 2024 (2025 ceilings); Reglamento 1971 text (rate unchanged by later agreements found)",
+  "grade": "A",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "13th/14th month salaries not split from the base",
+   "Junta Directiva rate agreements after 1971 for EM not searched"
+  ]
+ },
+ {
+  "oecd": "3000",
+  "tax": "INFOP 1 % (employer)",
+  "statute": "Ley del Instituto Nacional de Formación Profesional (Decreto 10 of 28 Dec 1972) art. 23 (original: firms with 5 or more workers; text as reformed by Decreto 194-2002 art. 11, La Gaceta 29,799 of 5 Jun 2002) and art. 24 (capital above L. 20,000): 1 % of wages earned, monthly",
+  "dated": "Ley del INFOP y sus reformas (IAIP portal copy, Wayback 2025-12-02); pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "employer size not an input: taken as within arts. 23-24"
+  ]
+ }
+]

@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Pelno mokestis",
+  "statute": "Pelno mokesčio įstatymas (IX-675) 5 str. 1 d. 1 p. (16 %), as amended by XIV-2774 (in force 1.1.2025, for 2025 profit only: 17 % from 2026)",
+  "dated": "e-seimas edition from 2025-01-01",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "small-entity 6 % / 0 % rate (5 str. 2-3 d.: ≤ 10 employees and ≤ 300 000 € revenue, group test) not applied: the kernel small-business schedule tests turnover only (kernel request filed in KERNEL_REQUESTS.md, R1 pass 4: smallEmployees; modelled at 16 %)",
+   "loss offset limit (70 %) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad",
+  "statute": "Pelno mokesčio įstatymas 37 str. (distributed profits 16 % from 1.1.2025; interest and royalties 10 %)",
+  "dated": "PwC WWTS Corporate - Withholding taxes, 2025-06-17 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Pelno mokestis prie šaltinio (paslaugos) (services)",
+  "statute": "Pelno mokesčio įstatymas 4 str. 4 d., 5 str. 2 d. 2 p.",
+  "dated": "redakcija nuo 2025-01-01 (`lt/law/pmi_ed20250101_wb.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "services paid to non-resident individuals: Gyventojų pajamų mokesčio įstatymas not read (grade C)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

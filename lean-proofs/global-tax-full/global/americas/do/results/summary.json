@@ -1,0 +1,368 @@
+{
+ "country": "DO",
+ "name": "Dominican Republic",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 22:15:21"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "gains: see the pass 11 entry",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/DoGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1100",
+   "tax": "ISR on capital gains in the renta neta gravable (art. 296 scale, stacked)",
+   "statute": "Código Tributario arts. 283, 289, 296, 299 m)",
+   "dated": "Título II consolidated to Ley 253-12; 2025 scale DGII (1.x model)",
+   "grade": "A",
+   "package": "P3",
+   "kernel_parts": [
+    "StackRule",
+    "stackRuleFamily"
+   ],
+   "unsupported": [
+    "loss carry-forward",
+    "3-year home condition assumed"
+   ],
+   "status": "modelled",
+   "family_file": "lean/DoGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5111",
+   "tax": "ITBIS",
+   "statute": "Código Tributario (Ley 11-92) Título III arts. 335, 343, 344, 345 (Ley 253-12)",
+   "dated": "DGII consolidated Título III (modified 18/06/2019)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "art. 345 Párrafo I condition (18 % administered)",
+    "Párrafo II reduced food rates"
+   ],
+   "status": "modelled",
+   "family_file": "lean/DoGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo (alcohol, cerveza, cigarrillos)",
+   "statute": "Código Tributario (Ley 11-92) art. 375 (Ley 253-12) Párrafos I, II, VII, VIII",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "indexation not applied (lower bound)",
+    "precio al por menor read as before ISC and ITBIS",
+    "fuels, telecom, insurance ISC not modelled"
+   ],
+   "dated": "DGII consolidated Título IV; amounts of the 2017/2015 columns, 2025 indexation not held",
+   "family_file": "lean/DoGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo (combustibles, telecomunicaciones, seguros)",
+   "statute": "Ley 112-00; Código Tributario arts. 381, 382",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "pass 12: Título IV held; fuel amounts (Ley 112-00, indexed) and the 2025 DGII notices not held",
+   "unsupported": [
+    "would unlock: Ley 112-00 and the 2025 DGII fuel and alcohol indexation notices"
+   ],
+   "family_file": "lean/DoGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 93 num. 1 a)",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 93 num. 1 a): \"Establecer los impuestos, tributos o contribuciones generales\" (`do/law/const_articulo-093.md`); Constitución art. 243: \"El régimen tributario está basado en los principios de legalidad\" (`do/law/const_articulo-243.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Código Tributario (Ley 11-92) Título III arts. 335, 343, 344, 345 (Ley 253-12); Código Tributario (Ley 11-92) art. 375 (Ley 253-12) Párrafos I, II, VII, VIII; Código Tributario art. 297 (27 %); Código Tributario arts. 305, 306, 308 (Ley 253-12); 1.x model (see its summary.json); Código Tributario arts. 283, 289, 296, 299 m)).",
+   "family_file": "lean/DoGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la renta (personas jurídicas)",
+   "statute": "Código Tributario art. 297 (27 %)",
+   "dated": "DGII Título II text (Ley 253-12 amendments)",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "impuesto sobre los activos (1 %, credited against ISR)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/DoGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Código Tributario arts. 305, 306, 308 (Ley 253-12)",
+   "dated": "DGII Título II del Código Tributario (world/B13-caribbean/do/law/t2.txt); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "Código Tributario art. 308 Párrafo I (dividends paid out of a dividend account of an inter-company dividend: no withholding) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/DoGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed with wages; no contribution computed (Ley 87-01 contributivo subsidiado regime)\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed with wages; no contribution computed (Ley 87-01 contributivo subsidiado regime)\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/DoGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Impuesto al Patrimonio Inmobiliario (IPI, Ley 18-88 as amended by Ley 288-04): 1 % above the exempt amount, indexed yearly",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto al Patrimonio Inmobiliario (IPI, Ley 18-88 as amended by Ley 288-04): 1 % above the exempt amount, indexed yearly; text and 2025 exempt amount not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto al Patrimonio Inmobiliario (IPI, Ley 18-88 as amended by Ley 288-04): 1 % above the exempt amount, indexed yearly; text and 2025 exempt amount not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 4100 = 2021:4170.6 2022:4437.5 2023:5105.1 2024:5348.8"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/DoGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "OECD DO 4510 1,490.7 in 2024: not identified",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD DO 4510 1,490.7 in 2024: not identified. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD DO 4510 1,490.7 in 2024: not identified. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 4500 = 2021:1641.5 2022:1929.0 2023:2745.6 2024:1490.7"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/DoGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel de Aduanas de la República Dominicana with DR-CAFTA preferences",
+   "customs_note": "customs import duties (5123): Arancel de Aduanas de la República Dominicana with DR-CAFTA preferences; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/DoGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "marbete / derecho de circulación (Ley 241, Ley 63-17",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): marbete / derecho de circulación (Ley 241, Ley 63-17; OECD DO 5220 'Vehicle property registration'). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): marbete / derecho de circulación (Ley 241, Ley 63-17; OECD DO 5220 'Vehicle property registration'). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 5200 = 2021:20823.9 2022:22992.9 2023:25378.9 2024:28867.4; named lines: 5213 Licenses to carry firearms (2024: 384.3); 5213 Licenses to operate gambling houses (2024: 1636.0); 5220 Ecological taxes (2024: 1616.5); 5220 Vehicle property registration (2024: 21916.6)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/DoGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD DO 6200 2.6 (2024), unnamed"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD DO 6200 2.6 (2024), unnamed",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 6000 = 2021:1.7 2022:3.0 2023:2.9 2024:2.6"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/DoGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "Ley 2569 (sucesiones y donaciones)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read in this pass",
+   "unsupported": [
+    "would unlock: the act's 2025 text"
+   ],
+   "family_file": "lean/DoGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 93 num. 1 a) and art. 243; Código Tributario (Ley 11-92) arts. 401-407 (Título V, added by Ley 557-05)",
+   "dated": "constitution: lexifina repository text (pass 12); asset-tax texts fetched 2026-11-21 (pass 15)",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 15): Constitución art. 93 num. 1 a): \"Establecer los impuestos, tributos o contribuciones generales\" (`do/law/const_articulo-093.md`); art. 243: \"El régimen tributario está basado en los principios de legalidad\" (`do/law/const_articulo-243.md`). The Impuesto sobre los Activos (Código Tributario Título V, arts. 401-407, added by Ley 557-05 of 13 Dec 2005; DGII consolidation `do/law/ct_titulo5_wb2020.pdf`, Wayback 2020-11-26; the DGII income-tax page of 22 Jun 2025, `world/B13-caribbean/do/law/dgii_impuestoSobreRenta_wayback_20250622.html`, describes the same tax at 1 % in 2025) falls on companies and sole-proprietor businesses (art. 401) and is measured on the balance-sheet assets after depreciation, not net of debts (art. 402); art. 407 makes the amount a credit against the income tax of the same year, and the asset tax is extinguished when the income tax is equal or higher (párrafo I): a minimum income tax on businesses (heading 1200), not a tax on net wealth. Ley 253-12 art. 48 (note in the consolidation) planned its reduction and removal subject to a revenue target; DGII still lists it in 2025. No law read in this build levies a recurrent tax on net wealth (laws read include: Código Tributario (Ley 11-92) Título III arts. 335, 343, 344, 345 (Ley 253-12); Código Tributario (Ley 11-92) art. 375 (Ley 253-12) Párrafos I, II, VII, VIII; Código Tributario art. 297 (27 %); Código Tributario arts. 305, 306, 308 (Ley 253-12); 1.x model (see its summary.json); Código Tributario arts. 283, 289, 296, 299 m)).",
+   "family_file": "lean/DoGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "SDSS contributions (employer: SFS, SVDS, SRL)",
+   "statute": "TSS FAQ no. 13 table (rates); Ley 87-01 arts. 57, 143 and CNSS Res. 151-10 as recited in TSS Resoluciones 01-2024 and 01-2025 (caps)",
+   "dated": "TSS Res. 01-2024 (signed Feb 2024, from 1 Feb 2024) and Res. 01-2025 (11 Mar 2025, from 1 Apr 2025), Wayback copies of tss.gob.do/assets; pass 9, 2026-11-21",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "SRL risk factor taken at the minimum",
+    "annual cap = sum of monthly caps (even monthly pay assumed)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/DoGlobal/Social.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "3000",
+   "tax": "INFOTEP 1 % (employer)",
+   "statute": "Ley 116-80 art. 24 a): \"El uno por ciento (1%) que sobre el monto total de las planillas de sueldos o salarios fijos que paguen mensualmente las empresas y entidades privadas\"",
+   "dated": "Ley 116-80, Gaceta Oficial 9522 of 20 Jan 1980 (UNESCO SITEAL copy of the G.O. text); no amending act found; pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "worker 0.5 % on profit shares and bonuses (art. 24 b) not modelled",
+    "public non-profit employers outside: employer taken as private"
+   ],
+   "family_file": "lean/DoGlobal/Social.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Ley 288-04 (transferencia 3 %); IPI (Ley 18-88)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/DoGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 6,
+  "B": 4,
+  "C": 9
+ },
+ "guards": 21,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

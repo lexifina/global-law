@@ -1,0 +1,232 @@
+{
+ "country": "AL",
+ "name": "Albania",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:29:44"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Ligji nr. 29/2023 (fitimet kapitale)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/AlGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Tatimi mbi vlerën e shtuar",
+   "statute": "Ligji për TVSH (20 %, 6 %; registration above ALL 10 000 000)",
+   "dated": "PwC, last reviewed 30 June 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the EU-style structure the source describes (health, education, finance, insurance, residential rent), not quoted item by item",
+    "the act's own text not reached: rates from PwC Worldwide Tax Summaries (reliable secondary host)"
+   ],
+   "family_file": "lean/AlGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Ligji për akcizat (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/AlGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Tatimi mbi fitimin",
+   "statute": "Ligji 29/2023 «Për tatimin mbi të ardhurat» (15 %)",
+   "dated": "PwC, last reviewed 30 June 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "the act's own text not reached (secondary host)",
+    "5 % regimes (software, agro-tourism) and the small-business regime not modelled"
+   ],
+   "family_file": "lean/AlGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "withholding tax on payments abroad",
+   "statute": "Ligji 29/2023: 8 % on dividends (PwC); 15 % (PwC); 15 % (PwC)",
+   "dated": "PwC, last reviewed 30 June 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "PwC Worldwide Tax Summaries, Albania, Corporate - Withholding taxes, accessed 2026-11-21 (live page reviewed 22 July 2026, no 2025 capture; `al/law/pwc_wht_live.html`): interest, royalties to non-resident companies 15 %; dividends / profit distributions 8 %",
+    "treaty rates out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/AlGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding tax (services) (services)",
+   "statute": "Ligji për tatimin mbi të ardhurat (withholding on non-residents) [year in force 2025 (pass 16), re-cited 2025: PwC's page on Albanian withholding taxes (review date 17.1.2025), Internet Archive 2025-06-23 (al/law/pwc_wht_wb2025.*): the 15 % rate on fees of non-residents for technical and managerial services, installation, assembly and supervision is unchanged, as modelled]",
+   "dated": "PwC WWTS (withholding page reviewed 17.1.2025), Internet Archive 2025-06-23",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as technical or management services; others not separated",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/AlGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/AlGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/AlGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on property sales (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Albania, Corporate - Other taxes, accessed 2025-08-03 (Wayback capture; `law/pwc_other_wb2025.txt`)",
+   "dated": "PwC WWTS Corporate - Other taxes, 2025-08-03 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/AlGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "4100",
+   "tax": "Tatimi mbi ndërtesat",
+   "statute": "Ligji 9632/2006 për sistemin e taksave vendore (buildings: residential 0,05 %, commercial 0,2 % of value)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "realEstate taken as residential (0,05 %); commercial buildings bear 0,2 %; land per m2 not modelled"
+   ],
+   "family_file": "lean/AlGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "2200",
+   "tax": "Kontributet e punëdhënësit (sigurime shoqërore 15 %, shëndetësore 1,7 %)",
+   "statute": "Ligji nr. 7703/1993 për sigurimet shoqërore neni 10; Udhëzimi nr. 23/2014 pika 10.3 (version of 30.12.2024, rate table unchanged in the version of 2.5.2025); VKM 113/2023 (minimum wage base 40 000 lekë in 2025)",
+   "dated": "QBZ consolidated versions in force in 2025 (via lexifina/albania-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "the 2025 maximum base for social insurance (VKM, indexed to the minimum wage) not read: not applied",
+    "the minimum base (40 000 lekë a month) not applied"
+   ],
+   "gap": 1,
+   "family_file": "lean/AlGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "none recorded",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/AlGlobal/Wealth.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4300",
+   "tax": "Tatimi mbi trashëgiminë dhe dhuratat",
+   "statute": "Ligji për tatimin mbi të ardhurat (15 %; heirs of the first and second order and siblings exempt)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "the ALL 1 000 000 movable-asset threshold is applied to the whole transfer (immovable assets: ALL 5 000 000); grandchildren taken as taxable (the order of heirs is not in the source)"
+   ],
+   "family_file": "lean/AlGlobal/Wealth.lean",
+   "family_guards": 8
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 7,
+  "C": 5
+ },
+ "guards": 27,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -1,0 +1,438 @@
+{
+ "country": "CA",
+ "name": "Canada",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:35:34"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional capital income and gains (all disposals, stacked)",
+   "statute": "ITA ss. 38 (a), 40 (2) (b); 1.x model",
+   "dated": "Justice Laws consolidation current to 2026-10-29 (s. 38 (a) as in 2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "principal-residence formula",
+    "loss carry-overs",
+    "LCGE"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Capital.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "GST/HST",
+   "statute": "Excise Tax Act s. 165, Sched. V, VI, VIII",
+   "dated": "Justice Laws consolidation current to 2026-10-29; s. 165 unchanged since 2007",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "POS rebates",
+    "GST/HST holiday"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Federal excise tax on fuel + Ontario gasoline and fuel taxes",
+   "statute": "ETA Sched. I s. 9, 9.1; Gasoline Tax Act s. 2; Fuel Tax Act s. 2",
+   "dated": "ETA current consolidation; Ontario versions from 2025-07-01",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Ontario tobacco tax",
+   "statute": "Tobacco Tax Act s. 2 (1)",
+   "dated": "Ontario version from 2025-06-05",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "cigars"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Federal tobacco and alcohol duties",
+   "statute": "Excise Act, 2001 Sched. 1, 4, 6; beer schedule",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "CPI-adjusted amounts (1 April 2025) in CRA notices; would unlock: the CRA 2025 adjusted-rate notices"
+   ],
+   "family_file": "lean/CaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5120",
+   "tax": "Customs duties (MFN and preferential tariffs)",
+   "statute": "Customs Tariff (S.C. 1997, c. 36) Schedule, 2025: 1006.30 Free, 2202.10 11 %, 2203.00 Free, 2204.21.10 1.87 c/l, 2204.21.21 4.68 c/l, 2208.30 Free, 2402.20 12.5 %, 2710.12.90 and 2710.19.99 Free, 3004.90 Free, 4901.99 Free, 6109.10 18 %, 6203.42 17 %, 8471.30, 8517.13 Free, 8703.23 and 8703.80 6.1 %; preferential treatments UST, MXT, CEUT, CPTPT, UKT, CCCT and the bilateral tariffs as listed per line",
+   "dated": "CBSA Customs Tariff 2025 chapters 10, 22, 24, 27, 30, 49, 61, 62, 84, 85, 87 (cbsa-asfc.gc.ca tariff-tarif/2025/01-99/chNN-2025-eng.pdf, 'Issued January 1, 2025'), ca/law/cbsa_tariff2025_chNN-2025-eng.{pdf,txt}; gap pass 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P7",
+   "kernel_parts": [
+    "TariffRule",
+    "customsFamily",
+    "consumptionC"
+   ],
+   "unsupported": [
+    "only the listed HS lines are modelled; any other code is grade C (no tariff line)",
+    "supply-managed lines (0207.14 poultry, 0402.21 milk powder: tariff-rate quotas) not modelled",
+    "GPT and LDCT (developing and least-developed beneficiaries) not modelled: such origins are charged MFN",
+    "2025 surtaxes (United States Surtax Order 2025, China Surtax Order 2024) flagged, not computed",
+    "excise duty and the excise tax inside the price (alcohol, tobacco, fuel) need \"customsValue\""
+   ],
+   "gap_pass": "2026-11-21 approach 1 (customs, kernel 2.8.0)",
+   "family_file": "lean/CaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Federal corporate income tax",
+   "statute": "ITA ss. 123, 123.4, 124, 125",
+   "dated": "Justice Laws consolidation current to 2026-10-29 (rates unchanged since 2019)",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "investment income, GRIP"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Ontario corporate income tax",
+   "statute": "Taxation Act, 2007 (Ont.)",
+   "dated": "e-Laws consolidation from 2026-07-01 with dated provisions",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "small business limit"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Part XIII withholding",
+   "statute": "ITA s. 212; s. 212 (1) (a), (4) (management fees; pass 7)",
+   "dated": "current consolidation",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "arm's-length interest exemption",
+    "services taken as non-arm's-length management fees (s. 212 (4) not distinguished)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "CPP contributions on self-employed earnings",
+   "statute": "Canada Pension Plan s. 10 (ca/lean/CaTax/Model.lean, output cppSelfEmployedCents)",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "(b) re-filed / covered",
+   "triage_note": "covered: the vendored 1.x model computes CPP contributions on self-employed earnings, both shares (CPP Act s. 10) and the ITA s. 60 (e) deduction; EI for the self-employed is opt-in (EI Act Part VII.1): voluntary, not a tax (Guide §11)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 2300 = 2021:4612.0 2022:5058.1 2023:5877.1 2024:6278.1; named lines: 2300 Canada pension plan (2024: 5247.4); 2300 Quebec pension plan (2024: 1030.6)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "covered_by": "1.x model (CaTax cppSelfEmployedCents)",
+   "family_file": "lean/CaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Part VI tax on capital of financial institutions",
+   "statute": "Income Tax Act (Canada) Part VI s. 190.1 (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: the OECD CA table books 570 (2024) under 4200: the federal tax on the taxable capital of financial institutions (Income Tax Act Part VI, s. 190.1; Ontario's capital tax ended 1 July 2010); applies to banks and insurers with capital above $1 billion: entity type not an input"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: the OECD CA table books 570 (2024) under 4200: the federal tax on the taxable capital of financial institutions (Income Tax Act Part VI, s. 190.1; Ontario's capital tax ended 1 July 2010); applies to banks and insurers with capital above $1 billion: entity type not an input",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 4200 = 2021:498.0 2022:573.0 2023:556.0 2024:570.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "local improvement charges and special assessments (OECD CA 4520 'Special assessments and charges local government' 11,674 in 2024",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: local improvement charges and special assessments (OECD CA 4520 'Special assessments and charges local government' 11,674 in 2024; Ontario Municipal Act Part XII). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: local improvement charges and special assessments (OECD CA 4520 'Special assessments and charges local government' 11,674 in 2024; Ontario Municipal Act Part XII). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 4500 = 2021:11263.0 2022:11511.5 2023:11952.8 2024:11673.9; named lines: 4520 Special assessments and charges local government (2024: 11673.9)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "Retail sales tax (provincial)",
+   "statute": "Retail Sales Tax Act (Ontario), not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: provincial retail sales taxes (OECD CA 5112 3,269 in 2024) are levied in BC, SK, MB, not in Ontario (HST); Ontario's Retail Sales Tax Act still taxes private sales of used vehicles and insurance premiums (the latter 5126): no private vehicle purchase input"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: provincial retail sales taxes (OECD CA 5112 3,269 in 2024) are levied in BC, SK, MB, not in Ontario (HST); Ontario's Retail Sales Tax Act still taxes private sales of used vehicles and insurance premiums (the latter 5126): no private vehicle purchase input",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "Ontario vehicle permit fees (licence-plate sticker fees abolished from 13 Mar 2022) and other licences (OECD CA 5220 licences and permits)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Ontario vehicle permit fees (licence-plate sticker fees abolished from 13 Mar 2022) and other licences (OECD CA 5220 licences and permits). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Ontario vehicle permit fees (licence-plate sticker fees abolished from 13 Mar 2022) and other licences (OECD CA 5220 licences and permits). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 5200 = 2021:13703.2 2022:15455.9 2023:12963.5 2024:12753.2; named lines: 5220 Licences and permits local government (2024: 1263.0); 5220 Licences and permits provincial government (2024: 5692.7)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD CA 6200 'Miscellaneous local government' (1,406 in 2024): not identified for Toronto"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD CA 6200 'Miscellaneous local government' (1,406 in 2024): not identified for Toronto",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 6000 = 2021:1015.0 2022:1304.0 2023:1396.0 2024:1406.0; named lines: 6200 Miscellaneous local government (2024: 1406.0)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "CPP employer contribution",
+   "statute": "Canada Pension Plan s. 9",
+   "dated": "Justice Laws consolidation; 2025 amounts from the 1.x model",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "flatCharge"
+   ],
+   "unsupported": [
+    "company payroll"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Social.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "EI employer premium",
+   "statute": "Employment Insurance Act s. 68",
+   "dated": "Justice Laws consolidation",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "flatCharge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Social.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "3000",
+   "tax": "Employer Health Tax (Ontario)",
+   "statute": "Employer Health Tax Act s. 2",
+   "dated": "e-Laws consolidation with the 2020-2028 exemption",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "households: employer payroll unknown",
+    "associated employers sharing the exemption"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Social.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "WSIB premiums",
+   "statute": "Workplace Safety and Insurance Act, 1997",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P4",
+   "unsupported": [
+    "rates by industry class; would unlock: WSIB 2025 rate schedule"
+   ],
+   "family_file": "lean/CaGlobal/Social.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "4400",
+   "tax": "Land Transfer Tax (Ontario)",
+   "statute": "Land Transfer Tax Act s. 2 (1) (a), (b); s. 9.2 (2), (2.1) (b)",
+   "dated": "e-Laws consolidation from 2026-04-24; section amendment notes: s. 2 (1) last amended 2016 (in force 08/12/2016), s. 9.2 (2.1) 2016: the 2025 wording",
+   "grade": "B",
+   "package": "P5",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "s. 9.2 refund: age, earlier ownership, s. 9.2 (2.0.1)",
+    "NRST (s. 2 (2.1)) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Transfers.lean",
+   "guards": 15
+  },
+  {
+   "oecd": "4400",
+   "tax": "Toronto Municipal Land Transfer Tax",
+   "statute": "Toronto Municipal Code ch. 760 § 760-9.2 and first-time purchaser rebate",
+   "dated": "consolidation to 2023-09-06 (By-law 824-2023 rates from 1 Jan 2024); rates checked against the City's MLTT and MNRST Rates page, Wayback 2025-08-02",
+   "grade": "A",
+   "package": "P5",
+   "kernel_parts": [
+    "TransferDuty",
+    "charge"
+   ],
+   "unsupported": [
+    "MNRST (10 % for foreign buyers from 1 January 2025) not modelled",
+    "rebate: age, earlier ownership, the 18-month grant (§ 760-60 G)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Transfers.lean",
+   "guards": 15
+  },
+  {
+   "oecd": "4100",
+   "tax": "Property tax (Toronto, residential)",
+   "statute": "City of Toronto 2025 tax-rate by-law; O. Reg. education rates (via the toronto.ca 2025 rate table)",
+   "dated": "toronto.ca rate table, capture 2025-07-16",
+   "grade": "B",
+   "package": "P5",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "non-residential classes",
+    "vacant home tax"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CaGlobal/Transfers.lean",
+   "guards": 15
+  },
+  {
+   "oecd": "4300",
+   "tax": "Estate administration tax (Ontario)",
+   "statute": "Estate Administration Tax Act, 1998",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "e-Laws API (code for the 1998 Act not resolved)",
+   "unsupported": [
+    "would unlock: Estate Administration Tax Act, 1998 s. 2"
+   ],
+   "family_file": "lean/CaGlobal/Transfers.lean",
+   "guards": 15
+  }
+ ],
+ "grades": {
+  "A": 10,
+  "B": 5,
+  "C": 8
+ },
+ "guards": 34,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -1,0 +1,91 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "ICMS (São Paulo)",
+  "statute": "Lei SP 6.374/1989 art. 34",
+  "dated": "ALESP consolidation with amendment notes to Lei 17.784/2023",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "fuel monophasic ICMS",
+   "RICMS reductions"
+  ]
+ },
+ {
+  "oecd": "5111",
+  "tax": "PIS/COFINS",
+  "statute": "Lei 10.637/2002 art. 2; Lei 10.833/2003 art. 2",
+  "dated": "Planalto, archived 2025-07-02",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "cumulative regime (3,65 %) for presumed-profit sellers",
+   "zero rates"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "ISS (São Paulo)",
+  "statute": "Lei municipal 13.701/2003 art. 16",
+  "dated": "Prefeitura consolidation (2026 fetch, amendment notes)",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "service-by-service list"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "IPI (bebidas, demais tabacos: TIPI)",
+  "statute": "TIPI (Decreto 11.158/2022), RFB consolidated table updated to ADE RFB 5/2026 (no chapter 22 or 24 change noted after 2022): 2202.10.00 / 2202.99.00 2,6 %; 2203.00.00 cervejas de malte 3,9 %; 2204 vinhos 6,5 % (2205 vermutes 9,75 %); 2208.20-2208.90 aguardentes, uísques, gim, vodca, licores 19,5 % (2208.40.00 cachaça 16,25 %); 2402.10, 2403.19, 2404.11 30 %",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P1",
+  "unsupported": [
+   "producer price not an input (upper bound)",
+   "cachaça, vermouth, non-alcoholic beer sub-rates"
+  ],
+  "dated": "TIPI 2022 consolidated by RFB (tipi.pdf fetched 2026-11-21; updates to ADE 5/2026)",
+  "kernel_parts": [
+   "charge"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "IPI (cigarros, regime especial)",
+  "statute": "Decreto 7.212/2010 art. 212-B (Decreto 12.127/2024); Decreto 7.555/2011 arts. 4-5",
+  "dated": "Planalto texts via Wayback (Dec 2025 / Jan 2026 captures); rates from 1 Nov 2024; pass 10, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "special regime assumed",
+   "price paid taken as the retail price"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "CIDE-combustíveis",
+  "statute": "Lei 10.336/2001 art. 5; Decreto 5.060/2004 art. 1 I, parágrafo único VII",
+  "dated": "Planalto compilation via Wayback (2025-12-21); pass 10, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": []
+ }
+]

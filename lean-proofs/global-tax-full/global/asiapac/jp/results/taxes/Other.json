@@ -1,0 +1,16 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "森林環境税 (forest environment tax, 1,000 yen a head with the 均等割): already covered in the PIT line",
+  "statute": "森林環境税及び森林環境譲与税に関する法律 (平成31年法律第3号) 第3条-第5条, 第7条; 1.x model JpTax.Local (LocalOut.shinrin, in LocalOut.total)",
+  "dated": "FY2025 (levied from FY2024); gap-closing triage: the vendored 1.x residents' tax adds shinrin = 1,000 yen for every 均等割 payer and the global PIT line (pitLine, not --oecd) books LocalOut.total, so the tax is computed; it sits inside the 1100 PIT charge, whereas the OECD guide §85 puts a capitation tax in 6200",
+  "grade": "A",
+  "status": "covered",
+  "kernel_parts": [
+   "pit"
+  ],
+  "unsupported": [
+   "booked inside the 1100 PIT charge (residents' tax line), not under 6200 (OECD Interpretative Guide §85: poll or capitation taxes)"
+  ]
+ }
+]

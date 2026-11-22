@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "IRAP (D.Lgs. 446/1997) recorded under CIT; imposta di bollo on financial statements (DPR 642/1972)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVITA v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/ITA.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6100 29 088 million EUR (2023; unnamed; IRAP's non-wage part is booked by the OECD under 6100); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "minor here: IRAP recorded under CIT (P2); imposta di bollo on documents small",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: tassa automobilistica (bollo) on cars for Regione Lazio modelled; superbollo, IPT (provincial registration tax), motorcycles and other classes not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: tassa automobilistica (bollo) on cars for Regione Lazio modelled; superbollo, IPT (provincial registration tax), motorcycles and other classes not modelled",
+  "unsupported": [
+   "would unlock: D.L. 98/2011 art. 23 c. 21 (superbollo 20 EUR per kW above 185 kW, by age); D.Lgs. 446/1997 art. 56 and the Città metropolitana di Roma's IPT tariff; the motorcycle rows of the tariffario"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Tassa automobilistica regionale (bollo)",
+  "statute": "D.P.R. 39/1953; D.Lgs. 504/1992 art. 23-24; L. 296/2006 art. 1 c. 321; Regione Lazio, Determinazione G16786 dell'11.12.2024 (tariffario 2025)",
+  "dated": "tariffario 2025, valid from 1 January 2025 (`it/law/lazio_dd_g16786.txt`, `it/law/lazio_tariffario2025_g16786.pdf`; the table is an image, read by OCR: `lazio_tariffario2025_g16786_ocr.txt`)",
+  "grade": "B",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "motorcycles, mopeds, lorries, buses and other classes (other rows of the tariffario)",
+   "5200 bollo: the region of Roma (Lazio) is taken; the year of first registration stands for the year of construction (30-year exemption); amounts in whole euros (rounded down)",
+   "5200 bollo: a hybrid first registered in 2022 may still be in Lazio's three-year exemption (tariffario, esenzioni 5)): taxed at the Euro-class tariff",
+   "5200 superbollo (D.L. 98/2011 art. 23 c. 21, 20 EUR per kW above 185 kW) not modelled (grade C)"
+  ]
+ }
+]

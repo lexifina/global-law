@@ -1,0 +1,236 @@
+{
+ "country": "ID",
+ "name": "Indonesia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:38:23"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "PPh final on interest and dividends",
+   "statute": "UU PPh Pasal 4 (2), 17 (2c); PP 131/2000",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "reinvestment exemption"
+   ],
+   "family_file": "lean/IdGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1100",
+   "tax": "PPh final on listed-share sales (0.1 %, works as an STT)",
+   "statute": "PP 41/1994 jo. PP 14/1997",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "founder shares +0.5 %"
+   ],
+   "family_file": "lean/IdGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1100",
+   "tax": "PPh final on land and building transfers (2.5 %)",
+   "statute": "PP 34/2016",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IdGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Pajak Pertambahan Nilai",
+   "statute": "UU 8/1983 as amended by UU 7/2021: Pasal 4A, 7, 16B; PMK 131/2024",
+   "dated": "UU 7/2021 official text (rates 2025 per Pasal 7 (1) b)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "PMK 131/2024 (effective 11 %) and PP 49/2022 (facilities) not read",
+    "PPnBM on luxury goods",
+    "PKP threshold (PMK) not modelled"
+   ],
+   "family_file": "lean/IdGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Cukai on alcoholic drinks (MMEA) and tobacco products (per stick by class)",
+   "statute": "UU 11/1995 as amended; PMK 160 Tahun 2023 Pasal 3, Lampiran II; PMK 192/PMK.010/2021 as amended by PMK 97 Tahun 2024, Lampiran I",
+   "dated": "PMK 160/2023 in force from 1 January 2024, status Berlaku on JDIH Kemenkeu (read 2026-11-21); PMK 97/2024 Lampiran I from 1 January 2025 (status Berlaku, read 2026-11-21)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [
+    "import rates not distinguished",
+    "tobacco: producer class from the line's sub (default SKM I); cigars and cut tobacco not modelled; PPN hasil tembakau and pajak rokok not modelled"
+   ],
+   "family_file": "lean/IdGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Pajak Penghasilan badan (corporate income tax)",
+   "statute": "UU PPh Pasal 17 (1) b (UU 7/2021)",
+   "dated": "from tax year 2022 (in force 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IdGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "UU PPh Pasal 26 (1) (UU 36/2008)",
+   "dated": "from tax year 2022 (in force 2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IdGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Indonesia as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Indonesia for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C360&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/id.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 10063030 (MFN duty 'Rp. 450,-/kg': specific or compound duty, unit/currency not mapped); 10063040 (MFN duty 'Rp. 450,-/kg': specific or compound duty, unit/currency not mapped); 10063050 (MFN duty 'Rp. 450,-/kg': specific or compound duty, unit/currency not mapped); 10063060 (MFN duty 'Rp. 450,-/kg': specific or compound duty, unit/currency not mapped); 10063070 (MFN duty 'Rp. 450,-/kg': specific or compound duty, unit/currency not mapped); 10063091 (MFN duty 'Rp. 450,-/kg': specific or compound duty, unit/currency not mapped); 10063099 (MFN duty 'Rp. 450,-/kg': specific or compound duty, unit/currency not mapped); 17019910 (MFN duty 'Rp. 790,-/kg': specific or compound duty, unit/currency not mapped); 17019990 (MFN duty 'Rp. 790,-/kg': specific or compound duty, unit/currency not mapped); 22030011 (MFN duty 'Rp. 14.000,-/liter': specific or compound duty, unit/currency not mapped); 22030019 (MFN duty 'Rp. 14.000,-/liter': specific or compound duty, unit/currency not mapped); 22030091 (MFN duty 'Rp. 14.000,-/liter': specific or compound duty, unit/currency not mapped); 22030099 (MFN duty 'Rp. 14.000,-/liter': specific or compound duty, unit/currency not mapped)",
+    "ASEAN free trade area (ATIGA) (origin BN, KH, LA, MY, MM, PH, SG, TH, VN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "family_file": "lean/IdGlobal/Customs.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4400",
+   "tax": "BPHTB (land and building acquisition duty, Jakarta)",
+   "statute": "UU 1/2022 Pasal 44-49; Perda DKI 1/2024",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IdGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "PBB-P2 (Jakarta)",
+   "statute": "UU 1/2022 Pasal 38-43; Perda DKI 1/2024",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "NJOP bands not reached"
+   ],
+   "family_file": "lean/IdGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer BPJS contributions",
+   "statute": "PP 44-46/2015; Perpres 82/2018",
+   "dated": "2025 caps",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "JKK risk classes above the lowest"
+   ],
+   "family_file": "lean/IdGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IdGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "No inheritance or gift tax (excluded from PPh)",
+   "statute": "UU PPh Pasal 4 (3) a-b",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IdGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IdGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 11,
+  "C": 1
+ },
+ "guards": 23,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

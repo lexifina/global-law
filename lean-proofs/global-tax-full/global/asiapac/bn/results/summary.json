@@ -1,0 +1,210 @@
+{
+ "country": "BN",
+ "name": "Brunei",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:14:02"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "VAT/GST (not levied)",
+   "statute": "no GST or VAT Act in the Laws of Brunei (AGC laws index on the build server: agc_brulaw.html)",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "absence inferred from the AGC laws index, not from a provision"
+   ],
+   "family_file": "lean/BnGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Excise Duties Order and Customs Import Duties Order as amended",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: not on the build server (Income Tax Act Cap. 35 and Employee Trust Act); would unlock: the Excise Duties Order schedule from agc.gov.bn"
+   ],
+   "family_file": "lean/BnGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "Cap. 35 s. 35 (1) (f)",
+   "dated": "revised edition B.L.R.O. 1/2024",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "loss period",
+    "petroleum income tax"
+   ],
+   "family_file": "lean/BnGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on non-residents",
+   "statute": "Cap. 35 s. 35 (2), (2A), s. 9 (4)-(5)",
+   "dated": "B.L.R.O. 1/2024",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "non-resident directors' fees 10 % (s. 35 (2B))"
+   ],
+   "family_file": "lean/BnGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains: not levied",
+   "statute": "none (no personal income tax; Income Tax Act Cap. 35 taxes companies only)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property",
+   "statute": "Municipal Boards Act Cap. 57 (assessment rates in municipal areas)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): "
+   ],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none (estate duty abolished 2009)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties)",
+   "statute": "Stamp Act Cap. 34 (documents and instruments)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade B (bg): "
+   ],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "6000",
+   "tax": "Zakat (religious levy; outside the OECD headings)",
+   "statute": "Religious Council and Kadis Courts Act Cap. 77 (zakat collected by Majlis Ugama Islam Brunei)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): ",
+    "gap-closing triage: zakat collected by the Majlis Ugama Islam (Cap. 77) is a tax if that council is part of general government and payment is compulsory (OECD Interpretative Guide §1, §3, §6), not otherwise; either way the charge depends on the payer being a Muslim, not in the canonical input (kernel request R3-GAP-1): stays C"
+   ],
+   "family_file": "lean/BnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (provident fund, non-tax)",
+   "statute": "National Retirement Scheme Act Cap. 273 (SPK)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BnGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 7,
+  "C": 4
+ },
+ "guards": 7,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -1,0 +1,264 @@
+{
+ "country": "BY",
+ "name": "Belarus",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 21:56:32"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Налоговый кодекс гл. 16 (подоходный налог)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/ByGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Налог на добавленную стоимость",
+   "statute": "Налоговый кодекс (Особенная часть) ст. 122 п. 2 (10 %), п. 3 (20 %), п. 4 (25 %)",
+   "dated": "pravo.by via Internet Archive 2025-06-14",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food at 10 % (ст. 122 п. 2.2: only foods on the Government's list; others 20 %)",
+    "telecommunication services at 20 % (25 % under ст. 122 п. 4 not separated)",
+    "exemptions (ст. 118) not read: taken at 20 %"
+   ],
+   "family_file": "lean/ByGlobal/Consumption.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Налоговый кодекс ст. 155 and приложение 1",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/ByGlobal/Consumption.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1200",
+   "tax": "Налог на прибыль",
+   "statute": "Налоговый кодекс ст. 184 п. 1 (20 %)",
+   "dated": "pravo.by via Internet Archive 2025-06-14",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "25 % for banks and insurers (ст. 184 п. 1)",
+    "loss carry-forward (ст. 183) not modelled"
+   ],
+   "family_file": "lean/ByGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Налог на доходы иностранных организаций",
+   "statute": "НК ст. 192 п. 1.3 (ст. 189 п. 1.2): 10 %; НК ст. 192 п. 1.4 (ст. 189 п. 1.4): 25 %; НК ст. 192 п. 1.5 (ст. 189 п. 1.3): 15 %",
+   "dated": "pravo.by via Internet Archive 2025-06-14",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "treaty rates out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/ByGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Налог на доходы иностранных организаций (услуги) (services)",
+   "statute": "Налоговый кодекс, Особенная часть, ст. 189 п. 1 пп. 1.12, ст. 192 п. 1 пп. 1.5",
+   "dated": "pravo.by via Internet Archive 2025-06-14 (`by/law/pravo_tc_sp_wb20250614.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as one of the kinds listed in ст. 189 п. 1 пп. 1.12 (other services to unrelated parties bear none)",
+    "services paid to non-resident individuals (подоходный налог, гл. 17) not read (grade C)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/ByGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Подоходный налог с физических лиц (налоговый агент: услуги нерезидентам) (services)",
+   "statute": "Налоговый кодекс, Особенная часть, гл. 17: ст. 197 п. 1 пп. 1.6, ст. 214 п. 1, ст. 216 п. 1",
+   "dated": "pravo.by via Internet Archive 2025-06-14 (`by/law/pravo_tc_sp_wb20250614.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "a non-resident individual is taken as acting outside an individual-entrepreneur registration in Belarus (13 %, not the 20 % of ст. 214 п. 3)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/ByGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/ByGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: транспортный налог on passenger cars modelled; lorries, buses, trailers, motorcycles and the high-comfort list (ст. 307-7 п. 11) not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: транспортный налог on passenger cars modelled; lorries, buses, trailers, motorcycles and the high-comfort list (ст. 307-7 п. 11) not modelled",
+   "unsupported": [
+    "would unlock: приложение 27 п. 1.2-1.8, 2.2-2.8 (other kinds); the Council of Ministers' list of high-comfort vehicles"
+   ],
+   "family_file": "lean/ByGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Транспортный налог",
+   "statute": "Налоговый кодекс, Особенная часть, гл. 31-1: ст. 307-1, 307-2, 307-4, 307-5, 307-7, приложение 27",
+   "dated": "pravo.by via the Internet Archive 2025-06-14 (`by/law/pravo_tc_sp_wb20250614.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "motorcycles, lorries, buses, trailers (приложение 27 other points)",
+    "5200 транспортный налог: massKg is read as the permitted maximum mass (разрешенная максимальная масса); the 50 % / 75 % rates for veterans and disabled persons (ст. 307-5 п. 2, 3) are not applied",
+    "5200 транспортный налог: a vehicle on the Council of Ministers' high-comfort list (ст. 307-7 п. 11) is taxed at the plain rate (grade C for the increase)"
+   ],
+   "family_file": "lean/ByGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "государственная пошлина (no real-estate transfer tax as such)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rate articles (and the reference region's rate where regional)"
+   ],
+   "family_file": "lean/ByGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "НК РБ гл. 25 налог на недвижимость",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/ByGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social contributions and payroll taxes",
+   "statute": "Закон «Об обязательных страховых взносах в бюджет ФСЗН» (наниматель 28 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P4 pass (no dated employer rates with quotes in the 1.x model or fetched texts)",
+   "unsupported": [
+    "would unlock: the act's 2025 employer rates and ceilings (official consolidation or the 1.x model's parameters with quotes)"
+   ],
+   "family_file": "lean/ByGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "Налоговый кодекс Республики Беларусь (Особенная часть), разделы V-VII (гл. 14-40) [year in force 2025 (pass 18), upgraded: Налоговый кодекс Республики Беларусь (Особенная часть), pravo.by, with the changes of Закон от 13.12.2024 № 47-З (Internet Archive 2025-06-14, by/law/pravo_tc_sp_wb20250614.*): разделы V-VII list every republican and local tax and special regime (гл. 14-40); none is levied on net wealth (налог на недвижимость, гл. 19, is a recurrent tax on buildings); B: the Общая часть ст. 8 list not read]",
+   "dated": "PwC WWTS Individual - Other taxes, 2021-11-30 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "downgraded",
+   "yif18": "upgraded",
+   "family_file": "lean/ByGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax (not levied)",
+   "statute": "Налоговый кодекс РБ (Особенная часть) гл. 14-40; ст. 208 п. 21, 22, 22-1 [year in force 2025 (pass 18), upgraded: Налоговый кодекс РБ (Особенная часть), 2025 redaction (Internet Archive 2025-06-14): no inheritance or gift tax among гл. 14-40; ст. 208 п. 21 exempts inheritances from подоходный налог, п. 22 gifts from individuals up to 11 516 рублей a year and п. 22-1 gifts from close relatives (larger gifts from others are подоходный налог income)]",
+   "dated": "PwC WWTS Individual - Other taxes, 2021-11-30 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "downgraded",
+   "yif18": "upgraded",
+   "family_file": "lean/ByGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 6,
+  "B": 2,
+  "C": 7
+ },
+ "guards": 16,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

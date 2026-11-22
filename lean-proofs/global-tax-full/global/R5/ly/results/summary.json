@@ -1,0 +1,274 @@
+{
+ "country": "LY",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail)",
+   "statute": "PIT law of the country",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "the 1.x model does not tax capital gains and the gain provisions were not read this round; interest/dividend/rent treatment is the 1.x model s"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "ضريبة الدخل على الشركات (20 %) وضريبة الجهاد (4 %)",
+   "statute": "Income Tax Law 7/2010 art. 63, 64, 66, 70 (20 %); Law 44/1970 art. 1, 2 ثانياً (Jihad tax 4 % of taxable profit)",
+   "dated": "Law 7/2010 of 28/01/2010 (13 Safar 1378 w.r.); Law 44/1970 of 26/03/1970; text from the tax legislation encyclopaedia 2016 (law/m2016.pdf pp. 18-31, 103-104; OCR law/ly_m2016_jihad_stamp.ocr.txt; art. 70 and Law 44 art. 2 read on the page images); amendments after 2016 not checked; pass 3r re-cite (grade B): Tax Authority list of tax laws served January 2025 (tax.gov.ly/Law1.aspx, Wayback 17/01/2025; law/ly_tax_laws_list_2025.html) lists Law 7/2010, Law 8/2010 and Law 44/1970 with no amending law (it lists amending acts of other laws); regulations list (Law2.aspx, Wayback 16/01/2025); encyclopaedia 2016 still served (Wayback 02/04/2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime flat 20 % + CorpRegime flat 4 % (Jihad), citCharge on taxable profit"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "branch head-office expense cap (art. 66) and exempt income taken as given",
+    "losses offset without time limit"
+   ],
+   "withholding": {
+    "grade": "C",
+    "rules": "no rule (kernel 2.3.0 lists each payment abroad as grade C)",
+    "why": "Income Tax Law 7/2010 (encyclopaedia 2016 OCR pp. 1-102) shows no withholding on payments abroad; foreign companies are taxed through branches; dividend and royalty treatment not established",
+    "pass": "3i"
+   },
+   "status": "modelled"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Social security contribution (employer share)",
+   "statute": "Law 13/1980 (15 % total); Law 1/1991 art. 3; Fund decision 182/1991 art. 1: employer 70 % = 10.50 % (non-national employer 75 % = 11.25 %)",
+   "dated": "Tax Authority encyclopaedia 2016 (distribution table in force from June 1991); pass 3q year-in-force audit: downgraded: encyclopaedia 2016",
+   "grade": "C",
+   "kernel_parts": [
+    "employerOn (10.5 %, no ceiling)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "pass 3q year-in-force audit: downgraded to C: encyclopaedia 2016",
+    "non-national employers 11.25 % not distinguished",
+    "no later text than the 2016 compilation reached"
+   ],
+   "status": "unsupported"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "ضريبة الدمغة على التصرفات العقارية (stamp duty on real-property transfers)",
+   "statute": "Stamp Duty Law 12/2004 annexed table part 2 item 21 as replaced by Law 8/2010 (3 % of the value, borne by the buyer)",
+   "dated": "Law 8/2010 of 28/01/2010 (in force on publication); encyclopaedia 2016 pp. 122-146 (page 146 image checked); pass 3r re-cite (grade B): Tax Authority list of tax laws served January 2025 (tax.gov.ly/Law1.aspx, Wayback 17/01/2025; law/ly_tax_laws_list_2025.html) lists Law 7/2010, Law 8/2010 and Law 44/1970 with no amending law (it lists amending acts of other laws); regulations list (Law2.aspx, Wayback 16/01/2025); encyclopaedia 2016 still served (Wayback 02/04/2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty flat 3 % on purchases of home/realEstate/land"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "exemptions (direct line, spouses, low-income bank finance) not applied",
+    "item 22 gift duty 2 % not computed"
+   ],
+   "status": "modelled"
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "ضريبة الاستهلاك (tobacco)",
+   "statute": "Law 10/2010 customs and consumption tax schedules",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "schedules set by decision, not reached"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (Law 89/1971)",
+   "statute": "Law 89/1971 (zakat)",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "texts not reached",
+    "gap-closing pass: the jihad tax (Law 44/1970) left this row: it is a tax on income and profits (OECD Guide §85, classed by base) and is already modelled: individuals in the 1.x PIT (surtax jihadTax, Law 44/1970 art. 2), companies in LY P2 1200 (4 %); zakat text still not reached (the Tax Authority's January 2025 list of tax laws, Law1.aspx, was the route tried in pass 3r)"
+   ],
+   "pass": "gap"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "not levied per the R5 registry statute map (registry/AFRICA_MENA.json, 2026-11-21: Net wealth tax); grade B (no statute text read for the negative)",
+   "grade": "B",
+   "source": "registry"
+  },
+  {
+   "oecd": "4300",
+   "why": "not levied per the R5 registry statute map (registry/AFRICA_MENA.json, 2026-11-21: Inheritance/estate and gift tax); grade B (no statute text read for the negative)",
+   "grade": "B",
+   "source": "registry"
+  },
+  {
+   "oecd": "5111",
+   "why": "not levied per the R5 registry statute map (registry/AFRICA_MENA.json, 2026-11-21: VAT / GST / sales tax); grade B (no statute text read for the negative)",
+   "grade": "B",
+   "source": "registry"
+  },
+  {
+   "oecd": "4100",
+   "why": "4100: no recurrent property tax: the real-estate tax Law 2/1986 (and Law 28/1369 on livestock) repealed by Income Tax Law 7/2010 art. 104 (encyclopaedia 2016, law/m2016.pdf p. 31; its contents list marks Law 2/1986 'ملغى بموجب القانون رقم (7) لسنة 2010'); grade A",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "ly-h1",
+   "total": 44170,
+   "byOecd": {
+    "1100": 14470,
+    "2100": 5700,
+    "4400": 24000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 44170,
+    "withheld": 0
+   },
+   "net": 285830,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "2200 social security (employer) grade C (year-in-force audit, pass 3q): Law 13/1980 and Fund decision 182/1991 from the encyclopaedia of 2016 is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "employer social security at the national-employer share 10.50 % (non-national employers 11.25 %); texts as compiled in 2016",
+    "stamp duty: exemptions for transfers in the direct line, between spouses and bank financing for low incomes (item 21) not applied"
+   ]
+  },
+  {
+   "id": "ly-c1",
+   "total": 168000,
+   "byOecd": {
+    "1200": 168000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 168000,
+    "withheld": 0
+   },
+   "net": 632000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "income tax: exempt income and branch expense limits (art. 66: head-office charges ≤ 5 % of administrative expenses) taken as given",
+    "Jihad tax on wages and pensions (Law 44/1970 art. 2 أولاً: 1/2/3 %) not computed here (the 1.x PIT line is unchanged)",
+    "losses: offset in full (no time limit applied)",
+    "1200 withholding on payment 1 (dividend) abroad: no rule read (grade C)",
+    "1200 withholding on payment 2 (royalty) abroad: no rule read (grade C)",
+    "1200 withholding on payment 3 (interest) abroad: no rule read (grade C)"
+   ]
+  },
+  {
+   "id": "ly-c2",
+   "total": 240000,
+   "byOecd": {
+    "1200": 240000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 240000,
+    "withheld": 0
+   },
+   "net": 760000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "income tax: exempt income and branch expense limits (art. 66: head-office charges ≤ 5 % of administrative expenses) taken as given",
+    "Jihad tax on wages and pensions (Law 44/1970 art. 2 أولاً: 1/2/3 %) not computed here (the 1.x PIT line is unchanged)"
+   ]
+  },
+  {
+   "id": "ly-t1",
+   "total": 15000,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "4400": 15000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 15000,
+    "withheld": 0
+   },
+   "net": -15000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "stamp duty: exemptions for transfers in the direct line, between spouses and bank financing for low incomes (item 21) not applied"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 5,
+ "theorems": 1
+}

@@ -1,0 +1,327 @@
+{
+ "country": "GD",
+ "name": "Grenada",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:19"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GdGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "statute": "VAT Act Cap. 333A s. 8, Third and Fourth Schedules",
+   "dated": "Cap. 333A as amended by Act 7 of 2011 (laws.gov.gd, fetched 2026-11-21); later amendments not checked",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food limited to the Regulations list"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GdGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "statute": "Excise Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "laws.gov.gd (VAT Act fetched; excise not)",
+   "unsupported": [
+    "would unlock: the Excise Tax Act schedule in force 2025"
+   ],
+   "family_file": "lean/GdGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax (companies)",
+   "statute": "Income Tax Act s. 56, Schedule: '(b) a company 30 per cent'",
+   "dated": "local consolidation of the 1.x builder (date not shown; amending Acts 2015-2017 not checked)",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/GdGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "ITA Cap. 149 s. 50 (1) (Act 27 of 2015 s. 11), Third Sched. para 1 (1) (Act 27 of 2015 s. 18), para 3: 15 %, final; ITA Cap. 149 Third Sched. para 1 (1) as substituted by Act 27 of 2015 s. 18: dividends are not a listed payment: none withheld",
+   "dated": "Income Tax Act Cap. 149 (consolidation to Act 2 of 2010) with Act 27 of 2015 and Act 8 of 2016 (world/B13-caribbean/gd/law); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "s. 50 (4A)-(4C) waivers for qualifying tourism and health investments (Act 8 of 2016) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GdGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed NI not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed NI not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Property Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act; not in lexifina/grenada-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act; not in lexifina/grenada-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 4100 = 2021:13.8 2022:12.5 2023:19.7 2024:11.5"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "Non-recurrent taxes on property",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "sales taxes (5112)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD GD 5112 not available (na) and no text in lexifina/grenada-law; a cited absence needs the VAT Act's repeal provisions"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD GD 5112 not available (na) and no text in lexifina/grenada-law; a cited absence needs the VAT Act's repeal provisions",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+   "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "motor vehicle licences",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): motor vehicle licences; OECD GD 5200 = 0 (booked elsewhere). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): motor vehicle licences; OECD GD 5200 = 0 (booked elsewhere). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 5200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD GD 6000 7.9 (2024), unnamed"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD GD 6000 7.9 (2024), unnamed",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGRD, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GRD.csv): general government heading 6000 = 2021:6.3 2022:7.5 2023:7.8 2024:7.9"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GdGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Grenada (DSD_REV_LAC@DF_REVGRD v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/GRD.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for Grenada (DSD_REV_LAC@DF_REVGRD v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/GRD.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for Grenada (DSD_REV_LAC@DF_REVGRD v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/GRD.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/GdGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Inland Revenue Division (ird.gd): list of taxes administered",
+   "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Inland Revenue Division (ird.gd) list of the taxes it administers, `gd/law/ird_home_2025-01-17.*` (Wayback 2025-01-17), names: Income Tax, Property Tax, Property Transfer Tax, Excise Tax, Withholding Tax, Value Added Tax, Annual Stamp Tax, Gaming Tax, Motor Vehicle Licence, licences; consolidated index of revenue Acts not held; none of them is a recurrent tax on net wealth.",
+   "family_file": "lean/GdGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "National Insurance (employer)",
+   "statute": "NI (Collection of Contributions) Regulations Cap. 205, Schedule Parts I, III (S.R.O. 43 of 2023)",
+   "dated": "S.R.O. 43 of 2023 in force 1 Jan 2024 (2025 step)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GdGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Property Transfer Tax Act; Property Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/GdGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 8,
+  "C": 8
+ },
+ "guards": 11,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

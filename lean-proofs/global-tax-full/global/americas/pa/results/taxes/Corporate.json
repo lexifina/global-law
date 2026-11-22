@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto sobre la renta (personas jurídicas)",
+  "statute": "Código Fiscal art. 699 (Ley 8/2010): 25 %",
+  "dated": "Ley 8 de 2010 text",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "CAIR (art. 699 par. 1: 4,67 % of gross taxable income above B/.1,500,000) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "Código Fiscal art. 733 (dividends 10 %); remittances abroad 12.5 % (PwC)",
+  "dated": "PwC Worldwide Tax Summaries Panama, corporate withholding taxes, reviewed 19 August 2025 (Internet Archive 2025-09-10; the page reviewed 2026-08-04 gives the same rates); FT review 7",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "Código Fiscal text on remittances abroad not read (Órgano Judicial copy 403, Gaceta Oficial behind a script check): the 12.5 % effective rate is the PwC summary's; exemptions (art. 708) not modelled"
+  ],
+  "status": "modelled"
+ }
+]

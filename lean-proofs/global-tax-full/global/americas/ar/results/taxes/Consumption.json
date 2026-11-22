@@ -1,0 +1,61 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto al Valor Agregado",
+  "statute": "Ley de IVA t.o. 1997 arts. 7, 28",
+  "dated": "Infoleg texto actualizado, latest amendment Ley 27.743 (2024)",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "medicines, transport, insurance treatment not read item by item"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuestos internos",
+  "statute": "Ley 24.674 arts. 4, 15, 16, 18, 23, 25, 26",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "unsupported": [
+   "base: manufacturer's net sale read from the consumer price net of IVA (upper bound, except cigarettes)",
+   "cigar minimum tax",
+   "reduced rates for SME craft beer, juice drinks, waters; caffeine drinks 10 %"
+  ],
+  "dated": "InfoLEG texto actualizado (id 38621) fetched 2026-11-21; art. 15 as substituted by Ley 27.742 (from 9 Jul 2024); pass 10, 2026-11-21",
+  "kernel_parts": [
+   "ExciseRule",
+   "exciseRuleFamily"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto a los combustibles líquidos y al dióxido de carbono",
+  "statute": "Ley 23.966 Título III",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "unsupported": [
+   "amounts updated by decree in 2025; would unlock: Ley 23.966 text and the 2025 decrees"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "Impuesto sobre los Ingresos Brutos (Ciudad Autónoma de Buenos Aires)",
+  "statute": "Ley 6806 (Ley Tarifaria 2025) Anexo Título I arts. 1-11",
+  "dated": "Ley 6806 promulgated 23 Dec 2024 (Boletín Oficial CABA)",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "activity by good",
+   "other provinces",
+   "consumer incidence not modelled"
+  ]
+ }
+]

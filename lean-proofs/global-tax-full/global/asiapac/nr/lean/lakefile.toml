@@ -1,0 +1,18 @@
+name = "NrGlobal"
+version = "0.1.0"
+defaultTargets = ["NrGlobal", "nrglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); NrTax = the 1.x model, vendored from cmp20/world/B14-pacific/nr/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "NrTax"
+
+[[lean_lib]]
+name = "NrGlobal"
+
+[[lean_exe]]
+name = "nrglobal"
+root = "NrGlobal.Main"

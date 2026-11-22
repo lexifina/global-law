@@ -1,0 +1,284 @@
+{
+ "country": "HU",
+ "name": "Hungary",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:14:51"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Árfolyamnyereség adója",
+   "statute": "Szja tv. 67. § (15 %)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-06-03 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "the 13 % social contribution tax (szocho) where the conditions fail is not applied",
+    "real estate gains (15 %, reduced by holding years) not modelled: the reductions are not in the B source"
+   ],
+   "family_file": "lean/HuGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Általános forgalmi adó",
+   "statute": "2007. évi CXXVII. törvény 82. § (1) 27 %, (2) 5 % (3. melléklet, II. 5. szálláshely), (3) 18 % (3/A. melléklet), (4) 0 % (3/B. melléklet 1. napilap, from 2024-01-01); 85.-86. § (mentes) [year in force 2025 (pass 16), unchanged-confirmed: hu/law/afa.html footnotes: (1) 27 % 2011. évi CLVI. tv. (2012. I. 1-től); (2) 5 % 2009. évi CIX. (2010. I. 15-től); (3) 18 % 2009. évi XXXV. (2009. VII. 1-től); (4) 0 % 2023. évi LIX. (2024. I. 1-től)]",
+   "dated": "consolidated text (jogtar), current",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food at 27 %; milk, eggs, pork, poultry and other 3. melléklet foods are 5 %",
+    "alanyi adómentesség (small-business exemption, 188. §) not read: no threshold applied",
+    "newspapers read as daily newspapers (0 %, 3/B. 1.); periodicals 5 % (3. melléklet I. 16.) not distinguished"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/HuGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "2016. évi LXVIII. törvény a jövedéki adóról 64., 72., 99., 106. § (rates as reported to the TEDB)",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "motor and heating fuel: the 2025 rate depends on the world market price of crude oil (above or at most 50 USD a barrel), not an input: not modelled",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/HuGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Társasági adó",
+   "statute": "1996. évi LXXXI. törvény a társasági adóról és az osztalékadóról 19. § (9 százalék) [year in force 2025 (pass 16), unchanged-confirmed: hu/law/tao.html footnote: 19. § set by 2018. évi LXXXII. tv. 24. §, hatályos 2019. I. 1-től]",
+   "dated": "consolidated text (jogtar), current at fetch (2026-11)",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "helyi iparűzési adó (local business tax, up to 2 % of the net turnover base, Htv.) not modelled",
+    "loss carry-forward limit (50 % of the base, 17. §) not modelled",
+    "Pillar Two top-up (2023. évi LXXXI.) not modelled"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/HuGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Forrásadó (társaságok) (dividend, interest, royalty, services)",
+   "statute": "1996. évi LXXXI. törvény (Tao.): no withholding on payments to foreign companies",
+   "dated": "2025-06-24",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/HuGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on royalties and services to individuals paid abroad",
+   "statute": "not read",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 9: no statute or official/secondary source on disk states the rule for these kinds; pass 12: Szja (`hu/law/szja.txt`, consolidated text with the 2025. évi LIV. törvény amendments) 46.-47. §: on self-employed and royalty income the Hungarian payer deducts a tax advance (adóelőleg) and the tax is settled by return; the advance base for a non-resident individual and the treaty relief path were not read clause by clause (the jogtar text interleaves amendment notes)",
+   "unsupported": [
+    "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\"",
+    "would unlock (pass 12): a clean 2025 text of Szja 46.-49. § and 7. § (cost ratio) or NAV's guide for payments to foreign individuals"
+   ],
+   "family_file": "lean/HuGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Személyi jövedelemadó (külföldi magánszemély: osztalék, kamat) (dividend, interest)",
+   "statute": "1995. évi CXVII. törvény (Szja tv.) 8. § (1), 65. §, 66. § [year in force 2025 (pass 16), unchanged-confirmed: jogtar footnotes in hu/law/szja.html: 8. § (1) 15 % set by 2015. évi LXXXI. tv. 2. §, hatályos 2016. I. 1-től; 65. § (1) by 2006. évi LXI. tv. (mod. 2012. évi CLXXVIII.); 66. § (1) by 2008. évi LXXXI. tv. (2009. I. 1-től); no later amendment]",
+   "dated": "Nemzeti Jogtár, hatályos 2026.X.1. (rate unchanged since 2016) (`hu/law/szja.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "interest is taken as kamatjövedelem (65. §); interest on a private loan is other income, also 15 % (social contribution tax not applied)",
+    "royalties and service fees paid to non-resident individuals (önálló tevékenység: base and source rules) not read (grade C)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/HuGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes recorded by the registry",
+   "statute": "Helyi iparűzési adó (local business tax on adjusted turnover, up to 2 %); KATA/KIVA small-business regimes; windfall/sector surtaxes (2022-2025)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVHUN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/HUN.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6000 unallocable tax penalties 46 509 and 6100 medicine tax 28 657 million HUF (2024); not modelled",
+   "unsupported": [
+    "the statutes of the items named by the OECD table"
+   ],
+   "triage": "model (high revenue): helyi iparűzési adó up to 2 % of adjusted turnover (Budapest 2 %); KATA/KIVA optional regimes",
+   "gap_note": true,
+   "family_file": "lean/HuGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: gépjárműadó on cars modelled (2025 indexed rates); cégautóadó (company cars), buses, lorries and motorcycles not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: gépjárműadó on cars modelled (2025 indexed rates); cégautóadó (company cars), buses, lorries and motorcycles not modelled",
+   "unsupported": [
+    "would unlock: Gjt. 17/A-17/G. § and 1. melléklet (cégautóadó by kW and environmental class); 7. § (2) heavy vehicles with mass"
+   ],
+   "family_file": "lean/HuGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Gépjárműadó",
+   "statute": "1991. évi LXXXII. törvény a gépjárműadóról (Gjt.) 5. § g), 6. § (1), 7. § (1), 7/A. §",
+   "dated": "Gjt. via the Internet Archive 2025-06-17 (`hu/law/gjt1991_wb2025.txt`); 2025 rates as published by NAV under 7/A. § (`hu/law/nav_gjt_valorizalt_2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "motorcycles, buses, lorries (7. § (2) per 100 kg), trailers",
+    "5200 gépjárműadó: the year of first registration is read as the year of manufacture (7. § (1) counts from the year of manufacture)",
+    "5200 gépjárműadó: a plug-in hybrid is taxed by kW; it is exempt only if classed környezetkímélő (KöHÉM 2. § (6)), which the input does not give",
+    "5200 cégautóadó (Gjt. 17/A-17/G. §, company cars, gépjárműadó deductible under 17/F. §) not modelled (grade C)"
+   ],
+   "family_file": "lean/HuGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4400",
+   "tax": "Visszterhes vagyonátruházási illeték (ingatlan)",
+   "statute": "Itv. 19. § (1) (4 % to HUF 1 billion per property, 2 % above, at most HUF 200 million) [year in force 2025 (pass 16), unchanged-confirmed: hu/law/itv.html footnote: set by 2023. évi XXXIX. tv. 1. §, hatályos 2023. VII. 22-től]",
+   "dated": "net.jogtar.hu current text (fetched 2026-11-21)",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty",
+    "cap (min)"
+   ],
+   "unsupported": [
+    "the base is the market value (forgalmi érték): the price stands in; first-home and young-buyer reliefs (26. §) and the home-swap credit (21. §) not applied"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/HuGlobal/Property.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "Htv. építményadó (Budapest)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "építményadó / telekadó levied at each municipality's discretion up to the caps of the Htv.; Budapest district decrees not read"
+   ],
+   "family_file": "lean/HuGlobal/Property.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "Szociális hozzájárulási adó",
+   "statute": "2018. évi LII. törvény 2. § (1): az adóalap 13 százaléka [year in force 2025 (pass 16), unchanged-confirmed: hu/law/szocho.html footnote: last modified by 2021. évi CXXXI. tv. 7. §; (1a) inserted by 2024. évi LV. tv. from 2025. I. 1 (a separate case, 1. § (5) g), not modelled)]",
+   "dated": "consolidated text (jogtar), current at fetch (2026-11); the 2025 wording not separately dated",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/HuGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, HU, Individual - Other taxes, accessed  (live page; `law/pwc_indother_wb2025.txt`) [year in force 2025 (pass 16), re-cited 2025: PwC Hungary, Individual - Other taxes, Internet Archive 2025-07-08 (hu/law/pwc_indother_wb20250708.*): no net wealth taxes in Hungary]",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-07-08 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/HuGlobal/Wealth.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "4300",
+   "tax": "Öröklési illeték",
+   "statute": "Itv. 12. § (1) (18 %); 16. § (1) i)-j) (lineal relatives, surviving spouse, siblings exempt) [year in force 2025 (pass 16), unchanged-confirmed: hu/law/itv.html footnotes: 12. § (1) 2012. évi CLXXVIII. tv. (2013. I. 1-től); 16. § (1) i) 2013. I. 1-től, j) 2020. évi LXVI. tv. (2020. VII. 8-tól)]",
+   "dated": "net.jogtar.hu Hatályos Jogszabályok Gyűjteménye (current text, fetched 2026-11-21; provisions unchanged in 2025 not checked against the 2025 időállapot)",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "the 9 % rate for a home (12. § (2)), the 300 000 Ft movables exemption (16. § (1) d)) and step-relatives' 20 000 000 Ft (c)) not applied",
+    "ajándékozási illeték (gifts, 11. §, exemptions in 17. §) not modelled"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/HuGlobal/Wealth.lean",
+   "family_guards": 9
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 7,
+  "C": 4
+ },
+ "guards": 42,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

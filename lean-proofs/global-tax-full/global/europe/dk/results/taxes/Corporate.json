@@ -1,0 +1,49 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Selskabsskat",
+  "statute": "Selskabsskatteloven (LBK nr 279 af 13/03/2025) § 17, stk. 1 (22 pct.), § 13, stk. 1, nr. 2 (udbytte af datterselskabsaktier)",
+  "dated": "LBK nr 279 af 13/03/2025",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "loss cap of § 12, stk. 2 (indexed grundbeløb, 60 %) not applied: losses are offset in full",
+   "koncernselskabsaktier (ABL § 4 B) not separated",
+   "tillægsselskabsskat (kulbrinte) out of scope"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Begrænset skattepligt (udbytte, renter, royalty) (dividend, interest, royalty, services)",
+  "statute": "selskabsskatteloven § 2, stk. 1, litra c, d, g (rates 22 pct.)",
+  "dated": "LBK nr 279 af 13/03/2025 (`dk/law/sel_lbk2025_279.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "withholding mechanics (kildeskatteloven § 65: 27 % withheld, excess refunded) not read; the 22 pct. tax is booked; the 15 pct. rate and the subsidiary-share exemption not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Kildeskat, personer (udbytte, renter, royalty, tjenesteydelser) (dividend, interest, royalty, services)",
+  "statute": "kildeskatteloven § 2, stk. 1, nr. 6-8, stk. 13; § 65, stk. 1; § 65 C, stk. 1 [year in force 2025 (pass 17), re-cited 2025: PwC Denmark, Corporate - Withholding taxes, Internet Archive 2025-07-18 (dk/law/pwc_wht_wb20250718.*): dividend withholding 27 %, royalties 22 %, interest only to related recipients outside treaty and EU cover (22 %): the rates modelled]",
+  "dated": "LBK nr 460 af 03/05/2024; PwC Denmark WHT page, Internet Archive 2025-07-18",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "27 pct. is the amount withheld; the refund to 15 pct. for residents of information-exchange states is not applied",
+   "the recipient is taken as never resident in Denmark and without a Danish permanent establishment (§ 2, stk. 1, nr. 4: assessed, not withheld)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif17": "re-cited 2025"
+ }
+]

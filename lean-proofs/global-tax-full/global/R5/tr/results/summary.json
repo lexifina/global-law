@@ -1,0 +1,625 @@
+{
+ "country": "TR",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail)",
+   "statute": "PIT law of the country",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "the 1.x model does not tax capital gains and the gain provisions were not read this round; interest/dividend/rent treatment is the 1.x model s"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Kurumlar Vergisi",
+   "statute": "KVK 5520 art. 5(1)(a), 9(1)(a), 32(1), 32/C(1)",
+   "dated": "consolidated text; provisions used unchanged after 28/7/2024",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime",
+    "lossOffset",
+    "minimum tax (own)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "32/C(2) exclusions",
+    "interest limitation (KVK art. 11(1)(i)) not read"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Kurumlar vergisi kesintisi (non-resident withholding)",
+   "statute": "KVK art. 30(1), (3)",
+   "dated": "as above",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "Presidential decisions varying the 15 % (e.g. CK 9707) not read"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "SGK işveren primleri (MYÖ, GSS)",
+   "statute": "5510 art. 81 (2025 wording: 11 %; GSS 7,5 %)",
+   "dated": "consolidated text with footnote dating the 2026 change",
+   "grade": "A",
+   "kernel_parts": [
+    "R5Common.employerOn"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "unemployment insurance (4447)",
+    "short-term branches",
+    "5-point incentive"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Çalışma izni harcı (work-permit fee per foreign worker)",
+   "statute": "Harçlar Kanunu 492 tariff (6) part IV-1 (Law 4817 art. 34; Law 6735 art. 27): fixed-term work permit up to one year, the same amount for each year of an extension; Law 6735 art. 10(1)-(2) (permit for work at a given employer, 1 year then up to 2 and 3 years)",
+   "dated": "gap-closing pass: 2025 amount TL 10.571,60 from Harçlar Kanunu Genel Tebliği (Seri No: 96), Resmî Gazete 32768 (2. mükerrer) 30/12/2024, art. 3-4 (in force 1/1/2025) and annex page 6 (read on the page image; RG HTML and annex PDF in law/); Law 6735 text from lexifina/turkey-law (git history of mevzuat.gov.tr), law/tr_gitlaw_6735_art10_22.txt",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "charge per foreign worker (company.expatWorkers)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "payer read as the employer that applies for its worker's permit (implementing regulation not read)",
+    "indefinite and independent permits (TL 105.760,60, one-off) and the permit card fee (değerli kağıt bedeli) not booked",
+    "company.expatWorkers must be given; without it grade C",
+    "no payroll tax in the laws read (KVK 5520, 5510, KDV 3065)"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4100",
+   "tax": "Değerli konut vergisi (valuable dwellings tax)",
+   "statute": "EVK 1319 art. 42, 44, 46(b); EVK Genel Tebliği Seri 86 art. 5-6 (2025 amounts)",
+   "dated": "Resmî Gazete 2024-12-30 (in force 2025-01-01)",
+   "grade": "A",
+   "kernel_parts": [
+    "Schedule.ofList",
+    "charge"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "booked 4100 (recurrent on immovable property), not 4200",
+    "kind realEstate not treated as dwellings"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Emlak vergisi (bina)",
+   "statute": "Emlak Vergisi Kanunu 1319 art. 7-8",
+   "dated": "consolidated text (4736/2002); pass 3q year-in-force audit: re-cited: mevzuat consolidation to Law 7566 (4/12/2025): art. 8 last changed by 4736 (2002); 7566 touches art. 29 and provisional art. 23 (from 19/12/2025), not the rates",
+   "grade": "A",
+   "kernel_parts": [
+    "PropertyTax (home schedule, multiplier)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "land (art. 18)",
+    "değerli konut vergisi (P6)"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Veraset ve İntikal Vergisi (inheritance and gift tax)",
+   "statute": "VİVK 7338 art. 4(b),(d), 16; VİVK Genel Tebliği Seri 56 (RG 30/12/2024) 2025 amounts",
+   "dated": "Resmî Gazete 2024-12-30 (in force 2025-01-01)",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax",
+    "Schedule.ofUpper"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "earlier gifts not aggregated",
+    "spouse without descendants by input noDescendants"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Tapu harcı (buyer and seller)",
+   "statute": "Harçlar Kanunu 492 tariff (4) 20 a)",
+   "dated": "consolidated text (binde 20 as raised); pass 3q year-in-force audit: re-cited: Harçlar Kanunu consolidation: tariff (4) 20 a) binde 20 since BKK 2012/3735 (footnote 91); Law 7566 of 4/12/2025 (footnote 88) rewords the base (declared price, not below the tax value): same rule",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty",
+    "charge"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "Presidential power to vary the rate (not exercised as far as the text shows)"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Katma Değer Vergisi (KDV)",
+   "statute": "KDV Kanunu 3065 art. 28; BKK 2007/13033 art. 1(1)(a) as amended by CK 7346 (RG 7.7.2023)",
+   "dated": "CK 7346 in force 10.7.2023; no 2025 change found (not exhaustive); pass 3q year-in-force audit: re-cited: GİB list of Presidential decisions (POST api/gibportal/mevzuat/cbk/list, fetched 2026-11-21): the last decision amending BKK 2007/13033 is no. 9126 (2024); none in 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "lists (I) 1 % and (II) 10 % of BKK 2007/13033 not read: all goods at 20 %",
+    "threshold: none modelled (KDV has no general registration threshold in art. 1; not verified)"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "ÖTV (III) sayılı liste (A) cetveli: alcoholic beverages (beer, wine, vermouth, fermented, spirits)",
+   "statute": "ÖTV Kanunu 4760 art. 11(2)(a), 12(3); CK 5614 (RG 27/5/2022) amounts and rates (beer 63 % / 4,4096 per degree-litre; wines per litre; spirits 602,4843 per litre of alcohol), July 2022 suspension except 2206; CK 9309 (RG 25/12/2024) 1.428,44 for spirits and 2205.10.90.00.12; art. 12(3) PPI chain +22,29 % (3/1/2023, computed from TÜİK), +14,82 %, +25,61 %, +19,49 %, +7,56 % (3/1/2025), +15,71 % (3/7/2025)",
+   "dated": "mevzuat consolidation Wayback 2023-07-12; GİB notices 2022-2025 (gibportal duyuru API); TÜİK Yİ-ÜFE bulletins Dec 2022 (Wayback 2023-01-03), June 2024 (Wayback 2024-07-18), June 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (dated windows, onPureAlcohol, firstOnly per window)",
+    "custom max(63 % beforeTax, asgari) for beer"
+   ],
+   "guards": 7,
+   "unsupported": [
+    "3/1/2023 step computed from TÜİK figures (not a GİB-published table)",
+    "absence of other (III)(A) decisions inferred from GİB's notice list",
+    "lines need quantity (ml) and abvBp"
+   ],
+   "pass": "3l"
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Özel Tüketim Vergisi (ÖTV)",
+   "statute": "ÖTV Kanunu 4760 art. 11-12, list (III) (A): applied rates 10 % (20.09, 22.02, sade/meyvalı gazoz, alkolsüz bira) and 35 % (kolalı gazoz) set by CK 540 (RG 31/12/2018) from 2019-01-01; list (III)(B) cigarettes: art. 11(2)(b), (4), (5), 12(3) with CK 8001, 8958, 9583, 10520, 10799 and the art. 12(3) revaluations of 3/7/2024 (+19,49 %), 3/1/2025 (+7,56 %, GİB notice) and 3/7/2025 (+15,71 %, TÜİK Yİ-ÜFE June 2025); list (I) motor fuels (pass 3n): art. 12(1), (5); CK 9380 (RG 31/12/2024, in force that day: 95 oktan 11,9819, 98 oktan 12,5605, motorin 11,2327 TL/l; art. 2 suspends 12(5) for Jan-Jun 2025), art. 12(5) +15,71 % from 3/7/2025 (TÜİK Yİ-ÜFE June 2025; no decision in between), CK 10799 (RG 31/12/2025, in force that day: 14,8277 / 15,5437 / 13,9006)",
+   "dated": "mevzuat.gov.tr text archived 2023-07-12 (footnote 81); GİB list of ÖTV Presidential decisions read 2026-11-21: no (III)(A) decision on these goods until CK 10799 (RG 31/12/2025); cigarettes: six dated windows (validFrom/validTo) 1/1, 3/1, 15/3, 3/7, 24/10, 31/12/2025; fuels: GİB copies of CK 9380 (scan, OCR) and its explanatory note, CK 10799 and its note (6,95 % on the July 2025 amounts), GİB notices 3/1/2024 and 3/7/2024 quoting art. 12(5) (read 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule x4 (beforeTax, KDV 20 %)",
+    "ExciseRule x6 cigarettes (retail, dated windows, minimum)",
+    "ExciseRule x3 per window x3 fuels (per litre, dated windows, firstOnly per window)"
+   ],
+   "guards": 10,
+   "unsupported": [
+    "list (III)(A) alcohol: CK 9309 minimum specific amounts revalued in July 2025 (art. 12(3)) not read",
+    "soft drinks: KDV taken at 20 % (KDV lists not read)",
+    "list (III)(B): revalued cigarette amounts computed at 4 decimals half up (GİB's own rounded figures not found)",
+    "list (III)(B) other tobacco (per gram), cigars, nargile not modelled",
+    "list (III)(A) alcohol: 3/7/2025 revaluation is +15,71 % (now known); amounts by good not modelled",
+    "list (I) fuels: 3/7/2025 amounts computed (CK 9380 × 1,1571, 4 decimals half up); GİB's July table not found; CK 10799 note implies amounts within 0,0002 TL",
+    "list (I): LPG/otogaz, natural gas, heating oil (per kg) and other petroleum goods not modelled"
+   ],
+   "pass": "3n"
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Türkiye as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Türkiye for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C792&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/tr.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, customsFamily)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "preference partners without an ISO code, not applied: Kosovo (under UNSC res. 1244)"
+   ],
+   "module": "Customs.lean"
+  },
+  {
+   "package": "P8",
+   "oecd": "5200",
+   "tax": "Motorlu taşıtlar vergisi (cars)",
+   "statute": "Law 197 art. 5 (I) tariff (cars registered from 1/1/2018: engine size x value x age, 20 rows), provisional art. 8 (I/A) tariff (cars registered to 31/12/2017: engine size x age), art. 10 (revaluation 43,93 %); pass 3m: motorcycles by Law 197 art. 5 (I) tariff part 2 (100-250 / 251-650 / 651-1200 / 1201+ cm3 by age; none below 100 cm3), MTV General Communique 57 art. 4(1); electric cars: art. 5 fourth paragraph (Law 7103 art. 18): only-electric cars at 25 % of the (I) tariff row matched by motor power (GİB article text); pass 3o: electric motorcycles: art. 5 fifth paragraph (Law 7103 art. 18): only-electric motorcycles at 25 % of the (I) tariff part 2 row matched by motor power (6-15 / 15-40 / 40-60 / 60+ kW; none up to 6 kW)",
+   "dated": "MTV General Communiqué No. 57, Resmî Gazete 32768 (2nd repeated) of 30/12/2024, in force 1/1/2025 (law/rg_20241230M2-6.txt)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (kernel 2.4.0) x29: when engineCcm/value bands, QtyTable on age",
+    "VehicleTax x 5 (motorcycles, incl. a cited zero below 100 cm3)",
+    "VehicleTax x20 electric (engineKw band x value band, multiplierBp 2500)",
+    "VehicleTax x5 electric motorcycles (engineKw bands, multiplierBp 2500, cited zero up to 6 kW)"
+   ],
+   "guards": 6,
+   "unsupported": [
+    "model year = firstRegYear; (I) value = asset value",
+    "half-year instalments: months pro rata instead",
+    "electric cars and motorcycles rounded down to the lira after the 25 %"
+   ],
+   "pass": "3n"
+  }
+ ],
+ "notLevied": [],
+ "cases": [
+  {
+   "id": "tr-h1",
+   "total": 81391,
+   "byOecd": {
+    "1100": 0,
+    "2100": 18000,
+    "2200": 22200,
+    "4100": 400,
+    "4400": 26000,
+    "5111": 8665,
+    "5121": 6126
+   },
+   "borne": {
+    "consumer": 14791,
+    "employer": 22200,
+    "entity": 44400,
+    "withheld": 0
+   },
+   "net": 285600,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KDV: the 1 % and 10 % lists of BKK 2007/13033 were not read; every good is taxed at 20 %",
+    "employer: unemployment insurance (Law 4447), short-term branches and the 5-point incentive not modelled"
+   ]
+  },
+  {
+   "id": "tr-c1",
+   "total": 600500,
+   "byOecd": {
+    "1200": 200500,
+    "5111": 400000
+   },
+   "borne": {
+    "consumer": 400000,
+    "employer": 0,
+    "entity": 175000,
+    "withheld": 25500
+   },
+   "net": 625000,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KVK 32/C(2) exclusions from the minimum-tax base not modelled; art. 30 rates as printed (15 %), Presidential decisions not read",
+    "3000 work-permit fee (TL 10.571,60 a year per foreign worker): company.expatWorkers not given (grade C); no payroll tax in the laws read (KVK 5520, 5510, KDV 3065)"
+   ]
+  },
+  {
+   "id": "tr-h2",
+   "total": 174873,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "4100": 50873,
+    "4300": 124000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 174873,
+    "withheld": 0
+   },
+   "net": 5595094,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "tr-h5",
+   "total": 1140,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 690,
+    "5121": 450
+   },
+   "borne": {
+    "consumer": 1140,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KDV: the 1 % and 10 % lists of BKK 2007/13033 were not read; every good is taxed at 20 %",
+    "ÖTV: nonAlcoholic lines without sub (softDrinks/cola/sweetenedDrinks/energyDrinks): no ÖTV applied"
+   ]
+  },
+  {
+   "id": "tr-h6",
+   "total": 143,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 26,
+    "5121": 117
+   },
+   "borne": {
+    "consumer": 143,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KDV: the 1 % and 10 % lists of BKK 2007/13033 were not read; every good is taxed at 20 %"
+   ]
+  },
+  {
+   "id": "tr-v1",
+   "total": 281526,
+   "byOecd": {
+    "1100": 63734,
+    "2100": 90000,
+    "2200": 111000,
+    "5200": 16792
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 111000,
+    "entity": 170526,
+    "withheld": 0
+   },
+   "net": 429474,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "employer: unemployment insurance (Law 4447), short-term branches and the 5-point incentive not modelled",
+    "MTV: model year taken as the first-registration year; (I) tariff value taken as the asset value; motorcycles by the (I) tariff part 2 (age from the first-registration year); only-electric cars from 2018 at 25 % of the row matched by engineKw (art. 5 fourth paragraph); only-electric motorcycles at 25 % of the part 2 row matched by engineKw (art. 5 fifth paragraph); (II) tariff vehicles not computed"
+   ]
+  },
+  {
+   "id": "tr-x1",
+   "total": 2008,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 700,
+    "5121": 1308
+   },
+   "borne": {
+    "consumer": 2008,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KDV: the 1 % and 10 % lists of BKK 2007/13033 were not read; every good is taxed at 20 %"
+   ]
+  },
+  {
+   "id": "tr-v2",
+   "total": 277809,
+   "byOecd": {
+    "1100": 63734,
+    "2100": 90000,
+    "2200": 111000,
+    "5200": 13075
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 111000,
+    "entity": 166809,
+    "withheld": 0
+   },
+   "net": 433191,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "employer: unemployment insurance (Law 4447), short-term branches and the 5-point incentive not modelled",
+    "MTV: model year taken as the first-registration year; (I) tariff value taken as the asset value; motorcycles by the (I) tariff part 2 (age from the first-registration year); only-electric cars from 2018 at 25 % of the row matched by engineKw (art. 5 fourth paragraph); only-electric motorcycles at 25 % of the part 2 row matched by engineKw (art. 5 fifth paragraph); (II) tariff vehicles not computed"
+   ]
+  },
+  {
+   "id": "tr-f1",
+   "total": 2322,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 974,
+    "5121": 1348
+   },
+   "borne": {
+    "consumer": 2322,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KDV: the 1 % and 10 % lists of BKK 2007/13033 were not read; every good is taxed at 20 %"
+   ]
+  },
+  {
+   "id": "tr-f2",
+   "total": 21255,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 8333,
+    "5121": 12922
+   },
+   "borne": {
+    "consumer": 21255,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KDV: the 1 % and 10 % lists of BKK 2007/13033 were not read; every good is taxed at 20 %"
+   ]
+  },
+  {
+   "id": "tr-v3",
+   "total": 447432,
+   "byOecd": {
+    "1100": 134861,
+    "2100": 135000,
+    "2200": 166500,
+    "5200": 11071
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 166500,
+    "entity": 280932,
+    "withheld": 0
+   },
+   "net": 619068,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "employer: unemployment insurance (Law 4447), short-term branches and the 5-point incentive not modelled",
+    "MTV: model year taken as the first-registration year; (I) tariff value taken as the asset value; motorcycles by the (I) tariff part 2 (age from the first-registration year); only-electric cars from 2018 at 25 % of the row matched by engineKw (art. 5 fourth paragraph); only-electric motorcycles at 25 % of the part 2 row matched by engineKw (art. 5 fifth paragraph); (II) tariff vehicles not computed"
+   ]
+  },
+  {
+   "id": "tr-v4",
+   "total": 208101,
+   "byOecd": {
+    "1100": 40025,
+    "2100": 75000,
+    "2200": 92500,
+    "5200": 576
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 92500,
+    "entity": 115601,
+    "withheld": 0
+   },
+   "net": 384399,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "employer: unemployment insurance (Law 4447), short-term branches and the 5-point incentive not modelled",
+    "MTV: model year taken as the first-registration year; (I) tariff value taken as the asset value; motorcycles by the (I) tariff part 2 (age from the first-registration year); only-electric cars from 2018 at 25 % of the row matched by engineKw (art. 5 fourth paragraph); only-electric motorcycles at 25 % of the part 2 row matched by engineKw (art. 5 fifth paragraph); (II) tariff vehicles not computed"
+   ]
+  },
+  {
+   "id": "tr-p3",
+   "total": 231715,
+   "byOecd": {
+    "1200": 200000,
+    "3000": 31715
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 231715,
+    "withheld": 0
+   },
+   "net": 568285,
+   "notModelled": [
+    "2300",
+    "4200",
+    "4500",
+    "5112",
+    "6000"
+   ],
+   "unsupported": [
+    "KVK 32/C(2) exclusions from the minimum-tax base not modelled; art. 30 rates as printed (15 %), Presidential decisions not read"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 44,
+ "theorems": 1
+}

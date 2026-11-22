@@ -1,0 +1,58 @@
+{
+"CI": {
+ "dated": "Code général des Impôts 2025 (DGI online edition at cgici.com/V2025, the CGI link of dgi.gouv.ci; includes the annexe fiscale 2025, loi n° 2024-1109 du 18 déc. 2024)",
+ "sources": "CGI 2025, DGI online edition (`https://cgici.com/V2025/page-N.html`, 711 pages fetched 2026-11-21 at 2 req/s; the dgi.gouv.ci menu entry 'Le code général des Impôts' points to cgici.com), concatenated text `cmp20/global/R4/fetch/ci8/cgi2025_cgici.txt` (+ v2025.tgz, SHA256SUMS). The online pages also show superseded versions of some articles; the version headed by the latest year marker is used.",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée",
+  "standard": 1800,
+  "reduced": 900,
+  "classes": {"petrol": "reduced", "diesel": "reduced"},
+  "grade": "A",
+  "statute": "CGI 2025 art. 359 (18 % on a base excluding tax; 9 % for milk, infant milk, durum-wheat pasta, petroleum products, luxury meat (LF 2025 art. 1-4) and luxury rice)",
+  "doc": "art. 359: \"Pour la détermination de la taxe sur la valeur ajoutée, telle que prévue par le présent Livre, il est fait application du taux de 18 % sur une base hors taxe. Le taux prévu au paragraphe ci-dessus est réduit à 9% pour : - le lait à l'exclusion des yaourts et de tout autre produit laitier ; - le lait infantile ... - les pâtes alimentaires à base de semoule de blé dur à 100 %; ... - les produits pétroliers; - la viande de luxe (Loi n° 2024-1109, an. fiscale, art. 1er-4); - le riz de luxe\".",
+  "notes": ["art. 355 exemptions (financial operations under the taxe sur les opérations bancaires, medicines, education, unprocessed staples, ...) are not applied; the 9 % food items are not separable from the processed-food basket line"],
+  "unsupported": ["art. 355 exemptions", "9 % food items (basket convention)"]
+ },
+ "excise": {
+  "name": "Taxe spécifique sur les boissons et les tabacs",
+  "grade": "A",
+  "statute": "CGI 2025 art. 418 (tariffs: beer 17 %, ordinary wine 35 %, other alcoholic drinks < 35° 40 %, >= 35° 45 %, non-alcoholic drinks 14 %, tobacco 57 %) and art. 419 (base: ex-factory price excluding VAT, or customs value plus duties)",
+  "doc": "art. 418 Section IV - Bases d'imposition et tarifs: \"I. - Boissons alcoolisées 1- Champagnes : 40 %. 2- Vins ordinaires : 35 %. 3- Vins mousseux et vins AC et assimilés : 40 %. 4- Bières et cidres : 17 %. 5- Autres boissons alcoolisées titrant moins de 35° d'alcool : 40 %. 6- Autres boissons alcoolisées titrant 35° d'alcool et plus : 45 %. ... II. - Boissons non alcoolisées à l'exclusion de l'eau : 1- Boissons énergétiques : 14 % 2- Autres boissons non alcoolisées : 14 %. III. - Tabacs Cigares, cigarillos, cigarettes, tabac à fumer, ... 57 %\"; art. 419: \"d'après le prix de vente sortie-usine, à l'exclusion de la taxe sur la valeur ajoutée ... En ce qui concerne les tabacs, ce prix de vente ne peut être inférieur à 20 000 francs les 1 000 cigarettes\".",
+  "items": [
+   {"good": "beer", "name": "Taxe spécifique bières", "advBp": 1700, "vatBp": 1800, "statute": "CGI art. 418 I 4 (17 %)"},
+   {"good": "wine", "name": "Taxe spécifique vins ordinaires", "advBp": 3500, "vatBp": 1800, "statute": "CGI art. 418 I 2 (35 %)"},
+   {"good": "spirits", "name": "Taxe spécifique boissons < 35°", "maxAbvBp": 3499, "advBp": 4000, "vatBp": 1800, "statute": "CGI art. 418 I 5 (40 %)"},
+   {"good": "spirits", "name": "Taxe spécifique boissons >= 35°", "minAbvBp": 3499, "advBp": 4500, "vatBp": 1800, "statute": "CGI art. 418 I 6 (45 %)"},
+   {"good": "nonAlcoholic", "name": "Taxe spécifique boissons non alcoolisées", "advBp": 1400, "vatBp": 1800, "statute": "CGI art. 418 II (14 %)"},
+   {"good": "cigarettes", "name": "Taxe spécifique tabacs", "advBp": 5700, "vatBp": 1800, "statute": "CGI art. 418 III (57 %)"}
+  ],
+  "notes": ["water is excluded from the non-alcoholic rate (art. 418 II): the whole non-alcoholic basket line is charged", "the minimum tobacco base (20 000 F per 1 000 cigarettes) and the taxe spécifique unique on petroleum products (per-litre tariff set by ordinance, reproduced in the online edition) are not modelled; the annex taxes on alcoholic drinks (taxe additionnelle) not located"],
+  "unsupported": ["minimum tobacco base", "taxe spécifique unique on petroleum products", "taxe additionnelle on alcoholic drinks"]
+ },
+ "cit": {
+  "name": "Impôt sur les bénéfices industriels et commerciaux (sociétés)",
+  "rate": 2500,
+  "step": 100,
+  "min": {"bp": 50, "floor": 3000000, "cap": 35000000},
+  "grade": "A",
+  "statute": "CGI 2025 art. 51 (25 %; base rounded down to 100 F) and art. 39 (impôt minimum forfaitaire, régime du réel normal: 0,5 % of turnover, minimum 3 000 000 F, maximum 35 000 000 F)",
+  "doc": "art. 51 (version 2024): \"Le taux de l'impôt est fixé à 25 % pour les personnes morales et les personnes physiques. Ce taux est porté à 30 % pour les entreprises du secteur des télécommunications, des technologies de l'information et de la communication, ainsi que les entreprises du secteur des jeux de hasard. Pour le calcul de l'impôt, le bénéfice net est arrondi à la centaine de francs inférieure.\" art. 39: \"Un impôt minimum forfaitaire frappe les personnes physiques ou morales soumises au régime du bénéfice réel normal. Il est exigible ... a) le montant de l'impôt sur les bénéfices de l'exercice est inférieur à l'impôt minimum forfaitaire ... 1° La cotisation ... est égale à 0,5% du chiffre d'affaires, toutes taxes comprises ... ne peut être inférieure à un minimum de perception de 3 000 000 de francs ... Le maximum de perception de l'impôt minimum forfaitaire est fixé à 35 000 000 de francs.\"",
+  "notes": ["the IMF base is turnover including taxes; the model's turnover (before VAT) is used", "30 % for telecoms/ICT/gaming, 0,10 %/0,15 % IMF rates for petroleum, utilities, banks and insurers, and the simplified regime (art. 45, 53) are not modelled"],
+  "unsupported": ["sector rates", "IMF on turnover including taxes", "simplified regime"]
+ },
+ "wht": {
+  "name": "Retenues sur paiements à l'étranger",
+  "grade": "A",
+  "statute": "CGI 2025 art. 92 (BNC of persons without a professional installation: 25 % on 80 % of the gross, i.e. 20 %); art. 182 3 (IRVM 15 %; 17 % only for individuals from 2025); art. 193 1° (IRC 18 %)",
+  "doc": "art. 92 1° a): \"Sont passibles de l'impôt sur les bénéfices non commerciaux ... les personnes et sociétés n'ayant pas d'installation professionnelle en Côte d'Ivoire, à raison des sommes qu'elles perçoivent en rémunération des prestations de toute nature fournies ou utilisées en Côte d'Ivoire\" (b: including copyright and patent royalties); d): \"Le montant net des sommes imposables est déterminé en appliquant aux encaissements bruts une déduction de 20 %\"; 2° a): \"II est fait application du taux de 25 %\". Art. 182: \"Le taux de l'impôt est fixé à 15 % pour ... 3-les produits et toutes les sommes imposables à l'impôt sur le revenu des valeurs mobilières non visés par le présent article. Ce taux est porté à 17 % en ce qui concerne les revenus ci-dessus dont le bénéficiaire est une personne physique\" (LF 2025 art. 37-1). Art. 193: \"1° - Le taux de l'impôt sur le revenu des créances est fixé à 18 %\".",
+  "rules": [
+   {"kind": "services", "rateBp": 2000, "statute": "CGI art. 92 (25 % x 80 % = 20 %)"},
+   {"kind": "royalty", "rateBp": 2000, "statute": "CGI art. 92 1° b (25 % x 80 % = 20 %)"},
+   {"kind": "dividend", "rateBp": 1500, "statute": "CGI art. 182 3 (IRVM 15 %)"},
+   {"kind": "interest", "rateBp": 1800, "statute": "CGI art. 193 1° (IRC 18 %)"}
+  ],
+  "notes": ["art. 183 bis: IRVM is increased by 25 % for payments to persons in privileged tax regimes (not modelled); listed-share dividends 10 % (art. 183)"],
+  "unsupported": ["art. 183 bis surcharge", "listed-share rate"]
+ }
+}
+}

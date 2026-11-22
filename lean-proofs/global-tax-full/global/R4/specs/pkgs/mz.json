@@ -1,0 +1,267 @@
+{
+ "cc": "MZ",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Código do Imposto do Selo (Decreto n.º 6/2004) Tabela",
+   "why": "the Tabela (acquisition of immovable property, credit, insurance) is not held; the AT Mozambique list of tax decrees as captured on 21 May 2025 (Wayback 20250521152016) offers the Sisa code (Decreto 46/2004), the ISV (Decreto 19/2002) and the RGIT, but not the Selo code",
+   "tried": "AT site Wayback (Legislação Fiscal / Decretos 2025 capture), held CDX lists of at.gov.mz (seventeenth pass)",
+   "triage": "moderate"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "inss",
+   "level": "social",
+   "rateBp": 400,
+   "grade": "B",
+   "name": "INSS employer contribution (4 %)",
+   "statute": "INSS Moçambique, page 'Taxa contributiva TCO' (fetched 2026-11-20); Regulamento de Segurança Social Obrigatória (Decreto 51/2017, republished by Decreto 56/2024) art. 15 leaves the rate to a joint ministerial diploma (not held)",
+   "doc": "INSS: TCO rate 7 %: worker 3 % + employer 4 % of remuneration (no ceiling).",
+   "unsupported": [
+    "the ministerial diploma fixing the rate is not held",
+    "the worker's 3 %"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "sisa",
+   "grade": "B",
+   "rateBp": 200,
+   "kinds": [
+    "home",
+    "realEstate"
+   ],
+   "name": "Sisa on onerous transfers of urban buildings (2 %, paid by the acquirer)",
+   "statute": "Código da Sisa (Decreto n.º 46/2004, in force 1 November 2004) art. 1 (1), 3 (devida pelas pessoas a quem se transmitem os direitos sobre prédios urbanos), 10 (1) (2 %); held registry/afm_data/fetch/MZ/mz_sisa_d46_2004.pdf.txt. Edition of 2004, later amendments not checked (flag)",
+   "doc": "art. 1 (1): 'A Sisa incide sobre as transmissões, a título oneroso, do direito de propriedade ou de figuras parcelares desse direito, sobre bens imóveis'; art. 3: the tax is 'devida pelas pessoas, singulares ou colectivas, a quem se transmitem os direitos sobre prédios urbanos'; art. 10 (1): 'A taxa da Sisa é de 2 % e aplica-se sobre o valor determinado nos termos do Capítulo III'; (2): 10 % where the acquirer resides in a privileged tax territory.",
+   "unsupported": [
+    "the value of Chapter III (higher of the price and the matrix value) read as the purchase price or assessed value",
+    "10 % for acquirers resident in privileged tax territories (art. 10 (2))",
+    "rural land (prédios rústicos) not charged",
+    "amendments after 2004 not checked"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicleTax",
+   "fam": "isv",
+   "grade": "B",
+   "unknown": true,
+   "name": "Imposto sobre Veículos (ISV): light cars by fuel, cylinder capacity and age",
+   "statute": "Regulamento do Imposto sobre Veículos approved by Decreto n.º 19/2002 de 23 de Julho (in force 1 Jan 2003), art. 1-2, 4, 7 and Tabela I (AT Moçambique download via Wayback 20170804185026, R4/fetch/p18/mz_isv_dec19_2002_wb20170804.pdf); amounts in old meticais divided by 1 000 for the 2006 redenomination of the metical; later revision by ministerial diploma (art. 7 n.º 5, at most double) not located: the AT legislation list of May 2025 (R4/fetch/p17/mz_at_decretos_wb20250521.html) gives Decreto n.º 19/2002 as the ISV text (B, flagged)",
+   "taxes": "[{ name := \"ISV, light car (petrol), 1.º escalão, up to 6 years\", kinds := [\"car\"], fuels := [.petrol], «when» := [(.age, -1, 5)], parts := [(.engineCcm, QtyTable.ofCeilings [(1000, 200), (1300, 400), (1750, 600), (2600, 1600), (3500, 2400)] 4400)], proRata := false, statute := \"Decreto n.º 19/2002 Tabela I, light cars (petrol, by cylinder capacity), 1.º escalão, up to 6 years; art. 7 n.º 2 (age), art. 2 (whole year)\" }, { name := \"ISV, light car (other fuels), 1.º escalão, up to 6 years\", kinds := [\"car\"], fuels := [.diesel, .lpg, .cng, .other], «when» := [(.age, -1, 5)], parts := [(.engineCcm, QtyTable.ofCeilings [(1500, 200), (2000, 400), (3000, 600)] 1600)], proRata := false, statute := \"Decreto n.º 19/2002 Tabela I, light cars (other fuels, by cylinder capacity), 1.º escalão, up to 6 years; art. 7 n.º 2 (age), art. 2 (whole year)\" }, { name := \"ISV, light car (petrol), 2.º escalão, over 6 to 12 years\", kinds := [\"car\"], fuels := [.petrol], «when» := [(.age, 5, 11)], parts := [(.engineCcm, QtyTable.ofCeilings [(1000, 100), (1300, 200), (1750, 300), (2600, 800), (3500, 1200)] 2200)], proRata := false, statute := \"Decreto n.º 19/2002 Tabela I, light cars (petrol, by cylinder capacity), 2.º escalão, over 6 to 12 years; art. 7 n.º 2 (age), art. 2 (whole year)\" }, { name := \"ISV, light car (other fuels), 2.º escalão, over 6 to 12 years\", kinds := [\"car\"], fuels := [.diesel, .lpg, .cng, .other], «when» := [(.age, 5, 11)], parts := [(.engineCcm, QtyTable.ofCeilings [(1500, 100), (2000, 200), (3000, 300)] 800)], proRata := false, statute := \"Decreto n.º 19/2002 Tabela I, light cars (other fuels, by cylinder capacity), 2.º escalão, over 6 to 12 years; art. 7 n.º 2 (age), art. 2 (whole year)\" }, { name := \"ISV, light car (petrol), 3.º escalão, over 12 to 25 years\", kinds := [\"car\"], fuels := [.petrol], «when» := [(.age, 11, 24)], parts := [(.engineCcm, QtyTable.ofCeilings [(1000, 50), (1300, 100), (1750, 150), (2600, 400), (3500, 600)] 1100)], proRata := false, statute := \"Decreto n.º 19/2002 Tabela I, light cars (petrol, by cylinder capacity), 3.º escalão, over 12 to 25 years; art. 7 n.º 2 (age), art. 2 (whole year)\" }, { name := \"ISV, light car (other fuels), 3.º escalão, over 12 to 25 years\", kinds := [\"car\"], fuels := [.diesel, .lpg, .cng, .other], «when» := [(.age, 11, 24)], parts := [(.engineCcm, QtyTable.ofCeilings [(1500, 50), (2000, 100), (3000, 150)] 400)], proRata := false, statute := \"Decreto n.º 19/2002 Tabela I, light cars (other fuels, by cylinder capacity), 3.º escalão, over 12 to 25 years; art. 7 n.º 2 (age), art. 2 (whole year)\" }]",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 600000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 500000,
+        "engineCcm": 1600,
+        "fuel": "petrol",
+        "firstRegYear": 2022
+       }
+      ]
+     },
+     "expect": [
+      600
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 600000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 500000,
+        "engineCcm": 2500,
+        "fuel": "diesel",
+        "firstRegYear": 2016
+       }
+      ]
+     },
+     "expect": [
+      300
+     ]
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 600000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 500000,
+        "engineCcm": 1000,
+        "fuel": "petrol",
+        "firstRegYear": 2005
+       }
+      ]
+     },
+     "expect": [
+      50
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 600000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 500000,
+        "engineCcm": 2000,
+        "fuel": "petrol",
+        "firstRegYear": 1999
+       }
+      ]
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t4",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t4",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 600000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 500000,
+        "engineCcm": 1200,
+        "fuel": "petrol",
+        "firstRegYear": 2020
+       }
+      ]
+     },
+     "expect": [
+      400
+     ]
+    },
+    {
+     "line": {
+      "id": "t5",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t5",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 600000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 500000,
+        "engineCcm": 1200,
+        "fuel": "petrol",
+        "firstRegYear": 2019
+       }
+      ]
+     },
+     "expect": [
+      200
+     ]
+    },
+    {
+     "line": {
+      "id": "t6",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t6",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 600000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 500000,
+        "engineCcm": 4000,
+        "fuel": "petrol",
+        "firstRegYear": 2024
+       }
+      ]
+     },
+     "expect": [
+      4400
+     ]
+    }
+   ],
+   "doc": "Decreto n.º 19/2002: the ISV falls on the use of light and heavy cars up to 25 years old, motor-cycles up to 15 years, private aircraft and pleasure boats registered in Mozambique (art. 1), is due in full for each calendar year (art. 2) from the owner (art. 3), and is set for light cars by fuel, cylinder capacity (or voltage) and age (art. 4 a)); age is counted in calendar years at 1 January including the registration year (art. 7 n.º 2). Tabela I, light cars, annual tax in MT of 2002 (petrol up to 1 000 / 1 300 / 1 750 / 2 600 / 3 500 cm3 / above; other fuels up to 1 500 / 2 000 / 3 000 cm3 / above): up to 6 years 200 000 to 4 400 000 MT, over 6 to 12 years half, over 12 to 25 years a quarter. Art. 7 n.º 5 lets the minister revise the rates by diploma (at most double); none was located, so the 2002 amounts (in new meticais, / 1 000) are used and flagged. Kernel age = year - first registration year, so the statute's 'up to 6 years' is kernel age 0-5. Worked cases (hand): petrol 1 600 cm3 first registered 2022 -> 600; diesel 2 500 cm3 of 2016 -> 300; petrol 1 000 cm3 of 2005 -> 50; petrol of 1999 (26 years) -> none; petrol 1 200 cm3 of 2020 (6 years) -> 400, of 2019 (7 years) -> 200; petrol 4 000 cm3 of 2024 -> 4 400. Eighteenth pass.",
+   "unsupported": [
+    "ministerial revisions of the rates after 2002 (art. 7 n.º 5) not located: 2002 amounts used (flag)",
+    "electric cars (by voltage), hybrids and hydrogen cars: not matched (no charge here; grade C)",
+    "heavy goods vehicles (by load capacity), buses (by seats), motor-cycles (Tabela II), aircraft and pleasure boats (Tabelas III-IV) not modelled",
+    "vehicles of exempt owners (art. 5) not distinguished"
+   ]
+  }
+ ]
+}

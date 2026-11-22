@@ -1,0 +1,11 @@
+{"KM": [
+ {"package": "P3", "oecd": "1100", "kind": "gains", "fam": "pvImm", "grade": "B", "rateBp": 2000, "kinds": ["home", "realEstate", "land"],
+  "name": "Prélèvement libératoire sur les plus-values immobilières des personnes physiques (20 %)",
+  "statute": "CGI 2022 (updated to 1 January 2022) art. 77 2°, 115 (LF 2024 OCR pp. 1-60 held; LF 2023 and 2025 not held)",
+  "doc": "art. 77 2°: gains made by individuals on built or unbuilt immovables acquired for value or free are property income; art. 115: those gains bear a final levy of 20 %, collected by the registration service when the deed is registered.",
+  "unsupported": ["the gain's computation rules (cost uplift, costs) were not read in the two-column extraction: gain = proceeds − cost − costs"]},
+ {"package": "P5", "oecd": "4100", "kind": "unsupported", "name": "Impôt sur la propriété foncière (IPF)",
+  "statute": "CGI 2022 art. 185-192",
+  "why": "art. 192: fixed amounts per building by type — houses with outbuildings 5 000 FC (2 000 m² or more) / 3 000 FC, dwellings without outbuildings 1 000 FC, professional buildings and land by their own scales: the input carries neither the outbuildings nor the surface",
+  "tried": "cgi2022.raw.txt art. 185-192"}
+]}

@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Mervärdesskatt",
+  "statute": "ML (2023:200) 9, 10, 18 kap. [year in force 2025 (pass 16), re-cited 2025: riksdagen.se text \"t.o.m. SFS 2024:942\", Internet Archive 2025-08-13 (se/law/ml2023_wb20250813.*): 9 kap. 2 § 25 %, 3 § food 12 %, 4-5 §§ hotels and restaurants 12 %, 18 kap. 120 000 kronor as modelled; the current text carries no Lag (2025:…) note, so no change during 2025; the 2026 changes (Lag 2026:118, food 6 % from 1.4.2026; 2026:119, 841, 1025) are after 2025]",
+  "dated": "riksdagen.se, ändrad t.o.m. SFS 2024:942 (Internet Archive 2025-08-13)",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "the 2025 SFS version not fetched as such"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Lag (2022:155) om alkoholskatt 8 §; lag (1994:1563) om tobaksskatt 2 §; lag (1994:1776) om skatt på energi 2 kap. 1 §, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "petrol and diesel of environmental class 1; beer above 3.5 % vol; still wine 8.5-15 % vol",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Energiskatt och koldioxidskatt på bensin, diesel och eldningsolja (ny tabell från 1.7.2025)",
+  "statute": "Lag (1994:1776) om skatt på energi 2 kap. 1 §, amended by SFS 2024:1144 (Prop. 2024/25:30) in force 1.7.2025",
+  "dated": "change on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRule (validFrom/validTo, kernel 2.1)"
+  ],
+  "unsupported": [
+   "figures from the TEDB (the text of SFS 2024:1144 not read); petrol and diesel at environmental class 1"
+  ],
+  "gap": 1
+ }
+]

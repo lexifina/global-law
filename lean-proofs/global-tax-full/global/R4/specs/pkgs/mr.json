@@ -1,0 +1,330 @@
+{
+ "cc": "MR",
+ "dated": "CGI 2023",
+ "entries": [
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI 2023 (whole code)",
+   "why": "MR CGI 2023 (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net' finds no charging provision"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts (loi n° 2019-018, CGI of 10 March 2020; DGI consolidation 17/2/2023), amended by LF 2024, LF 2025, LFR 2025",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (http://impots.gov.mr/DGI/files/CGI-Fr-2023.pdf)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "patente",
+   "grade": "B",
+   "name": "Patente (general tariff by the previous year's turnover)",
+   "statute": "CGI version officielle janvier 2023 art. 187-188 (art. 188 nouveau LFI 2021); LF 2025 held only in Arabic, not checked",
+   "doc": "art. 188: turnover of the previous year up to 3 M MRU 10 000; 3-10 M 30 000; 10-15 M 45 000; 15-30 M 70 000; 30-60 M 100 000; 60-100 M 150 000; 100-150 M 200 000; 150-250 M 250 000; 250-400 M 300 000; above 400 M 500 000 MRU.",
+   "unsupported": [
+    "retail petroleum sales counted at 25 % (art. 187-2)",
+    "transporters' per-vehicle tariff (art. 190)"
+   ],
+   "lic": {
+    "tiers": [
+     [
+      3000000,
+      0,
+      10000,
+      10000
+     ],
+     [
+      10000000,
+      0,
+      30000,
+      30000
+     ],
+     [
+      15000000,
+      0,
+      45000,
+      45000
+     ],
+     [
+      30000000,
+      0,
+      70000,
+      70000
+     ],
+     [
+      60000000,
+      0,
+      100000,
+      100000
+     ],
+     [
+      100000000,
+      0,
+      150000,
+      150000
+     ],
+     [
+      150000000,
+      0,
+      200000,
+      200000
+     ],
+     [
+      250000000,
+      0,
+      250000,
+      250000
+     ],
+     [
+      400000000,
+      0,
+      300000,
+      300000
+     ]
+    ],
+    "top": [
+     0,
+     500000,
+     500000
+    ]
+   },
+   "tests": [
+    {
+     "turnover": 200000000,
+     "expect": [
+      250000
+     ]
+    },
+    {
+     "turnover": 800000000,
+     "expect": [
+      500000
+     ]
+    },
+    {
+     "turnover": 5000000,
+     "expect": [
+      30000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "cgi2020fr.txt (whole code)",
+   "why": "MR: the general tax code held (cgi2020fr.txt, 473k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "tvm",
+   "grade": "B",
+   "name": "Taxe sur les véhicules à moteur (personal-use vehicles by fiscal horsepower)",
+   "statute": "CGI version officielle janvier 2023 art. 138, 140 1); LF 2025 held only in Arabic, not checked; dating for 2025 (seventeenth pass): the LF 2025 (Loi n° 2025-001 of 14 January 2025, Arabic text world/B06-mena/mr/law/lf2025ar.nfkc.txt art. 3.1) amends CGI art. 297, 309, 312, 313, 323, 329, 331, 334, 337, 362, 384, 386, 391, 405 and L159, L160, L168, L175 only, and the LFR 2025 (lfr2025ar.nfkc.txt art. 3.2.x) amends no CGI article on vehicles: art. 138 and 140 unchanged in 2025 (LF 2024 not held: flag)",
+   "doc": "art. 140 1) personal-use vehicles: up to 4 CV 1 620 MRU, 5-7 CV 2 250, 8-11 CV 2 970, 12-16 CV 4 050, 17 CV and more 7 020.",
+   "unsupported": [
+    "public transport vehicles 1 140-3 600 MRU (art. 140 2)"
+   ],
+   "bands": [
+    [
+     4,
+     1620
+    ],
+    [
+     7,
+     2250
+    ],
+    [
+     11,
+     2970
+    ],
+    [
+     16,
+     4050
+    ]
+   ],
+   "top": 7020,
+   "tests": [
+    {
+     "hps": [
+      9,
+      17
+     ],
+     "expect": [
+      2970,
+      7020
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmDiv",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1000,
+   "name": "Impôt sur le revenu des capitaux mobiliers, dividends (10 %)",
+   "statute": "CGI 2023 (French edition) art. 119-120, 126 (LFI 2024/2025 held in Arabic only, not read)",
+   "doc": "art. 126: 20 % on gains on securities where the seller is in a privileged-tax State, 10 % in all other cases.",
+   "unsupported": []
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmInt",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 1000,
+   "name": "Impôt sur le revenu des capitaux mobiliers, interest on claims and deposits (10 %)",
+   "statute": "CGI 2023 art. 119, 121, 122, 126",
+   "doc": "art. 119: IRCM on income from claims, deposits and guarantees; art. 126: 10 %; art. 122: savings-bank passbook interest and interest on bank accounts of households up to 100 000 MRU a year are exempt.",
+   "unsupported": [
+    "exemption of savings-bank interest and of household bank-account interest up to 100 000 MRU a year (art. 122 1°-2°): the household's interest is taken to be taxable"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "irf",
+   "grade": "B",
+   "income": "rent",
+   "rateBp": 1000,
+   "name": "Impôt sur les revenus fonciers (10 % of rents due)",
+   "statute": "CGI 2023 art. 102, 105",
+   "doc": "art. 102: taxable income = total rents due in the previous year, rounded down to 10 MRU; landlords whose only income is rent of at most 6 000 MRU a year are exempt; art. 105: rate 10 %.",
+   "unsupported": [
+    "exemption of rent-only landlords up to 6 000 MRU (art. 102 4)",
+    "real-estate gains taxed under the IRF with a 5 %-a-year abatement after two years (art. 103, 107)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "ta",
+   "grade": "B",
+   "rateBp": 60,
+   "name": "Taxe d'apprentissage (0,60 % of wages)",
+   "statute": "CGI 2023 art. 152-153",
+   "doc": "art. 152: base = all salaries, wages, allowances and remuneration paid; art. 153: rate 0,60 %.",
+   "unsupported": [
+    "reduction of 40 MRU per apprentice, at most 50 % (art. 151)",
+    "rounding of the base to 10 MRU"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "external",
+   "fam": "mrFonciereExt",
+   "module": "Local.lean",
+   "parts": [
+    "TaxKernel.Global2.LocalRate (LocalTax, withLocalTaxes)"
+   ],
+   "grade": "B",
+   "name": "Contribution foncière sur les propriétés bâties (commune rate, 3 %-10 %, a declared input)",
+   "statute": "CGI art. 159, 161, 162 (rental value at 1 January less 20 %), 165 ('un taux voté par le Conseil Municipal qui doit être compris entre 3 % et 10 %') [text version: CGI version officielle janvier 2023; the LF 2025 is held in Arabic only and was not read: grade B]",
+   "unsupported": [
+    "the commune's rate is an input (localRates.contributionFonciere): no Nouakchott 2025 deliberation reached, no default declared (no rate: grade C)",
+    "art. 160 exemptions",
+    "art. 163 (1) fallback rental value of 14 % of cost or price (an asset without annualValue: grade C)",
+    "art. 137 (2) 8 % withholding on rents paid by corporate tenants (collection of the same tax)",
+    "art. 164 rounding of the base to the ten ouguiya"
+   ],
+   "was": "grade C (rate voted by each municipal council between 3 % and 10 % of the rental value less 20 % (art. 162, 165): no default rate in the code)",
+   "status": "framework (local rate input)",
+   "local_rate": "the commune's rate is an input: localRates.contributionFonciere (3 %-10 %)"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "mutImm",
+   "grade": "B",
+   "rateBp": 200,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Droit d'enregistrement, mutations d'immeubles à titre onéreux (2 %)",
+   "statute": "CGI 2023 art. 312, 313 (LFI 2021)",
+   "doc": "art. 312: base = price plus charges and indemnities, or market value if higher; art. 313 1): transfers of immovables or real rights for consideration 2 % (1 % abroad).",
+   "unsupported": [
+    "exchanges 5 % (art. 314)"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estate",
+   "fam": "donation",
+   "grade": "B",
+   "inh": {},
+   "gift": {
+    "spouse": 0,
+    "child": 0,
+    "grandchild": 0,
+    "parent": 0
+   },
+   "inhDefault": 0,
+   "giftDefault": 200,
+   "allowance": 0,
+   "name": "Droits d'enregistrement sur les donations entre vifs (2 % as for sales of immovables; free in the direct line and between spouses)",
+   "statute": "CGI 2023 art. 313, 325",
+   "doc": "art. 325: gifts of immovables, businesses, leases or shares bear the proportional duties of the corresponding sale (immovables 2 %, art. 313) on the declared value without deduction of charges; gifts to the spouse, ascendants or descendants are registered free. No duty on successions: the code has no tariff for transfers on death.",
+   "unsupported": [
+    "the gift is taken to be immovable property; gifts of a business, lease or shares bear their own sale rates",
+    "inheritances: no duty in the code (rate 0)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnss",
+   "level": "social",
+   "rateBp": 1500,
+   "cap": 840000,
+   "grade": "B",
+   "name": "CNSS employer contributions 13 % and occupational medicine (ONMT) 2 % (up to 70 000 MRU a month)",
+   "statute": "CNSS Mauritanie pages 'Cotisation' (2016) and 'Recouvrement' (2021) (held mr/law/w5); CLEISS 'Les cotisations en Mauritanie' (1 Jan 2025, ceiling in MRU)",
+   "doc": "CNSS: '14 % pour la sécurité sociale dont 1 % est supporté par le travailleur et 13 % sont à la charge de l'employeur ; 2 % pour la médecine du travail à la charge exclusive de l'employeur', ceiling 70 000 a month; CLEISS 2025 gives the ceiling as 70 000 MRU.",
+   "unsupported": [
+    "the worker's 1 %"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnam",
+   "level": "social",
+   "rateBp": 500,
+   "grade": "B",
+   "name": "CNAM health insurance, employer contribution (5 %, whole wage)",
+   "statute": "CLEISS 'Les cotisations en Mauritanie' (1 Jan 2025)",
+   "doc": "CLEISS: 'Maladie 5 % (part patronale), 4 % (part salariale), totalité du salaire'.",
+   "unsupported": [
+    "the CNAM ordinance not read",
+    "the worker's 4 %"
+   ]
+  }
+ ]
+}

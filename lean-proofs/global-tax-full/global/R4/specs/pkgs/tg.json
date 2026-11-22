@@ -1,0 +1,442 @@
+{
+ "cc": "TG",
+ "dated": "CGI-LPF édition 2025 (OTR)",
+ "entries": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "income": "dividend",
+   "rateBp": 1300,
+   "grade": "A",
+   "name": "Retenue sur les revenus de capitaux mobiliers (produits distribués)",
+   "statute": "CGI art. 79 (13 %, libératoire for individuals)",
+   "doc": "art. 79: \"Pour les produits de placements à revenus variables, les taux de la retenue sont fixés comme suit : ... Personne physique : - 13% du montant des revenus distribués ; - 3% du montant des dividendes distribués par les sociétés cotées sur une bourse des valeurs agréées par le [CREPMF] ... Pour les personnes physiques, ces retenues sont libératoires de l'impôt sur le revenu\".",
+   "notes": [
+    "CGI art. 79: 13 % on distributions (3 % for dividends of companies listed on the BRVM: not separable)"
+   ],
+   "unsupported": [
+    "3 % for listed companies"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "intWht",
+   "income": "interest",
+   "rateBp": 1300,
+   "grade": "A",
+   "name": "Retenue sur les produits de placements à revenus fixes (intérêts), personnes physiques (13 %, libératoire)",
+   "statute": "CGI art. 80 ('Personne physique - 13% libératoire de l'impôt sur le revenu pour les produits auxquels la retenue est appliquée'), art. 47 (revenus des créances, dépôts, cautionnements et comptes courants) [text version: CGI 2025 (OTR edition 'CGI et LPF 2025', otr_cgi_lpf_2025.txt)]",
+   "doc": "art. 80: \"Pour les produits de placements à revenus fixes les taux de la retenue sont fixés comme suit : ... Personne physique - 13% libératoire de l'impôt sur le revenu pour les produits auxquels la retenue est appliquée.\" art. 48: interest on savings books (livrets d'épargne) is exempt.",
+   "unsupported": [
+    "exempt interest of art. 48 (livrets d'épargne) and art. 50-52 (cooperatives, public loans) not distinguished",
+    "interest taken into a business profit (not final) not distinguished"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "pv",
+   "rateBp": 700,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land",
+    "listedShares",
+    "unlistedShares"
+   ],
+   "mainHomeExempt": true,
+   "grade": "A",
+   "holdReduce": [
+    {
+     "kinds": [
+      "home",
+      "realEstate"
+     ],
+     "overMonths": 60,
+     "reduceBp": 2000
+    },
+    {
+     "kinds": [
+      "land"
+     ],
+     "overMonths": 60,
+     "reduceBp": 1000
+    },
+    {
+     "kinds": [
+      "listedShares",
+      "unlistedShares"
+     ],
+     "overMonths": 24,
+     "reduceBp": 1000
+    }
+   ],
+   "exemptProceeds": {
+    "kinds": [
+     "realEstate",
+     "land",
+     "home"
+    ],
+    "upTo": 2000000
+   },
+   "name": "Taxe sur les plus-values de cession d'immeubles et d'actions ou parts sociales (7 %, libératoire)",
+   "statute": "CGI art. 82 (gains on immovables and on shares of companies registered in Togo, 'à titre libératoire'), art. 84 (exemptions), art. 85 and 88 (base), art. 90 ('7% en ce qui concerne les cessions d'immeubles ou de droits immobiliers et d'actions ou de parts sociales') [text version: CGI 2025 (OTR edition 'CGI et LPF 2025', otr_cgi_lpf_2025.txt)]",
+   "doc": "art. 82: \"Les plus-values immobilières effectivement réalisées par les personnes physiques ... lors de la cession à titre onéreux de biens immeubles ou de droits immobiliers de toute nature sont soumises à titre libératoire à une taxe sur les plus-values. Il en est de même en ce qui concerne : 1. les plus-values réalisées par les personnes physiques ou morales ... qui cèdent ... des actions ou parts de sociétés immatriculées au Togo\"; art. 84: exempt the principal residence on a first mutation, other immovables sold for at most 2 000 000 F, agricultural land; art. 90: 7 %.",
+   "notes": [
+    "CGI art. 90: 7 % on the gain (art. 85: price less acquisition price; art. 88 for shares); the principal residence is exempt (art. 84, first mutation assumed); immovables other than it sold for 2 000 000 F or less are exempt (art. 84); held more than 5 years: buildings -20 %, unbuilt land -10 % (art. 85); shares held more than 2 years -10 % (art. 88)"
+   ],
+   "unsupported": [
+    "art. 84: agricultural land exempt (land treated as taxable)",
+    "art. 87 c): 30 % flat uplift of the acquisition price for works not applied",
+    "shares of companies not registered in Togo are outside art. 82 (all shares taxed here)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnss",
+   "rateBp": 1750,
+   "level": "social",
+   "grade": "B",
+   "name": "CNSS employer contributions",
+   "statute": "CNSS Togo (rates fixed by decree): family 3 %, occupational risks 2 %, pensions 12,5 %",
+   "doc": "CNSS Togo, 'Cotisations sociales' (official site, w5/tg_cnss_cotis.txt): \"Le taux de cotisation sociale est de 21,5%. ... la branche des prestations familiales pour 3%, la branche des risques professionnels ... pour 2%, une part de la branche des pensions de vieillesse pour 12,50%. Les 4% à la charge du travailleur salarié\". The decree itself not held (grade B); no ceiling stated.",
+   "source": "CNSS official page (secondary)",
+   "notes": [
+    "CNSS employer 17,5 % from the CNSS official page (decree not held); ceiling, if any, not applied"
+   ],
+   "unsupported": [
+    "decree not held"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "amu",
+   "rateBp": 500,
+   "level": "social",
+   "grade": "A",
+   "name": "Assurance maladie obligatoire (employer share)",
+   "statute": "Décret n° 2023-096 art. 12 (10 %, at least half by the employer)",
+   "doc": "Décret 2023-096 art. 12: \"Le taux de cotisation dû par les travailleurs salariés au titre du régime d'assurance maladie obligatoire est fixé à 10 % des rémunérations mensuelles soumises à cotisation, dont 50% au moins à la charge de l'employeur et le reste à la charge du travailleur.\" The statutory minimum employer share (5 %) is applied.",
+   "notes": [
+    "AMU: employer share taken at the statutory minimum (half of 10 %)"
+   ],
+   "unsupported": []
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "property",
+   "fam": "foncier",
+   "builtBp": 750,
+   "landBp": 50,
+   "grade": "A",
+   "name": "Taxes foncières",
+   "statute": "CGI art. 275-276 (7,5 % built, on the revenu net cadastral; 0,5 % unbuilt)",
+   "doc": "CGI art. 275-276: taxe foncière 7,5 % for built property, 0,5 % for unbuilt land.",
+   "notes": [
+    "revenu net cadastral taken from annualValue"
+   ],
+   "unsupported": [
+    "revenu net cadastral taken from annualValue"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "regImm",
+   "rateBp": 120,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "A",
+   "name": "Droits d'enregistrement et d'immatriculation (ventes d'immeubles)",
+   "statute": "CGI art. 443 (0,6 % registration + 0,6 % land-title registration)",
+   "doc": "art. 443: \"les adjudications, ventes ... translatifs de propriété ou d'usufruit de biens immeubles à titre onéreux, sont assujettis à des droits d'enregistrement et d'immatriculation ci-après : - droit d'enregistrement : 0,6% ; - droit d'immatriculation de la propriété foncière : 0,6% ; - droit de morcellement des titres fonciers : 0,3%. Une taxe additionnelle de 0,3% est perçue au profit des collectivités locales pour les immeubles situés sur ...\".",
+   "notes": [
+    "CGI art. 443: 1,2 % applied; morcellement 0,3 % (subdivisions) and the 0,3 % local additional tax not applied"
+   ],
+   "unsupported": [
+    "morcellement 0,3 %",
+    "local additional tax 0,3 %"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "succession",
+   "grade": "A",
+   "classes": [
+    {
+     "rels": [
+      "child",
+      "spouse",
+      "grandchild",
+      "parent"
+     ],
+     "bands": [
+      [
+       2000000,
+       200
+      ],
+      [
+       5000000,
+       400
+      ],
+      [
+       10000000,
+       600
+      ],
+      [
+       50000000,
+       800
+      ]
+     ],
+     "top": 1000
+    },
+    {
+     "rels": [
+      "sibling"
+     ],
+     "bands": [
+      [
+       2000000,
+       800
+      ],
+      [
+       5000000,
+       1000
+      ],
+      [
+       10000000,
+       1200
+      ],
+      [
+       50000000,
+       1500
+      ]
+     ],
+     "top": 1800
+    },
+    {
+     "rels": [
+      "nieceNephew",
+      "otherRelative"
+     ],
+     "bands": [
+      [
+       2000000,
+       1200
+      ],
+      [
+       5000000,
+       1400
+      ],
+      [
+       10000000,
+       1700
+      ],
+      [
+       50000000,
+       2000
+      ]
+     ],
+     "top": 2200
+    }
+   ],
+   "default": {
+    "bands": [
+     [
+      2000000,
+      2500
+     ],
+     [
+      5000000,
+      3000
+     ],
+     [
+      10000000,
+      3500
+     ],
+     [
+      50000000,
+      4000
+     ]
+    ],
+    "top": 4500
+   },
+   "allowRels": [
+    "spouse",
+    "child",
+    "parent"
+   ],
+   "allowance": 10000000,
+   "giftAllowance": false,
+   "name": "Droits de mutation à titre gratuit (successions, donations)",
+   "statute": "CGI art. 419 (tariff by share), art. 420 (10 000 000 F abatement), art. 414 (gifts: same tariff without abatements)",
+   "doc": "art. 419: \"Les droits de mutation par décès sont fixés aux tarifs ci-après pour la part nette recueillie par chaque ayant droit\": fractions 1-2 000 000, 2 000 001-5 000 000, 5 000 001-10 000 000, 10 000 001-50 000 000, above 50 000 000 F: direct line and spouses 2/4/6/8/10 %; brothers and sisters 8/10/12/15/18 %; 3rd-4th degree 12/14/17/20/22 %; beyond and non-relatives 25/30/35/40/45 % (column order checked on the pdftotext -layout page). art. 420: \"un abattement de dix millions (10 000 000) de francs CFA sur la part du conjoint survivant, sur la part du ou des ascendants à charge du défunt et sur la part de chacun des enfants ... dans la limite maximum de six (06) enfants\". art. 414: gifts are liquidated on the art. 419 tariff \"sans application des abattements\", reduced by 25 % for gifts by marriage contract and donations-partages.",
+   "notes": [
+    "CGI art. 419-420: otherRelative taken as 3rd-4th degree; the parent abatement assumes a dependent ascendant; the 25 % reduction for marriage-contract gifts not applied"
+   ],
+   "unsupported": [
+    "six-children limit of the abatement",
+    "25 % reduction for marriage-contract gifts and donations-partages"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI-LPF 2025 (whole code)",
+   "why": "TG CGI-LPF édition 2025 (complete code): no tax on net wealth; 'fortune' occurs only incidentally (art. on declarations, LPF)"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts et Livre des procédures fiscales, OTR edition 2025",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.otr.tg (CGI-LPF mis à jour))",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "patente",
+   "grade": "A",
+   "name": "Patente (rate of the turnover bracket on the whole turnover; commerce column)",
+   "statute": "CGI 2025 (OTR, CGI et LPF 2025) Livre II art. 250, 252, 254",
+   "doc": "art. 254: the patente is the rate of the bracket of the year's turnover excluding tax applied to that turnover (whole amount, not marginal); commerce / hotels / pharmacies column: 0,55 % up to 500 M, 0,60 % from 500 000 001 to 10 bn, 0,65 % from 10 000 000 001 to 50 bn, 0,70 % above 50 bn.",
+   "unsupported": [
+    "other sector columns: services/insurance/banks/BTP (0,75-1,20 %), telephony/IT (0,80-1,20 %), industries (0,70-1,00 %), used vehicles (0,85-1,00 %)",
+    "regulated-margin products taxed on the margin, 60 % reduction for pagne-cloth resellers (art. 254)",
+    "taxe professionnelle unique for small taxpayers (art. 129 ff.)"
+   ],
+   "lic": {
+    "tiers": [
+     [
+      500000000,
+      5500,
+      0,
+      -1
+     ],
+     [
+      10000000000,
+      6000,
+      0,
+      -1
+     ],
+     [
+      50000000000,
+      6500,
+      0,
+      -1
+     ]
+    ],
+    "top": [
+     7000,
+     0,
+     -1
+    ]
+   },
+   "tests": [
+    {
+     "turnover": 3000000000,
+     "expect": [
+      18000000
+     ]
+    },
+    {
+     "turnover": 12000000000,
+     "expect": [
+      78000000
+     ]
+    },
+    {
+     "turnover": 100000000,
+     "expect": [
+      550000
+     ]
+    },
+    {
+     "turnover": 60000000000,
+     "expect": [
+      420000000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "otr_cgi_lpf_2025.txt (whole code)",
+   "why": "TG: the general tax code held (otr_cgi_lpf_2025.txt, 911k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "tvm",
+   "grade": "A",
+   "name": "Taxe sur les véhicules à moteur (TVM; passenger vehicles by fiscal horsepower)",
+   "statute": "CGI 2025 art. 154, 159, 162 2)",
+   "doc": "art. 162 2) vehicles carrying persons: below 5 CV 5 000 F, 5-7 CV 10 000, 8-11 CV 15 000, 12-15 CV 20 000, 16-20 CV 30 000, above 20 CV 40 000.",
+   "unsupported": [
+    "goods vehicles 20 000-55 000 F and motorcycles (art. 162 1, 3)",
+    "50 % reduction for road hauliers under the TPU, prorata in the year of acquisition (art. 162-163)"
+   ],
+   "bands": [
+    [
+     4,
+     5000
+    ],
+    [
+     7,
+     10000
+    ],
+    [
+     11,
+     15000
+    ],
+    [
+     15,
+     20000
+    ],
+    [
+     20,
+     30000
+    ]
+   ],
+   "top": 40000,
+   "tests": [
+    {
+     "hps": [
+      9,
+      16
+     ],
+     "expect": [
+      15000,
+      30000
+     ]
+    }
+   ]
+  }
+ ]
+}

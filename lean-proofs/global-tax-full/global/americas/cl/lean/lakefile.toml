@@ -1,0 +1,22 @@
+name = "ClGlobal"
+version = "0.1.0"
+defaultTargets = ["ClTax", "ClGlobal", "clglobal"]
+
+# Kernel-2.0 pilot for Chile (cmp20/global/DESIGN.md §8). ClTax = the 1.x model, vendored unchanged.
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ClTax"
+
+[[lean_lib]]
+name = "ClGlobal"
+
+[[lean_exe]]
+name = "clglobal"
+root = "ClGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

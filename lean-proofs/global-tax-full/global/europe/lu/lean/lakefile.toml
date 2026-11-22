@@ -1,0 +1,18 @@
+name = "LuGlobal"
+version = "0.1.0"
+defaultTargets = ["LuGlobal", "luglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); LuTax = the 1.x model, vendored from cmp20/germanic/lu/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "LuTax"
+
+[[lean_lib]]
+name = "LuGlobal"
+
+[[lean_exe]]
+name = "luglobal"
+root = "LuGlobal.Main"

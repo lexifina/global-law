@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "Pension contribution (employer)",
+  "statute": "Ley Integral del Sistema de Pensiones (D.L. 614/2022) arts. 14, 16",
+  "dated": "D.O. 241 of 21 Dec 2022 (SSF copy)",
+  "grade": "A",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "aguinaldo not split from the base"
+  ]
+ },
+ {
+  "oecd": "3000",
+  "tax": "INSAFORP (employer, 1 %)",
+  "statute": "Ley de Formación Profesional (D.L. 554 of 2 Jun 1993, D.O. 143 of 29 Jul 1993; reformed by D.L. 455/1995) art. 26 c): \"Cotizaciones obligatorias hasta el 1%, pagadas por los patronos del sector privado ... que empleen diez o más trabajadores, calculadas sobre el monto total de las planillas mensuales\"",
+  "dated": "UES jurisprudencia consolidation (estado VIGENTE; reforma 1995); pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "'hasta el 1%' taken at 1 %",
+   "employer taken as having 10+ workers (not agricultural: 1/4 %)"
+  ]
+ },
+ {
+  "oecd": "2200",
+  "tax": "ISSS (employer 7.5 %)",
+  "statute": "Ley del Seguro Social art. 29 (employer 7.50 % for health and occupational risks: read); Reglamento para la Aplicación del Régimen del Seguro Social art. 3 (ceiling: the 2019 ISSS compilation shows C 700 a month as last reformed by D.E. 54 of 1986; the dollar ceiling in force in 2025 not read)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P4",
+  "kernel_parts": [],
+  "tried": "isss.gob.sv compilation 403 (retried once in pass 9); Wayback 2022 copy read (old colón ceiling); transparencia.gob.sv and jurisprudencia.gob.sv 403 to scripts",
+  "unsupported": [
+   "would unlock: the executive decree fixing the ISSS ceiling in US$"
+  ]
+ }
+]

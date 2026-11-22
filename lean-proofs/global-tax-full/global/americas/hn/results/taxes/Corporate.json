@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto sobre la renta (personas jurídicas)",
+  "statute": "LISR art. 22 (25 %)",
+  "dated": "SAR consolidation 07-2025",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "aportación solidaria (5 % above L1 million) and the 1.5 % minimum on gross income not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "LISR (Decreto-Ley 25, SAR consolidation to Acuerdo SAR 07-2025) art. 5 num. 3), 5), 6), 7); art. 50 (retention)",
+  "dated": "SAR consolidated LISR to Acuerdo SAR 07-2025 (world/B12-latin-america/hn/src/lisr.txt); pass 8, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "LISR art. 5: interest paid to a related party is taxed as a dividend (also 10 %); num. 9 (10 % software and telecoms) and num. 13 (10 % other operating income) not distinguished from services"
+  ],
+  "status": "modelled"
+ }
+]

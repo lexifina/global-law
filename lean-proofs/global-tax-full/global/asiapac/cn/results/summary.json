@@ -1,0 +1,249 @@
+{
+ "country": "CN",
+ "name": "China",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:07:12"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "个人所得税 on dividends and property transfers (20 %)",
+   "statute": "个人所得税法 arts. 2-3",
+   "dated": "2018-08-31 amendment",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "listed dividends by holding period",
+    "home sales"
+   ],
+   "family_file": "lean/CnGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "印花税 on securities transactions (seller 0.05 %)",
+   "statute": "印花税法 (2021); 公告2023年第39号",
+   "dated": "from 2023-08-28",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "增值税",
+   "statute": "增值税暂行条例 第二条, 第十二条, 第十五条; rates per 公告2019年第39号",
+   "dated": "regulation 2017 revision (flk.npc.gov.cn); 2019 rate notice not read",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "the 13/9/6 % rates and the education/medical exemptions are from notices not read",
+    "small-scale taxpayers 3 % (1 %)",
+    "起征点"
+   ],
+   "family_file": "lean/CnGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5120",
+   "tax": "城市维护建设税",
+   "statute": "城市维护建设税法 第二条, 第四条",
+   "dated": "law of 2020-08-11, in force 2021-09-01",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "county and town rates (5 %, 1 %) by input not offered; consumption tax base"
+   ],
+   "family_file": "lean/CnGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "消费税 (汽油, 柴油)",
+   "statute": "消费税暂行条例 (2008) 第二条, 第五条; 财政部 国家税务总局 财税〔2015〕11号 一, 二 (汽油 1.52, 柴油 1.20 元/升)",
+   "dated": "notice of 2015-01-12, in force 2015-01-13 (MOF site, read 2026-11-21); no later change to the unit amounts located; regulation 2008 (flk)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [
+    "tobacco and alcohol not modelled (producer / wholesale price base; beer per tonne)",
+    "in force in 2025 by absence of a later notice (secondary corroboration: mofcom oil-market article 2023, 汽油 1.52 元/升)",
+    "城市维护建设税 on the consumption tax not added to its base"
+   ],
+   "family_file": "lean/CnGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "企业所得税 (enterprise income tax)",
+   "statute": "企业所得税法 (2018) art. 4, art. 28; 财政部 税务总局公告2023年第12号 三, 五",
+   "dated": "2018-12-29 law; 2025-01-20 regulations; 公告2023年第12号 (2023-08-02, to 2027-12-31)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "small low-profit test on year-end values, not quarterly averages"
+   ],
+   "family_file": "lean/CnGlobal/Corporate.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "企业所得税法 arts. 3-4, 27 (5); 实施条例 arts. 7, 91; 个人所得税法 art. 3 (2018); 个人所得税法实施条例 art. 3 (2018)",
+   "dated": "2018-12-29 law; 2025-01-20 regulations",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "dividends from foreign-invested enterprises to foreign individuals (财税字〔1994〕020号) not distinguished",
+    "services performed in China by a non-resident enterprise (deemed-profit EIT) not modelled",
+    "royalties to non-resident individuals: each payment record is taken as one payment (每次); the year's payments to one person are not split"
+   ],
+   "family_file": "lean/CnGlobal/Corporate.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of China as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by China for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C156&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/cn.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 10063020 (a preferential rate is specific or compound (not representable as a preference rate)); 10063080 (a preferential rate is specific or compound (not representable as a preference rate)); 17019910 (a preferential rate is specific or compound (not representable as a preference rate)); 17019920 (a preferential rate is specific or compound (not representable as a preference rate)); 17019990 (a preferential rate is specific or compound (not representable as a preference rate))"
+   ],
+   "family_file": "lean/CnGlobal/Customs.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "契税 (deed tax)",
+   "statute": "契税法 (2020) art. 3; 公告2024年第16号",
+   "dated": "2025 (Beijing)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "area-based home rates"
+   ],
+   "family_file": "lean/CnGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4100",
+   "tax": "房产税 (house property tax)",
+   "statute": "房产税暂行条例 arts. 3-5",
+   "dated": "2011 version",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "rental basis 12 %",
+    "Shanghai/Chongqing pilots"
+   ],
+   "family_file": "lean/CnGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social insurance (pension, unemployment; Beijing)",
+   "statute": "社会保险法; 国办发〔2019〕13号",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "medical",
+    "work injury"
+   ],
+   "family_file": "lean/CnGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax: none",
+   "statute": "no payroll tax law (社会保险 are contributions, 2200)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax: none",
+   "statute": "no 遗产税/赠与税 law",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "no law",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 9,
+  "C": 0
+ },
+ "guards": 30,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

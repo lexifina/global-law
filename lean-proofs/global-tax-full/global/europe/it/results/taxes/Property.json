@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Imposta municipale propria (IMU, Roma)",
+  "statute": "L. 27 dicembre 2019 n. 160 art. 1 c. 740, 745, 746, 754, 755; Deliberazione Assemblea Capitolina n. 182 del 19.12.2024 (prospetto aliquote 2025)",
+  "dated": "normattiva vigente al 2025-07-01; prospetto aliquote anno 2025 published by the MEF on 24.1.2025",
+  "grade": "A",
+  "kernel_parts": [
+   "charge (rendita x 1,05 x moltiplicatore x aliquota)"
+  ],
+  "unsupported": [
+   "catastal category not in the input: realEstate taken as gruppo A, home as non-luxury abitazione principale",
+   "rendita catastale is an input (asset.annualValue)",
+   "reduced Roma rates and agevolazioni (c. 760 canone concordato 75 %, comodato 50 %)",
+   "terreni agricoli"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Imposta di registro (trasferimenti immobiliari)",
+  "statute": "DPR 131/1986 Tariffa parte I art. 1 (9 %; 2 % prima casa, nota II-bis)",
+  "dated": "normattiva vigente al 2025-07-01 (Tariffa parte I art. 1, `it/law/tur131_vig20250701_art1_1.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "base: the price (the prezzo-valore rule on cadastral value for homes, L. 266/2005 c. 497, not applied); minimum EUR 1 000 (D.Lgs. 23/2011 art. 10, not read); imposte ipotecaria/catastale EUR 50 + 50; agricultural land 15 %; sales by builders under IVA (registro EUR 200) not separated"
+  ]
+ }
+]

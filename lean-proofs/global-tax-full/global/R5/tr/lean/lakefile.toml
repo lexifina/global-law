@@ -1,0 +1,22 @@
+name = "TrGlobal"
+version = "0.1.0"
+defaultTargets = ["TrGlobal", "trglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); TrTax = the 1.x model, vendored from cmp20/world/B01-oecd5/tr/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TrTax"
+
+[[lean_lib]]
+name = "TrGlobal"
+
+[[lean_exe]]
+name = "trglobal"
+root = "TrGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

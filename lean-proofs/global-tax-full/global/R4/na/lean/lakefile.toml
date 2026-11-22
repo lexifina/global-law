@@ -1,0 +1,22 @@
+name = "NaGlobal"
+version = "0.1.0"
+defaultTargets = ["NaGlobal", "naglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); NaTax = the 1.x model, vendored from cmp20/world/B09-southern-africa/na/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "NaTax"
+
+[[lean_lib]]
+name = "NaGlobal"
+
+[[lean_exe]]
+name = "naglobal"
+root = "NaGlobal.Main"

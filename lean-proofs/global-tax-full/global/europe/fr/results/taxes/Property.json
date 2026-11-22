@@ -1,0 +1,30 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Taxe foncière sur les propriétés bâties (Paris)",
+  "statute": "CGI art. 1380, 1388; Paris taux 2025 (commune 20,50 %, taux global 21,21 %)",
+  "dated": "CGI art. 1380 in force since 1.7.1979, art. 1388 since 11.1.1980 (Légifrance captures 2025-01-13, 2024-11-05); rates exercice 2025 from DGFiP 'Fiscalité locale des particuliers'",
+  "grade": "B",
+  "kernel_parts": [
+   "charge (VLC x 50 % x taux)"
+  ],
+  "unsupported": [
+   "rates from the DGFiP open-data register (the Conseil de Paris deliberation not read)",
+   "valeur locative cadastrale is an input (asset.annualValue)",
+   "TEOM, frais de gestion (art. 1641), exonérations, TFPNB"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Droits de mutation à titre onéreux (immeubles)",
+  "statute": "CGI art. 683, 1594 D, 1584, 1595 bis (5,80 % in all)",
+  "dated": "PwC WWTS Corporate - Other taxes, 2025-06-17 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "Paris: the département's rate rose for acts from 1 April 2025 (up to 6,3 % in all, not modelled); new buildings under TVA (0,715 %) and first-time-buyer exemptions not separated; notary fees not taxes"
+  ]
+ }
+]

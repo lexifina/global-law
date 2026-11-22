@@ -1,0 +1,190 @@
+{
+ "cc": "KM",
+ "dated": "CGI 2022 (latest edition held; LF 2023-2025 not held)",
+ "entries": [
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "regImm",
+   "rateBp": 900,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "B",
+   "name": "Droit d'enregistrement (ventes d'immeubles)",
+   "statute": "CGI 2022 art. 273 (9 %)",
+   "doc": "art. 273: \"Sous réserve des dispositions de l'article 264, les ventes, reventes, cessions, rétrocessions, adjudications de bien immeubles à titre onéreux ... ainsi que les actes translatifs du droit de superficie sur un immeuble, sont assujettis à un droit de 9 %.\" CGI 2022 edition without the 2023-2025 finance laws: grade B.",
+   "notes": [
+    "CGI 2022 art. 273: 9 % (the art. 264 reservations not read; 2023-2025 finance laws not held)"
+   ],
+   "unsupported": [
+    "art. 264 reservations",
+    "LF 2023-2025 not held"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts 2022 + LF 2024 (archived finances.gouv.km)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://finances.gouv.km (archived))",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "patente",
+   "grade": "B",
+   "name": "Contribution des patentes, stated profession: wholesale general-merchandise trader in a capital of the islands (150 000 F + 1/10 of rental value + 30 % communal centime)",
+   "statute": "CGI 2022 (updated to 1 January 2022) art. 165-166, 171, 179, 193 (L.F. 2021) and the annexed tariff ('Marchandises générales (Marchand de) — en gros'); LF 2023-2025 not checked",
+   "doc": "art. 165: the patente is a fixed duty and a proportional duty under the annexed tariff; art. 166: the fixed duty is set by the activity and reduced by 20 % outside the islands' capitals; art. 171: the proportional duty is on the rental value of the premises; tariff: general-merchandise trader, wholesale, fixed duty 150 000 FC, proportional duty 10e (one tenth of the rental value); art. 193 (L.F. 2021): a communal additional centime of 30 % on the patente. Every company line is taken to be such a trader in Moroni.",
+   "unsupported": [
+    "the trade of the company is not in the input: one stated profession is applied to every company",
+    "20 % reduction of the fixed duty outside the islands' capitals (art. 166)",
+    "retail traders 50 000 FC and the other activities of the tariff"
+   ],
+   "lic": {
+    "tiers": [],
+    "top": [
+     0,
+     150000,
+     150000
+    ],
+    "rentPpm": 100000,
+    "surchargePpm": 300000
+   },
+   "tests": [
+    {
+     "turnover": 1000000000,
+     "rv": 10000000,
+     "expect": [
+      150000,
+      1000000,
+      345000
+     ]
+    },
+    {
+     "turnover": 1000000000,
+     "rv": 0,
+     "expect": [
+      150000,
+      45000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "cgi2022.txt (whole code)",
+   "why": "KM: the general tax code held (cgi2022.txt, 529k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "auto5": true,
+   "name": "Net wealth tax",
+   "statute": "cgi2022.txt (whole code)",
+   "why": "KM: the general tax code held (cgi2022.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "pvImm",
+   "grade": "B",
+   "rateBp": 2000,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Prélèvement libératoire sur les plus-values immobilières des personnes physiques (20 %)",
+   "statute": "CGI 2022 (updated to 1 January 2022) art. 77 2°, 115 (LF 2024 OCR pp. 1-60 held; LF 2023 and 2025 not held)",
+   "doc": "art. 77 2°: gains made by individuals on built or unbuilt immovables acquired for value or free are property income; art. 115: those gains bear a final levy of 20 %, collected by the registration service when the deed is registered.",
+   "unsupported": [
+    "the gain's computation rules (cost uplift, costs) were not read in the two-column extraction: gain = proceeds − cost − costs"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "unsupported",
+   "name": "Impôt sur la propriété foncière (IPF)",
+   "statute": "CGI 2022 art. 185-192",
+   "why": "art. 192: fixed amounts per building by type — houses with outbuildings 5 000 FC (2 000 m² or more) / 3 000 FC, dwellings without outbuildings 1 000 FC, professional buildings and land by their own scales: the input carries neither the outbuildings nor the surface",
+   "tried": "cgi2022.raw.txt art. 185-192"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "vignette",
+   "grade": "B",
+   "name": "Vignette automobile et droit de stationnement (vehicles up to 5 years old, by fiscal horsepower, + 1 000 FC parking duty)",
+   "statute": "CGI 2022 art. 432 (L.F. 2019); LF 2023-2025 not checked; dating for 2025 (seventeenth pass): the LF 2024 OCR held (world/B08-central-africa-fr/km/law/lf2024.ocr1-60.txt, pp. 1-60) shows the vignette only as a budget revenue line (7142), no amendment of art. 432 seen; LF 2023 and LF 2025 not held (flag)",
+   "doc": "art. 432: vehicles up to 5 years old 0-5 CV 9 000 FC, 6-9 CV 12 000, 10-12 CV 18 000, 12 CV and more 22 500 (6-10 years: 6 000 / 9 000 / 12 000 / 18 000; 11-20 years: 3 000 / 6 000 / 9 000 / 12 000), and a parking duty of 1 000 FC per car, added here to each amount. The vehicle's age is not in the input: vehicles are taken to be at most 5 years old.",
+   "unsupported": [
+    "older vehicles' columns (6-10 and 11-20 years)",
+    "motorcycles 2 000-3 000 FC (art. 433)"
+   ],
+   "bands": [
+    [
+     5,
+     10000
+    ],
+    [
+     9,
+     13000
+    ],
+    [
+     12,
+     19000
+    ]
+   ],
+   "top": 23500,
+   "tests": [
+    {
+     "hps": [
+      9,
+      12,
+      13
+     ],
+     "expect": [
+      13000,
+      19000,
+      23500
+     ]
+    },
+    {
+     "hps": [
+      4
+     ],
+     "company": true,
+     "expect": [
+      10000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "unsupported",
+   "name": "Caisse de prévoyance sociale employer contributions",
+   "grade": "C",
+   "why": "no rate text held; CGI 2022 art. 59 only caps the employee's deductible retentions at 6 % of gross",
+   "tried": "CGI 2022 search, live cnps.km (no answer), CLEISS (no Comores page)",
+   "statute": "not reached: tried CGI 2022 search, live cnps.km (no answer), CLEISS (no Comores page)"
+  }
+ ]
+}

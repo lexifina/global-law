@@ -1,0 +1,22 @@
+name = "YeGlobal"
+version = "0.1.0"
+defaultTargets = ["YeGlobal", "yeglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); YeTax = the 1.x model, vendored from cmp20/world/B06-mena/ye/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "YeTax"
+
+[[lean_lib]]
+name = "YeGlobal"
+
+[[lean_exe]]
+name = "yeglobal"
+root = "YeGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

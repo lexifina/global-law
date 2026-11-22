@@ -1,0 +1,147 @@
+{
+ "country": "GM",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "VAT Act 2012 (rate as stated by the GRA leaflet: 15 %; official secondary) [text version: GRA brochures as published on gra.gm on 21 August 2023 (the corporation-tax brochure dates its rate to 2018); Finance Acts 2024 and 2025 not held (flag)]",
+   "dated": "GRA guides (official secondary): VAT leaflet; 'Corporation Income Tax', 'Withholding Tax' and 'Dividend Income Tax' brochures (published on gra.gm 21 Aug 2023; the corporation-tax brochure dates its rate to 2018); Income and Value Added Tax Act 2012 and later Finance Acts not held: grade B",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "Act text not held",
+    "exempt foods not separable"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried gm_cea.pdf.txt",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "the Customs and Excise Act extraction (gm_cea.pdf.txt) was not mapped in this pass"
+   ],
+   "tried": "gm_cea.pdf.txt",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Corporation income tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Income and Value Added Tax Act 2012 (as amended; rate as stated by the GRA brochure 'Corporation Income Tax'): the higher of 27 % of net profit and 1 % of turnover (audited accounts; 2 % unaudited) [text version: GRA brochures as published on gra.gm on 21 August 2023 (the corporation-tax brochure dates its rate to 2018); Finance Acts 2024 and 2025 not held (flag)]",
+   "dated": "GRA guides (official secondary): VAT leaflet; 'Corporation Income Tax', 'Withholding Tax' and 'Dividend Income Tax' brochures (published on gra.gm 21 Aug 2023; the corporation-tax brochure dates its rate to 2018); Income and Value Added Tax Act 2012 and later Finance Acts not held: grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "Act and Finance Acts 2019-2025 not read",
+    "2 % minimum for unaudited accounts",
+    "six-year loss carry-forward limit"
+   ],
+   "guards": 6
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Income and Value Added Tax Act 2012 (as stated by the GRA brochures 'Withholding Tax' and 'Dividend Income Tax'): payments to non-resident contractors, suppliers or service providers 10 % (final); dividends 15 % on payments to resident and non-resident shareholders [text version: GRA brochures as published on gra.gm on 21 August 2023 (the corporation-tax brochure dates its rate to 2018); Finance Acts 2024 and 2025 not held (flag)]",
+   "dated": "GRA guides (official secondary): VAT leaflet; 'Corporation Income Tax', 'Withholding Tax' and 'Dividend Income Tax' brochures (published on gra.gm 21 Aug 2023; the corporation-tax brochure dates its rate to 2018); Income and Value Added Tax Act 2012 and later Finance Acts not held: grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "interest and royalties paid to non-residents",
+    "Act text not read"
+   ],
+   "guards": 6
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on assignments and conveyances on sale (2 % of the amount, charged on the transferee)",
+   "statute": "Stamp Act Cap. 82:01 s. 3 and Schedule item 14 (conveyance or transfer on sale: 'the transferee'), Schedule as amended by the Stamp Act (Amendment of Schedule) Order 2019 ('Assignment/Conveyance: 2% of amount'; persons primarily liable: 'the assignee or transferee'); GRA-posted copy (2024), OCR R4/fetch/p13/gm_stamp_act.pdf.ocr.txt. Liability: the transferee (purchaser) [text version: Stamp Act Cap. 82:01 with the Schedule as amended by the Stamp Act (Amendment of Schedule) Order 2019, GRA-posted copy of 2024]",
+   "dated": "-",
+   "unsupported": [
+    "other instruments (fixed D500 duties, debentures 2 %, mortgages and further charges 0,5 %, leases by annual-rent bands)",
+    "transfers of shares: the rate is not legible in the scanned 2019 Order",
+    "conveyances of property other than land and buildings"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "SSHFC National Provident Fund, employer contribution (10 %)",
+   "statute": "Social Security and Housing Finance Corporation Act 2015 s. 40 (1)-(3) (OCR of the gazetted Act, gm/law/sshfc2015_ocr.txt) [text version: SSHFC Act 2015 as gazetted; no amendment located (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "base is basic salary or wages (allowances excluded): the model applies it to wages",
+    "Federated Pension Fund (public employees, s. 40 (4))",
+    "Industrial Injuries Compensation contributions"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of The Gambia as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by The Gambia for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C270&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/gm.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+   ],
+   "guards": 3
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

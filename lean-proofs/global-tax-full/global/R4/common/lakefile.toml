@@ -1,0 +1,11 @@
+name = "R4Common"
+version = "0.1.0"
+defaultTargets = ["R4Common"]
+
+# Shared parts for the Sub-Saharan Africa region (R4), full-tax-coverage phase (cmp20/global/PLAN.md section 2).
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "R4Common"

@@ -1,0 +1,261 @@
+{
+ "country": "TH",
+ "name": "Thailand",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:59:26"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Final withholding on interest and dividends",
+   "statute": "Revenue Code s. 50 (2)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "dividend credit option"
+   ],
+   "family_file": "lean/ThGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Specific business tax on SET share sales",
+   "statute": "Revenue Code s. 91/2; RD 764",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ThGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "ภาษีมูลค่าเพิ่ม (VAT)",
+   "statute": "Revenue Code ss. 80, 81 (1), 81/1; Royal Decrees Nos. 790 (B.E. 2567) and 799 (B.E. 2568) on the VAT rate reduction",
+   "dated": "2025: decree No. 790 (6.3 % to 30 Sep 2025) and No. 799 (6.3 % from 1 Oct 2025 to 30 Sep 2026), Royal Gazette texts on rd.go.th: the same rate all year (no split); session 12 year in force",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "local-government VAT share (1/9, 0.7 %) and the small-business decree (1.8 M baht) not read"
+   ],
+   "family_file": "lean/ThGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "ภาษีสรรพสามิต (petrol, diesel, beer, wine, spirits, cigarettes)",
+   "statute": "พ.ร.บ.ภาษีสรรพสามิต พ.ศ. 2560 มาตรา 5, 17 (1); กฎกระทรวงกำหนดพิกัดอัตราภาษีสรรพสามิต พ.ศ. 2560 ประเภทที่ 01.01, 01.05, 13.01, 13.02, 14.01 as amended by ฉบับที่ 17, 36, 38, 39, 41, 42",
+   "dated": "texts of each amending regulation with their commencement dates (lawelcs.excise.go.th, read 2026-11-21); fuel rates change on 7 May 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [
+    "local-government surcharge (s. 150, decree up to 10 %) and earmarked fund levies not modelled",
+    "cut tobacco and cigars per gram not modelled"
+   ],
+   "family_file": "lean/ThGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "ภาษีรถประจำปี (annual vehicle tax): private cars by cc, motorcycles 100 baht",
+   "statute": "Motor Vehicle Act B.E. 2522 annual tax; Department of Land Transport rate page (2016)",
+   "dated": "DLT page dated 2016-06-09 (Wayback 2019-07-17); page id still published in 2024 (script-rendered, not read); no 2025 change found",
+   "grade": "B",
+   "kernel_parts": [
+    "VehicleTax"
+   ],
+   "unsupported": [
+    "cars above 7 seats, pickups and trucks (weight table)",
+    "electric vehicles",
+    "seats not checked"
+   ],
+   "family_file": "lean/ThGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "statute": "Revenue Code (ประมวลรัษฎากร) s. 65, s. 67; rate schedule (2) (a) 20 % (Revenue Code Amendment Act No. 42, B.E. 2559)",
+   "dated": "rd.go.th consolidated Thai text (schedule page updated 07-02-2024); accounting periods 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "SME reduced rates (Royal Decree No. 530) not modelled"
+   ],
+   "family_file": "lean/ThGlobal/Corporate.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Revenue Code s. 70; rate schedule (2) (b) 15 %, (c) 10 % on s. 40 (4) (b) dividends",
+   "dated": "rd.go.th consolidated Thai text (accessed 2026-11-21); 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "non-resident individuals are taxed under s. 50, not s. 70: the s. 70 rates are applied to them (not read)"
+   ],
+   "family_file": "lean/ThGlobal/Corporate.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Thailand as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Thailand for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C764&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/th.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 09012111 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 09012112 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 09012119 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 09012120 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 10063030 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 10063040 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 10063050 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 10063060 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 10063070 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 10063091 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 10063099 (several MFN rows (MFN statutory (legal/autonomous) duty 30.0% (In-quota); MFN statutory (l); 17019910 (several MFN rows (MFN statutory (legal/autonomous) duty 65.0% (In-quota); MFN statutory (l); 17019990 (several MFN rows (MFN statutory (legal/autonomous) duty 65.0% (In-quota); MFN statutory (l); 27101211 (MFN duty '0.01 Baht/Litre': specific or compound duty, unit/currency not mapped); 27101212 (MFN duty '0.01 Baht/Litre': specific or compound duty, unit",
+    "ASEAN free trade area (ATIGA) (origin BN, ID, MY, PH, SG, VN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "family_file": "lean/ThGlobal/Customs.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4100",
+   "tax": "Land and building tax",
+   "statute": "Land and Building Tax Act B.E. 2562",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "main-home exemption",
+    "agricultural, vacant land"
+   ],
+   "family_file": "lean/ThGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Specific business tax / stamp duty on property sales",
+   "statute": "Revenue Code Ch. 5-6",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "transfer fee"
+   ],
+   "family_file": "lean/ThGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social security",
+   "statute": "SSA B.E. 2533 s. 46-47",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "Workmen's Compensation Fund contribution (WC Act ss. 44-45: rate by Ministry of Labour notice, not read)"
+   ],
+   "family_file": "lean/ThGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax: not levied (the WCF contribution is 2200)",
+   "statute": "Workmen's Compensation Act B.E. 2537 ss. 44-45 (read); OECD Interpretative Guide §40-41",
+   "dated": "2025: Act texts in force from 2018-12-09 (Act No. 2 B.E. 2561), read in lexifina/thailand-law (gap-closing session: C -> cited absence)",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "status": "not levied",
+   "family_file": "lean/ThGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance tax",
+   "statute": "Inheritance Tax Act B.E. 2558",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ThGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Tax on gifts (5 %)",
+   "statute": "Revenue Code s. 42 (10), 48 (1/1)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "gift tax is income tax legally (1100)"
+   ],
+   "family_file": "lean/ThGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ThGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 12,
+  "C": 0
+ },
+ "guards": 26,
+ "sorry": 0,
+ "cases": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

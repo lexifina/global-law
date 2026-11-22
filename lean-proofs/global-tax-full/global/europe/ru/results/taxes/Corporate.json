@@ -1,0 +1,59 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Налог на прибыль организаций",
+  "statute": "НК РФ ст. 284 п. 1 (25 %; 8 % федеральный бюджет в 2025-2030 годах) в редакции Федерального закона от 12.07.2024 № 176-ФЗ",
+  "dated": "НК РФ ст. 284 п. 1 consolidated, ред. от 28.12.2024 с изм. от 21.01.2025 (Internet Archive 2025-08-14), and 176-ФЗ",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "loss carry-forward 50 % cap (ст. 283) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Налог у источника (иностранные организации) (dividend, interest, royalty, services)",
+  "statute": "НК РФ ст. 284 п. 2 пп. 1 и 4, п. 3 пп. 3, ст. 309 п. 1-2, ст. 310",
+  "grade": "A",
+  "dated": "ред. от 28.12.2024 с изм. от 21.01.2025 (in force 2025; 25 % from 1.1.2025 by 176-ФЗ)",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "related parties under ст. 105.1 other than a recipient holding more than 25 % of the payer (sister companies, control) are not seen: their services are booked at 0",
+   "the special rates of ст. 284 п. 2 пп. 2-3 (10 % freight, 0 % insurance settlements) and п. 4 (state and municipal securities) not applied",
+   "treaty rates out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "НДФЛ у источника (физические лица - нерезиденты) (dividend, interest, royalty)",
+  "statute": "НК РФ ст. 224 п. 3, ст. 208 п. 1 пп. 1, 3",
+  "grade": "A",
+  "dated": "ст. 224 ред. от 28.12.2024 с изм. от 21.01.2025 (in force 2025); ст. 208 ред. от 31.07.2025",
+  "kernel_parts": [
+   "Wht (toCompany := some false)"
+  ],
+  "unsupported": [
+   "interest on deposits with a bank in Russia is 15 % (ст. 224 п. 3): the paying company is taken as not a bank",
+   "royalties are taken as paid for use in Russia (ст. 208 п. 1 пп. 3)",
+   "dividends of an international holding company (5 %) not applied",
+   "treaty rates out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on services of foreign individuals (НДФЛ)",
+  "grade": "C",
+  "status": "unsupported",
+  "statute": "not reached: НК РФ ст. 208 п. 1 пп. 6, 6.3 and п. 3 пп. 6 (place of performance) and ст. 224 п. 3 (30 %) read; where the service was performed is not an input",
+  "dated": "ст. 208 ред. от 31.07.2025",
+  "kernel_parts": [],
+  "tried": "pass 18: ст. 224 and 208 read in the 2025 redactions; a service is Russian-source only if performed in Russia (or under the пп. 6.3 conditions)",
+  "unsupported": [
+   "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\""
+  ]
+ }
+]

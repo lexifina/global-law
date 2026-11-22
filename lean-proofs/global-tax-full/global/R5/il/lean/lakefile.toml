@@ -1,0 +1,22 @@
+name = "IlGlobal"
+version = "0.1.0"
+defaultTargets = ["IlGlobal", "ilglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); IlTax = the 1.x model, vendored from cmp20/world/B01-oecd5/il/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "IlTax"
+
+[[lean_lib]]
+name = "IlGlobal"
+
+[[lean_exe]]
+name = "ilglobal"
+root = "IlGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

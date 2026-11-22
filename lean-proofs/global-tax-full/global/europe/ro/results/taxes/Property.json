@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Real estate transfer tax (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Romania, Corporate - Other taxes, accessed 2025-06-17 (Wayback capture; `law/pwc_corpother_wb2025.txt`)",
+  "dated": "PwC WWTS Corporate - Other taxes, 2025-06-17 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4100",
+  "tax": "Impozit pe clădiri rezidențiale",
+  "statute": "Codul fiscal (Legea 227/2015) Titlul IX cap. 2, art. 457 alin. (1) (residential buildings of individuals: 0,08-0,2 % of the taxable value, set by the local council); HG 1/2016 (norme metodologice)",
+  "dated": "Codul fiscal Title IX ch. 2 as applicable 1.1.2025; EC Taxes in Europe Database (TEDB), tax 497, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rate declared: Bucharest's HCGMB 356/2024 is held as metadata only (text not read) (rate input localRates.propertyTax)",
+   "non-residential buildings (0,2-1,3 %, 2 % / 5 % if not revalued) and the tax on land (art. 465): not modelled; a non-residential rate above 0,2 % is flagged",
+   "the local council's increase of up to 50 % (art. 489) is included in the rate given"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rate is an input: localRates.propertyTax"
+ }
+]

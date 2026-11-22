@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "other income kinds"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "Impuesto de ganancias ocasionales (property, unlisted shares held 2 years or more)",
+  "statute": "ET arts. 300, 311-1, 314 (Ley 2277 de 2022)",
+  "dated": "ET consolidation (Secretaría del Senado) held locally; UVT 2025",
+  "grade": "A",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "fiscal-cost adjustments",
+   "short holdings (ordinary income)"
+  ]
+ }
+]

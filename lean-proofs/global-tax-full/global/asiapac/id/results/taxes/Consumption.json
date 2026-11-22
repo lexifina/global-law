@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Pajak Pertambahan Nilai",
+  "statute": "UU 8/1983 as amended by UU 7/2021: Pasal 4A, 7, 16B; PMK 131/2024",
+  "dated": "UU 7/2021 official text (rates 2025 per Pasal 7 (1) b)",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "PMK 131/2024 (effective 11 %) and PP 49/2022 (facilities) not read",
+   "PPnBM on luxury goods",
+   "PKP threshold (PMK) not modelled"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Cukai on alcoholic drinks (MMEA) and tobacco products (per stick by class)",
+  "statute": "UU 11/1995 as amended; PMK 160 Tahun 2023 Pasal 3, Lampiran II; PMK 192/PMK.010/2021 as amended by PMK 97 Tahun 2024, Lampiran I",
+  "dated": "PMK 160/2023 in force from 1 January 2024, status Berlaku on JDIH Kemenkeu (read 2026-11-21); PMK 97/2024 Lampiran I from 1 January 2025 (status Berlaku, read 2026-11-21)",
+  "grade": "A",
+  "kernel_parts": [
+   "ExciseRule"
+  ],
+  "unsupported": [
+   "import rates not distinguished",
+   "tobacco: producer class from the line's sub (default SKM I); cigars and cut tobacco not modelled; PPN hasil tembakau and pajak rokok not modelled"
+  ]
+ }
+]

@@ -1,0 +1,364 @@
+{
+ "country": "PL",
+ "name": "Poland",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:05:25"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "PIT on gains from securities (art. 30b)",
+   "statute": "ustawa o PIT art. 30b ust. 1",
+   "dated": "t.j. Dz.U. 2025 poz. 163",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (flat 19 %)"
+   ],
+   "unsupported": [
+    "losses of earlier years (art. 9 ust. 3)"
+   ],
+   "family_file": "lean/PlGlobal/Capital.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1100",
+   "tax": "PIT on real-estate sales (art. 30e)",
+   "statute": "ustawa o PIT art. 10 ust. 1 pkt 8, art. 30e",
+   "dated": "t.j. Dz.U. 2025 poz. 163",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (flat 19 %)",
+    "five-year rule"
+   ],
+   "unsupported": [
+    "ulga mieszkaniowa",
+    "inherited property holding period"
+   ],
+   "family_file": "lean/PlGlobal/Capital.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5111",
+   "tax": "Podatek od towarów i usług",
+   "statute": "ustawa o VAT art. 41, 43, 113, 146ef; załączniki 3, 10 [year in force 2025 (pass 17), re-cited 2025: PwC Poland, Corporate - Other taxes, Internet Archive 2025-06-23 (pl/law/pwc_corpother_wb20250623.*): rates 23 %, 8 %, 5 %, 0 % and exemption, as modelled]",
+   "dated": "t.j. Dz.U. 2024 poz. 361; PwC Poland other taxes, Internet Archive 2025-06-23",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "2025 amendments not checked",
+    "annexes by category"
+   ],
+   "yif17": "re-cited 2025",
+   "family_file": "lean/PlGlobal/Consumption.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "5121",
+   "tax": "Akcyza (paliwa silnikowe, oleje opałowe)",
+   "statute": "ustawa o podatku akcyzowym art. 89 ust. 1 pkt 2, 6, 9",
+   "dated": "t.j. Dz.U. 2025 poz. 126 (no transitional rate for 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [
+    "LPG, electricity"
+   ],
+   "family_file": "lean/PlGlobal/Consumption.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "5121",
+   "tax": "Akcyza (alkohol etylowy, piwo, wino)",
+   "statute": "ustawa o podatku akcyzowym art. 93-95, art. 165a ust. 1 lit. d",
+   "dated": "t.j. Dz.U. 2025 poz. 126; the 2025 row of art. 165a",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule (pure alcohol, per degree Plato)"
+   ],
+   "unsupported": [
+    "small producers (50 %)",
+    "intermediate products, fermented drinks"
+   ],
+   "family_file": "lean/PlGlobal/Consumption.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "5121",
+   "tax": "Akcyza (papierosy)",
+   "statute": "ustawa o podatku akcyzowym art. 99 ust. 2 pkt 1, art. 165a ust. 2 pkt 1 lit. d",
+   "dated": "wording of the act of 18.10.2024 (Dz.U. 2024 poz. 1681) from 1.1.2025: two periods",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (validFrom/validTo, specific + ad valorem)"
+   ],
+   "unsupported": [
+    "art. 99 ust. 4 minimum (weighted average price)",
+    "tobacco for smoking, heated tobacco, e-liquids"
+   ],
+   "family_file": "lean/PlGlobal/Consumption.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "5121",
+   "tax": "Opłata paliwowa",
+   "statute": "ustawa o autostradach płatnych oraz o KFD art. 37h-37j, 37m ust. 4",
+   "dated": "M.P. 2024 poz. 1034 (2025 rates)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [
+    "LPG and gases (246,87 zł/1000 kg)"
+   ],
+   "family_file": "lean/PlGlobal/Consumption.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "5121",
+   "tax": "Opłata emisyjna",
+   "statute": "Prawo ochrony środowiska art. 321a-321f",
+   "dated": "t.j. Dz.U. 2025 poz. 647",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PlGlobal/Consumption.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "1200",
+   "tax": "Podatek dochodowy od osób prawnych",
+   "statute": "ustawa o CIT art. 19 ust. 1 pkt 1 (19 %)",
+   "dated": "t.j. Dz.U. 2025 poz. 278",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "9 % for small taxpayers (revenue ≤ 2 000 000 euro converted at the NBP rate: the zloty limit is not in the act) not applied",
+    "estoński CIT, minimum tax (art. 24ca) not modelled"
+   ],
+   "family_file": "lean/PlGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Zryczałtowany podatek dochodowy (dywidendy)",
+   "statute": "ustawa o CIT art. 22 ust. 1: 19 %",
+   "dated": "t.j. Dz.U. 2025 poz. 278",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "art. 21 ust. 1 (interest, royalties) rate not read in this pass",
+    "parent-subsidiary exemption (art. 22 ust. 4)"
+   ],
+   "family_file": "lean/PlGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Zryczałtowany podatek (odsetki, należności licencyjne, usługi) (interest, royalty, services)",
+   "statute": "ustawa o CIT art. 21 ust. 1 pkt 1, 2a; ustawa o PIT art. 29 ust. 1 pkt 1, 5, art. 30a ust. 1 pkt 1-2",
+   "dated": "teksty jednolite 2025 (`pl/law/cit_tj2025.txt`, `pl/law/pit_tj2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as the intangible services listed in CIT art. 21 ust. 1 pkt 2a / PIT art. 29 ust. 1 pkt 5; other services bear none",
+    "the art. 21 ust. 3 exemption for EU associated companies and the 2 000 000 zł pay-and-refund threshold (art. 26 ust. 2e) not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/PlGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes recorded by the registry",
+   "statute": "Podatek od niektórych instytucji finansowych (bank tax 0.0366 %/month); podatek od sprzedaży detalicznej",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVPOL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/POL.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6200 1 670 million PLN (2023), 55 559 (2024; unnamed); not modelled",
+   "unsupported": [
+    "the statutes of the items named by the OECD table"
+   ],
+   "triage": "minor here: bank tax and retail sales tax are sector taxes",
+   "gap_note": true,
+   "family_file": "lean/PlGlobal/Other.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: akcyza on passenger cars (5121, new registrations) and podatek od środków transportowych (cars, motorcycles, vans cited as not taxable) modelled; lorries, buses and trailers not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: akcyza on passenger cars (5121, new registrations) and podatek od środków transportowych (cars, motorcycles, vans cited as not taxable) modelled; lorries, buses and trailers not modelled",
+   "unsupported": [
+    "would unlock: ustawa o podatkach i opłatach lokalnych art. 10 with the reference municipality's 2025 resolution (rates within the ministerial maxima)"
+   ],
+   "family_file": "lean/PlGlobal/Other.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "Akcyza od samochodów osobowych",
+   "statute": "Ustawa o podatku akcyzowym art. 100 ust. 1, 104 ust. 1, 105, 109a ust. 1, 163a ust. 1",
+   "dated": "tekst jednolity Dz. U. 2025 poz. 126 (`pl/law/akcyza_tj2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "vehicles other than passenger cars, cars without engine size (an electric car needs none)",
+    "5121 akcyza: the vehicle's value is taken as the art. 104 base (price net of VAT and excise, or the amount paid abroad); a car first registered in Poland in the year is taken as not yet registered there (art. 100 ust. 1)"
+   ],
+   "family_file": "lean/PlGlobal/Other.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5200",
+   "tax": "Podatek od środków transportowych",
+   "statute": "Ustawa o podatkach i opłatach lokalnych art. 8",
+   "dated": "tekst jednolity Dz. U. 2025 poz. 707 (`pl/law/upol_tj2025_707.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "lorries, tractor units, trailers and buses (taxable at the municipality's rates, not modelled)"
+   ],
+   "family_file": "lean/PlGlobal/Other.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "4400",
+   "tax": "Podatek od czynności cywilnoprawnych (sprzedaż nieruchomości)",
+   "statute": "ustawa o PCC art. 7 ust. 1 pkt 1 lit. a (2 %) [year in force 2025 (pass 17), re-cited 2025: PwC Poland, Corporate - Other taxes, Internet Archive 2025-06-23: sale of real estate taxed at 2 % of market value (first-home exemption since 2023 and the 6 % rate from the sixth flat since 2024 noted there), as modelled]",
+   "dated": "t.j. Dz.U. 2024 poz. 295; PwC Poland other taxes, Internet Archive 2025-06-23",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "sales subject to VAT (new dwellings from developers) are outside PCC (art. 2 pkt 4): not separated; 2025 amendments not checked; the 6 % rate for multiple dwellings not modelled"
+   ],
+   "yif17": "re-cited 2025",
+   "family_file": "lean/PlGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4100",
+   "tax": "Podatek od nieruchomości",
+   "statute": "Ustawa z 12 stycznia 1991 r. o podatkach i opłatach lokalnych (Dz.U. 2023 poz. 70 ze zm.): the council sets the rates by resolution, at most (2025): 1,19 zł per m² of usable area of residential buildings, 0,73 zł per m² of other land",
+   "dated": "Act on local taxes and charges as applicable 2025 (maximum rates indexed for 2025); EC Taxes in Europe Database (TEDB), tax 461, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "LocalTax (2.8.0)"
+   ],
+   "unsupported": [
+    "no capital-city rates declared: Warsaw's 2025 resolution was not reached",
+    "buildings used for business (at most 34,00 zł/m²), business land (1,38 zł/m²) and structures (2 %): not modelled; a business rate is flagged",
+    "the land under a home is not part of the home asset: give it as a land asset with its area"
+   ],
+   "lfw": 1,
+   "status": "framework (local rate input)",
+   "local_rate": "the municipality's rates are inputs: localRates.propertyTax (residential buildings, zł/m²), propertyTaxLand (zł/m²)",
+   "family_file": "lean/PlGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Składka na ubezpieczenie emerytalne (płatnik)",
+   "statute": "ustawa o systemie ubezpieczeń społecznych art. 22 ust. 1 pkt 1 (19,52 %), art. 16 ust. 1 (w równych częściach), art. 19 ust. 1; M.P. 2024 poz. 1051: 260 190 zł",
+   "dated": "Dz.U. 2025 poz. 350 (tekst jednolity of 14.2.2025); M.P. 2024 poz. 1051",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PlGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "Składka na ubezpieczenia rentowe (płatnik)",
+   "statute": "ustawa o systemie ubezpieczeń społecznych art. 22 ust. 1 pkt 2 (8,00 %), art. 16 ust. 1b (6,5 % płatnicy), art. 19 ust. 1; M.P. 2024 poz. 1051",
+   "dated": "Dz.U. 2025 poz. 350 (tekst jednolity of 14.2.2025); M.P. 2024 poz. 1051",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PlGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4300",
+   "tax": "Podatek od spadków i darowizn",
+   "statute": "ustawa o podatku od spadków i darowizn art. 4a ust. 1, art. 9 ust. 1-2, art. 14 ust. 3, art. 15 ust. 1",
+   "dated": "t.j. Dz.U. 2024 poz. 1837 (amended by Dz.U. 2025 poz. 769, 1064: not the rates or allowances)",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "art. 4a exemption assumes the 6-month report is made; otherwise grupa I; otherRelative taken as grupa II (in-laws are I, cousins III); the scale's fixed amounts are rounded (308,30 zł vs 3 % of 10 278 = 308,34); look-back taken as 6 years"
+   ],
+   "family_file": "lean/PlGlobal/Wealth.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "European Commission TEDB, PL: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 461, 687, 458, 460, 2983, 6060, 4090, 452, 878, 879)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 2,
+   "family_file": "lean/PlGlobal/Wealth.lean",
+   "family_guards": 8
+  }
+ ],
+ "grades": {
+  "A": 14,
+  "B": 5,
+  "C": 2
+ },
+ "guards": 62,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

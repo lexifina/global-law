@@ -9,6 +9,10 @@ kernel once for all countries.
 The work and what it found are described in the blog post
 [Formalizing the tax code globally](https://lexifina.com/blog/formalizing-tax-code-globally).
 
+The full-tax models, which add every other tax (corporate tax, social contributions, property, wealth, inheritance,
+transfer taxes, VAT, excises, customs and more) for 199 jurisdictions on the same kernel, are in
+[`../global-tax-full`](../global-tax-full/).
+
 - **Kernel** ([`kernel/`](kernel/)): the parts that tax systems share: bracket schedules, allowances, credits and
   their phase-outs, surcharges, social contribution ceilings, family units (individual, joint, splitting, family
   quotient), rounding rules. [`kernel/API.md`](kernel/API.md) documents every part.

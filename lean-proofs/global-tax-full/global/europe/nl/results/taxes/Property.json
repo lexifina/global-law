@@ -1,0 +1,48 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Overdrachtsbelasting (woning)",
+  "statute": "WBR art. 14 lid 1 (10,4 %), lid 2 (2 % own dwelling); art. 15 lid 1 onderdeel p (starters, ≤ € 525.000)",
+  "dated": "wetten.overheid.nl geldend 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "startersvrijstelling assumes the buyer is 18-34 and never used it",
+   "a home not occupied by the buyer: 10,4 % (2 % + 8,4 points)"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Overdrachtsbelasting (overig)",
+  "statute": "WBR art. 14 lid 1 (10,4 %)",
+  "dated": "wetten.overheid.nl geldend 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "startersvrijstelling assumes the buyer is 18-34 and never used it",
+   "a home not occupied by the buyer: 10,4 % (2 % + 8,4 points)"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Onroerendezaakbelastingen (eigenaren, woningen)",
+  "statute": "Gemeentewet art. 220-220h (onroerendezaakbelastingen: a percentage of the WOZ value under the Wet waardering onroerende zaken, set by the municipal council; no statutory maximum rate)",
+  "dated": "Gemeentewet and Wet WOZ as applicable 2025; EC Taxes in Europe Database (TEDB), tax 3828, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rate declared: the Amsterdam 2025 belastingverordening was not reached (rate input localRates.propertyTax)",
+   "no statutory range to check a rate against (the macro norm limits the national total, not a municipality's rate)",
+   "non-residential property (owners' and users' rates) and the water boards' levies: not modelled"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rate is an input: localRates.propertyTax"
+ }
+]

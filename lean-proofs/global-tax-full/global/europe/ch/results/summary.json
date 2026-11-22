@@ -1,0 +1,389 @@
+{
+ "country": "CH",
+ "name": "Switzerland",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:20"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Direkte Bundessteuer on private capital gains (exempt)",
+   "statute": "DBG Art. 16 (3)",
+   "dated": "fedlex 2025-01-01",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (zero, cited)"
+   ],
+   "unsupported": [
+    "cantonal Grundstückgewinnsteuer",
+    "quasi-professional trading"
+   ],
+   "family_file": "lean/ChGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Mehrwertsteuer",
+   "statute": "MWSTG Art. 10 (2), 21 (2), 25",
+   "dated": "fedlex consolidation 2025-03-31",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "reduced-rate list item by item (Art. 25 (2) lit. a Ziff. 3-7, 10; lit. b-c)",
+    "restaurant rule (Art. 25 (3)) not quoted"
+   ],
+   "family_file": "lean/ChGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Mineralölsteuer + Mineralölsteuerzuschlag (petrol, diesel)",
+   "statute": "MinöStG Art. 12 (1), (2), Anhang 1",
+   "dated": "fedlex consolidation 2025-01-01",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate"
+   ],
+   "unsupported": [
+    "heating oil, gas, renewable-fuel reliefs (Art. 12a, 12b)"
+   ],
+   "family_file": "lean/ChGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Tabaksteuer (cigarettes)",
+   "statute": "TStG (Zigaretten: 11,832 Rp. + 25 %, mindestens 21,210 Rp.)",
+   "dated": "fedlex consolidation 2025-01-01",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (minimum)"
+   ],
+   "unsupported": [
+    "cigars, fine-cut (46 Fr./kg + 25 %, min 90 Fr./kg), other tobacco"
+   ],
+   "family_file": "lean/ChGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Alkoholsteuer (spirits)",
+   "statute": "AlkG Art. 22; AlkV Art. 21 [year in force 2025 (pass 18), unchanged-confirmed: fedlex SPARQL endpoint (consolidations of eli/cc/2017/568, queried 2026-11-21): AlkV has two consolidations only, 2018-01-01 and 2022-01-01, so the 2022 text read applies throughout 2025; AlkG (eli/cc/48/425_437_457): last consolidation 2024-06-01, the one read]",
+   "dated": "fedlex AlkV 2022-01-01 (last consolidation; none in 2023-2026) and AlkG 2024-06-01 (last consolidation)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol)"
+   ],
+   "unsupported": [
+    "small-producer relief (Art. 22 (2) AlkG)"
+   ],
+   "yif18": "unchanged-confirmed",
+   "family_file": "lean/ChGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Biersteuer",
+   "statute": "Biersteuergesetz (BStG, SR 641.411)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "BStG consolidation not fetched (fedlex search by title gave only the ordinances); would unlock: BStG SR 641.411 in force 2025"
+   ],
+   "family_file": "lean/ChGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Direkte Bundessteuer (Gewinnsteuer)",
+   "statute": "DBG Art. 59 (1) lit. a, Art. 68",
+   "dated": "fedlex 2025-01-01",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (custom: tax deductible from its own base)"
+   ],
+   "unsupported": [
+    "Art. 67 losses",
+    "Art. 69-70 Beteiligungsabzug",
+    "joint deduction assumes the company is taxed in the City of Zürich"
+   ],
+   "family_file": "lean/ChGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Verrechnungssteuer",
+   "statute": "VStG Art. 4 (1), Art. 13 (1) lit. a",
+   "dated": "fedlex 2025-01-01",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "refunds under treaties and to residents (Art. 21 ff.) out of scope"
+   ],
+   "family_file": "lean/ChGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Staats- und Gemeindesteuer Zürich (Gewinnsteuer)",
+   "statute": "StG ZH § 71, § 65 (1) lit. a; Steuerfüsse 2025 Kanton 98 %, Stadt Zürich 119 %",
+   "dated": "zhlex Nachtrag 127 (1.1.2025); ESTV TaxRates 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Charge"
+   ],
+   "unsupported": [
+    "Kirchensteuer juristischer Personen not modelled",
+    "Beteiligungsabzug (§ 72) not modelled",
+    "patent box and R&D deductions (§§ 64a-64b) not modelled"
+   ],
+   "family_file": "lean/ChGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Verrechnungssteuer (royalties, services) (royalty, services)",
+   "statute": "VStG Art. 4 (1) (objects of the Verrechnungssteuer)",
+   "dated": "SR 642.21, Fassung 01.01.2025 (`ch/law/vstg_20250101.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "cantonal source taxes on certain income of non-resident individuals (DBG Art. 91-97: performers, board fees) not read",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/ChGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 13: Kanton Zürich Verkehrsabgabe on cars (Hubraum + Gesamtgewicht) modelled from the Strassenverkehrsamt's tariff; electric cars, the efficiency rebate, vans, motorcycles, heavy vehicles, the federal Automobilsteuer (4 % on import) and the LSVA not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 13: Kanton Zürich Verkehrsabgabe on cars (Hubraum + Gesamtgewicht) modelled from the Strassenverkehrsamt's tariff; electric cars, the efficiency rebate, vans, motorcycles, heavy vehicles, the federal Automobilsteuer (4 % on import) and the LSVA not modelled",
+   "unsupported": [
+    "would unlock: the Verkehrsabgabengesetz (LS 741.1) and Verkehrsabgabenverordnung (LS 741.11) texts for 2025 (electric cars' tariff, rebate rules); AStG (SR 641.51) art. 13 for the 4 % on imported cars"
+   ],
+   "family_file": "lean/ChGlobal/Other.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5200",
+   "tax": "Verkehrsabgabe (Kanton Zürich)",
+   "statute": "Verkehrsabgabengesetz des Kantons Zürich (LS 741.1) and Verkehrsabgabenverordnung (LS 741.11), tariff for cars and light motor vehicles up to 3,5 t as published by the Strassenverkehrsamt",
+   "dated": "zh.ch, Verkehrsabgabe für Auto & Kleinbus, via the Internet Archive 2025-04-27 (`ch/law/zh_verkehrsabgabe_auto_wb20250427.html`)",
+   "grade": "B",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "electric and fuel-cell cars (their tariff was not read), cars above 3,5 t or 11 000 cm3, vans, motorcycles, lorries and trailers",
+    "5200 Verkehrsabgabe (Zürich): the input's mass is read as the total weight (Gesamtgewicht, field 33); the canton is taken as Zürich for every vehicle",
+    "5200 Verkehrsabgabe (Zürich): the 80 % / 50 % rebate for efficiency categories A and B (at most 130 g/km) in the first four years is not applied: the category is not an input (grade C)"
+   ],
+   "family_file": "lean/ChGlobal/Other.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "6000",
+   "tax": "Personalsteuer (Stadt Zürich)",
+   "statute": "StG ZH § 199, § 200 (Fr. 24 per adult; spouses each)",
+   "dated": "StG ZH Nachtrag 127 (in force for 2025, as the CH model's other ZH entries)",
+   "grade": "A",
+   "kernel_parts": [
+    "1.x line: Personalsteuer 24 per adult (ChTax.Basic)"
+   ],
+   "unsupported": [
+    "booked inside the 1.x pit line, not as a separate 6000 charge"
+   ],
+   "gap": 1,
+   "family_file": "lean/ChGlobal/Other.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "6000",
+   "tax": "Kirchensteuer (ZH)",
+   "statute": "StG ZH § 201 (Kirchgemeinden der kantonalen kirchlichen Körperschaften)",
+   "dated": "StG ZH Nachtrag 127",
+   "grade": "R",
+   "status": "reclassified",
+   "reclass": "not a tax (OECD guide § 6): levied by the parishes of the cantonal church corporations, not by the canton or the political municipalities; the 1.x option --church reformed|catholic is kept as it is",
+   "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+   "law": "StG ZH § 201 (1)",
+   "kernel_parts": [],
+   "unsupported": [],
+   "gap": 1,
+   "family_file": "lean/ChGlobal/Other.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6200: military-service exemption tax and other items)",
+   "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVCHE v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/CHE.csv`, SHA256SUMS; general government S13; 2025 not yet published): 6200 Exemption tax 211,5 and Other 466,7 million CHF (2024); the exemption tax is the federal Wehrpflichtersatzabgabe",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: named by the OECD table; the Wehrpflichtersatzabgabe act (BG über die Wehrpflichtersatzabgabe, SR 661) not read",
+   "unsupported": [
+    "would unlock: SR 661 (3 % of taxable income, minimum CHF 400) and an input for liability"
+   ],
+   "gap": 1,
+   "family_file": "lean/ChGlobal/Other.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "kantonale Liegenschaftssteuer",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/ChGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Handänderungssteuer (Kanton Zürich) (not levied)",
+   "statute": "StG ZH (LS 631.1) § 1, § 205 (Fassung vom 30.11.2003, in Kraft seit 1.1.2005), Nachtrag 127 (1.1.2025)",
+   "dated": "zhlex Nachtrag 127 (in force 1.1.2025, `ch/law/stgzh_127.pdf`)",
+   "grade": "A",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ChGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Eidgenössische Umsatzabgabe (securities)",
+   "grade": "C",
+   "status": "unsupported",
+   "statute": "not reached: StG (SR 641.10) Art. 13-16 (version 2024-01-01 held, its 2025 version not checked)",
+   "dated": "",
+   "kernel_parts": [],
+   "tried": "pass 18: the cantonal real-estate transfer tax is a cited absence; the federal turnover duty on securities dealt through a Swiss securities dealer is not modelled",
+   "unsupported": [
+    "a purchase of shares through a Swiss securities dealer bears the Umsatzabgabe (not modelled)"
+   ],
+   "family_file": "lean/ChGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "AHV/IV/EO-Beitrag Arbeitgeber (AHV-Teil)",
+   "statute": "AHVG Art. 13: 4,35 Prozent",
+   "dated": "fedlex 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ChGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "ALV-Beitrag Arbeitgeber",
+   "statute": "AVIG Art. 3 (2), Art. 6: 2,2 Prozent je zur Hälfte bis zum Höchstbetrag des versicherten Verdienstes (148 200 Fr.)",
+   "dated": "fedlex 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ChGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4200",
+   "tax": "Vermögenssteuer (Kanton und Stadt Zürich)",
+   "statute": "StG ZH § 47; Steuerfüsse 2025 98 % / 119 %",
+   "dated": "zhlex Nachtrag 127 (1.1.2025); ESTV TaxRates 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "WealthTax"
+   ],
+   "unsupported": [
+    "single parents' Verheiratetentarif",
+    "Kirchensteuer"
+   ],
+   "family_file": "lean/ChGlobal/Wealth.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4200",
+   "tax": "Kapitalsteuer (Kanton und Stadt Zürich)",
+   "statute": "StG ZH § 82 (1); Steuerfüsse 2025 98 % / 119 %",
+   "dated": "zhlex Nachtrag 127 (1.1.2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Charge"
+   ],
+   "unsupported": [
+    "Kirchensteuer juristischer Personen"
+   ],
+   "family_file": "lean/ChGlobal/Wealth.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4300",
+   "tax": "Erbschafts- und Schenkungssteuer (Kanton Zürich)",
+   "statute": "ESchG ZH §§ 11, 21, 22, 23 [year in force 2025 (pass 18), unchanged-confirmed: zh.ch Gesetzessammlung, LS 632.1 version list (Internet Archive 2024-02-24, ch/law/zh_eschg_versions_wb20240224.*): Nachtrag 071 'aktuell', in force since 1.1.2011; the Archive's captures of the zh.ch LS 632.1 pages from 2024 to October 2025 name no later Nachtrag (highest 071)]",
+   "dated": "zhlex Nachtrag 71 (1.1.2011), current per the zh.ch version list (Internet Archive 2024-02-24); no later Nachtrag captured to October 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Charge"
+   ],
+   "unsupported": [
+    "aggregation (§ 21 (3), § 24)",
+    "Lebenspartner and other special Freibeträge"
+   ],
+   "yif18": "unchanged-confirmed",
+   "family_file": "lean/ChGlobal/Wealth.lean",
+   "family_guards": 11
+  }
+ ],
+ "grades": {
+  "A": 14,
+  "B": 3,
+  "C": 5
+ },
+ "guards": 45,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

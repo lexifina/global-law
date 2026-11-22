@@ -1,0 +1,277 @@
+{
+ "country": "TW",
+ "name": "Taiwan",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:01:29"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Separate taxation of dividends (28 %)",
+   "statute": "所得稅法 art. 15 (5)",
+   "dated": "current text",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TwGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1100",
+   "tax": "房地合一 tax on property gains",
+   "statute": "所得稅法 art. 14-4",
+   "dated": "current text (2021 amendment)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "self-use relief"
+   ],
+   "family_file": "lean/TwGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "證券交易稅 (securities transaction tax 0.3 %)",
+   "statute": "證券交易稅條例 art. 2",
+   "dated": "2025: 證券交易稅條例 current text (last amended 2025; art. 2 unchanged); session 12 registry sample",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "day-trading 0.15 %",
+    "ETFs 0.1 %",
+    "day-trading rate 0.15 % (art. 2-2) not modelled"
+   ],
+   "family_file": "lean/TwGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5111",
+   "tax": "營業稅 (加值型)",
+   "statute": "營業稅法 第8條, 第10條, 第11條",
+   "dated": "law.moj.gov.tw current (修正 2025-05-28)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "the 5 % rate is the Executive Yuan's (not read)",
+    "GBRT on financial and small businesses (第11-13條) not modelled"
+   ],
+   "family_file": "lean/TwGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "菸酒稅 (cigarettes, beer, spirits), 貨物稅 (petrol, diesel)",
+   "statute": "菸酒稅法 第7條, 第8條; 貨物稅條例 第10條",
+   "dated": "law.moj.gov.tw current (amended 2025-01-24 / 2025-12-30)",
+   "grade": "A",
+   "kernel_parts": [
+    "Excise"
+   ],
+   "unsupported": [
+    "wine, other tobacco by weight",
+    "commodity tax on other goods (vehicles, appliances)",
+    "菸品健康福利捐"
+   ],
+   "family_file": "lean/TwGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "所得稅法 art. 88; 各類所得扣繳率標準 art. 3 (1), (4), (6), (8), (10)",
+   "dated": "2025: 各類所得扣繳率標準 current text (last amended 2021, law.moj.gov.tw); session 12 registry sample",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "15 % interest on bills, bonds and securitised assets (art. 3 (4) (一)-(四)) not distinguished; treaty rates"
+   ],
+   "family_file": "lean/TwGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "營利事業所得稅",
+   "statute": "所得稅法 art. 5 (5)",
+   "dated": "art. 5 as amended 2018-02-07 (unchanged in 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "art. 66-9 undistributed earnings 5 %",
+    "AMT 12 %"
+   ],
+   "family_file": "lean/TwGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Chinese Taipei as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Chinese Taipei for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C158&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/tw.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 10063000 (MFN duty 'NT$45/KGM': specific or compound duty, unit/currency not mapped)"
+   ],
+   "family_file": "lean/TwGlobal/Customs.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4100",
+   "tax": "房屋稅 (house tax: own home 1.2 %, business use 3 %)",
+   "statute": "房屋稅條例 第3條, 第5條第1項",
+   "dated": "text last amended 2024-01-03 (from the 2024-07 period): the 2025 text",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "homes after the first (local rates) C",
+    "1 % single-home rate not applied",
+    "business use at the 3 % minimum"
+   ],
+   "family_file": "lean/TwGlobal/Property.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4100",
+   "tax": "地價稅 (land value tax)",
+   "statute": "土地稅法 第16條, 第17條",
+   "dated": "text last amended 2025-01-24",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "land value and local progressive start value not in the entity"
+   ],
+   "family_file": "lean/TwGlobal/Property.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4400",
+   "tax": "契稅 (deed tax 6 % on buildings)",
+   "statute": "契稅條例 第2條, 第3條第1款, 第13條",
+   "dated": "text last amended 2010-05-05",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "purchases without the building's standard value not computed",
+    "土地增值稅, 印花稅 not modelled"
+   ],
+   "family_file": "lean/TwGlobal/Property.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social insurance (labour, health, pension)",
+   "statute": "勞工保險條例 13; 全民健康保險法 27; 勞工退休金條例 14",
+   "dated": "2025 tables",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "occupational accident insurance"
+   ],
+   "family_file": "lean/TwGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TwGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "遺產稅 (estate tax)",
+   "statute": "遺產及贈與稅法 arts. 13, 18",
+   "dated": "2025 indexed amounts",
+   "grade": "B",
+   "kernel_parts": [
+    "estateCharge"
+   ],
+   "unsupported": [
+    "art. 17 deductions"
+   ],
+   "family_file": "lean/TwGlobal/Transfers.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "贈與稅 (gift tax)",
+   "statute": "遺產及贈與稅法 arts. 19, 22",
+   "dated": "2025 indexed amounts",
+   "grade": "B",
+   "kernel_parts": [
+    "estateCharge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TwGlobal/Transfers.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/TwGlobal/Transfers.lean",
+   "family_guards": 2
+  }
+ ],
+ "grades": {
+  "A": 8,
+  "B": 7,
+  "C": 1
+ },
+ "guards": 25,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

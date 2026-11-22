@@ -1,0 +1,71 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto al Valor Agregado",
+  "statute": "Ley del IVA (Decreto 27-92) art. 10 (Decreto 32-2001 art. 1)",
+  "dated": "Decreto 32-2001 (in force on publication, 2001); not reformed by Decreto 10-2012",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "art. 7 exemptions",
+   "pequeño contribuyente regime"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto a la distribución de petróleo crudo y combustibles derivados",
+  "statute": "Decreto 38-92 art. 12 A (Decreto 11-2003 art. 5)",
+  "dated": "Decreto 11-2003; later amendments of art. 12 A not identified",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "petrol read as regular"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto sobre la distribución de bebidas alcohólicas destiladas, cervezas y otras bebidas fermentadas",
+  "statute": "Decreto 21-2004 arts. 9-17",
+  "dated": "Decreto 21-2004 (scp.gob.gt copy); Decreto 4-2012 does not reform it",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "suggested price taken as the price paid"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto sobre tabacos y sus productos",
+  "statute": "Decreto 61-77 art. 27 (Decreto 4-2012 art. 69)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "kernel_parts": [],
+  "tried": "pass 12: only the Decreto 4-2012 reform of the base paragraph held (WHO FCTC copy)",
+  "unsupported": [
+   "would unlock: Decreto 61-77 as in force 2025 (rate paragraph of art. 27)"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 239",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 239: \"Corresponde con exclusividad al Congreso de la República, decretar impuestos ordinarios y extraordinarios\" (`gt/law/const_art-239.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Ley del IVA (Decreto 27-92) art. 10 (Decreto 32-2001 art. 1); Decreto 38-92 art. 12 A (Decreto 11-2003 art. 5); Decreto 21-2004 arts. 9-17; Decreto 10-2012 art. 36 (25 %); Decreto 10-2012 Libro I Título V arts. 97-99, 103-105 (art. 104 num. 1 d. repealed by Decreto 19-2013 art. 28); 1.x model (see its summary.json))."
+ }
+]

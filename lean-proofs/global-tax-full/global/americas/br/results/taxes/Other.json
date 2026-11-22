@@ -1,0 +1,51 @@
+[
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribuição de melhoria (Constituição art. 145 III",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribuição de melhoria (Constituição art. 145 III; CTN arts. 81-82). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribuição de melhoria (Constituição art. 145 III; CTN arts. 81-82). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBRA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BRA.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "MERCOSUR Arancel Externo Común (NCM) with national exception lists",
+  "customs_note": "customs import duties (5123): MERCOSUR Arancel Externo Común (NCM) with national exception lists; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD BR 6000 0 in 2024 but unallocated amounts in 2021-2023: no named tax; a cited absence needs a text"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD BR 6000 0 in 2024 but unallocated amounts in 2021-2023: no named tax; a cited absence needs a text",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBRA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BRA.csv): general government heading 6000 = 2021:143.7 2022:92.4 2023:-232.7 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes",
+  "statute": "none recorded by the registry",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVISL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/ISL.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6100 6 794 and 6200 9 011 million ISK (2023; unnamed); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 13: bifreiðagjald (lög 39/1988) on cars, vans, trucks and buses modelled; kílómetragjald on electric and plug-in hybrid cars (lög 101/2023, from 1.1.2024), vörugjald af ökutækjum on import and the motorcycle and trailer rows not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 13: bifreiðagjald (lög 39/1988) on cars, vans, trucks and buses modelled; kílómetragjald on electric and plug-in hybrid cars (lög 101/2023, from 1.1.2024), vörugjald af ökutækjum on import and the motorcycle and trailer rows not modelled",
+  "unsupported": [
+   "would unlock: lög nr. 101/2023 um kílómetragjald (km driven is not an input: kernel request candidate) and lög nr. 29/1993 (vörugjald af ökutækjum)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Bifreiðagjald",
+  "statute": "Lög nr. 39/1988 um bifreiðagjald, 2. gr. (fjárhæðir L. 127/2024, 4. gr.), 3. gr., 4. gr.; 3. gr. (gjaldtímabil 1.1-30.6 and 1.7-31.12, by days held)",
+  "dated": "althingi.is lagasafn útgáfa 156b (Íslensk lög 1. september 2025) via the Internet Archive 2025-11-30 (`is/law/bifreidagjald_l39_1988_utg156b_wb20251130.html`); the amounts are those of L. 127/2024, in force from 1.1.2025; L. 104/2024 (from 1.9.2025) changed only 4. gr. 1. mgr. a (who is exempt)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable",
+   "VehicleTax.dayPeriods (2.7.0)"
+  ],
+  "unsupported": [
+   "motorcycles, trailers and vehicles without registered CO2 (the 0,12 g/kg + 50 g rule needs the own weight)",
+   "5200 bifreiðagjald: the input's CO2 is read as WLTP for vehicles first registered from 2019 and as NEDC before (the act charges by the registered cycle); the first-registration year stands for the model year in the 25-year exemption",
+   "5200 kílómetragjald (lög 101/2023) on electric and plug-in hybrid cars not modelled: it is charged per km driven, not an input (grade C)"
+  ]
+ }
+]

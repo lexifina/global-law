@@ -1,0 +1,252 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Value Added Tax",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "VAT Act Cap. 148 s. 5 [text version: VAT Act Cap. 148 as printed by the registry copy (TRA print, revision not stated: flag); Finance Act 2025 s. 124 (in force 1 July 2025) adds s. 5 (5) (withholding agents: 18 % of which 3 % / 6 % withheld) and s. 5 (6) (16 % for unregistered buyers paying by bank or approved electronic payment, in operation 1 September 2025, eligible persons by public notice): 18 % kept on every line, the payment method not being an input (twentieth pass)]",
+  "dated": "registry fetch (consolidated text)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt schedule not read",
+   "16 % rate of s. 5 (6) for unregistered buyers paying by bank or approved electronic payment, from 1 September 2025 (public notice of eligible persons not held; payment method not an input)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duty (Cap. 147 Fourth Schedule)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Excise (Management and Tariff) Act Cap. 147 R.E. 2023 Fourth Schedule (Old/New rate columns of the R.E. 2023 print; the New column is in force), as amended by FA 2024 (Part VI) and FA 2025 (Part VIII, from 1 July 2025): 2202.10 soft drinks, 2203.00 beer, 2204.21 wine, 2208.30-2208.70 spirits, 2402.20.10 cigarettes, 2710.12.10 petrol, 2710.19.31 gas oil",
+  "dated": "Finance Act 2025 (No. 11): old rate to 30 June 2025, new rate from 1 July 2025",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "ExciseRule (2.1, dated)",
+   "exciseRuleFamily"
+  ],
+  "unsupported": [
+   "100 % local-barley beer rate (620/630) not separable",
+   "locally produced grape spirits (540/565) not separable",
+   "wine: 'domestic grapes > 75 %' rate applied to local production, 'other' to imports; cigarettes: 'domestic tobacco > 75 %' to local, 'other' to imports",
+   "non-filter and longer cigarettes, 2202.99 other non-alcoholic beverages (134.20 / 561 / 600), kerosene and fuel oils"
+  ],
+  "source": "Act text held: global/registry/afm_data/fetch/TZ/tz_exc.pdf (+ .txt), TRA's print of the Excise (Management and Tariff) Act Cap. 147 R.E. 2023 with the Fourth Schedule (tra.go.tz/images/uploads/acts/The_Excise_(Management_and_Tariff)_Act.pdf); Finance Acts 2024-2026 in world/B10-anglophone-africa/tz/law/"
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Corporate income tax + perpetual-loss minimum",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "ITA Cap. 332 First Schedule para 3 (1) (30 %), para 3 (3) and para 5 (3) [text version: ITA Cap. 332 R.E. 2023 (as amended to Act 7 of 2023), read with the Finance Act 2024 (No. 6) s. 46 and the Finance Act 2025 (No. 11, in force 1 July 2025) s. 60: para 3 (1) unchanged; para 3 (3) 0.5 -> 1 % of turnover from 1 July 2025, the 2025 year of income apportioned by days (para 5 (3): 181/365 at 0.5 %, 184/365 at 1 % for a calendar year); para 3 (2) (a) 'thirty' -> 'twenty five' percent is the public float of a newly listed company (not modelled), not a rate (twentieth pass)]",
+  "dated": "R.E. 2023 with the Finance Acts 2024 and 2025 (para 3 (3) split at 1 July 2025 by para 5 (3))",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax (fixed = day-apportioned minimum)"
+  ],
+  "unsupported": [
+   "PE repatriated income 10 %",
+   "reduced rates for listed/assemblers",
+   "a year of income other than the calendar year (para 5 (3) apportionment by its own days)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Withholding tax (non-residents)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "ITA Cap. 332 First Schedule para 4 [text version: ITA Cap. 332 R.E. 2023 (as amended to Act 7 of 2023), read with the Finance Act 2024 s. 46 (b)-(c) and the Finance Act 2025 s. 60 (e): the changes (resident service fees and insurance premiums 5 -> 10 % from 1 July 2025, gaming commissions 10 %, resident sports royalties 5 %, digital content 5 %, digital assets 3 %) touch no non-resident rate modelled here: no split (twentieth pass)]",
+  "dated": "R.E. 2023 with the Finance Acts 2024 and 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "DSE-listed dividends 5 %",
+   "treaties"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty on conveyances on sale (immovable property)",
+  "statute": "Stamp Duty Act Cap. 189 R.E. 2023, Schedule item 22 (a)-(b); Finance Acts 2024 and 2025 do not amend Cap. 189 (the Finance Act 2026 does, from 1 July 2026)",
+  "dated": "-",
+  "unsupported": [
+   "conveyance of agricultural land TShs 500 (item 22 (c)) and exemptions (Administrator General, EPZ, special purpose vehicles)",
+   "reduction by the duty paid on a stamped agreement for sale"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.transferBandFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (Zanzibar has its own tax laws (Zanzibar Revenue Board); provision not located by keyword in the reachable text)",
+  "statute": "Income Tax Act Cap. 332 (R.E. 2023) + Finance Acts 2024-2025",
+  "dated": "-",
+  "unsupported": [],
+  "status": "reclassified",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "classification": "out of scope (another government's taxes)",
+  "oecdGuide": "OECD Interpretative Guide (Revenue Statistics 2026, Annex A; R4/fetch/gap/oecd_guide.txt) §97 (state/regional sub-sector: intermediate units with their own revenue powers in part of the territory) and §104 (a tax is attributed to the government that imposes it and sets its rate)",
+  "why": "The row stands for the Revolutionary Government of Zanzibar's own taxes (Zanzibar laws, collected by the Zanzibar Revenue Board/Authority), which fall on persons and transactions in Zanzibar. The model is a household and firm in Mainland Tanzania, as other countries' sub-national taxes are taken for the modelled locality only. Union taxes that also apply in Zanzibar are modelled: Income Tax Act Cap. 332 (R.E. 2023) s. 2 'This Act shall apply to Mainland Tanzania as well as Tanzania Zanzibar' (world/B10-anglophone-africa/tz/law/The_Income_Tax_Act.txt).",
+  "was": "grade C (triage outOfScope: Zanzibar's own tax laws: the model is mainland Tanzania. listed by the registry (background (unverified)); charging provision not read/modelled in this pass)"
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty on transfers of shares (unlisted)",
+  "statute": "Stamp Duty Act Cap. 189 R.E. 2023, Schedule item 61 (a); not amended by the Finance Acts 2024-2025",
+  "dated": "-",
+  "unsupported": [
+   "listed shares traded on the stock exchange (exemptions outside item 61 not read)",
+   "debentures 1 % (item 61 (b))"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "NSSF statutory contribution, employer's part (10 %)",
+  "statute": "National Social Security Fund Act Cap. 50 R.E. 2023 s. 12, First Schedule ('Contributions for employees') [text version: Cap. 50 R.E. 2023 (world/B10-anglophone-africa/tz/law/nssf_cap50_re2023.txt)]",
+  "dated": "-",
+  "unsupported": [
+   "the employee's 10 % (1.x PIT side)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Skills and Development Levy (3,5 % of gross monthly emoluments)",
+  "statute": "Vocational Education and Training Act Cap. 82 R.E. 2023 s. 14 (1)-(3) as amended by Act 7 of 2023 s. 73 (TRA PDF, R4/fetch/tz11); Finance Acts 2024 and 2026 amend only s. 19 exemptions",
+  "dated": "-",
+  "unsupported": [
+   "employer headcount not given (household 'employerEmployees', company 'employees'): the employer is presumed to have ten or more employees (declared; the charge's statute says so)",
+   "s. 19 exempt employers (Government departments, diplomatic missions, farms, charities, ...)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "EmployerLevy.family (kernel Global2.Employer)"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Workers Compensation Fund contribution, private-sector employer (0,5 %)",
+  "statute": "Workers Compensation Act Cap. 263; Workers Compensation (Payment of Tariff) Regulations GN 229A of 2017 reg. 5 (2) as amended by GN 496G (1 % -> 0,6 %) and GN 478F of 1 July 2022 (0,6 % -> 0,5 %) (wcf.go.tz PDFs, R4/fetch/tz11) [text version: GN 229A of 2017 as amended by GN 496G and GN 478F of 1 July 2022 (wcf.go.tz PDFs)]",
+  "dated": "-",
+  "unsupported": [
+   "the principal Regulations (scope of reg. 5 (2): private-sector employers) not read: grade B",
+   "base = gross earnings per the principal regulations (not read)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Final withholding tax on dividends to resident individuals (10 %)",
+  "statute": "Income Tax Act Cap. 332 s. 54, 82, 86 (final withholding payments for resident individuals), First Schedule para 4 (held The_Income_Tax_Act.txt) [text version: ITA Cap. 332 R.E. 2023 (as amended to Act 7 of 2023); Finance Act 2024 s. 46 (b) and Finance Act 2025 s. 60 (e) (in force 1 July 2025) amend para 4 (b) (iii) (resident sports royalties) and para 4 (c) (i)-(ii), (v) (resident service fees and insurance premiums 5 -> 10 %, gaming commissions): para 4 (b) (i) (bb) and (ii) are unchanged in 2025, no split (twentieth pass)]",
+  "dated": "-",
+  "unsupported": [
+   "DSE-listed companies 5 %"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Final withholding tax on interest to resident individuals (10 %)",
+  "statute": "Income Tax Act Cap. 332 s. 82, 86, First Schedule para 4 [text version: ITA Cap. 332 R.E. 2023 (as amended to Act 7 of 2023); Finance Act 2024 s. 46 (b) and Finance Act 2025 s. 60 (e) (in force 1 July 2025) amend para 4 (b) (iii) (resident sports royalties) and para 4 (c) (i)-(ii), (v) (resident service fees and insurance premiums 5 -> 10 %, gaming commissions): para 4 (b) (i) (bb) and (ii) are unchanged in 2025, no split (twentieth pass)]",
+  "dated": "-",
+  "unsupported": [
+   "exempt interest (government securities, s. 10 / Second Schedule)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Motor vehicle charges on first registration (licence fee by engine capacity, registration tax; HIV Response Levy from 1 July 2025 grade C)",
+  "statute": "Motor Vehicle (Tax on Registration and Transfer) Act Cap. 124 First Schedule para. 3 (a) (TZS 250 000, any cylinder capacity; as substituted by the Finance Act 2024 s. 63, in force 1 July 2024; Finance Act 2025 s. 81 replaced only para. 3 (b) (electric vehicles) from 1 July 2025, Finance Act 2026 s. 57 only the 95 000 of para. 4, from 1 July 2026: world/B10-anglophone-africa/tz/law/Finance_Act_2024_1.txt l. 1118-1170, THE_FINANCE_ACT_2025.txt l. 2150-2215, THE_FINANCE_ACT_2026.txt l. 2039-2055); licence fee on first registration by engine capacity per the TRA page 'Motor Vehicle Registration' (fetched 2026-11-21, R4/fetch/p15/tz_tra_motor.html; no Finance Act 2024-2026 amends these fees). HIV Response Levy (s. 5A, Third Schedule) inserted by the Finance Act 2025 s. 80, 82, in force 1 July 2025 (s. 2): not computed for 2025 (registration date not an input; FT reviewer 6). Liability: the owner applying for registration",
+  "dated": "-",
+  "unsupported": [
+   "no annual charge: a vehicle held but not registered in the tax year bears nothing (the annual licence is no longer listed by TRA)",
+   "electric and hybrid vehicles (registration tax and licence fee by battery or motor class in kWh): the engine-capacity rows are applied when engineCcm is given, else grade C",
+   "cars of 500 cc or less: no licence fee row (0 applied)",
+   "registration tax and HIV levy on motorcycles, vans, trucks, buses and machinery (250 000) not modelled: kinds other than car and motorcycle get nothing",
+   "personalised and special registration numbers",
+   "tax on transfer of a used vehicle (Part III)",
+   "a car without engineCcm still bears the fixed registration tax; its licence fee and HIV levy are then not computed",
+   "HIV Response Levy on first registration (Cap. 124 s. 5A, Third Schedule: 0-1000 cc TZS 50 000, 1001-1500 cc 100 000, 1501-2500 cc 150 000, above 200 000) applies to first registrations from 1 July 2025 only (Finance Act 2025 s. 2, 80, 82); the registration date is not an input: not computed for 2025 (grade C)",
+   "electric vehicles: registration tax by battery class (para. 3 (b) as replaced by the Finance Act 2025 s. 81 from 1 July 2025; before, FA 2024 hybrid classes by kW): battery capacity and registration date not inputs (grade C)",
+   "micro hybrids (< 5 kW) registered before 1 July 2025: TZS 95 000 under FA 2024 s. 63 para. 3 (b) (i), not 250 000 (kW not an input)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "vehicleTaxFamily (kernel Global2.Vehicle)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (EAC Common External Tariff)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "East African Community Customs Management Act 2004 (charging provisions not read) and the EAC CET; EAC Common External Tariff 2022 Version (Annex 1 to the Protocol on the Establishment of the East African Community Customs Union), edition 'CET 2022 VERSION updated June 2025' (eac.int, Wayback 20260303052110, R4/fetch/gap/eac_cet2022_upd_jun2025_wb20260303052110.pdf): Legal Notice No. EAC/117/2022 para 1 (four bands 0, 10, 25 and 35 per centum) and 2 (in force 1 July 2022); the amending Legal Notices printed at its end (EAC/129/2023, 81/2024, 147/2024, 298/2024, 32/2025, 171/2025) touch none of the lines below",
+  "dated": "CET 2022 version as updated to June 2025 (lines unchanged by the 2023-2025 amending notices): the whole of 2025",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "stays of application and duty remissions by partner state (EAC Gazette notices for 2024/25 and 2025/26) not read",
+   "COMESA / AfCFTA / EPA preferences not applied (CET charged)",
+   "national import levies (KE Import Declaration Fee and Railway Development Levy, UG/TZ/RW/BI equivalents) not modelled",
+   "lines of other HS headings (grade C)"
+  ]
+ }
+]

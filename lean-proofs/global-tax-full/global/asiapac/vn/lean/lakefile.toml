@@ -1,0 +1,18 @@
+name = "VnGlobal"
+version = "0.1.0"
+defaultTargets = ["VnGlobal", "vnglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); VnTax = the 1.x model, vendored from cmp20/world/B03-asia-east-se/vn/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "VnTax"
+
+[[lean_lib]]
+name = "VnGlobal"
+
+[[lean_exe]]
+name = "vnglobal"
+root = "VnGlobal.Main"

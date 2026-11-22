@@ -1,0 +1,343 @@
+{
+ "country": "NI",
+ "name": "Nicaragua",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 18:26:29"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "see the pass 11 entry below for disposals",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/NiGlobal/Capital.lean",
+   "guards": 3
+  },
+  {
+   "tax": "IR de rentas de capital y ganancias de capital: ganancias (15 %)",
+   "statute": "Ley 822 arts. 82, 83, 87 (Ley 891, Ley 987)",
+   "dated": "Ley 822 with Ley 891 (2014) and Ley 987 (2019)",
+   "grade": "A",
+   "unsupported": [
+    "registered property bands (art. 87 num. 4)",
+    "presumed 60 % gain",
+    "losses"
+   ],
+   "oecd": "1100",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/NiGlobal/Capital.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "Ley 822 arts. 109, 127",
+   "dated": "La Gaceta 241 (2012) + Ley 891 (2014); Ley 987 (2019) not read",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "services exemptions",
+    "Ley 987 changes to art. 127"
+   ],
+   "status": "modelled",
+   "family_file": "lean/NiGlobal/Consumption.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo",
+   "statute": "Ley 822 art. 151, Anexos I-III",
+   "dated": "2012 text; annexes as amended not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "would unlock: Ley 822 consolidated after Ley 987 (Asamblea Nacional digesto)"
+   ],
+   "family_file": "lean/NiGlobal/Consumption.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 108",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 108: \"Los tributos se crean, modifican y derogan por ley\" (`ni/law/const_articulo-108.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Ley 822 arts. 109, 127; Ley 822 art. 52 (30 %); Ley 822 arts. 53, 87, 89 (Ley 891 of 2014, Ley 987 of 2019); 1.x model (see its summary.json); Ley 822 arts. 82, 83, 87 (Ley 891, Ley 987); Decreto 975 arts. 11 (2), 16 as reformed by Decreto Presidencial 06-2019).",
+   "family_file": "lean/NiGlobal/Consumption.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la Renta (actividades económicas)",
+   "statute": "Ley 822 art. 52 (30 %)",
+   "dated": "La Gaceta 241 (2012)",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "pago mínimo definitivo (Ley 822 art. 61, % of gross income) not modelled: the regular tax only"
+   ],
+   "status": "modelled",
+   "family_file": "lean/NiGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents (retenciones definitivas)",
+   "statute": "Ley 822 arts. 53, 87, 89 (Ley 891 of 2014, Ley 987 of 2019)",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P2",
+   "unsupported": [
+    "Ley 822 art. 87 num. 1 (10 % on financing from investment-grade international banks), art. 87 num. 3 and art. 49 (30 % for tax havens), and the 1.5 %/3 % rates of art. 53 num. 1-2 not modelled; Ley 1212 (La Gaceta 155, 22 Aug 2024) not checked"
+   ],
+   "dated": "Ley 822 (La Gaceta 241, 2012) and Ley 891 (world/B12-latin-america/ni/src); Ley 987 La Gaceta 41 of 28 Feb 2019 (copy from leybook.com, archived ni/law/ley987_leybook.*); pass 8, 2026-11-21",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "family_file": "lean/NiGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: IR de actividades economicas not modelled; INSS facultativo not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: IR de actividades economicas not modelled; INSS facultativo not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVNIC, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/NIC.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/NiGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Impuesto sobre Bienes Inmuebles (IBI, Decreto 3-95: 1 % of 80 % of the cadastral value)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto sobre Bienes Inmuebles (IBI, Decreto 3-95: 1 % of 80 % of the cadastral value); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto sobre Bienes Inmuebles (IBI, Decreto 3-95: 1 % of 80 % of the cadastral value); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVNIC, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/NIC.csv): general government heading 4100 = 2021:1707.1 2022:1716.4 2023:1985.7 2024:2342.7"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/NiGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribuciones especiales (Plan de Arbitrios municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribuciones especiales (Plan de Arbitrios municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribuciones especiales (Plan de Arbitrios municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVNIC, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/NIC.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/NiGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+   "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/NiGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "impuesto de rodamiento (municipal) and circulación",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto de rodamiento (municipal) and circulación. 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto de rodamiento (municipal) and circulación. 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVNIC, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/NIC.csv): general government heading 5200 = 2021:1062.5 2022:1232.8 2023:1426.2 2024:1577.1"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/NiGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD NI 6200 1,947 (2024), local government: municipal taxes (Plan de Arbitrios, 1 % on sales) not identified"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD NI 6200 1,947 (2024), local government: municipal taxes (Plan de Arbitrios, 1 % on sales) not identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVNIC, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/NIC.csv): general government heading 6000 = 2021:1239.6 2022:1412.5 2023:1634.1 2024:1946.9"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/NiGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "Ley 822 (ganancias de capital on inheritances)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read in this pass",
+   "unsupported": [
+    "would unlock: the act's 2025 text"
+   ],
+   "family_file": "lean/NiGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 108",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 108: \"Los tributos se crean, modifican y derogan por ley\" (`ni/law/const_articulo-108.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: Ley 822 arts. 109, 127; Ley 822 art. 52 (30 %); Ley 822 arts. 53, 87, 89 (Ley 891 of 2014, Ley 987 of 2019); 1.x model (see its summary.json); Ley 822 arts. 82, 83, 87 (Ley 891, Ley 987); Decreto 975 arts. 11 (2), 16 as reformed by Decreto Presidencial 06-2019).",
+   "family_file": "lean/NiGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "INSS Régimen Integral (employer)",
+   "statute": "Decreto 975 arts. 11 (2), 16 as reformed by Decreto Presidencial 06-2019",
+   "dated": "La Gaceta N° 21 of 1 Feb 2019 (leybook copy)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "charge",
+    "Contribution"
+   ],
+   "unsupported": [
+    "household employer size unknown (21.5 %)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/NiGlobal/Social.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "3000",
+   "tax": "INATEC aporte mensual (2 %)",
+   "statute": "Decreto 40-94 (Ley Orgánica del INATEC) arts. 24 a), 25 (reform of 2009: art. 11 only)",
+   "dated": "Decreto 40-94, La Gaceta 192 of 14 Oct 1994 (Justia copy)",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "status": "modelled",
+   "family_file": "lean/NiGlobal/Social.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Plan de Arbitrios (IBI); Ley 822 (timbres)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/NiGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 5,
+  "C": 9
+ },
+ "guards": 13,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

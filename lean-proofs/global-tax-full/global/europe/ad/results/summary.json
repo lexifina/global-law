@@ -1,0 +1,227 @@
+{
+ "country": "AD",
+ "name": "Andorra",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:29:52"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Llei 5/2014 de l'IRPF (guanys de capital)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/AdGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impost general indirecte",
+   "statute": "Llei 11/2012 de l'impost general indirecte art. 57 (4,5 %), 58 (1 %, redacció Llei 10/2014 art. 7 i Llei 17/2022 DF1), 59 (0 %, redacció Llei 3/2019 art. 24, Llei 41/2022, Llei 5/2025 art. 82), 60 (9,5 %), 60 bis (2,5 %, Llei 3/2017 DF3), 60 ter (3,5 %, Llei 41/2022)",
+   "dated": "laws as enacted with every amending law in force in 2025 applied (BOPA, via lexifina/andorra-law); art. 59 item 15 from 10.4.2025 (affordable-housing cessions, outside the basket)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "health and education taken at 0 % (art. 59: only when supplied by public, conventioned or authorised providers)",
+    "no registration threshold applied (not read)",
+    "passenger transport at the special 2,5 % (art. 60 bis); private cultural services at 2,5 % not separated from recreation",
+    "medicines at 0 % only when reimbursed by the CASS (art. 59): all medicines taken at 0 %",
+    "insurance taken at the general rate (exemptions article not read)"
+   ],
+   "yif18": "downgraded",
+   "gap": 1,
+   "family_file": "lean/AdGlobal/Consumption.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impostos especials (alcohol, carburants)",
+   "statute": "Llei 27/2008, del 27 de novembre, dels impostos especials, art. 20, 28 (redacció Llei 19/2021 art. 6) i annex 1",
+   "dated": "law as enacted with the amending laws found in the repository (Llei 19/2021, Llei 1/2022) applied; no consolidated text, later amendments not excluded (grade B)",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "tobacco not modelled (the consumption tax of Llei 11/2024 depends on the regime of origin)",
+    "petrol taken as RON 95-98",
+    "no consolidated text: amendments after Llei 19/2021 / 1/2022 not excluded (grade B)"
+   ],
+   "gap": 1,
+   "family_file": "lean/AdGlobal/Consumption.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impost sobre la renda dels no-residents fiscals (retenció) (dividend, interest, royalty, services)",
+   "statute": "Llei 94/2010 de l'IRNR art. 15 b) (Llei 18/2011 art. 10: movable-capital income exempt), art. 29 (Llei 18/2011 art. 16: general 10 %, royalties 5 %)",
+   "dated": "law as enacted with the amending laws in force in 2025 applied (BOPA, via lexifina/andorra-law); Llei 5/2025 art. 80 changes only the real-estate rates from 10.4.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "services are taken as used in Andorra (art. 10 a))",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif18": "downgraded",
+   "gap": 1,
+   "family_file": "lean/AdGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impost sobre societats",
+   "statute": "Llei 95/2010 de l'impost sobre societats art. 41.1 (10 %), art. 43.2 (minimum 30 % of gross tax, Llei 5/2023 art. 19)",
+   "dated": "law as enacted with the amending laws in force in 2025 applied (BOPA, via lexifina/andorra-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "the deductions of art. 43-45 (double taxation, job creation and investment) and the special regimes are not applied",
+    "the speculative real-estate surcharge (DA2: 5 % to 9.4.2025; 10 % / 5 % from 10.4.2025) and the rental reduction (art. 21 ter) not applied"
+   ],
+   "yif18": "downgraded",
+   "gap": 1,
+   "family_file": "lean/AdGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/AdGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/AdGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "Llei de l'impost sobre transmissions patrimonials immobiliàries (ITP)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rate articles (and the reference region's rate where regional)"
+   ],
+   "family_file": "lean/AdGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "impost comunal sobre la propietat",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/AdGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Cotitzacions a la CASS a càrrec de l'empresa (6 % + 8,5 %)",
+   "statute": "Llei 17/2008, del 3 d'octubre, de la seguretat social, art. 100 i 103 (redacció de la Llei 18/2014); Llei 4/2025 del pressupost DF3 (no rate change)",
+   "dated": "laws as enacted with the amending laws in force in 2025 applied (BOPA via lexifina/andorra-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "minimum base and special regimes (self-employed, new hires) not applied",
+    "laws as enacted, amendments applied by hand (no consolidated text)"
+   ],
+   "gap": 1,
+   "family_file": "lean/AdGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "no inheritance tax recorded (absence not cited)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/AdGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "no net wealth tax recorded (absence not cited)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/AdGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 1,
+  "C": 7
+ },
+ "guards": 26,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

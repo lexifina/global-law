@@ -1,0 +1,48 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Federal estate and gift tax",
+  "statute": "26 U.S.C. §§ 2001, 2010, 2055, 2056, 2501-2505, 2522, 2523; Rev. Proc. 2024-40 §§ 3.41, 3.43",
+  "dated": "U.S. Code (Cornell LII, with the Pub. L. 119-21 note: $15M only after 2025); Rev. Proc. 2024-40 for 2025",
+  "grade": "A",
+  "package": "P6",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "GST tax",
+   "non-citizen spouse",
+   "state death taxes (none in California)"
+  ]
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "none in 26 U.S.C. or California law",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Vehicle license fee (California)",
+  "statute": "Cal. R&TC §§ 10751, 10752 (a) (3) (0.65 % of market value), 10753 (a), 10753.2 (c) (100/90/80/70/60/50/40/30/25/20 %, then 15 %; minimum $1)",
+  "dated": "lexifina/united-states-california-law rtc/10751.md, 10752.md (amended by Stats. 2011, Ch. 35, effective 30 June 2011), 10753.md, 10753.2.md (official source leginfo.legislature.ca.gov as recorded in the repository); in force throughout 2025; gap pass 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P7",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily"
+  ],
+  "unsupported": [
+   "cost-class midpoint not applied (at most $0.65)",
+   "age from first registration (used-vehicle restart not read)",
+   "registration fees (Veh. Code § 9250 ff.) and the transportation improvement fee (R&TC § 11052) not computed"
+  ],
+  "gap_pass": "2026-11-21 approach 6 (5200 vehicles; OECD Interpretative Guide §12: vehicle licence fees are taxes)"
+ }
+]

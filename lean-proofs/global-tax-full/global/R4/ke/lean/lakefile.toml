@@ -1,0 +1,22 @@
+name = "KeGlobal"
+version = "0.1.0"
+defaultTargets = ["KeGlobal", "keglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); KeTax = the 1.x model, vendored from cmp20/world/B10-anglophone-africa/ke/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "KeTax"
+
+[[lean_lib]]
+name = "KeGlobal"
+
+[[lean_exe]]
+name = "keglobal"
+root = "KeGlobal.Main"

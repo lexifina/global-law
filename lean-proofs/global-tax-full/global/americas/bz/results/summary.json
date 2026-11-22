@@ -1,0 +1,333 @@
+{
+ "country": "BZ",
+ "name": "Belize",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:33:51"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BzGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "General Sales Tax",
+   "statute": "GST Act Cap. 63 s. 9; Third and Fourth Schedules (S.I. 38 of 2010, S.I. 21 of 2011)",
+   "dated": "Revised Edition 2011 (laws as at 31 December 2011), posted by the Belize Tax Service in 2020",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "post-2011 Statutory Instruments not read",
+    "food relief limited to itemized foods"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BzGlobal/Consumption.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol and tobacco; fuels C)",
+   "statute": "Customs and Excise Duties Act Cap. 48 s. 21 (1), (2) (payable on goods produced locally or imported), (3) (reduction by Order); Schedule II items 7-13, 16-25, 27",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine",
+    "exciseCharges"
+   ],
+   "unsupported": [
+    "motor spirit and diesel (rates changed by Order about twice a month in 2025)",
+    "cigars, other tobacco, aerated waters"
+   ],
+   "dated": "lexifina/belize-law cap/48/21.md and schedule-ii3.md (Revised Edition 2020; Schedule II substituted by Act 8 of 2016, amended by S.I. 44 and 47 of 2016, Act 29 of 2017, Act 3 of 2018; official source Laws of Belize, agm.gov.bz/laws); the Schedule II Orders of 2021-2026 in the repository (S.I.s under s. 21 (3), about 20 a year) change only heading 27.10 fuel rates (one, S.I. 54 of 2025, has no tariff line in its text layer; its neighbours are fuel Orders); 235 scanned S.I.s of 2020-2026 are not in the repository",
+   "gap_pass2": "2026-11-22 approach 1 (lexifina law repository; MAP americas/bz#2)",
+   "family_file": "lean/BzGlobal/Consumption.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / consumption tax",
+   "statute": "none: Sales Tax Act (Rev. Ed. 2000) repealed by GST Act Cap. 63 s. 98 (1)",
+   "dated": "GST Act Cap. 63 Rev. Ed. 2020",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "family_file": "lean/BzGlobal/Consumption.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax (persons other than employed persons)",
+   "statute": "Income and Business Tax Act Cap. 55 s. 6 (2) as substituted by Act No. 40 of 2024 s. 3: no tax upon the chargeable income of any person other than an employed person (basis years 2020 onwards)",
+   "dated": "Global law copy of Act No. 40 of 2024 (in force 2024-12-11), kept by the 1.x builder",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/BzGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Cap. 55 s. 113 (2)-(4), Sched. IX (h), (i), (k)",
+   "dated": "Substantive Laws of Belize Rev. Ed. 2020 (agm.gov.bz; lexifina/belize-law cap/55, copy in bz/law/p7_cap55_s113_schedIX.md) and Act No. 12 of 2021 s. 6; pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "dividend exemption of s. 113 (2A) (related party, or a self-certifying foreign company without PE) and the Minister's interest exemption orders (s. 113 (4) proviso) not modelled: 15 % kept"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BzGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "Social security contributions of self-employed persons (voluntary scheme)",
+   "statute": "Social Security (Self-Employed Persons) Regulations (Cap. 44, S.I. of 2002) regs. 3 (3), 4 (d), 11; Social Security Act Cap. 44 ss. 71 (1), 74 (2) (a)",
+   "grade": "R",
+   "status": "reclassified: not a tax (voluntary contributions; OECD Guide §11, §42)",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment: business tax on receipts not modelled; Social Security Act Cap. 44 s. 2 defines the self-employed person (contributions not computed)\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "lexifina/belize-law sub/44/14 (Social Security (Self-Employed Persons) Regulations, Revised Edition 2020 as at 31 December 2020; official source Laws of Belize, agm.gov.bz/laws) regs. 3, 4, 11 read; cap/44/71.md, 74.md read; statutory instruments 2021-2026 scanned by title: the Social Security S.I.s (94 of 2021, 24 of 2023, 71 of 2024) amend the financial, contributions and benefit regulations, not the self-employed regulations",
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "gap2_outcome": "(c) not a tax",
+   "gap2_note": "not a tax: the self-employed join Social Security only by choice: Social Security (Self-Employed Persons) Regulations reg. 3 (3) 'Participation shall be on a voluntary basis but once registered, the self-employed person shall contribute on a sustainable basis to the Social Security Fund' and reg. 4 (d) (insured only if he 'has opted to join the Social Security Scheme'; the contribution, reg. 11, is 7 % of the declared weekly income, $55-$320). The National Health Insurance contributions of the self-employed exist only if the Board levies them by regulations (Cap. 44 s. 71 (1) 'may be required ... by regulations', s. 74 (2) (a) 'if levied'); no such regulations are among the subsidiary legislation of Cap. 44 (sub/44/1-18) or the statutory instruments of 2020-2026 in the repository. Interpretative Guide §11 and §42: voluntary contributions are not taxes and are excluded from heading 2000.",
+   "gap_pass2": "2026-11-22",
+   "family_file": "lean/BzGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BzGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Land Tax Act Cap. 58 (lexifina/belize-law cap/58, read): s. 22 'The Minister may from time to time, by regulation, determine the percentage of the unimproved value' (the regulation is not in the repository)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Land Tax Act Cap. 58 (lexifina/belize-law cap/58, read): s. 22 'The Minister may from time to time, by regulation, determine the percentage of the unimproved value' (the regulation is not in the repository); land within towns pays the council's property tax at the council's rate. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Land Tax Act Cap. 58 (lexifina/belize-law cap/58, read): s. 22 'The Minister may from time to time, by regulation, determine the percentage of the unimproved value' (the regulation is not in the repository); land within towns pays the council's property tax at the council's rate. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 4100 = 2021:8.6 2022:7.9 2023:6.9 2024:7.2"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BzGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "Non-recurrent taxes on property",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BzGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+   "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/BzGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 6000 (other taxes, Guide §85) in 2021-2024; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BzGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Belize (DSD_REV_LAC@DF_REVBLZ v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BLZ.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for Belize (DSD_REV_LAC@DF_REVBLZ v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BLZ.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for Belize (DSD_REV_LAC@DF_REVBLZ v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BLZ.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/BzGlobal/Property.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Belize Tax Service (bts.gov.bz): list of taxes administered; consolidated laws index",
+   "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Belize Tax Service (bts.gov.bz) list of the taxes it administers, `bz/law/bts_home_2025-01-25.*` (Wayback 2025-01-25), names: General Sales Tax, Business & Income Tax, Employee Income Tax, Contract Tax Withholding; consolidated index: lexifina/belize-law@43dfad3b11af `laws.csv` (`bz/law/lexifina_bz_laws_index.csv`: Revised Edition 2020 and Acts 2021-2026): the revenue Acts are Caps. 48 Customs and Excise Duties, 50 Departure Tax, 55 Income and Business Tax, 58 Land Tax, 60 Produce Export Duties, 63 General Sales Tax, 64 Stamp Duties, 64.01 Environmental Tax, 278.01 Cruise Ship Passenger Tax, and their amending Acts; none of them is a recurrent tax on net wealth.",
+   "family_file": "lean/BzGlobal/Property.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "5200",
+   "tax": "Motor vehicle licence duty",
+   "statute": "Motor Vehicles and Road Traffic Act Cap. 230 s. 20 (licence duties prescribed by Order); Motor Vehicles and Road Traffic (Fees and Duties) Order (S.I. 182 of 2003, 41 of 2013) para. 2 (i), (xix)",
+   "dated": "lexifina/belize-law cap/230/20.md and sub/230/8 (Revised Edition 2020, as at 31 December 2020; official source Laws of Belize, agm.gov.bz/laws); no amending Order under s. 20 (2) among the repository's statutory instruments of 2021-2026 (the S.I.s under Cap. 230 of 2023-2026 are regulations under s. 112: electronic devices, seat belts, speed devices, fares); 235 scanned S.I.s of 2020-2026 are not in the repository (data/si-not-built.csv)",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P7",
+   "kernel_parts": [
+    "VehicleTax",
+    "vehicleTaxFamily"
+   ],
+   "unsupported": [
+    "goods-vehicle, taxi, omnibus, trailer and tractor rates (paras. (iii)-(xviii))",
+    "cane farmers' half rate",
+    "3/6/9-month licences (s. 20 (4))"
+   ],
+   "gap_pass2": "2026-11-22 approach 1 (lexifina law repository) + 5200 vehicles (Interpretative Guide §12, §14: vehicle licences are taxes)",
+   "family_file": "lean/BzGlobal/Property.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Social Security (employer)",
+   "statute": "Social Security (Collection of Contributions) Regulations reg. 6 (1), Schedule Table 2 (S.I. 184 of 2020)",
+   "dated": "Schedule as in force on 2025-06-30 (Table 2 from 6 January 2020 until a Table 3 notice)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "weekly pay pattern"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BzGlobal/Social.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Stamp Duties Act; Land Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/BzGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 6,
+  "B": 7,
+  "C": 3
+ },
+ "guards": 22,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

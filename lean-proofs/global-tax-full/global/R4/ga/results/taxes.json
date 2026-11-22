@@ -1,0 +1,354 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 221 (18/10/5 %), art. 210-211",
+  "dated": "CGI 2025 (LF 2025)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "listed staple foods exempt / imported meat 10 % (food line at 18 %)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Droits d'accises (boissons, tabacs) + redevance d'usage routier (carburants)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 249-250 (LF 2023-2024), art. 366",
+  "dated": "CGI 2025",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc (local/imported)"
+  ],
+  "unsupported": [
+   "pack size (20 assumed)",
+   "wines > 50 000 F",
+   "mobile calls 5 %",
+   "cosmetics, caviar, salmon"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés + IMF",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 11-IV, 16, 24-25",
+  "dated": "CGI 2025 (LF 2025)",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "loss age (5 years)",
+   "tourism investment credit"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenues (RCM 20 %, non-résidents 25 %)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 109, 116, 206",
+  "dated": "CGI 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "parent-subsidiary regime",
+   "treaties"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRPP — prélèvement libératoire sur revenus de capitaux mobiliers, dividends (20 %)",
+  "statute": "CGI 2025 (DGI Gabon) art. 106, 109",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "10 % on bonds of at least 5 years issued in Gabon (art. 110 2)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNAMGS employer contribution (private sector)",
+  "statute": "Décret n°0022 art. 38 (4,1 %), monthly ceiling 2 500 000 F (CNAMGS)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "CNSS employer contributions (texts not held)"
+  ],
+  "source": "CNAMGS official page (secondary)",
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Droit d'enregistrement (ventes d'immeubles)",
+  "statute": "CGI art. 603 (6 %; +2 % in Libreville, Port-Gentil, Owendo, Akanda)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "2 % urban increase"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation par décès",
+  "statute": "CGI art. 611 (tariff by share and relationship), art. 615 (20 000 000 F abatement, direct line and spouses), art. 618 1° (children and spouses exempt)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "number of the deceased's children (rows by children)",
+   "art. 612 10 % levy on liquidities",
+   "art. 617 reduction",
+   "gifts (art. 605 tariff) not modelled"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateBandFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI 2025 (whole code)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "GA CGI 2025 (complete code): no tax on net wealth; 'fortune'/'patrimoine' occur only in income-tax and registration contexts"
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation entre vifs (donations)",
+  "statute": "CGI art. 605 (tariff by share, relationship and the donor's children), art. 615 (20 000 000 F abatement, also for gifts)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "number of the donor's children",
+   "prior gifts aggregation",
+   "25 % reduction for marriage-contract gifts"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateBandFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts 2025 (DGI)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.dgi.ga/document/code-general-des-impots-2025/)",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (contribution spéciale de solidarité (CSS 1 %), patente, taxe sur les salaires abolished? (to verify); provision not located by keyword in the reachable text)",
+  "statute": "Code général des impôts 2025 (DGI)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "triage moderate: contribution spéciale de solidarité: levy on business turnover/imports, not on households. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.dgi.ga/document/code-general-des-impots-2025/)",
+  "triage": "moderate"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "cgi2025.txt (whole code)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "GA: the general tax code held (cgi2025.txt, 805k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRPP — prélèvement libératoire sur revenus de capitaux mobiliers, interest on claims and deposits (20 %)",
+  "statute": "CGI 2025 art. 103-104, 106 5°, 109",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "cash bonds issued by banks 15 % (art. 110 1)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Taxe spéciale immobilière sur les loyers (15 % of gross rents; nil below 200 000 F a month)",
+  "statute": "CGI 2025 art. 384-387 (art. 385 as amended by LF 2024)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "the exemption's formal conditions (registered lease, expert report) are taken as met"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.incomeBandFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière unique, owner's main residence (3 % of rental value less 5 %)",
+  "statute": "CGI 2025 art. 289, 292, 294 (LF 2022, LFR 2022, LF 2024, LF 2025)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "rounding of the base down to the thousand francs",
+   "5-year exemption of new dwellings (Section 2, temporary exemptions)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyAnnualFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière unique, other built property (15 % of rental value less 5 %)",
+  "statute": "CGI 2025 art. 289, 292, 294",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "bare land (rental value of land not in the input; rural land on a per-hectare value, art. 294 bis)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyAnnualFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Prélèvement pour le Fonds national de l'habitat (2 % up to the CNSS ceiling)",
+  "statute": "CGI 2025 art. 401-404 (rate and base, read); CNSS ceiling 1 500 000 F a month: CLEISS 'Les cotisations au Gabon', table 'Taux de cotisation au 1er janvier 2023' as shown on 6 May 2025 (Wayback 20250506125305, R4/fetch/p16/cleiss_gabon_wb20250506.html) (the same ceiling on the 2026 page)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "CNSS ceiling from a secondary table"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Contribution des patentes, stated profession: architect or design office employing more than 2 persons, Libreville / Port-Gentil (tableau A, class 3, 170 000 F)",
+  "statute": "CGI 2025 art. 252-253 and the tariff annexed under art. 271 (tableau A)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "the trade of the company is not in the input: one stated profession is applied to every company",
+   "other towns' columns and other professions (tableaux A, B, C)",
+   "one fixed duty per establishment (art. 256)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNSS employer contributions in 2025 (family 8 %, work accidents 3 %, pensions 5 %; up to 1 500 000 F a month)",
+  "statute": "CLEISS 'Les cotisations au Gabon', table 'Taux de cotisation au 1er janvier 2023' as shown on 6 May 2025 (Wayback 20250506125305, R4/fetch/p16/cleiss_gabon_wb20250506.html); the 2026 page (R4/fetch/cleiss11/gabon.html, 'au 1er janvier 2026': family 5 %, work accidents 2 %, pensions 11 %) gives the reform decree's rates from 1 January 2026, not applied to 2025; CNSS decrees not read",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "the employee's 2,5 %",
+   "rates of the 2026 reform (from 1 January 2026) not applied"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Taxe sur les véhicules de luxe (passenger cars above 10 CV: 20 000 or 30 000 FCFA per CV above 10, by age)",
+  "statute": "CGI 2025 (DGI Gabon edition), Livre des taxes diverses, 3.1 Taxe sur les véhicules de luxe, art. 5-11 (LFR 2018), world/B08-central-africa-fr/ga/law/cgi2025.txt l. 13711-13745; the 2025 edition holds the LFR 2018 text unchanged. Liability: the owner (art. 6), collected by insurers with the policy (art. 9-10)",
+  "dated": "CGI 2025 (DGI Gabon)",
+  "unsupported": [
+   "the tax is collected by insurers with each policy (art. 9-10): modelled as one annual amount, not pro rata",
+   "age = 2025 - year of first registration; a vehicle exactly 5 years old is taken as 'de plus de 5 ans' (the text leaves the boundary open)",
+   "a car without fiscalHp, firstRegYear or fuel: grade C line",
+   "utility vehicles (exempt) and other kinds: no charge",
+   "no other national annual vehicle tax in the CGI 2025 (the taxe sur les immatriculations personnalisées, 3.2, is an optional plate charge)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "vehicleTaxFamily (kernel Global2.Vehicle)"
+  ]
+ }
+]

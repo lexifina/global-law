@@ -1,0 +1,205 @@
+{
+ "cc": "MG",
+ "dated": "Code général des impôts, LFI 2025",
+ "entries": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmDiv",
+   "income": "dividend",
+   "rateBp": 2000,
+   "grade": "A",
+   "name": "Impôt sur les revenus des capitaux mobiliers (dividendes)",
+   "statute": "CGI art. 01.04.04 (20 %, libératoire) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+   "doc": "art. 01.04.04: \"Le taux de l'impôt sur le revenu des capitaux mobiliers est fixé à 20p.100 ... Le paiement de l'impôt sur le revenu des capitaux mobiliers est libératoire, sur justification, de l'impôt sur les revenus des personnes morales et physiques\".",
+   "unsupported": []
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmInt",
+   "income": "interest",
+   "rateBp": 2000,
+   "grade": "A",
+   "name": "Impôt sur les revenus des capitaux mobiliers (intérêts)",
+   "statute": "CGI art. 01.04.04 (20 %) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+   "notes": [
+    "CGI art. 01.04.04: 10 % on cooperative distributions not applied; the scope article (01.04.01) not checked for bank-deposit interest exemptions"
+   ],
+   "unsupported": [
+    "scope exemptions not checked"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "ipvi",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "onProceeds": true,
+   "grade": "A",
+   "name": "Impôt sur les plus-values immobilières",
+   "statute": "CGI art. 01.05.04 (gain = price − 75 % of the price), art. 01.05.07 (20 %): 5 % of the price [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+   "doc": "art. 01.05.04: \"La plus-value imposable est constituée par la différence entre : le prix de cession ... et le prix de revient fixé forfaitairement à 75% du montant susmentionné\"; art. 01.05.07: \"L'Impôt est calculé en appliquant à la plus-value imposable le taux de 20p.100\". So the tax is 20 % x 25 % = 5 % of the price.",
+   "notes": [
+    "IPVI: the administrative minimum value of the price (art. 01.05.04) and the exclusions of art. 01.05.03 not applied"
+   ],
+   "unsupported": [
+    "administrative minimum value"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnaps",
+   "level": "social",
+   "rateBp": 1300,
+   "grade": "B",
+   "name": "CNaPS employer contributions (pensions, work accidents, family benefits: 13 %)",
+   "statute": "CLEISS 'Les cotisations à Madagascar' (1 Jan 2026, R4/fetch/cleiss11/madagascar.html); the rate decree is not held; dating for 2025: the same employer rate (general scheme 13 %, employee 1 %) on the CNaPS page 'Les taux de cotisation' of 2011 (Wayback 20110525032402, R4/fetch/p16/cnaps_taux_wb20110525.html) and on the CLEISS 2026 page; SME 262 680 MGA since 1 March 2024, so the 8 x SME ceiling of the 2026 page (2 101 440) also held in 2025; no amending text located",
+   "doc": "CLEISS Madagascar page (facts restated): one contribution for invalidity, old age and death, work injury and family benefits, 13 % employer and 1 % employee; footnote 3 (on the employee column): contributions on a salary capped at 8 x the SME, 2 101 440 MGA a month.",
+   "unsupported": [
+    "the 8 x SME ceiling is footnoted on the employee share only: the employer share is applied to the whole wage (flag)",
+    "the employee's 1 %",
+    "optional CNaPS supplementary pension"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "property",
+   "fam": "ifpb",
+   "builtBp": 500,
+   "landBp": null,
+   "grade": "A",
+   "name": "Impôt foncier sur la propriété bâtie",
+   "statute": "CGI art. 10.02.10 (5 % of the rental value; minimum Ar 5 000) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+   "doc": "art. 10.02.10: \"La taxe est calculée par application d'un taux fixe de 5p.100 à la valeur locative fixée par les dispositions de l'article 10.02.06. Toutefois, l'impôt dû ne doit pas être inférieur à Ar 5 000 par immeuble.\" The land tax (IFT, art. 10.01.07) is a communal tariff per hectare or a voted percentage: not modelled.",
+   "notes": [
+    "IFPB 5 % on annualValue (minimum Ar 5 000 not applied); IFT on land: communal tariffs (art. 10.01.07), not modelled"
+   ],
+   "unsupported": [
+    "IFT (communal tariffs)",
+    "Ar 5 000 minimum"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "regImm",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "A",
+   "name": "Droit de vente d'immeubles",
+   "statute": "CGI art. 02.02.39 1° (5 %) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+   "doc": "art. 02.02.39: \"1° Les adjudications, ventes, reventes, cessions, rétrocessions, et tous autres actes civils et judiciaires translatifs de propriété ou d'usufruit de biens immeubles à titre onéreux sont assujettis à un droit de 5p.100.\"",
+   "unsupported": []
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estate",
+   "fam": "mutGratuit",
+   "inh": {},
+   "gift": {
+    "child": 0,
+    "grandchild": 0
+   },
+   "inhDefault": 0,
+   "giftDefault": 500,
+   "allowance": 0,
+   "grade": "A",
+   "name": "Droits de mutation à titre gratuit",
+   "statute": "CGI art. 02.03.25 (successions: fixed duties, collection suspended; gifts 5 %, direct descendants a fixed Ar 40 000) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+   "doc": "art. 02.03.25: \"I - La mutation par décès en ligne directe ascendante et descendante et entre époux est soumise à un droit fixe de Ar 10 000,00 par héritier ... La perception des droits sur la déclaration de succession, sur les actes de partage issus d'une succession est suspendue. ... II - La mutation à titre gratuit entre vifs est soumise à un droit de 5p.100. Toutefois, il n'est dû qu'un droit fixe de Ar 40 000 par donataire pour la mutation en ligne directe descendante.\"",
+   "notes": [
+    "CGI art. 02.03.25: inheritances carry only fixed duties whose collection is suspended (0 here); gifts 5 %; the fixed Ar 40 000 per direct-descendant donee is not added"
+   ],
+   "unsupported": [
+    "fixed Ar 40 000 duty for direct descendants"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI LFI 2025 (whole code)",
+   "why": "MG CGI (LFI 2025, complete code): no tax on net wealth; 'fortune' occurs only in the family-income and information-duty provisions"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts suivant LFI 2025 (and LFI 2026)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.impots.mg (laptop only))",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (impôt synthétique (IS) for small taxpayers; IRSA on wages; provision not located by keyword in the reachable text)",
+   "statute": "Code général des impôts suivant LFI 2025 (and LFI 2026)",
+   "why": "triage minor: impôt synthétique: presumptive tax on small businesses, not on households. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.impots.mg (laptop only))",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "cdi_lfi2026.txt (whole code)",
+   "why": "MG: the general tax code held (cdi_lfi2026.txt, 771k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "smie",
+   "level": "social",
+   "rateBp": 500,
+   "grade": "B",
+   "name": "Inter-company medical service (OSTIE / SMIE), employer contribution (5 %)",
+   "statute": "CLEISS 'Les cotisations à Madagascar', 2020 edition ('Taux de cotisation au 1er janvier 2020'; Wayback 20220819023952, R4/fetch/p19/mg_cleiss_wb20220819.html): maladie, maternité 5 % employer, 1 % employee, paid to the inter-company medical service the employer joins (OSTIE listed first); the 1 January 2026 edition (R4/fetch/cleiss11/madagascar.html) gives the same 5 % / 1 %, so the rate is taken as unchanged through 2025 (no 2021-2025 edition captured; no amending text located: flag)",
+   "doc": "CLEISS 2020 edition (facts restated): sickness and maternity 5 % employer and 1 % employee, paid to an inter-company medical service of the employer's choice (OSTIE, AMIT, ESIA, FUNHECE ...); the 2026 edition repeats 5 % / 1 % under 'Maladie, maternité (OSTIE)'.",
+   "unsupported": [
+    "rates differ by medical service (OSTIE is the Antananarivo one)",
+    "classification: compulsory payment to an inter-company body, treated as SSC (flag)",
+    "no edition dated 2021-2025 held: 2025 rate bracketed by the 2020 and 2026 editions (flag)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "fmfp",
+   "level": "central",
+   "rateBp": 100,
+   "grade": "B",
+   "name": "Fonds malgache de formation professionnelle (1 %)",
+   "statute": "Loi n°2017-025 (contribution financière des entreprises au développement de la formation professionnelle continue), Décret n°2018-1509 du 13 novembre 2018 and Arrêté n°911/2019 (collection from 1 January 2019), as stated on the FMFP page 'Règlement des cotisations sociales par les entreprises' (29 March 2019; Wayback 20221230103048, R4/fetch/p19/mg_fmfp_reglement_wb20221230.html): 1 % of the capped gross payroll, collected with the CNaPS return; the CLEISS 1 January 2026 edition gives the same 1 % (corroboration only; no amending text located: flag)",
+   "doc": "FMFP page (facts restated): under Loi n°2017-025, its Décret n°2018-1509 and Arrêté n°911/2019, firms pay 1 % of their capped gross payroll to the FMFP, quarterly from 2019, declared on the single CNaPS/FMFP return and paid to the FMFP's own accounts.",
+   "unsupported": [
+    "the law, decree and arrêté themselves not read (FMFP page)",
+    "the payroll ceiling ('masse salariale brute plafonnée'; the page does not state it) is not applied: 1 % of the whole payroll (flag)"
+   ]
+  }
+ ]
+}

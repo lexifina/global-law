@@ -1,0 +1,15 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "Seguro de cesantía (employer), SIS, Ley 21.735 employer contribution",
+  "statute": "Ley 19.728 art. 5; DL 3.500 art. 59; Ley 21.735",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P4",
+  "kernel_parts": [],
+  "tried": "pass 13: Ley 19.728 read (LeyChile get_norma_json idNorma 184979, version 2025-07-01, `cl/law/ley19728_184979_2025-07-01.*`): art. 5 b) employer 2,4 % (indefinite contracts) / 3 % (fixed-term); art. 6 ceiling 90 UF 'reajustado anualmente' by the Índice de Remuneraciones Reales (2025 value not in the law). The 2025 ceilings (cesantía 131,9 UF, AFP 87,8 UF), SIS 1,88 % and the Ley 21.735 employer 1 % (0,1 % + 0,9 %) were seen only in Previred's 'Indicadores previsionales' (Wayback 2025-09-04, `cl/law/previred_indicadores_2025-09-04.*`), a secondary source: not modelled (employer rows from primary sources only); needs the Superintendencia de Pensiones' 2025 tope resolution and Ley 21.735's text",
+  "unsupported": [
+   "would unlock: LeyChile versions of Ley 19.728 and Ley 21.735 (from 1.8.2025)"
+  ]
+ }
+]

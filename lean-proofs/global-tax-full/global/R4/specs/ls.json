@@ -1,0 +1,224 @@
+{
+ "cc": "LS",
+ "name": "Lesotho",
+ "dated": "Income Tax Act 1993 consolidated to 1 April 2012 (the copy the Revenue Services Lesotho site publishes as its current Act, uploaded 2024); later Finance Acts not held: grade B, flagged. VAT: Value Added Tax Act 2001 s. 6 (2) and Value Added Tax Regulations 2003 (LN 95 of 2003) reg. 6 as amended by LN 27 of 2018, LN 34 of 2019, LN 18 of 2020 and LN 30 of 2021",
+ "sources": "No usable 2025 text for these headings: the Income Tax Act 1993 held is a 2012 consolidation; no 2025 text for any heading. RSL pages and guides fetched 2026-11-21 (`cmp20/global/R4/fetch/ls8/`, SHA256SUMS): withholding tax guide, VAT Act 2001, VAT (Amendment) Regulations LN 18 of 2020 and LN 30 of 2021 (OCR). Pass 9 (VAT): the Revenue Services Lesotho uploads of the VAT (Amendment) Regulations LN 27 of 2018 and LN 34 of 2019 (www.rsl.org.ls/sites/default/files/2018-04/…, 2019-04/…, via Wayback; scanned gazettes, OCR eng) and RSL's 'VAT Rates Changes 2018' notice, in `R4/fetch/ls9/` (SHA256SUMS); LN 18 of 2020 and LN 30 of 2021 and the VAT Act 2001 already held in `R4/fetch/ls8/`. The RSL document list on Wayback shows no later VAT regulation (2022-2024).",
+ "vat": {
+  "name": "Value added tax",
+  "standard": 1500,
+  "reduced": 1000,
+  "classes": {
+   "electricity": "reduced",
+   "transport": "exempt",
+   "health": "exempt",
+   "financial": "exempt",
+   "insurance": "exempt",
+   "education": "exempt",
+   "water": "exempt"
+  },
+  "grade": "A",
+  "statute": "VAT Regulations 2003 reg. 6 (1) (c) as amended by LN 27 of 2018 reg. 2 (b) (14 % → 15 % from 1 April 2018); reg. 6 (1) (b) electricity 10 % (LN 27/2018, LN 18/2020, LN 30/2021); reg. 6 (1) (d) telecommunications 15 % (LN 27/2018, LN 34/2019, LN 18/2020); VAT Act 2001 s. 6 (2) exempt supplies",
+  "doc": "LN 27 of 2018 reg. 2: \"Regulation 6 of the Value Added Tax Regulations, 2003, is amended by - (a) deleting the words 'and telephone calls, 5%' in paragraph (b) and substituting '8%'; (b) deleting '14%' in paragraph (c) and substituting '15%', and (c) adding after paragraph (c) the following - '(d) In case of supplies of telecommunications, 9%'.\" LN 34 of 2019: \"deleting '9%' in paragraph (d) and substituting '12%'\"; LN 18 of 2020: \"(a) '8%' in paragraph (b) and substituting '9%'; and (b) '12%' in paragraph (d) and substituting '15%'\"; LN 30 of 2021 (from 1 April 2021): \"Regulation 6(1)(b) ... is amended by deleting '9%' and substituting '10%'\". VAT Act 2001 s. 6 (2): \"the following supplies are exempt supplies – (a) a supply of public postal, transportation, medical or dental, financial, insurance, or education services; (b) a supply of unimproved land; (c) a supply by way of lease or letting of immovable property where – (i) the tenant is a manufacturer ... (d) a supply of water\". RSL notice 'VAT Rates Change, Effective Date: 1st April 2018': \"The standard rate of VAT will change from 14% to 15%, Electricity rate increases from 5% to 8%\".",
+  "notes": [
+   "reg. 6 (1) (b) is the electricity rate (RSL's 2018 notice: 'Electricity rate increases from 5% to 8%'; LN 27 removed 'and telephone calls' from it); the original text of reg. 6 (LN 95 of 2003) was not read: the paragraph contents are taken from the amending notices and RSL's notice",
+   "transportation is exempt only for fare-paying passengers by road; zero-rated supplies (Schedule IV, e.g. basic foods) are not separated from the processed-food basket line"
+  ],
+  "unsupported": [
+   "Schedule IV zero rating (basket convention)",
+   "LN 95 of 2003 original text not read"
+  ]
+ },
+ "excise": {
+  "name": "Excise duties (SACU common excise tariff, Schedule 1 Part 2A)",
+  "grade": "B",
+  "statute": "SACU Agreement 2002 (as amended 12 April 2013) art. 21 (1): the Ministers responsible for Finance of all Member States 'meet and agree on the rates of specific excise and ad valorem excise duties ... to be applied to goods grown, produced or manufactured in or imported into the Common Customs Area'; art. 22: similar legislation [text version: sacu.int SACU-Agreement.pdf, Wayback 20210517172146, R4/fetch/gap/sacu_agreement_wb20210517.pdf]; Lesotho Customs and Excise Act 1982 (not held); rates: the SACU common rates as in SA Act 45 of 2024 Part I (to 11 March 2025) and Act 3 of 2026 Sch. II (from 12 March 2025); the loti is at par with the rand",
+  "doc": "2024/2025 rates: SA Act 45 of 2024 s. 1 (2) ('deemed to have come into operation on 21 February 2024') and Part I: '104.10.20 2203.00.90 Other R135.89/li aa', '104.15.03 2204.21.41 ... R5.57/li', '104.23.05 2208.30.10 ... R274.39/li aa', '104.30.07 2402.20.90 Other R10.89/10 cigarettes'; 2025/2026 rates: SA Act 3 of 2026 s. 4 (2) (12 March 2025) and Sch. II: R145.07/li aa, R5.95/li, R292.91/li aa, R11.40/10 (R4/fetch/za8/act-45-of-2024.txt, act-3-of-2026.txt). Lesotho's own Customs and Excise Act 1982 and its notices are not held: the SACU common rates and SA's effective dates are applied (grade B).",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Excise duty beer (malt)",
+    "onPureAlcohol": true,
+    "perUnitNum": 135890,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.10.20 (2203.00.90) (SACU Act 45 of 2024 Part I (deemed in operation from 21 February 2024)): M135.89 per litre of absolute alcohol",
+    "validTo": "2025-03-12"
+   },
+   {
+    "good": "beer",
+    "name": "Excise duty beer (malt)",
+    "onPureAlcohol": true,
+    "perUnitNum": 145070,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.10.20 (2203.00.90) (SACU Act 3 of 2026 Sch. II (deemed in operation from 12 March 2025)): M145.07 per litre of absolute alcohol",
+    "validFrom": "2025-03-12"
+   },
+   {
+    "good": "wine",
+    "name": "Excise duty unfortified wine",
+    "minAbvBp": 449,
+    "maxAbvBp": 1650,
+    "perUnitNum": 5570,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.15.03 (2204.21.41) (SACU Act 45 of 2024 Part I (deemed in operation from 21 February 2024)): M5.57 per litre",
+    "validTo": "2025-03-12"
+   },
+   {
+    "good": "wine",
+    "name": "Excise duty unfortified wine",
+    "minAbvBp": 449,
+    "maxAbvBp": 1650,
+    "perUnitNum": 5950,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.15.03 (2204.21.41) (SACU Act 3 of 2026 Sch. II (deemed in operation from 12 March 2025)): M5.95 per litre",
+    "validFrom": "2025-03-12"
+   },
+   {
+    "good": "spirits",
+    "name": "Excise duty spirits (whisky)",
+    "onPureAlcohol": true,
+    "perUnitNum": 274390,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.23.05 (2208.30.10) (SACU Act 45 of 2024 Part I (deemed in operation from 21 February 2024)): M274.39 per litre of absolute alcohol",
+    "validTo": "2025-03-12"
+   },
+   {
+    "good": "spirits",
+    "name": "Excise duty spirits (whisky)",
+    "onPureAlcohol": true,
+    "perUnitNum": 292910,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.23.05 (2208.30.10) (SACU Act 3 of 2026 Sch. II (deemed in operation from 12 March 2025)): M292.91 per litre of absolute alcohol",
+    "validFrom": "2025-03-12"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Excise duty cigarettes",
+    "perUnitNum": 1089,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.30.07 (2402.20.90) (SACU Act 45 of 2024 Part I (deemed in operation from 21 February 2024)): M10.89 per 10 cigarettes",
+    "validTo": "2025-03-12"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Excise duty cigarettes",
+    "perUnitNum": 1140,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Sch. 1 Part 2A 104.30.07 (2402.20.90) (SACU Act 3 of 2026 Sch. II (deemed in operation from 12 March 2025)): M11.40 per 10 cigarettes",
+    "validFrom": "2025-03-12"
+   }
+  ],
+  "notes": [
+   "grade B: Lesotho's Customs and Excise Act 1982 and its notices adopting the 2024/2025 and 2025/2026 SACU rates are not held; the common rates of SACU Agreement art. 21 (1) and SA's effective dates are applied",
+   "fuel levy and ad valorem excise are not modelled"
+  ],
+  "unsupported": [
+   "Lesotho Customs and Excise Act 1982 and notices not read (dates assumed equal to SA's)",
+   "fuel levy",
+   "ad valorem excise"
+  ]
+ },
+ "cit": {
+  "name": "Company income tax",
+  "rate": 2500,
+  "step": 1,
+  "grade": "B",
+  "statute": "Income Tax Act 1993 s. 10 and Third Schedule item 4 (other income 25 %; substituted by Act No. 2 of 2007), consolidation to 1 April 2012 as published by the RSL; amendments 2013-2025 not held (flagged)",
+  "doc": "Third Schedule (section 10), Resident Company Income Tax Rates: \"1. Manufacturing income derived from a manufacturing activity of an industrial, scientific or educational nature which promotes industrial, scientific, educational or other development within Lesotho 10% ... 3. Other manufacturing income 10% 4. Other income 25%\" [Third Schedule substituted by sec. 3 of Act No. 2 of 2007]; s. 2: \"standard rate of tax\" means a rate of 25%. The RSL 'corporate income tax' page (2026) still attaches this consolidation. Grade B flagged: no Finance Act after 2012 was read.",
+  "notes": [
+   "Third Schedule by company.sector: 'manufacturing' 10 % on all its income (the model does not split manufacturing from other income); manufacturing exports outside SACU (item 2) not applied; another sector or none given: 25 % (declared); advance corporation tax on distributions (33,33 %, creditable) not modelled"
+  ],
+  "unsupported": [
+   "split of manufacturing and other income; export rate (item 2)",
+   "advance corporation tax",
+   "Finance Acts 2013-2025 (not held)"
+  ],
+  "sectors": [
+   {
+    "sectors": [
+     "manufacturing"
+    ],
+    "rate": 1000,
+    "statute": "Income Tax Act 1993 Third Schedule items 1 and 3 (manufacturing income 10 %; Act No. 2 of 2007)"
+   }
+  ],
+  "ifAbsent": "general",
+  "sectorTests": [
+   {
+    "line": {
+     "id": "s18-ls-mfg",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000000,
+      "lossesForward": 0,
+      "sector": "manufacturing"
+     }
+    },
+    "expect": [
+     100000
+    ]
+   },
+   {
+    "line": {
+     "id": "s18-ls-none",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000000,
+      "lossesForward": 0
+     }
+    },
+    "expect": [
+     250000
+    ]
+   }
+  ]
+ },
+ "wht": {
+  "name": "Withholding on payments to non-residents",
+  "grade": "B",
+  "statute": "Income Tax Act 1993 s. 107 (1) (standard rate 25 % on dividends, interest, royalties, natural resource payments and management charges paid to non-residents) and s. 108 (1) (10 % on services contracts), consolidation to 1 April 2012; RSL withholding tax guide; later amendments not held (flagged)",
+  "doc": "s. 107 (1): \"withholding tax at the standard rate of tax is payable on the gross amount of a Lesotho-source dividend, interest, royalty, natural resource payment, or management charge paid to a non-resident\"; (3): 15 % where the payment relates to concessionary manufacturing income; s. 108 (1): \"Withholding tax at the rate of 10% is payable on the gross amount of a payment under a Lesotho-source services contract paid to a non-resident\"; s. 109 (1): final tax. RSL Withholding Tax Guide table: \"Dividends 25% ... Interest 25% ... Management Fee 25% ... Royalty 25%\".",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 2500,
+    "statute": "ITA 1993 s. 107 (1) (standard rate 25 %)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 2500,
+    "statute": "ITA 1993 s. 107 (1) (standard rate 25 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 2500,
+    "statute": "ITA 1993 s. 107 (1) (standard rate 25 %)"
+   },
+   {
+    "kind": "services",
+    "rateBp": 1000,
+    "statute": "ITA 1993 s. 108 (1) (10 %)"
+   }
+  ],
+  "notes": [
+   "management charges are at 25 % under s. 107 (s. 108 (2) excludes them from the 10 % services rate): the services line is taken as an ordinary services contract",
+   "dividends out of concessionary manufacturing income are exempt and related interest/royalties/fees are at 15 % (s. 107 (2)-(3)): not separable"
+  ],
+  "unsupported": [
+   "management charges at 25 %",
+   "manufacturing-related reliefs",
+   "amendments after 2012 (not held)"
+  ]
+ }
+}

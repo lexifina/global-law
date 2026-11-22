@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Real estate transfer tax (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Slovak Republic, Corporate - Other taxes, accessed 2025-06-13 (Wayback capture; `law/pwc_corpother_wb2025.txt`)",
+  "dated": "PwC WWTS Corporate - Other taxes, 2025-06-13 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4100",
+  "tax": "Daň zo stavieb a daň z bytov",
+  "statute": "Zákon č. 582/2004 Z. z. o miestnych daniach (as amended to 335/2022): tax on buildings and on flats, a rate per m² of built-up or floor area set by the municipality (base rate 0,033 EUR/m², which it may raise or lower; its highest rate at most 10 times its lowest)",
+  "dated": "Act 582/2004 as applicable 2025; EC Taxes in Europe Database (TEDB), tax 559, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rate declared: Bratislava's 2025 VZN was not reached (rate input localRates.propertyTax)",
+   "no absolute range: the 10-times limit is relative to the municipality's own lowest rate, so a rate cannot be checked",
+   "the surcharge per further storey (up to 0,33 EUR/m² per storey) and the land tax (0,25 % of the statutory land value): not modelled"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rate is an input: localRates.propertyTax"
+ }
+]

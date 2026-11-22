@@ -1,0 +1,22 @@
+name = "BjGlobal"
+version = "0.1.0"
+defaultTargets = ["BjGlobal", "bjglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); BjTax = the 1.x model, vendored from cmp20/world/B07-west-africa-fr-pt/bj/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "BjTax"
+
+[[lean_lib]]
+name = "BjGlobal"
+
+[[lean_exe]]
+name = "bjglobal"
+root = "BjGlobal.Main"

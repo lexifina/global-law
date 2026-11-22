@@ -1,0 +1,59 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Stamp duty land tax (residential)",
+  "statute": "FA 2003 s. 55 Table A; Sch. 4ZA (+5 points from £40,000, para. 3 (2)); Sch. 6ZA (first-time buyers); s. 75ZA, Sch. 9A (non-resident +2 points from £40,000, para. 2 (3) (a))",
+  "dated": "legislation.gov.uk 2025-07-01 (bands from 1 April 2025); s. 75ZA point in time 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "LBTT (Scotland) and LTT (Wales) not modelled: SDLT applies in England and Northern Ireland",
+   "Sch. 9A residence test (183 days) and company purchasers: the entity's nonResident flag is taken as given"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Stamp duty land tax (non-residential)",
+  "statute": "FA 2003 s. 55 Table B",
+  "dated": "legislation.gov.uk 2025-07-01 (bands from 1 April 2025)",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "LBTT (Scotland) and LTT (Wales) not modelled: SDLT applies in England and Northern Ireland"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Council tax (Westminster)",
+  "statute": "Local Government Finance Act 1992 s. 5 (1), (2); Westminster Band D 2025-26",
+  "dated": "legislation.gov.uk point in time 2025-04-01; Band D £1,019.00 from MHCLG Council Tax levels 2025 to 2026, Table 9 (official statistics)",
+  "grade": "B",
+  "kernel_parts": [
+   "charge (band of the 1991 value x ratio/9 x Band D)"
+  ],
+  "unsupported": [
+   "Band D from official statistics (area average incl. Queen's Park parish), not the s. 30 resolution",
+   "discounts, exemptions, premiums, council tax reduction",
+   "1991 value is an input (asset.assessed)"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Non-domestic rates (England)",
+  "statute": "Local Government Finance Act 1988 s. 43, Sch. 4ZA paras. 1, 10, Sch. 7 paras. A4, A6; SI 2024/111 reg. 2; SI 2024/1321",
+  "dated": "legislation.gov.uk point in time 2025-04-01; multipliers 2025-26 55.5p and 49.9p from Business Rates Information Letter 4/2024",
+  "grade": "B",
+  "kernel_parts": [
+   "charge (rateable value x multiplier)"
+  ],
+  "unsupported": [
+   "multiplier values from GOV.UK (the Secretary of State's notice not read)",
+   "reliefs (small business rate relief, RHL, charitable, improvement), empty property rates",
+   "rateable value is an input (asset.annualValue)"
+  ]
+ }
+]

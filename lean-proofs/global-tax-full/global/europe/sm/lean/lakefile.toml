@@ -1,0 +1,18 @@
+name = "SmGlobal"
+version = "0.1.0"
+defaultTargets = ["SmGlobal", "smglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); SmTax = the 1.x model, vendored from cmp20/world/B04-europe-rest/sm/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SmTax"
+
+[[lean_lib]]
+name = "SmGlobal"
+
+[[lean_exe]]
+name = "smglobal"
+root = "SmGlobal.Main"

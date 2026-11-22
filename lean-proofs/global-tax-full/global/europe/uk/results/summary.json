@@ -1,0 +1,323 @@
+{
+ "country": "UK",
+ "name": "United Kingdom",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:41"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Capital gains tax (disposals)",
+   "statute": "TCGA 1992 ss. 222, 223 (1); 1.x model CGT",
+   "dated": "legislation.gov.uk 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "stackedTax"
+   ],
+   "unsupported": [
+    "partial main residence relief",
+    "BADR and investors' relief",
+    "losses brought forward"
+   ],
+   "family_file": "lean/UkGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value added tax",
+   "statute": "VATA 1994 s. 2, Sch. 1 para 1, Sch. 7A, 8, 9",
+   "dated": "legislation.gov.uk point in time 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "Sch. 8 Group 1 excepted items",
+    "children's clothing (Group 16) not separable in the basket"
+   ],
+   "family_file": "lean/UkGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Tobacco products duty (cigarettes)",
+   "statute": "TPDA 1979 Sch. 1",
+   "dated": "point in time 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (minimum)"
+   ],
+   "unsupported": [
+    "cigars, hand-rolling and other tobacco"
+   ],
+   "family_file": "lean/UkGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Alcohol duty",
+   "statute": "F(No.2)A 2023 s. 48, Sch. 7 (FA 2025 s. 63)",
+   "dated": "point in time 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "custom (rate by strength band)"
+   ],
+   "unsupported": [
+    "draught relief",
+    "small producer relief",
+    "January 2025 rates"
+   ],
+   "family_file": "lean/UkGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Hydrocarbon oil duty",
+   "statute": "HODA 1979 s. 6 (1A)",
+   "dated": "point in time 2025-07-01",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "would unlock: the instrument giving the 52.95p rate statutory effect in 2025 (a Provisional Collection of Taxes Act 1968 resolution is not on legislation.gov.uk); modelling £0.5795 would overstate the 2025 duty"
+   ],
+   "tried": "legislation.gov.uk: HODA 1979 s. 6 (1A) point in time 2025-07-01 reads £0.5795 (unleaded petrol, heavy oil; FA 2013 s. 179); the changes register of HODA 1979 lists no amendment of s. 6 after 2021; the contents of FA 2022 (c. 3), FA 2023 (c. 1), F(No.2)A 2023 (c. 30), FA 2024 (c. 3), F(No.2)A 2024 (c. 12) and FA 2025 (c. 8) hold no fuel-duty rate provision (only rebated-diesel, heating-oil rebate and EPL sections)",
+   "family_file": "lean/UkGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporation tax",
+   "statute": "FA 2021 s. 6 (main rate 25 %), s. 7 (small profits rate 19 %, marginal relief fraction 3/200); CTA 2010 Part 3A s. 18B, 18D (£50,000 / £250,000); CTA 2010 Part 7ZA (ss. 269ZB, 269ZD, 269ZF, 269ZW)",
+   "dated": "legislation.gov.uk 2025-07-01",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "FY2025 charge (annual Finance Act) not read",
+    "associated companies divide the limits (s. 18E)",
+    "groups share one £5 m deductions allowance (s. 269ZR): the entity taken as not in a group"
+   ],
+   "family_file": "lean/UkGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax deducted at source (interest, royalties)",
+   "statute": "ITA 2007 s. 874: income tax at the basic rate (20 %); ITA 2007 s. 906: income tax at the basic rate (20 %)",
+   "dated": "legislation.gov.uk 2025-07-01",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "the basic rate (20 %) is set by the annual income tax charge (not read)",
+    "treaty and EU-derived exemptions out of scope"
+   ],
+   "family_file": "lean/UkGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax deducted at source (dividends, services) (dividend, services)",
+   "statute": "Income Tax Act 2007 Part 15 (Deduction of income tax at source), Chapters 3-18 [year in force 2025 (pass 16), re-cited 2025: legislation.gov.uk point in time 2025-07-01 of ss. 874 and 906 (uk/law/ita2007_s874_pit20250701.*, _s906_*): deduction at the basic rate on yearly interest and royalties; Part 15 imposes no deduction on dividends or on service fees outside the CIS, as modelled]",
+   "dated": "legislation.gov.uk point in time 2025-07-01 (ITA 2007 ss. 874, 906)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "the construction industry scheme (FA 2004 ss. 57-77) applies only to construction payments: not modelled",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/UkGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "Vehicle excise duty",
+   "statute": "Vehicle Excise and Registration Act 1994 Sch. 1 paras. 1, 1B, 1GC, 1GD, 1GE, 1GF (price = list price)",
+   "dated": "legislation.gov.uk point in time 01/06/2025 (licences from 1.4.2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "cars first registered before 1985 (historic vehicles), motorcycles, vans, lorries and other vehicles",
+    "5200 Vehicle excise duty: a new diesel car is taken as meeting Euro 6d (Table 2 for other diesels not applied)",
+    "5200 Vehicle excise duty: registration-year boundaries (1 April 2017, 23 March 2006, 1 March 2001) are taken by calendar year",
+    "a car first registered from 2020 without a list price (para. 1GF): grade C"
+   ],
+   "family_file": "lean/UkGlobal/Other.lean",
+   "family_guards": 16
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+   "unsupported": [
+    "registration taxes, licences and permits other than the one modelled"
+   ],
+   "family_file": "lean/UkGlobal/Other.lean",
+   "family_guards": 16
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVGBR v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/GBR.csv`, SHA256SUMS; general government S13; 2025 not yet published): heading 6000 total 0 in 2021-2024",
+   "dated": "OECD Revenue Statistics 2021-2024 (2025 not yet published); no 6000 tax known in the national law read",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 2,
+   "family_file": "lean/UkGlobal/Other.lean",
+   "family_guards": 16
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty land tax (residential)",
+   "statute": "FA 2003 s. 55 Table A; Sch. 4ZA (+5 points from £40,000, para. 3 (2)); Sch. 6ZA (first-time buyers); s. 75ZA, Sch. 9A (non-resident +2 points from £40,000, para. 2 (3) (a))",
+   "dated": "legislation.gov.uk 2025-07-01 (bands from 1 April 2025); s. 75ZA point in time 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "LBTT (Scotland) and LTT (Wales) not modelled: SDLT applies in England and Northern Ireland",
+    "Sch. 9A residence test (183 days) and company purchasers: the entity's nonResident flag is taken as given"
+   ],
+   "family_file": "lean/UkGlobal/Property.lean",
+   "family_guards": 25
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty land tax (non-residential)",
+   "statute": "FA 2003 s. 55 Table B",
+   "dated": "legislation.gov.uk 2025-07-01 (bands from 1 April 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "LBTT (Scotland) and LTT (Wales) not modelled: SDLT applies in England and Northern Ireland"
+   ],
+   "family_file": "lean/UkGlobal/Property.lean",
+   "family_guards": 25
+  },
+  {
+   "oecd": "4100",
+   "tax": "Council tax (Westminster)",
+   "statute": "Local Government Finance Act 1992 s. 5 (1), (2); Westminster Band D 2025-26",
+   "dated": "legislation.gov.uk point in time 2025-04-01; Band D £1,019.00 from MHCLG Council Tax levels 2025 to 2026, Table 9 (official statistics)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge (band of the 1991 value x ratio/9 x Band D)"
+   ],
+   "unsupported": [
+    "Band D from official statistics (area average incl. Queen's Park parish), not the s. 30 resolution",
+    "discounts, exemptions, premiums, council tax reduction",
+    "1991 value is an input (asset.assessed)"
+   ],
+   "family_file": "lean/UkGlobal/Property.lean",
+   "family_guards": 25
+  },
+  {
+   "oecd": "4100",
+   "tax": "Non-domestic rates (England)",
+   "statute": "Local Government Finance Act 1988 s. 43, Sch. 4ZA paras. 1, 10, Sch. 7 paras. A4, A6; SI 2024/111 reg. 2; SI 2024/1321",
+   "dated": "legislation.gov.uk point in time 2025-04-01; multipliers 2025-26 55.5p and 49.9p from Business Rates Information Letter 4/2024",
+   "grade": "B",
+   "kernel_parts": [
+    "charge (rateable value x multiplier)"
+   ],
+   "unsupported": [
+    "multiplier values from GOV.UK (the Secretary of State's notice not read)",
+    "reliefs (small business rate relief, RHL, charitable, improvement), empty property rates",
+    "rateable value is an input (asset.annualValue)"
+   ],
+   "family_file": "lean/UkGlobal/Property.lean",
+   "family_guards": 25
+  },
+  {
+   "oecd": "2200",
+   "tax": "Secondary Class 1 NICs",
+   "statute": "SSCBA 1992 s. 9 (2): secondary percentage 15%; SI 2001/1004 reg. 10 (d): secondary threshold £96 a week",
+   "dated": "legislation.gov.uk 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/UkGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance tax",
+   "statute": "IHTA 1984 s. 7, s. 18, Sch. 1",
+   "dated": "legislation.gov.uk 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "estateCharge"
+   ],
+   "unsupported": [
+    "RNRB, TNRB",
+    "reliefs",
+    "lifetime transfers"
+   ],
+   "family_file": "lean/UkGlobal/Transfers.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, United Kingdom, Individual - Other taxes, accessed 2025-05-24 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-05-24 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/UkGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 10,
+  "B": 6,
+  "C": 2
+ },
+ "guards": 69,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

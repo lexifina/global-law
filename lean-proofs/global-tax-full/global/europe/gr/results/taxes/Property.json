@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Φόρος μεταβίβασης ακινήτων (ΦΜΑ)",
+  "statute": "ν. 1587/1950 ΦΜΑ 3 % + municipal surcharge 3 % of it = 3,09 %",
+  "dated": "PwC WWTS Corporate - Other taxes, 2025-06-23 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "the base is the objective value where higher (the price stands in); new buildings under VAT not separated"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "ΕΝ.Φ.Ι.Α. (Ενιαίος Φόρος Ιδιοκτησίας Ακινήτων), φυσικά πρόσωπα, κτίσματα",
+  "statute": "ν. 4223/2013 άρθ. 1 παρ. 3, 4 Α παρ. 2-3, Γ, Δ, Ε, 7 παρ. 2Α, as amended by ν. 4916/2022 άρθ. 40, 43, 44, 46",
+  "dated": "ν. 4916/2022, ΦΕΚ Α' 65/28.03.2022 (et.gr PDF, Internet Archive 2024-06-13: `gr/law/n4916_fek_a65_2022_wb20240613.*`), from ΕΝ.Φ.Ι.Α. 2022; the coefficients in the 2013 wording (e-nomothesia, Internet Archive 2024-07-22: `gr/law/n4223_enomothesia_wb20240722.*`), not touched by ν. 4916/2022; PwC Greece 2025 captures: the same 2-16,20 €/m² range and ν. 5162/2024 (insurance discount) as the only 2025 change; amendments of άρθ. 4 and 7 between 2022 and the 2025 assessment not checked in a 2025 consolidation (B)",
+  "grade": "B",
+  "status": "",
+  "kernel_parts": [
+   "ZoneTax (2.7.0: zoneValueM2, buildYear, floor, frontages)",
+   "Schedule"
+  ],
+  "unsupported": [
+   "plots and land (Ενότητα Β) and legal persons (άρθ. 5) not modelled",
+   "the objective value (ν. 3842/2010 άρθ. 32) is an input (\"objectiveValue\"), not computed",
+   "ν. 5162/2024 insurance discount and άρθ. 7 παρ. 1-2 not applied",
+   "Σ.Μ., Σ.Β.Χ., Σ.Η.Κ., special buildings not inputs"
+  ]
+ }
+]

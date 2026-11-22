@@ -1,0 +1,18 @@
+name = "ByGlobal"
+version = "0.1.0"
+defaultTargets = ["ByGlobal", "byglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); ByTax = the 1.x model, vendored from cmp20/world/B05-former-ussr/by/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ByTax"
+
+[[lean_lib]]
+name = "ByGlobal"
+
+[[lean_exe]]
+name = "byglobal"
+root = "ByGlobal.Main"

@@ -1,0 +1,112 @@
+{
+ "cc": "NG",
+ "name": "Nigeria",
+ "dated": "-",
+ "sources": "No usable 2025 text for these headings: only Finance Act OCR fragments (2019-2023) are held; the 2025 consolidations (CITA, VAT Act) and the Nigeria Tax Act 2025 are not. Pass 9 (CIT): Finance Act 2019 (official gazette, firs.gov.ng/wp-content/uploads/2021/02/finance-act-2019-official-gazette-1.pdf via Wayback) and Finance Act 2021 (firs.gov.ng/wp-content/uploads/2022/04/Finance-Act-2021-Gazetted.pdf via Wayback), OCR (tesseract eng) in `R4/fetch/ng9/` (SHA256SUMS); Finance Act 2020 and 2023 OCR already held (`world/B02-g20/ng/law/`); Finance Act 2023 Part III amends CITA s. 14, 32, 34, 37 and the Second Schedule only. Finance Act 2022 not held (flagged). The Nigeria Tax Act 2025 applies from 2026. Thirteenth pass: FIRS public notice on withholding tax (Wayback copy of firs.gov.ng PUBLIC-NOTICE-ON-WHT-3.pdf, PDF dated 2015-06-10; `R4/fetch/p13/ng_wht_notice.pdf`) section 3 'Prevailing tax rates for WHT payments' (CITA Cap. C21 and the WHT regulations; final tax for non-residents). Fourteenth pass: Deduction of Tax at Source (Withholding) Regulations 2024, gazette copy (14 pages) saved as `R4/fetch/p14/ng_wht_regs2024.pdf`.",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 750,
+  "classes": {},
+  "grade": "B",
+  "statute": "Value Added Tax Act Cap. V1 LFN 2004 s. 4 as substituted by the Finance Act 2020 s. 42 (7,5 % from 1 February 2020); Finance Act 2023 Part IX (ss. 22-24) does not amend s. 4; Finance Act 2021 not held",
+  "doc": "Finance Act 2020 (OCR) s. 42: \"Substitute for section 4 of the Act, a new section '4': 'Rate of tax. 4. The tax shall be computed at the rate of 7.5% with effect from 1 February 2020, on the value of all goods and services, except that goods and services listed under Part III of the First Schedule to this Act shall be taxed at zero rate.'\" Finance Act 2023 Part IX amends ss. 7, 14 and 16 only. The Nigeria Tax Act 2025 applies from 1 January 2026. Grade B: the FA 2021 (and FA 2022, if any) were not held.",
+  "notes": [
+   "First Schedule Part I/II exemptions (basic food items, medical and pharmaceutical products, books, educational materials, ...) and Part III zero-rated items are not applied: the schedules were not read"
+  ],
+  "unsupported": [
+   "First Schedule exemptions and zero-rated items",
+   "Finance Act 2021 (not held)"
+  ]
+ },
+ "excise": {
+  "status": "unsupported",
+  "name": "Excises",
+  "why": "only Finance Act OCR fragments (2019-2023) are held; the 2025 consolidations (CITA, VAT Act) and the Nigeria Tax Act 2025 are not",
+  "tried": "world/B02-g20/ng/law",
+  "statute": "not reached: tried world/B02-g20/ng/law"
+ },
+ "cit": {
+  "name": "Companies income tax",
+  "rate": 3000,
+  "bands": [
+   {
+    "maxTurnover": 25000000,
+    "rate": 0,
+    "min": null,
+    "name": "Companies income tax (small company: profits exempt, s. 23 (1) (o))"
+   },
+   {
+    "maxTurnover": 99999999,
+    "rate": 2000,
+    "min": {
+     "bp": 50
+    },
+    "name": "Companies income tax (medium-sized company: 20 kobo per naira)"
+   },
+   {
+    "maxTurnover": null,
+    "rate": 3000,
+    "min": {
+     "bp": 50
+    },
+    "name": "Companies income tax (large company: 30 kobo per naira)"
+   }
+  ],
+  "grade": "A",
+  "statute": "CITA Cap. C21 s. 40 as substituted by Finance Act 2019 s. 16 (small company: exempt under s. 23 (1) (o); medium-sized company 20 kobo per naira; large company 30 kobo per naira), s. 105 definitions (small: gross turnover N25,000,000 or less; medium: greater than N25,000,000 but less than N100,000,000); minimum tax s. 33 (2) as substituted by Finance Act 2021 s. 10 (0,5 % of gross turnover less franked investment income; 0,25 % only for 2020-2021) and s. 33 (3) (b) (Finance Act 2019 s. 14: not applicable below N25,000,000)",
+  "doc": "Finance Act 2019 s. 16: \"Substitute for section 40 of CITA, a new section '40'— 40. There shall be levied and paid for each year of assessment in respect of total profits of every company, tax as follows, in the case of a— (a) small company, tax as provided under section 23 (1)(o) of this Act; (b) medium-sized company, tax at the rate of 20 Kobo for every Naira ; and (c) large company, tax at the rate of 30 Kobo for every Naira.\" Definitions: \"'large company' means any company which is not a small or medium-sized company\"; \"'medium-sized company' means a company that earns gross turnover greater than N25,000,000 but less than N100,000,000\"; \"'small company' means a company that earns gross turnover of N25,000,000 or less.\" s. 14 (b): s. 33 (3) \"(b) a company that earns gross turnover of less than N25,000,000 in the relevant year of assessment.\" Finance Act 2021 s. 10: \"(2) For the purpose of subsection (1), the minimum tax to be levied and paid shall be 0.5% of gross turnover of the company less franked investment income: Provided that— (a) the applicable minimum tax is reduced to 0.25% for tax returns prepared and filed with respect to financial years ending on any date between 1 January 2020 and 31 December 2021\".",
+  "notes": [
+   "Finance Act 2022 not held (flagged); the 2025 rates rest on FA 2019 (s. 40), FA 2021 (s. 33) and FA 2023 (no change to s. 23, 33 or 40)",
+   "franked investment income is not deducted from the minimum-tax base; the four-year start-up exclusion and the other s. 33 (3) exclusions are not modelled; tertiary education tax (3 %) and other levies on profits are separate taxes, not modelled here"
+  ],
+  "unsupported": [
+   "Finance Act 2022 not read",
+   "franked investment income in the minimum-tax base",
+   "tertiary education tax"
+  ]
+ },
+ "wht": {
+  "name": "Withholding tax (CITA, PITA; Withholding Regulations 2024)",
+  "grade": "A",
+  "statute": "Deduction of Tax at Source (Withholding) Regulations 2024 (S.I. No. 34 of 2024, Official Gazette No. 168 Vol. 111 of 2 October 2024, Government Notice No. 37; effective 1 January 2025) reg. 3 (a) and First Schedule, non-resident columns (gazette copy via Wayback 2025-02-18, `R4/fetch/p14/ng_wht_regs2024.pdf`)",
+  "doc": "First Schedule, non-resident recipients (corporate / non-corporate): dividend, interest 10 / 10; royalty 10 / 5; commission, consultancy, technical, management and professional fees 10 / 10 ('Higher rate for non-residents to serve as final tax'); supply of other services 5 / 5. Fourteenth pass (replaces the 2015 FIRS notice table).",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 1000,
+    "statute": "Deduction of Tax at Source (Withholding) Regulations 2024 (S.I. No. 34 of 2024, Official Gazette No. 168 Vol. 111 of 2 October 2024, Government Notice No. 37; effective 1 January 2025) reg. 3 (a) and First Schedule, non-resident columns (gazette copy via Wayback 2025-02-18, `R4/fetch/p14/ng_wht_regs2024.pdf`): Dividend, Interest 10 % (corporate and non-corporate, non-resident)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1000,
+    "statute": "Deduction of Tax at Source (Withholding) Regulations 2024 (S.I. No. 34 of 2024, Official Gazette No. 168 Vol. 111 of 2 October 2024, Government Notice No. 37; effective 1 January 2025) reg. 3 (a) and First Schedule, non-resident columns (gazette copy via Wayback 2025-02-18, `R4/fetch/p14/ng_wht_regs2024.pdf`): Dividend, Interest 10 % (corporate and non-corporate, non-resident)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1000,
+    "toCompany": true,
+    "statute": "Deduction of Tax at Source (Withholding) Regulations 2024 (S.I. No. 34 of 2024, Official Gazette No. 168 Vol. 111 of 2 October 2024, Government Notice No. 37; effective 1 January 2025) reg. 3 (a) and First Schedule, non-resident columns (gazette copy via Wayback 2025-02-18, `R4/fetch/p14/ng_wht_regs2024.pdf`): Royalty 10 % (corporate, non-resident)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 500,
+    "toCompany": false,
+    "statute": "Deduction of Tax at Source (Withholding) Regulations 2024 (S.I. No. 34 of 2024, Official Gazette No. 168 Vol. 111 of 2 October 2024, Government Notice No. 37; effective 1 January 2025) reg. 3 (a) and First Schedule, non-resident columns (gazette copy via Wayback 2025-02-18, `R4/fetch/p14/ng_wht_regs2024.pdf`): Royalty 5 % (non-corporate, non-resident)"
+   },
+   {
+    "kind": "services",
+    "rateBp": 1000,
+    "statute": "Deduction of Tax at Source (Withholding) Regulations 2024 (S.I. No. 34 of 2024, Official Gazette No. 168 Vol. 111 of 2 October 2024, Government Notice No. 37; effective 1 January 2025) reg. 3 (a) and First Schedule, non-resident columns (gazette copy via Wayback 2025-02-18, `R4/fetch/p14/ng_wht_regs2024.pdf`): Commission, consultancy, technical, management and professional fees 10 % (corporate and non-corporate, non-resident)"
+   }
+  ],
+  "notes": [
+   "services: the Schedule's consultancy / technical / management / professional fees line (10 %) is applied to every service payment abroad; 'supply or rendering of services other than those specifically listed' is 5 % (not distinguished)",
+   "fourteenth pass: 2024 Regulations (gazetted, effective 1 January 2025) replace the 2015 FIRS notice; services to non-resident individuals 5 % -> 10 %"
+  ],
+  "unsupported": [
+   "reg. 3 (c): twice the rate for non-passive income where the recipient has no Tax Identification Number (not an input)",
+   "treaty rates (reg. 3 (b))",
+   "other services at 5 %, construction 5 / 10 %, entertainers 15 %"
+  ]
+ }
+}

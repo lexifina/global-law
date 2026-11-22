@@ -1,0 +1,224 @@
+{
+ "country": "VN",
+ "name": "Viet Nam",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:06:23"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "PIT on investment income (5 %)",
+   "statute": "Luật 04/2007 art. 23 (2) a",
+   "dated": "hợp nhất 103/VBHN (2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/VnGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1100",
+   "tax": "PIT on transfers of capital, securities (0.1 % of price) and real estate (2 % of price)",
+   "statute": "art. 23 (2) đ-e",
+   "dated": "hợp nhất 103/VBHN (2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/VnGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1100",
+   "tax": "PIT on inheritances and gifts (10 %)",
+   "statute": "art. 16, 23 (2) d",
+   "dated": "hợp nhất 103/VBHN (2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "family exemptions"
+   ],
+   "family_file": "lean/VnGlobal/Capital.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5111",
+   "tax": "Thuế giá trị gia tăng",
+   "statute": "Law 48/2024/QH15 Điều 5, 9; Resolution 204/2025/QH15 art. 1 (1) (as quoted in the official consolidation); first half: Law 13/2008 + Resolution 174/2024 (own period, B)",
+   "dated": "consolidation 12/VBHN-VPQH (provisions in force from 1 July 2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "DatedVat (kernel 2.1)"
+   ],
+   "unsupported": [
+    "H1 2025 under Law 13/2008 and Resolution 174/2024 not read",
+    "the household-business threshold of Điều 5 khoản 25 (2025 wording replaced in 2026)",
+    "credit method vs direct method"
+   ],
+   "family_file": "lean/VnGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Thuế tiêu thụ đặc biệt (petrol, cigarettes, beer, spirits, wine); thuế bảo vệ môi trường (petrol, diesel, kerosene)",
+   "statute": "Luật Thuế tiêu thụ đặc biệt 27/2008/QH12 as amended (VBHN 08/VBHN-VPQH, Công báo 931+932/2022) Điều 6, Điều 7; Luật Thuế bảo vệ môi trường 57/2010/QH12; Nghị quyết 60/2024/UBTVQH15 Điều 1 khoản 1",
+   "dated": "SCT law in force to 31 Dec 2025 (no amendment after Law 03/2022: next consolidation 111/VBHN-VPQH is of Law 66/2025, from 2026); EPT resolution 1 Jan-31 Dec 2025 (repealed from 2026 by NQ 109/2025)",
+   "grade": "A",
+   "status": "modelled",
+   "kernel_parts": [
+    "ExciseRule (.beforeTax base, custom SCT charge)"
+   ],
+   "unsupported": [
+    "SCT base read from the retail price net of VAT and EPT; the statute's base is the producer's or importer's selling price (Điều 6 khoản 1-2)",
+    "EPT on E5/E10 on the nominal petrol share (95 % / 90 %)",
+    "cut tobacco, cigars, cars, motorcycles and SCT services not modelled"
+   ],
+   "family_file": "lean/VnGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Thuế thu nhập doanh nghiệp (corporate income tax)",
+   "statute": "Luật 67/2025/QH15 art. 10 (1)-(3), art. 19 (1)",
+   "dated": "tax period 2025 (art. 19 (1): in force 1 Oct 2025, applies from the 2025 tax period); text read in the official signed PDF (OCR); session 12 registry sample",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "revenue of the preceding period not distinguished; incentive and sector rates not modelled"
+   ],
+   "family_file": "lean/VnGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Circular 103/2014/TT-BTC (foreign contractor tax)",
+   "dated": "tax period 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "the 10 m dong per-contract allowance on royalties to individuals (PIT Law art. 30 (1)) not applied",
+    "other payments to foreign organisations: CIT Law 67/2025 art. 11 (2) (a) leaves the % of revenue to a Government decree; the Circular 103/2014 rates are kept (decree not read)"
+   ],
+   "family_file": "lean/VnGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/VnGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Non-agricultural land use tax",
+   "statute": "Luật 48/2010/QH12 art. 7",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "land above the quota"
+   ],
+   "family_file": "lean/VnGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Registration fee (lệ phí trước bạ) on real estate",
+   "statute": "Nghị định 10/2022/ND-CP",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [],
+   "family_file": "lean/VnGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social, health and unemployment insurance",
+   "statute": "Luật 41/2024; Luật BHYT; Luật Việc làm",
+   "dated": "from 2025-07-01",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "regional cap for unemployment insurance"
+   ],
+   "family_file": "lean/VnGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax: not levied (trade union fee 2 % is not a tax: OECD guide §6)",
+   "statute": "Luật Công đoàn 50/2024/QH15 art. 29 (1) (b), art. 37 (read); OECD Interpretative Guide §6",
+   "dated": "2025: Law 50/2024 in force 1 July 2025 (read in lexifina/vietnam-law, official source vbpl.vn); Law 12/2012 to 30 June (same 2 %, not read); gap-closing session: C (Other.lean, registry) -> out of scope",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "status": "not levied",
+   "family_file": "lean/VnGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: none (taxed as PIT, 1100)",
+   "statute": "Luật Thuế TNCN 04/2007 arts. 3 (10), 16, 23 (2) (hợp nhất 28/VBHN-VPQH)",
+   "dated": "2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/VnGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 6,
+  "B": 7,
+  "C": 0
+ },
+ "guards": 23,
+ "sorry": 0,
+ "cases": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

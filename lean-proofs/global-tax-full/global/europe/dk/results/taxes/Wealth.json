@@ -1,0 +1,29 @@
+[
+ {
+  "oecd": "4200",
+  "tax": "Formueskat (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Denmark, Individual - Other taxes, accessed 2025-05-27 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-05-27 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4300",
+  "tax": "Boafgift og tillægsboafgift",
+  "statute": "boafgiftsloven: boafgift 15 %, tillægsboafgift 25 % of the remainder for other heirs; bundfradrag DKK 346 000 (2025)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-05-27 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "InheritanceTax",
+   "TaxClass"
+  ],
+  "unsupported": [
+   "the DKK 346 000 bundfradrag belongs to the estate; it is applied per recipient here; charities and the cohabitant rule not modelled",
+   "gaveafgift (gifts) not modelled"
+  ]
+ }
+]

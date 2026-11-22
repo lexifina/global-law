@@ -1,0 +1,415 @@
+{
+ "cc": "TZ",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transferBands",
+   "fam": "stampConv",
+   "grade": "A",
+   "name": "Stamp duty on conveyances on sale (immovable property)",
+   "statute": "Stamp Duty Act Cap. 189 R.E. 2023, Schedule item 22 (a)-(b); Finance Acts 2024 and 2025 do not amend Cap. 189 (the Finance Act 2026 does, from 1 July 2026)",
+   "doc": "Schedule item 22: conveyance not exceeding TShs 20 000 nil; above, 0,5 % for the first TShs 100 000 and 1 % of the value in excess of TShs 100 000.",
+   "unsupported": [
+    "conveyance of agricultural land TShs 500 (item 22 (c)) and exemptions (Administrator General, EPZ, special purpose vehicles)",
+    "reduction by the duty paid on a stamped agreement for sale"
+   ],
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     100000,
+     50
+    ]
+   ],
+   "top": 100,
+   "marginal": true,
+   "nilUpTo": 20000,
+   "testValues": [
+    1000000,
+    20000,
+    100000000
+   ],
+   "expect": [
+    9500,
+    0,
+    999500
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "reclassified",
+   "name": "Other notable taxes (Zanzibar has its own tax laws (Zanzibar Revenue Board); provision not located by keyword in the reachable text)",
+   "statute": "Income Tax Act Cap. 332 (R.E. 2023) + Finance Acts 2024-2025",
+   "classification": "out of scope (another government's taxes)",
+   "oecdGuide": "OECD Interpretative Guide (Revenue Statistics 2026, Annex A; R4/fetch/gap/oecd_guide.txt) §97 (state/regional sub-sector: intermediate units with their own revenue powers in part of the territory) and §104 (a tax is attributed to the government that imposes it and sets its rate)",
+   "why": "The row stands for the Revolutionary Government of Zanzibar's own taxes (Zanzibar laws, collected by the Zanzibar Revenue Board/Authority), which fall on persons and transactions in Zanzibar. The model is a household and firm in Mainland Tanzania, as other countries' sub-national taxes are taken for the modelled locality only. Union taxes that also apply in Zanzibar are modelled: Income Tax Act Cap. 332 (R.E. 2023) s. 2 'This Act shall apply to Mainland Tanzania as well as Tanzania Zanzibar' (world/B10-anglophone-africa/tz/law/The_Income_Tax_Act.txt).",
+   "unsupported": [],
+   "was": "grade C (triage outOfScope: Zanzibar's own tax laws: the model is mainland Tanzania. listed by the registry (background (unverified)); charging provision not read/modelled in this pass)"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stampShares",
+   "grade": "A",
+   "name": "Stamp duty on transfers of shares (unlisted)",
+   "statute": "Stamp Duty Act Cap. 189 R.E. 2023, Schedule item 61 (a); not amended by the Finance Acts 2024-2025",
+   "doc": "Schedule item 61 (a): transfer of shares in an incorporated company, 1 % of the value of the shares approved by the Board.",
+   "unsupported": [
+    "listed shares traded on the stock exchange (exemptions outside item 61 not read)",
+    "debentures 1 % (item 61 (b))"
+   ],
+   "rateBp": 100,
+   "kinds": [
+    "unlistedShares"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "nssf",
+   "level": "social",
+   "rateBp": 1000,
+   "grade": "A",
+   "name": "NSSF statutory contribution, employer's part (10 %)",
+   "statute": "National Social Security Fund Act Cap. 50 R.E. 2023 s. 12, First Schedule ('Contributions for employees') [text version: Cap. 50 R.E. 2023 (world/B10-anglophone-africa/tz/law/nssf_cap50_re2023.txt)]",
+   "doc": "First Schedule: statutory contribution for each employee 'Twenty cents for every complete shilling of wages', of which the 'Employer's share deductible from wages by Employer' is 'Ten cents for every complete shilling of wages'; the employer pays the other 10 %.",
+   "unsupported": [
+    "the employee's 10 % (1.x PIT side)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "employerLevy",
+   "fam": "sdl",
+   "level": "central",
+   "grade": "A",
+   "name": "Skills and Development Levy (3,5 % of gross monthly emoluments)",
+   "statute": "Vocational Education and Training Act Cap. 82 R.E. 2023 s. 14 (1)-(3) as amended by Act 7 of 2023 s. 73 (TRA PDF, R4/fetch/tz11); Finance Acts 2024 and 2026 amend only s. 19 exemptions",
+   "doc": "s. 14 (1): levy charged 'from every employer who has in his employment ten or more employees'; (2): 'The levy shall be the sum of money equal to three point five per centum of the total gross monthly emoluments payable by the employer to his employees in respect of that month.' Eighteenth pass: the ten-employee test of s. 14 (1) is applied through kernel 2.6.0 employer facts (Global2.Employer, companies := true): an adult whose employer has fewer than ten employees bears no levy; with no headcount given the employer is presumed in scope, as before. Worked cases (hand): wages 1 000 000, employer of 25 -> 35 000; of 9 -> nothing; of 10 -> 35 000 (inclusive); no headcount -> 35 000 (presumed); company payroll 1 000 000 with 40 employees -> 35 000, with 8 -> nothing.",
+   "unsupported": [
+    "employer headcount not given (household 'employerEmployees', company 'employees'): the employer is presumed to have ten or more employees (declared; the charge's statute says so)",
+    "s. 19 exempt employers (Government departments, diplomatic missions, farms, charities, ...)"
+   ],
+   "levy": "{ name := \"Skills and Development Levy (3,5 % of gross monthly emoluments)\", level := .central, companies := true, rules := [{ rateBp := 350, tests := [.employeesAtLeast 10], ifUnknown := .presume, statute := \"Vocational Education and Training Act Cap. 82 R.E. 2023 s. 14 (1)-(2) as amended by Act 7 of 2023 s. 73: 3,5 % of gross emoluments, employers with ten or more employees (model presumption when the headcount is not given: in scope)\" }] }",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 25
+        }
+       ]
+      }
+     },
+     "expect": [
+      35000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 9
+        }
+       ]
+      }
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000,
+         "employerEmployees": 10
+        }
+       ]
+      }
+     },
+     "expect": [
+      35000
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 1000000
+        }
+       ]
+      }
+     },
+     "expect": [
+      35000
+     ]
+    },
+    {
+     "line": {
+      "id": "c4",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 1000000,
+       "employees": 40
+      }
+     },
+     "expect": [
+      35000
+     ]
+    },
+    {
+     "line": {
+      "id": "c5",
+      "schema": "global/2.0",
+      "entity": "company",
+      "company": {
+       "payroll": 1000000,
+       "employees": 8
+      }
+     },
+     "expect": []
+    }
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "wcf",
+   "level": "social",
+   "rateBp": 50,
+   "grade": "B",
+   "name": "Workers Compensation Fund contribution, private-sector employer (0,5 %)",
+   "statute": "Workers Compensation Act Cap. 263; Workers Compensation (Payment of Tariff) Regulations GN 229A of 2017 reg. 5 (2) as amended by GN 496G (1 % -> 0,6 %) and GN 478F of 1 July 2022 (0,6 % -> 0,5 %) (wcf.go.tz PDFs, R4/fetch/tz11) [text version: GN 229A of 2017 as amended by GN 496G and GN 478F of 1 July 2022 (wcf.go.tz PDFs)]",
+   "doc": "GN 478F reg. 2: 'The principal Regulations are amended in regulation 5 (2) by deleting the words \"zero point six per centum (0.6 %)\" and substituting for them the words \"zero point five per centum (0.5 %)\"', in effect from 1 July 2022.",
+   "unsupported": [
+    "the principal Regulations (scope of reg. 5 (2): private-sector employers) not read: grade B",
+    "base = gross earnings per the principal regulations (not read)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "grade": "A",
+   "income": "dividend",
+   "rateBp": 1000,
+   "name": "Final withholding tax on dividends to resident individuals (10 %)",
+   "statute": "Income Tax Act Cap. 332 s. 54, 82, 86 (final withholding payments for resident individuals), First Schedule para 4 (held The_Income_Tax_Act.txt) [text version: ITA Cap. 332 R.E. 2023 (as amended to Act 7 of 2023); Finance Act 2024 s. 46 (b) and Finance Act 2025 s. 60 (e) (in force 1 July 2025) amend para 4 (b) (iii) (resident sports royalties) and para 4 (c) (i)-(ii), (v) (resident service fees and insurance premiums 5 -> 10 %, gaming commissions): para 4 (b) (i) (bb) and (ii) are unchanged in 2025, no split (twentieth pass)]",
+   "doc": "First Schedule: withholding on dividends '(aa) of a corporation listed on the Dar es Salaam Stock Exchange ... five percent; or (bb) of any other corporation - ten percent'; s. 86: such payments to resident individuals are final.",
+   "unsupported": [
+    "DSE-listed companies 5 %"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "intWht",
+   "grade": "A",
+   "income": "interest",
+   "rateBp": 1000,
+   "name": "Final withholding tax on interest to resident individuals (10 %)",
+   "statute": "Income Tax Act Cap. 332 s. 82, 86, First Schedule para 4 [text version: ITA Cap. 332 R.E. 2023 (as amended to Act 7 of 2023); Finance Act 2024 s. 46 (b) and Finance Act 2025 s. 60 (e) (in force 1 July 2025) amend para 4 (b) (iii) (resident sports royalties) and para 4 (c) (i)-(ii), (v) (resident service fees and insurance premiums 5 -> 10 %, gaming commissions): para 4 (b) (i) (bb) and (ii) are unchanged in 2025, no split (twentieth pass)]",
+   "doc": "First Schedule: 'in the case of interest, rent or a commuted pension paid to a resident withholdee ... ten percent'.",
+   "unsupported": [
+    "exempt interest (government securities, s. 10 / Second Schedule)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicleTax",
+   "fam": "mvFirstReg",
+   "grade": "B",
+   "unknown": true,
+   "name": "Motor vehicle charges on first registration (licence fee by engine capacity, registration tax; HIV Response Levy from 1 July 2025 grade C)",
+   "statute": "Motor Vehicle (Tax on Registration and Transfer) Act Cap. 124 First Schedule para. 3 (a) (TZS 250 000, any cylinder capacity; as substituted by the Finance Act 2024 s. 63, in force 1 July 2024; Finance Act 2025 s. 81 replaced only para. 3 (b) (electric vehicles) from 1 July 2025, Finance Act 2026 s. 57 only the 95 000 of para. 4, from 1 July 2026: world/B10-anglophone-africa/tz/law/Finance_Act_2024_1.txt l. 1118-1170, THE_FINANCE_ACT_2025.txt l. 2150-2215, THE_FINANCE_ACT_2026.txt l. 2039-2055); licence fee on first registration by engine capacity per the TRA page 'Motor Vehicle Registration' (fetched 2026-11-21, R4/fetch/p15/tz_tra_motor.html; no Finance Act 2024-2026 amends these fees). HIV Response Levy (s. 5A, Third Schedule) inserted by the Finance Act 2025 s. 80, 82, in force 1 July 2025 (s. 2): not computed for 2025 (registration date not an input; FT reviewer 6). Liability: the owner applying for registration",
+   "taxes": "[{ name := \"Motor vehicle licence fee on first registration\", occasion := .registration, kinds := [\"car\"], parts := [(.engineCcm, QtyTable.ofCeilings [(500, 0), (1500, 200000), (2500, 250000)] 300000)], statute := \"Road Traffic Act Cap. 168; TRA page: 501-1500 cc TZS 200 000, 1501-2500 cc 250 000, 2501 cc and above 300 000\" }, { name := \"Motorcycle or tricycle licence fee on first registration\", occasion := .registration, kinds := [\"motorcycle\"], fixed := 50000, statute := \"TRA page: a motorcycle or tricycle (Bajaji), electric or not, TZS 50 000\" }, { name := \"Registration tax on first registration\", occasion := .registration, kinds := [\"car\"], fuels := [.petrol, .diesel, .hybrid, .pluginHybrid, .lpg, .cng, .hydrogen, .other], fixed := 250000, statute := \"Cap. 124 First Schedule para. 3 (a) (FA 2024 s. 63): a motor vehicle of any cylinder capacity TZS 250 000; electric vehicles under para. 3 (b) (FA 2025 s. 81 from 1 July 2025, by battery kWh) not computed\" }]",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "adults": [
+        {
+         "age": 40,
+         "wages": 12000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 30000000,
+        "engineCcm": 1800,
+        "fuel": "petrol",
+        "registeredThisYear": true
+       }
+      ]
+     },
+     "expect": [
+      250000,
+      250000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "adults": [
+        {
+         "age": 40,
+         "wages": 12000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 15000000,
+        "engineCcm": 1200,
+        "fuel": "petrol",
+        "firstRegYear": 2019,
+        "registeredThisYear": false
+       }
+      ]
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "adults": [
+        {
+         "age": 30,
+         "wages": 3000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "vehicleKind": "motorcycle",
+        "value": 2500000,
+        "engineCcm": 150,
+        "registeredThisYear": true
+       }
+      ]
+     },
+     "expect": [
+      50000
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "adults": [
+        {
+         "age": 40,
+         "wages": 12000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 40000000,
+        "engineCcm": 3000,
+        "fuel": "diesel",
+        "registeredThisYear": true
+       }
+      ]
+     },
+     "expect": [
+      300000,
+      250000
+     ]
+    },
+    {
+     "line": {
+      "id": "t4",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t4",
+       "adults": [
+        {
+         "age": 40,
+         "wages": 12000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 60000000,
+        "fuel": "electric",
+        "registeredThisYear": true
+       }
+      ]
+     },
+     "expect": []
+    }
+   ],
+   "doc": "TRA 'Motor Vehicle Registration': 'Motor Vehicle License Fee on First Registration is based on Engine Capacity: 501-1500 cc TZS 200,000; 1501-2500cc TZS 250,000; 2501 and above TZS 300,000; a motorcycle or a Tricycle commonly known as Bajaji, whether electric or not TZS 50,000'; 'Registration tax in respect of motor vehicle: a motor vehicle of any cylinder capacity TZS 250,000'; HIV Response Levy under section 5A on first registration: 0-1000 cc 50 000, 1001-1500 cc 100 000, 1501-2500 cc 150 000, 2501 cc and above 200 000. No annual licence fee is listed (the annual motor vehicle licence was abolished in 2017, press report; not cited as source). Fifteenth pass. FT reviewer 6 (year-in-force audit): the HIV Response Levy is a Finance Act 2025 levy from 1 July 2025 and was charged on every 2025 first registration; it is now a grade-C line; registration tax restricted to non-electric cars.",
+   "unsupported": [
+    "no annual charge: a vehicle held but not registered in the tax year bears nothing (the annual licence is no longer listed by TRA)",
+    "electric and hybrid vehicles (registration tax and licence fee by battery or motor class in kWh): the engine-capacity rows are applied when engineCcm is given, else grade C",
+    "cars of 500 cc or less: no licence fee row (0 applied)",
+    "registration tax and HIV levy on motorcycles, vans, trucks, buses and machinery (250 000) not modelled: kinds other than car and motorcycle get nothing",
+    "personalised and special registration numbers",
+    "tax on transfer of a used vehicle (Part III)",
+    "a car without engineCcm still bears the fixed registration tax; its licence fee and HIV levy are then not computed",
+    "HIV Response Levy on first registration (Cap. 124 s. 5A, Third Schedule: 0-1000 cc TZS 50 000, 1001-1500 cc 100 000, 1501-2500 cc 150 000, above 200 000) applies to first registrations from 1 July 2025 only (Finance Act 2025 s. 2, 80, 82); the registration date is not an input: not computed for 2025 (grade C)",
+    "electric vehicles: registration tax by battery class (para. 3 (b) as replaced by the Finance Act 2025 s. 81 from 1 July 2025; before, FA 2024 hybrid classes by kW): battery capacity and registration date not inputs (grade C)",
+    "micro hybrids (< 5 kW) registered before 1 July 2025: TZS 95 000 under FA 2024 s. 63 para. 3 (b) (i), not 250 000 (kW not an input)"
+   ]
+  }
+ ]
+}

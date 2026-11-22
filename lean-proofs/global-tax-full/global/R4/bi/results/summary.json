@@ -1,0 +1,196 @@
+{
+ "country": "BI",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Loi n°1/10 du 16 novembre 2020 (TVA) art. 19 (taux ordinaire 18 %; taux intermédiaire 10 %; 0 % exportations) and art. 10 (exonérations; art. 10 b): credit, exchange, securities, bank investment income and financial intermediation exempt, 'la liste des opérations bancaires taxables est déterminée par une ordonnance du Ministre'), text as published (obr.bi scan, R4/fetch/bi10/tva2020.pdf); 1 January-30 June 2025: Loi n°1/19 du 28 juin 2024 (budget général 2024/2025) as modified by the Loi n°1/.. du 30 décembre 2024 (cover page read on the Wayback copy of finances.gov.bi/wp-content/uploads/2025/01/Loi-de-Finances-2024-2025-Modifiee.pdf, captured 26 March 2025, truncated at 5 MB after Article 1: R4/fetch/p19/bi_lf2425_mod_wb20250326.pdf); sugar at 10 % per the OBR news page 'les contribuables de la province de Cankuzo sensibilisés à la mise en application de la Loi budgétaire révisée 2024-2025' (workshop of 22 January 2025; Wayback 20250214212240): the revised law's articles 56-147 set the specific tax on beer at 40 000 BIF/hl except beer made from 100 % local raw materials, remove the consumption tax on sugar and lower the VAT on sugar from 18 % to 10 %; 1 July-31 December 2025: LF 2025/2026 (art. 164: 'La TVA sur les opérations bancaires et financières est supprimée'; art. 155-158: Taxe sur les Activités Financières 8 % of the net banking product instead)",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus) and Loi n°1/10 du 16 novembre 2020 (TVA) with the LF 2025/2026 derogations (budget year July 2025 - June 2026); LF 2021/22-2024/25 not held",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "listed foodstuffs at 10 % (ordinance not held)",
+    "taxable banking operations (ministerial list) at 18 % from 1 January to 30 June 2025: list not held, exempt line kept",
+    "Taxe sur les Activités Financières (LF 2025/26 art. 155-158, 8 % of the net banking product, from 1 July 2025): borne by banks, not modelled",
+    "LF 2021/22-2023/24 and the tax articles of the revised LF 2024/25 not read (copies truncated)"
+   ],
+   "guards": 30
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Taxe de consommation",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "taxe de consommation, split at 1 July 2025. 1 January-30 June 2025: Loi n°1/19 du 28 juin 2024 (budget général 2024/2025) as modified by the Loi n°1/.. du 30 décembre 2024 (cover page read on the Wayback copy of finances.gov.bi/wp-content/uploads/2025/01/Loi-de-Finances-2024-2025-Modifiee.pdf, captured 26 March 2025, truncated at 5 MB after Article 1: R4/fetch/p19/bi_lf2425_mod_wb20250326.pdf), articles 56-147 not in the copy; OBR news page 'les contribuables de la province de Cankuzo sensibilisés à la mise en application de la Loi budgétaire révisée 2024-2025' (workshop of 22 January 2025; Wayback 20250214212240): the revised law's articles 56-147 set the specific tax on beer at 40 000 BIF/hl except beer made from 100 % local raw materials, remove the consumption tax on sugar and lower the VAT on sugar from 18 % to 10 %. 1 July-31 December 2025: LF 2025/2026 (Loi portant fixation du budget général pour l'exercice 2025/2026, OCR of the obr.bi copy captured 23 July 2025), the taxe ad valorem / taxe spécifique article between art. 81 and art. 86 (b) 1. bière 40 000 BIF/hl). Beer: the same rate both halves. Wine, spirits, soft drinks, cigarettes and fuel: the LF 2025/2026 rates from 1 July 2025 (kernel ExciseRule date windows; an undated line bears them on 184/365 of it), January-June not computed (grade C)",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus) and Loi n°1/10 du 16 novembre 2020 (TVA) with the LF 2025/2026 derogations (budget year July 2025 - June 2026); LF 2021/22-2024/25 not held",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc",
+    "ExciseRule (2.1, date windows: R4.Exc.toRule)",
+    "exciseRuleFamily"
+   ],
+   "unsupported": [
+    "wine, spirits, soft drinks, cigarettes, petrol and diesel bought 1 January-30 June 2025: rates of the revised LF 2024/25 (articles 56-147) not held: not computed (C); July-December computed at the LF 2025/2026 rates",
+    "local-raw-material beer rate",
+    "import surtaxes on beer and soft drinks"
+   ],
+   "guards": 30
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les revenus des sociétés",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Loi n°1/14 du 24/12/2020 art. 103 (30 %)",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus) and Loi n°1/10 du 16 novembre 2020 (TVA) with the LF 2025/2026 derogations (budget year July 2025 - June 2026); LF 2021/22-2024/25 not held",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "minimum tax: only the individuals' art. 21 minimum located",
+    "loss rules not read",
+    "rounding to the nearest thousand"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenue à la source (art. 122)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Loi n°1/14 du 24/12/2020 art. 122 (15 %); art. 102 (final for non-residents)",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus) and Loi n°1/10 du 16 novembre 2020 (TVA) with the LF 2025/2026 derogations (budget year July 2025 - June 2026); LF 2021/22-2024/25 not held",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "guards": 8
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les revenus du capital (dividendes)",
+   "statute": "Loi IR 2020 art. 23 (15 %), art. 122 1° (retenue 15 %) [text version: Loi n°1/14 du 24 décembre 2020 as promulgated (obr.bi scan, Wayback; world/B08-central-africa-fr/bi/law/loi_ir_2020.pdf); art. 122 restated with the same 15 % by LF 2025/2026 art. 139 (from 1 July 2025); LF 2021/22-2023/24 and the tax articles of the revised LF 2024/25 not read (flag)]",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus)",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les revenus du capital (intérêts)",
+   "statute": "Loi IR 2020 art. 23, art. 122 2° (15 %) [text version: Loi n°1/14 du 24 décembre 2020 as promulgated (obr.bi scan, Wayback; world/B08-central-africa-fr/bi/law/loi_ir_2020.pdf); art. 122 2° restated with the same 15 % by LF 2025/2026 art. 139 (from 1 July 2025); LF 2021/22-2023/24 and the tax articles of the revised LF 2024/25 not read (flag)]",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus)",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les plus-values",
+   "statute": "Loi IR 2020 art. 23 (15 %) [text version: Loi n°1/14 du 24 décembre 2020 as promulgated (obr.bi scan, Wayback; world/B08-central-africa-fr/bi/law/loi_ir_2020.pdf); the LF 2025/2026 derogations read (art. 137-149) do not touch art. 23; LF 2021/22-2023/24 and the tax articles of the revised LF 2024/25 not read (flag)]",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus)",
+   "unsupported": [
+    "gain computation and exemptions not read"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.gainsFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "INSS pensions, employer contribution (6 % up to 450 000 BIF a month)",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019, Burundi (Wayback 2020-08-02, R4/fetch/p14/ssptw_burundi.txt; facts restated): employer 6 % of covered monthly pay (8,8 % for arduous work), on monthly earnings up to 450 000 BIF; official secondary, edition 2019 (flagged)",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus)",
+   "unsupported": [
+    "arduous work 8,8 % not distinguished",
+    "edition 2019 (no later rate text reached)",
+    "the minimum base (legal minimum wage)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "INSS occupational risks, employer contribution (3 % up to 80 000 BIF a month)",
+   "statute": "SSPTW Africa 2019, Burundi, Work Injury (facts restated): employer 3 % of covered monthly pay, on monthly earnings up to 80 000 BIF; edition 2019 (flagged)",
+   "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus)",
+   "unsupported": [
+    "edition 2019"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (EAC Common External Tariff)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "East African Community Customs Management Act 2004 (charging provisions not read) and the EAC CET; EAC Common External Tariff 2022 Version (Annex 1 to the Protocol on the Establishment of the East African Community Customs Union), edition 'CET 2022 VERSION updated June 2025' (eac.int, Wayback 20260303052110, R4/fetch/gap/eac_cet2022_upd_jun2025_wb20260303052110.pdf): Legal Notice No. EAC/117/2022 para 1 (four bands 0, 10, 25 and 35 per centum) and 2 (in force 1 July 2022); the amending Legal Notices printed at its end (EAC/129/2023, 81/2024, 147/2024, 298/2024, 32/2025, 171/2025) touch none of the lines below",
+   "dated": "CET 2022 version as updated to June 2025 (lines unchanged by the 2023-2025 amending notices): the whole of 2025",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "stays of application and duty remissions by partner state (EAC Gazette notices for 2024/25 and 2025/26) not read",
+    "COMESA / AfCFTA / EPA preferences not applied (CET charged)",
+    "national import levies (KE Import Declaration Fee and Railway Development Levy, UG/TZ/RW/BI equivalents) not modelled",
+    "lines of other HS headings (grade C)"
+   ],
+   "guards": 6
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

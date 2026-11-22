@@ -1,0 +1,11 @@
+S = {'cc': 'WS', 'doc': '# Samoa 2025: company tax and non-resident withholding (1200)\n\nSource: Income Tax Act 2012 (`cmp20/world/B14-pacific/ws/law/Income_Tax_Act_2012.txt`), Schedule 1.\n* **cl. (2)**: "The rate of income tax applicable to a company is 27%."\n* **cl. (4) (b)**: non-resident withholding tax on "interest, a royalty, … management fee, fee for personal (including\n  professional) services, or natural resource amount, 15%".', 'regimeName': 'Income tax on companies', 'unsupported': [], 'taxes': [{'oecd': '1200', 'tax': 'Income tax on companies', 'statute': 'Income Tax Act 2012 Sch. 1 cl. (2)', 'dated': '2012 Act (rate unchanged in 2025)', 'grade': 'A', 'kernel_parts': ['CorpRegime'], 'unsupported': []}, {'oecd': '1200/1100', 'tax': 'Withholding tax on payments to non-residents', 'statute': 'Income Tax Act 2012 Sch. 1 cl. (4)', 'dated': '2012 Act (rate unchanged in 2025)', 'grade': 'A', 'kernel_parts': ['Wht'], 'unsupported': []}], 'sched': [(0, 2700)], 'citStatute': 'Income Tax Act 2012 Sch. 1 cl. (2)', 'wht': [{'kind': 'interest', 'rate': 1500, 'statute': 'ITA 2012 Sch. 1 cl. (4) (b)'}, {'kind': 'royalty', 'rate': 1500, 'statute': 'Sch. 1 cl. (4) (b)'}, {'kind': 'services', 'rate': 1500, 'statute': 'Sch. 1 cl. (4) (b)'}], 'whtName': 'Withholding tax on payments to non-residents', 'guards': ['cit.citTax { profit := 1000000 } == 270000', 'wht.amount { kind := .interest, amount := 1000 } == 150', 'wht.amount { kind := .royalty, amount := 1000 } == 150', 'wht.amount { kind := .services, amount := 1000 } == 150']}
+
+# --- R3 session 5 (2026-11-21): withholding under kernel 2.3.0 ---
+def _s5_wht_entry(**kw):
+    for t in S['taxes']:
+        if t['oecd'] == '1200/1100':
+            t.update(kw); return
+    S['taxes'].append(dict({'oecd': '1200/1100', 'kernel_parts': ['Wht'], 'unsupported': []}, **kw))
+
+S['wht'] = S['wht'] + [dict(kind='dividend', rate=0, statute='ITA 2012 s. 10 (2): non-resident withholding tax on interest, royalties, insurance premiums, management fees, personal services fees and natural resource amounts only; Sch. 2 Part A (1) (b): a dividend paid by a resident company is exempt income')]
+S['guards'] = S['guards'] + ['wht.amount { kind := .dividend, amount := 1000 } == 0']

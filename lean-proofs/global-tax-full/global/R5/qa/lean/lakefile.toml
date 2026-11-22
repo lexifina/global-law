@@ -1,0 +1,22 @@
+name = "QaGlobal"
+version = "0.1.0"
+defaultTargets = ["QaGlobal", "qaglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); QaTax = the 1.x model, vendored from cmp20/world/B15-no-pit/qa/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "QaTax"
+
+[[lean_lib]]
+name = "QaGlobal"
+
+[[lean_exe]]
+name = "qaglobal"
+root = "QaGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

@@ -1,0 +1,252 @@
+{
+ "country": "RU",
+ "name": "Russia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:39:03"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "НК РФ ст. 217.1, 214.1",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/RuGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Налог на добавленную стоимость",
+   "statute": "Налоговый кодекс РФ ст. 164 п. 2 (10 %), п. 3 (20 %); п. 8 (5 % / 7 %, УСН, from 1.1.2025, 176-ФЗ) [year in force 2025 (pass 17), upgraded: НК РФ ст. 164 in the redaction of 31.07.2025 (legalacts.ru, Internet Archive 2025-09-16: ru/law/nkrf164_legalacts_wb20250916.*): п. 2 10 % (listed food, children's goods, medicines ...), п. 3 20 % otherwise, as modelled (the 22 % of 2026 is not in this redaction)]",
+   "dated": "НК РФ ст. 164, ред. от 31.07.2025 (legalacts.ru, Internet Archive 2025-09-16)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the EU-style structure the source describes (health, education, finance, insurance, residential rent), not quoted item by item",
+    "food at 10 % (some basic foods only: the 10 % list of п. 2 not read item by item)",
+    "exemption of ст. 145 (revenue thresholds) and the 5 % / 7 % simplified-regime rates of п. 8 not modelled: every company line taxed at 20 %",
+    "ст. 164 itself not read (consultant.ru is script-built); rates from PwC"
+   ],
+   "yif17": "upgraded",
+   "family_file": "lean/RuGlobal/Consumption.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Налоговый кодекс РФ гл. 22 (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/RuGlobal/Consumption.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1200",
+   "tax": "Налог на прибыль организаций",
+   "statute": "НК РФ ст. 284 п. 1 (25 %; 8 % федеральный бюджет в 2025-2030 годах) в редакции Федерального закона от 12.07.2024 № 176-ФЗ",
+   "dated": "НК РФ ст. 284 п. 1 consolidated, ред. от 28.12.2024 с изм. от 21.01.2025 (Internet Archive 2025-08-14), and 176-ФЗ",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "loss carry-forward 50 % cap (ст. 283) not modelled"
+   ],
+   "family_file": "lean/RuGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200",
+   "tax": "Налог у источника (иностранные организации) (dividend, interest, royalty, services)",
+   "statute": "НК РФ ст. 284 п. 2 пп. 1 и 4, п. 3 пп. 3, ст. 309 п. 1-2, ст. 310",
+   "grade": "A",
+   "dated": "ред. от 28.12.2024 с изм. от 21.01.2025 (in force 2025; 25 % from 1.1.2025 by 176-ФЗ)",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "related parties under ст. 105.1 other than a recipient holding more than 25 % of the payer (sister companies, control) are not seen: their services are booked at 0",
+    "the special rates of ст. 284 п. 2 пп. 2-3 (10 % freight, 0 % insurance settlements) and п. 4 (state and municipal securities) not applied",
+    "treaty rates out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/RuGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200",
+   "tax": "НДФЛ у источника (физические лица - нерезиденты) (dividend, interest, royalty)",
+   "statute": "НК РФ ст. 224 п. 3, ст. 208 п. 1 пп. 1, 3",
+   "grade": "A",
+   "dated": "ст. 224 ред. от 28.12.2024 с изм. от 21.01.2025 (in force 2025); ст. 208 ред. от 31.07.2025",
+   "kernel_parts": [
+    "Wht (toCompany := some false)"
+   ],
+   "unsupported": [
+    "interest on deposits with a bank in Russia is 15 % (ст. 224 п. 3): the paying company is taken as not a bank",
+    "royalties are taken as paid for use in Russia (ст. 208 п. 1 пп. 3)",
+    "dividends of an international holding company (5 %) not applied",
+    "treaty rates out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/RuGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on services of foreign individuals (НДФЛ)",
+   "grade": "C",
+   "status": "unsupported",
+   "statute": "not reached: НК РФ ст. 208 п. 1 пп. 6, 6.3 and п. 3 пп. 6 (place of performance) and ст. 224 п. 3 (30 %) read; where the service was performed is not an input",
+   "dated": "ст. 208 ред. от 31.07.2025",
+   "kernel_parts": [],
+   "tried": "pass 18: ст. 224 and 208 read in the 2025 redactions; a service is Russian-source only if performed in Russia (or under the пп. 6.3 conditions)",
+   "unsupported": [
+    "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\""
+   ],
+   "family_file": "lean/RuGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/RuGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes recorded by the registry",
+   "statute": "Transport tax (НК гл. 28, regional), mineral extraction tax (гл. 26)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the registry's row (background, not a read text); not modelled",
+   "unsupported": [
+    "would unlock: the statutes named in the registry row"
+   ],
+   "triage": "obsolete placement: transport tax belongs to 5200; mineral extraction tax is sector-only (minor)",
+   "family_file": "lean/RuGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "госпошлина (no transfer tax)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rate articles (and the reference region's rate where regional)"
+   ],
+   "family_file": "lean/RuGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "НК РФ гл. 32 (налог на имущество физических лиц, Москва)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "налог на имущество физических лиц: municipal rates on cadastral value within НК ст. 406 ranges; Moscow law not read"
+   ],
+   "family_file": "lean/RuGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social contributions and payroll taxes",
+   "statute": "НК РФ гл. 34 (страховые взносы, единый тариф 30 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P4 pass (no dated employer rates with quotes in the 1.x model or fetched texts)",
+   "unsupported": [
+    "would unlock: the act's 2025 employer rates and ceilings (official consolidation or the 1.x model's parameters with quotes)"
+   ],
+   "family_file": "lean/RuGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "НК РФ ст. 13, 14, 15 (lists of federal, regional and local taxes) [year in force 2025 (pass 18), upgraded: НК РФ ст. 13 (ред. от 28.11.2025, legalacts.ru, Internet Archive 2025-12-17), ст. 14 (2025 redaction, held) and ст. 15 (ред. от 30.09.2024, Internet Archive 2024-12-14; the tourist tax added from 2025 is not a wealth tax): the federal, regional and local taxes are listed and none is levied on net wealth (налог на имущество физических лиц is a recurrent tax on listed property); B because ст. 15 is read in the 2024 redaction]",
+   "dated": "НК РФ ст. 13 (ред. от 28.11.2025), ст. 14 (2025), ст. 15 (ред. от 30.09.2024), legalacts.ru via the Internet Archive (pass 18); the PwC 2021 capture is no longer relied on",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "downgraded",
+   "yif18": "upgraded",
+   "gap": 6,
+   "family_file": "lean/RuGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax (not levied)",
+   "statute": "НК РФ ст. 217 п. 18, 18.1 (2025 redaction) [year in force 2025 (pass 17), upgraded: НК РФ ст. 217 п. 18 and 18.1 in the 2025 redaction (legalacts.ru, Internet Archive 2025-06-17: ru/law/nkrf217_legalacts_wb20250617.*): inheritances from individuals are exempt from НДФЛ, and gifts too except real estate, vehicles, shares and digital assets from persons other than family members (which are НДФЛ income in the 1.x PIT); the tax code has no separate inheritance or gift tax (ст. 13 list not read: B)]",
+   "dated": "НК РФ ст. 217 п. 18, 18.1 (2025 redaction, legalacts.ru, Internet Archive 2025-06-17; pass 17); the PwC 2021 capture is no longer relied on",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "downgraded",
+   "yif17": "upgraded",
+   "gap": 6,
+   "family_file": "lean/RuGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 2,
+  "C": 8
+ },
+ "guards": 14,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

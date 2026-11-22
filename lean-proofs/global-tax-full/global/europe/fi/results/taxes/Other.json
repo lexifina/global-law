@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Taxes on use of goods (motor vehicle taxes)",
+  "statute": "the country's motor-vehicle tax act",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "not read in the P7 pass",
+  "unsupported": [
+   "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+  ],
+  "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000)",
+  "statute": "European Commission TEDB, FI: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 241, 242, 262, 623, 625, 2901, 246, 251, 252, 253, 264, 621, 2001, 5066) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "unsupported": [
+   "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+  ],
+  "gap": 2,
+  "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVFIN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/FIN.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6200 total 108, 87, 79, 103 million EUR in 2021-2024 (unnamed); the national taxes behind it not read",
+  "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVFIN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/FIN.csv`, SHA256SUMS; general government S13; 2025 not yet published)"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Kirkollisvero (evankelis-luterilainen ja ortodoksinen kirkko)",
+  "statute": "Tuloverolaki (1535/1992) 124 § (deductions shared among municipal tax, health-care contribution and church tax, `fi/law/tvl_wb20250703.txt`); Statistics Finland, Taxes and tax-like payments: documentation of statistics (stat.fi/en/statistics/documentation/vermak, fetched 2026-11-22, `fi/law/statfi_vermak_doc.html`)",
+  "dated": "2025 (texts as cited)",
+  "grade": "R",
+  "status": "reclassified",
+  "reclass": "not a tax (OECD guide § 6, as decided for the Nordic church taxes): levied by the parishes, collected by Verohallinto with the municipal tax; the 1.x model charges it only with `churchRateBp` (default 0). The OECD Revenue Statistics table for Finland (DSD_REV_OECD@DF_REVFIN, `tools/in_gap2/oecd/FIN.csv`) has one church line, 1210 Church tax, at 0 in 2021-2024, and its 1100 lines (communal tax, tax on income, final withholding tax on interest) name no church tax: the individuals' church tax is outside the general-government figures",
+  "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+  "law": "Tuloverolaki (1535/1992) 124 § (deductions shared among municipal tax, health-care contribution and church tax, `fi/law/tvl_wb20250703.txt`); Statistics Finland, Taxes and tax-like payments: documentation of statistics (stat.fi/en/statistics/documentation/vermak, fetched 2026-11-22, `fi/law/statfi_vermak_doc.html`)",
+  "evidence_grade": "B",
+  "kernel_parts": [],
+  "unsupported": [],
+  "gap": 5
+ }
+]

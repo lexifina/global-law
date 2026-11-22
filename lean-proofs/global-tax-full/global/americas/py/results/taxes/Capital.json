@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "see the pass 11 entry below for disposals",
+   "other income kinds"
+  ]
+ },
+ {
+  "tax": "IRP: rentas y ganancias del capital (8 %)",
+  "statute": "Ley 6380/2019 arts. 53, 56, 59, 60",
+  "dated": "Ley 6380/2019 (BACN page; DNIT IRP page confirms 8 %)",
+  "grade": "A",
+  "unsupported": [
+   "1.x 8 % on long-held listed shares (art. 56 num. 9 exempts them)"
+  ],
+  "oecd": "1100",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ]
+ }
+]

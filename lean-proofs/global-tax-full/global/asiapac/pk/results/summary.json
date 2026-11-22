@@ -1,0 +1,249 @@
+{
+ "country": "PK",
+ "name": "Pakistan",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:14:10"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Tax on dividends",
+   "statute": "ITO 2001 s. 5, Div. III",
+   "dated": "tax year 2026; session 11 year-in-force audit: re-cited: Division III (b) 15 % in both tax year 2025 (FBR consolidation to 30.06.2024) and tax year 2026 (to 31.07.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PkGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1100",
+   "tax": "Profit on debt (s. 7B) and capital gains on securities (s. 37A)",
+   "statute": "ITO 2001 ss. 7B, 37A",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "rates by filer status not re-read"
+   ],
+   "family_file": "lean/PkGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Sales tax on goods (federal, 18 %)",
+   "statute": "Sales Tax Act, 1990 s. 3 (1); Sixth Schedule Table-1 S. Nos. 21, 32, 33, 176; Eighth Schedule S. No. 81",
+   "dated": "FBR consolidation as amended up to 30 June 2025 (rate and POL exemption unchanged since Finance Act 2024)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "HS-level schedules mapped to classes (food, drugs)",
+    "cottage-industry and retailer regimes (s. 2 (5AB), Third Schedule retail price) not modelled",
+    "no registration threshold applied"
+   ],
+   "family_file": "lean/PkGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5126",
+   "tax": "Provincial sales tax on services (Punjab)",
+   "statute": "Punjab Sales Tax on Services Act 2012, Second Schedule",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not reached this session; would unlock: the Punjab Revenue Authority consolidation as in force 2025"
+   ],
+   "family_file": "lean/PkGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "Federal excise duty on cigarettes (Rs 16,500 / 5,050 per thousand by printed retail price)",
+   "statute": "Federal Excise Act 2005 s. 3, First Schedule Table I S. Nos. 9-10",
+   "dated": "FBR consolidations as amended up to 30 June 2024 and up to 30 June 2025 (entries identical): all of 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "imported cigarettes (S. No. 8) not distinguished",
+    "aerated waters 20 % of retail price not modelled (class mix)",
+    "other tobacco per kg not modelled"
+   ],
+   "family_file": "lean/PkGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies; super tax (s. 4C)",
+   "statute": "ITO 2001 First Schedule Part I Divisions II, IIB; s. 4C",
+   "dated": "2025, split at 1 July 2025: tax year 2025 (FBR consolidation amended up to 30.06.2024 + Income Tax (Amendment) Act 2025 bank rate) to 30 June, tax year 2026 (FBR consolidation amended up to 31.07.2025, Finance Act 2025) from 1 July; by days",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime",
+    "charge"
+   ],
+   "unsupported": [
+    "minimum tax s. 113, ACT s. 113C",
+    "income under s. 4C taken as taxable income",
+    "split by days (181/365 tax year 2025, 184/365 tax year 2026); special tax year s. 74 (3) not modelled"
+   ],
+   "family_file": "lean/PkGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Tax on dividends; tax on payments to non-residents (royalties and technical fees 15 %, other payments 20 %)",
+   "statute": "ITO 2001 s. 5, s. 6, s. 150, s. 152 (1), (2); First Schedule Part I Divisions III, IV, Part III Division II",
+   "dated": "all of 2025: the modelled rows are the same in tax year 2025 (FBR consolidation to 30.06.2024) and tax year 2026 (to 31.07.2025): Div. III (b) 15 %, Div. IV 15 %, Part III Div. II (2) 20 %",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "contract payments under s. 152 (1A) (7 %) not distinguished from technical fees",
+    "profit on debt to a non-resident person of either kind: s. 152 (2) (20 %, Part III Div. II (2)); s. 152 (3) excludes only amounts under ss. 149, 150, 156, 233, a PE, a representative or a non-chargeable amount (not distinguished); s. 7B (Div. IIIA) taxes only persons other than companies receiving profit on debt from the s. 151 (1) (a)-(d) payers (banks, government securities): the payer is taken not to be one"
+   ],
+   "family_file": "lean/PkGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes (partly)",
+   "statute": "Workers' Welfare Fund Ordinance, 1971 (2% of profits, federal/provincial) and Companies Profits (Workers' Participation) Act, 1968 (5% of profits)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade B (bg): profit-based levies (closer to 1200 than 3000)."
+   ],
+   "family_file": "lean/PkGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "6000",
+   "tax": "Zakat (religious levy; outside the OECD headings)",
+   "statute": "Zakat and Ushr Ordinance, 1980 (2.5% deducted at source from savings/deposit accounts of Muslims on the first of Ramadan unless an exemption declaration (CZ-50) is filed); ITO s. 60 deduction",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade B (bg): compulsory deduction at source, opt-out by declaration.",
+    "gap-closing triage: zakat deducted at source under the Zakat and Ushr Ordinance 1980 is paid into the government's Zakat Funds: a compulsory unrequited payment to general government, a tax (OECD Interpretative Guide §1, §6; recurrent on bank balances above the nisab); exempt on a declaration and for non-Muslims, so the charge depends on facts the canonical input does not carry (kernel request R3-GAP-1): stays C"
+   ],
+   "family_file": "lean/PkGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Urban immovable property tax (Punjab)",
+   "statute": "Punjab UIPT Act 1958",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/PkGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty and capital value tax (Punjab)",
+   "statute": "Stamp Act 1899 (Punjab)",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/PkGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1100",
+   "tax": "Advance income tax on sale (s. 236C) and purchase (s. 236K) of immovable property, adjustable",
+   "statute": "ITO 2001 ss. 236C (1), (2), 236K (1), (2); First Schedule Part IV Divisions X, XVIII",
+   "dated": "two periods by transaction date: FBR consolidation to 30.06.2024 (to 30 June 2025) and to 31.07.2025 (Finance Act 2025, from 1 July 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "AdvanceTax (2.6.0)"
+   ],
+   "unsupported": [
+    "active-taxpayers'-list rates only",
+    "undated transactions: grade C",
+    "s. 236C provisos not modelled"
+   ],
+   "family_file": "lean/PkGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "EOBI employer contribution",
+   "statute": "EOBI Act 1976 s. 9",
+   "dated": "2025-26",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "provincial social security (Punjab PESSI 6 %)"
+   ],
+   "family_file": "lean/PkGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "No estate or gift tax",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PkGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Wealth tax abolished 2001 (s. 7E deemed income is 1100)",
+   "statute": "Finance Act 2001; ITO s. 7E",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PkGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 5,
+  "C": 6
+ },
+ "guards": 25,
+ "sorry": 0,
+ "cases": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

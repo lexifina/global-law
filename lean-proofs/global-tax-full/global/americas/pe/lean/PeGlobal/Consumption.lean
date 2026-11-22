@@ -1,0 +1,88 @@
+import PeGlobal.Pit
+import TaxKernel.Global2
+
+/-!
+# Peru 2025: IGV (5111); IPM and ISC (5121) unsupported
+
+Source: TUO de la Ley del IGV e ISC (D.S. 055-99-EF), SUNAT legislation pages fetched 2026-11-21 (`pe/law/`), which
+carry each amendment with its dates.
+* **art. 17** (Capítulo V): "La tasa del impuesto es 16%" (Ley 29666, from 1.3.2011); the 14 % of Ley 32387 (published
+  16.6.2025) applies "progresivamente" from 1 January 2026 (its art. 2: "a partir del 1 de enero de 2026"): 2025 is 16 %.
+* **Apéndice I** (exonerated goods: fresh foods, the basket's food line read as these, flagged) and **Apéndice II**
+  (exonerated services: education, public passenger transport, interest and other financial services).
+* ISC (Título II, Apéndices III-IV): fixed amounts per unit set by ministerial resolution, not
+  read: unsupported.
+* **Impuesto de Promoción Municipal** (FT review 2026-11-21): Ley de Tributación Municipal, D. Leg. 776 (1993), as
+  published (leyes.congreso.gob.pe `00776.pdf`, scan; OCR `pe/law/dleg776.ocr.txt`), **art. 76**: "El Impuesto de
+  Promoción Municipal grava con una tasa del 2% las operaciones afectas al régimen del Impuesto General a las Ventas y
+  se rige por sus mismas normas". The basket's prices include both: one 5111 charge at 16 % + 2 % = 18 % of the price
+  before tax, with the IGV's exonerations (the same norms). Grade B: the 1993 text (the TUO D.S. 156-2004-EF, which
+  keeps the article, not read).
+
+**Pass 10 (2026-11-21), ISC:** SUNAT's texts of the Nuevo Apéndice IV of the TUO (fetched 2026-11-21, `pe/law/isc_apendice*.pdf`; literal A updated to 13.9.2024). Literal B (monto fijo), the current rows: cervezas 0,047 % UIT per litre from 1.7.2024 (D.S. 115-2024-EF); cigarettes S/ 0,36 per cigarette (R.M. 021-2022-EF/15); pisco S/ 2,27 per litre. Literal C: beer excluded (D.S. 092-2013-EF); cigarettes excluded (D.S. 004-2010-EF). Literal D ("el mayor valor que resulte de comparar"): wines and other alcoholic liquids by strength, S/ 1,25 or 20 % (to 6°), S/ 2,50 or 25 % (6°-12°), S/ 2,70 or 30 % (12°-20°), more than 20° S/ 3,63 (R.M. 021-2022-EF/15) or 40 %; beer's heading excluded from literal D (D.S. 181-2019-EF). UIT 2025 S/ 5.350. Grade A for the rows read; fuels (Apéndice III text dated 3.4.2022) stay C.
+-/
+
+namespace PeGlobal.Consumption
+open TaxKernel TaxKernel.Global AmerCommon PeGlobal
+
+def vat : Vat :=
+  { name := "Impuesto General a las Ventas + Impuesto de Promoción Municipal", standard := 1800,
+    classOf := fun gd => match gd with
+      | .food | .education | .transport | .financial | .books | .rent => .exempt
+      | _ => .standard }
+
+def vatStatute : String := "TUO Ley del IGV art. 17 (16 % in 2025), Apéndices I, II; D. Leg. 776 art. 76 (IPM 2 %)"
+
+def vatF : Family := vatFamily "Impuesto General a las Ventas + Impuesto de Promoción Municipal" vat vatStatute .vat .central
+
+/-- Literal D: the higher of S/ `mn`/100 per litre (monto fijo, as the rule's minimum) and `adv` al valor on the producer's value
+before ISC and IGV (18 % inside the consumer price); strength band `lo < abv ≤ hi`. -/
+def iscD (good : Good) (lo hi mn adv : Int) (lit : String) : ExciseRule :=
+  { good, name := "Impuesto Selectivo al Consumo", adValoremBp := adv, valueBase := .beforeTax, vatBp := 1800,
+    minNum := mn, minDen := 100, minAbvBp := lo, maxAbvBp := hi, statute := "TUO Ley del IGV e ISC, Nuevo Apéndice IV literal D (D.S. 093-2018-EF, D.S. 181-2019-EF; > 20°: R.M. 021-2022-EF/15): the higher of the monto fijo and the rate al valor, " ++ lit }
+
+def isc : List ExciseRule :=
+  [{ good := .cigarettes, name := "Impuesto Selectivo al Consumo (cigarrillos)", perUnitNum := 36, perUnitDen := 100,
+     statute := "TUO Ley del IGV e ISC, Nuevo Apéndice IV literal B (SUNAT text): S/ 0,36 per cigarette (R.M. 021-2022-EF/15)" },
+   { good := .beer, name := "Impuesto Selectivo al Consumo (cervezas)", perUnitNum := 25145, perUnitDen := 10000,
+     statute := "TUO Ley del IGV e ISC, Nuevo Apéndice IV literal B (SUNAT text): 0,047 % UIT per litre from 1.7.2024 (D.S. 115-2024-EF); UIT 2025 S/ 5.350 -> S/ 2,5145" },
+   iscD .wine 0 600 125 2000 "0° hasta 6°: S/ 1,25 per litre or 20 %",
+   iscD .wine 600 1200 250 2500 "más de 6° hasta 12°: S/ 2,50 per litre or 25 %",
+   iscD .wine 1200 2000 270 3000 "más de 12° hasta 20°: S/ 2,70 per litre or 30 %",
+   iscD .wine 2000 100000 363 4000 "más de 20°: S/ 3,63 per litre or 40 %",
+   iscD .wine (-1) 100000 270 3000 "más de 12° hasta 20°: S/ 2,70 per litre or 30 % (strength not given)",
+   iscD .spirits 0 600 125 2000 "0° hasta 6°: S/ 1,25 per litre or 20 %",
+   iscD .spirits 600 1200 250 2500 "más de 6° hasta 12°: S/ 2,50 per litre or 25 %",
+   iscD .spirits 1200 2000 270 3000 "más de 12° hasta 20°: S/ 2,70 per litre or 30 %",
+   iscD .spirits 2000 100000 363 4000 "más de 20°: S/ 3,63 per litre or 40 %",
+   iscD .spirits (-1) 100000 363 4000 "más de 20°: S/ 3,63 per litre or 40 % (strength not given)"]
+
+def iscF : Family := exciseRuleFamily "Impuesto Selectivo al Consumo" isc (firstOnly := true)
+
+def families : List Family := [vatF, iscF]
+
+def absent : List Absent :=
+  [{ oecd := .salesTax, why := "Not levied (convention R5-3k-G, pass 12): Constitución art. 74: \"Los tributos se crean, modifican o derogan, o se establece una exoneración, exclusivamente por ley o decreto legislativo\" (`pe/law/const_art-074.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: TUO Ley del IGV e ISC art. 17, Apéndices I-II; TUO Ley del IGV e ISC Título II; TUO LIR art. 55 (29,5 %); TUO LIR art. 56 a), d), e), f); 1.x model (see its summary.json); LIR TUO arts. 2, 21.1, 36, 52-A)." }]
+
+def notes : List String := []
+
+def unsupported (_ : List String) (g : CanonGlobal) : List String :=
+  when (!g.consumption.isEmpty) "IPM (D. Leg. 776 art. 76) from the 1993 text; food read as the exonerated fresh foods of Apéndice I; rent of housing by non-business owners taken as outside the IGV"
+  ++ when (g.consumption.any fun s => s.good == .petrol || s.good == .diesel || s.good == .tobaccoOther || s.good == .nonAlcoholic) "ISC on fuels (Nuevo Apéndice III: the SUNAT text is updated only to 3.4.2022), on other tobacco and on sugared drinks (literal A rates by sugar content): not charged"
+  ++ when (g.consumption.any fun s => s.good == .wine || s.good == .spirits) "ISC literal D: the al valor base (producer's sale value) read from the consumer price net of IGV (upper bound); wine without a strength taken as 12°-20°, spirits as over 20°; pisco (S/ 2,27 per litre, literal B) not distinguished from other spirits"
+
+#guard vat.embedded { good := .clothing, amount := 1180 } == 180
+#guard vat.embedded { good := .food, amount := 1180 } == 0
+-- art. 17 16 % + D. Leg. 776 art. 76 2 %: 18 % on the price before tax
+#guard vat.embedded { good := .clothing, amount := 1179 } == 179
+-- 20 cigarettes: S/ 7,20; 10 litres of beer: S/ 25,145
+#guard (isc.head!.dutyOn { good := .cigarettes, amount := 20, quantity := 20000 } {}) == 7
+#guard ((isc.filter (·.appliesTo 2025 { good := .beer, amount := 80, quantity := 10000 } {})).map (·.dutyOn { good := .beer, amount := 80, quantity := 10000 } {})) == [25]
+-- 1 litre of spirits at 40 % for S/ 118: 100 net of IGV, 71 before ISC, 40 % = 28 > S/ 3,63
+#guard ((isc.filter (·.appliesTo 2025 { good := .spirits, amount := 118, quantity := 1000, abvBp := 4000 } {})).map (·.dutyOn { good := .spirits, amount := 118, quantity := 1000, abvBp := 4000 } {})).head! == 28
+-- 10 litres of the same at S/ 118: the monto fijo S/ 36,30 is higher
+#guard ((isc.filter (·.appliesTo 2025 { good := .spirits, amount := 118, quantity := 10000, abvBp := 4000 } {})).map (·.dutyOn { good := .spirits, amount := 118, quantity := 10000, abvBp := 4000 } {})).head! == 36
+-- wine at 13 % vol, 10 litres for S/ 1.180: 1.000 net, 769 before ISC, 30 % = 230 > S/ 27
+#guard ((isc.filter (·.appliesTo 2025 { good := .wine, amount := 1180, quantity := 10000, abvBp := 1300 } {})).map (·.dutyOn { good := .wine, amount := 1180, quantity := 10000, abvBp := 1300 } {})).head! == 230
+
+end PeGlobal.Consumption

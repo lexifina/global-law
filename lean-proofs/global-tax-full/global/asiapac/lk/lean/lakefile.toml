@@ -1,0 +1,18 @@
+name = "LkGlobal"
+version = "0.1.0"
+defaultTargets = ["LkGlobal", "lkglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); LkTax = the 1.x model, vendored from cmp20/world/B11-south-asia/lk/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "LkTax"
+
+[[lean_lib]]
+name = "LkGlobal"
+
+[[lean_exe]]
+name = "lkglobal"
+root = "LkGlobal.Main"

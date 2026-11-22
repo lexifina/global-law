@@ -1,0 +1,77 @@
+{
+ "cc": "CF",
+ "name": "Central African Republic",
+ "dated": "CGI édition officielle mise à jour 2023 (DGID); LF 2025 pages 1-60 (no change found to these articles)",
+ "sources": "Sources: Code général des impôts, édition officielle mise à jour 2023 (`cmp20/world/B08-central-africa-fr/cf/law/cgi2023.txt`); LF 2025 OCR pages 1-60 (`lf2025.ocr1-60.txt`).",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée",
+  "standard": 1900,
+  "reduced": 500,
+  "classes": {},
+  "grade": "B",
+  "statute": "CGI art. 257 (taux général 19 %, réduit 5 %, 0 %)",
+  "doc": "art. 257: \"Le taux général de 19%, le taux réduit de 5% et le taux 0% s'appliquent à une base calculée hors TVA\"; the 5 % list (milk and cream of heading 04.01 …) sits in the food line. Exemptions not read.",
+  "notes": [
+   "CGI art. 257: the 5 % list of staples (milk, …) is inside the food line, taxed at 19 %; exemptions not read"
+  ],
+  "unsupported": [
+   "exemptions not read",
+   "5 % list inside the food line"
+  ]
+ },
+ "excise": {
+  "status": "unsupported",
+  "name": "Droits d'accises",
+  "statute": "CGI art. 292-293",
+  "why": "CGI art. 292: \"Les montants et taux des droits d'accises sont fixés par la loi de finances\"; the LF 2025 pages available (1-60 OCR) do not hold the table",
+  "tried": "lf2025.ocr1-60.txt, cgi2023.txt"
+ },
+ "cit": {
+  "name": "Impôt sur les sociétés",
+  "rate": 3000,
+  "grade": "B",
+  "statute": "CGI art. 133 (30 %; 20 % agriculture)",
+  "lossFull": -1,
+  "doc": "art. 133: \"Le taux de l'impôt est fixé à 30%, mais il est réduit à 20% pour les activités agricoles. Cependant, le montant de l'impôt dû par chaque personne morale ne peut être inférieur au minimum obtenu par application des taux au chiffre d'affaires\" (art. 133 bis rates not read). art. 130: losses carried forward \"jusqu'au troisième exercice qui suit l'exercice déficitaire\".",
+  "notes": [
+   "CGI art. 133: minimum on turnover (rates in art. 133 bis not read): not applied",
+   "CGI art. 130: losses carry forward 3 years (age not an input)"
+  ],
+  "unsupported": [
+   "minimum tax rates",
+   "loss age"
+  ]
+ },
+ "wht": {
+  "name": "Retenues sur paiements à l'étranger",
+  "grade": "B",
+  "statute": "CGI 2017 édition officielle mise à jour 2023 art. 166 bis 1 (15 % final on services paid abroad; 15 % on capital income); art. 52 e and art. 84 (IRCM 15 % on capital income paid to persons domiciled abroad)",
+  "doc": "art. 166 bis 1: \"en ce qui concerne les revenus des capitaux mobiliers, la retenue à la source est effectuée au taux de 15% des revenus bruts distribués. S'agissant des rémunérations des prestations de services versées à l'étranger et sous réserve des conventions internationales, le taux de la retenue est de 15%. Cette retenue constitue pour le redevable un prélèvement libératoire\"; services include \"les travaux d'études, de recherches, et d'expertises ... les prestations de professions libérales\" and assimilated \"livraisons de biens meubles incorporels (brevets, marques etc.)\". Art. 52 e: capital income paid to persons without domicile or seat in the CAR bears a final IRPP withholding at the art. 84 rate; art. 84: \"application de 15% du montant brut des revenus distribués\".",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "CGI art. 166 bis 1 (15 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "CGI art. 166 bis 1 (patents, trademarks assimilated to services: 15 %)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "CGI art. 52 e, 84 (15 %)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "CGI art. 52 e, 84 (15 %)"
+   }
+  ],
+  "notes": [
+   "grade B: 2023 edition of the CGI; LF 2025 pages 1-60 held with no change to these articles found"
+  ],
+  "unsupported": []
+ }
+}

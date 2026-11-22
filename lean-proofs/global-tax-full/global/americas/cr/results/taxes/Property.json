@@ -1,0 +1,37 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Inheritance, gift and wealth taxes",
+  "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Costa Rica (DSD_REV_LAC@DF_REVCRI v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/CRI.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+  "dated": "OECD Revenue Statistics detailed table for Costa Rica (DSD_REV_LAC@DF_REVCRI v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/CRI.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table for Costa Rica (DSD_REV_LAC@DF_REVCRI v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/CRI.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+  ],
+  "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)"
+ },
+ {
+  "oecd": "5200",
+  "tax": "Impuesto a la propiedad de vehículos automotores (marchamo), período 2025",
+  "statute": "Ley 7088 art. 9 (as reformed by Ley 10390 of 2 Oct 2023), SINALEVI version 36 of 16 Sep 2024 (`cr/law/ley7088_sinalevi_v144138.json`; tables are images, `cr/law/img36/`, read by OCR and checked by eye)",
+  "dated": "SINALEVI version 36 (16 Sep 2024): Decreto 44658 tramos; devengo 30 Sep 2024 (art. 9 d) ii); fetched 2026-11-21 pass 15",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily"
+  ],
+  "unsupported": [
+   "value read as the value before depreciation",
+   "age from first registration year (law: model year)",
+   "first registrations of 2025, electric vehicles (Ley 9518), taxis and heavy goods not computed"
+  ]
+ }
+]

@@ -1,0 +1,22 @@
+name = "MgGlobal"
+version = "0.1.0"
+defaultTargets = ["MgGlobal", "mgglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); MgTax = the 1.x model, vendored from cmp20/world/B08-central-africa-fr/mg/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "MgTax"
+
+[[lean_lib]]
+name = "MgGlobal"
+
+[[lean_exe]]
+name = "mgglobal"
+root = "MgGlobal.Main"

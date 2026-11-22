@@ -1,0 +1,83 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Imposta sul valore aggiunto",
+  "statute": "DPR 633/1972 art. 16 (22 %; 4, 5, 10 % per tabella A parti II, II-bis, III); art. 10 (esenzioni)",
+  "dated": "Normattiva vigente al 2025-07-01",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "food at 10 % (tabella A parte III); bread, milk, fresh produce and other parte II items are 4 %: tabella A not read item by item",
+   "no VAT registration threshold (the regime forfettario is an income-tax regime, not modelled)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Accisa sui prodotti energetici (benzina, gasolio carburante)",
+  "statute": "D.Lgs. 504/1995 All. I; DM 14 maggio 2025 art. 1-2",
+  "dated": "normattiva vigente 2025-07-01; two periods (to 14.5.2025: 728,40 / 617,40; from 15.5.2025: 713,40 / 632,40 EUR per 1 000 l)",
+  "grade": "A",
+  "kernel_parts": [
+   "ExciseRule (validFrom/validTo, kernel 2.1)"
+  ],
+  "unsupported": [
+   "GPL, metano, heating uses",
+   "D.Lgs. 43/2025 2026 changes (outside 2025)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Accisa sui tabacchi lavorati (sigarette)",
+  "statute": "D.Lgs. 504/1995 art. 39-octies c. 3, 10; All. I Tabacchi lavorati c)",
+  "dated": "normattiva vigente 2025-07-01 (29,50 EUR / 1 000 'a decorrere dall'anno 2025')",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRule (specific + ad valorem + minimum)"
+  ],
+  "unsupported": [
+   "onere fiscale minimo (c. 6-8) needs the PMP-sigarette",
+   "other tobacco products"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Accisa sulla birra",
+  "statute": "D.Lgs. 504/1995 All. I; L. 234/2021 art. 1 c. 986 [year in force 2025 (pass 18), unchanged-confirmed: D.Lgs. 504/1995 in the normattiva text vigente al 1.7.2025 (it/law/tua504_akn20250701.*): the notes to All. I list the last change of the beer rate as L. 234/2021 art. 1 c. 986 (as amended): 2,99 euro per hl and degree Plato from 1.1.2024, no later change to D.Lgs. 43/2025; L. 207/2024 (normattiva, vigente 1.7.2025, it/law/l207_2024_vig20250701.*) art. 1 c. 72-73 touch only the reduced rates of art. 35 (small breweries)]",
+  "dated": "normattiva TUA vigente al 1.7.2025 (2,99 from 1.1.2024; no 2025 change); L. 207/2024 c. 72-73 (art. 35 only)",
+  "grade": "A",
+  "kernel_parts": [
+   "ExciseRule (per degree Plato, kernel 2.1)"
+  ],
+  "unsupported": [
+   "small breweries"
+  ],
+  "yif18": "unchanged-confirmed"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Accisa sul vino",
+  "statute": "D.Lgs. 504/1995 All. I (Vino: lire zero)",
+  "dated": "normattiva vigente 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [],
+  "status": "rate zero (cited)",
+  "unsupported": []
+ },
+ {
+  "oecd": "5121",
+  "tax": "Accisa sull'alcole etilico",
+  "statute": "D.Lgs. 504/1995 (TUA) art. 32-33 e allegato I (alcole etilico), rate as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ }
+]

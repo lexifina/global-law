@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "see the pass 11 entry below for disposals",
+   "other income kinds"
+  ]
+ },
+ {
+  "tax": "Impuesto sobre ganancias de capital (15 %)",
+  "statute": "Ley 7092 arts. 28 bis, 30, 30 bis, 31 ter (Ley 9635)",
+  "dated": "SINALEVI version 83 (includes Ley 10600 of Nov 2024)",
+  "grade": "A",
+  "unsupported": [
+   "losses (art. 31 bis)",
+   "valuation floors for real estate and unlisted shares"
+  ],
+  "oecd": "1100",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ]
+ }
+]

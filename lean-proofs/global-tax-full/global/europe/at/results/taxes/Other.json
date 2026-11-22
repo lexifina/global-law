@@ -1,0 +1,75 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "Kommunalsteuer and Dienstgeberbeitrag recorded under payroll; Stabilitätsabgabe (banks)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVAUT v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/AUT.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6000 administration duties 279,5, other fees and taxes on production n.e.c. 331,6, other taxes 88,2, stamp fees 44,5, students' association contributions 16,5, Vienna tree-protection levy 6,6 million EUR (2024); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "minor here: Kommunalsteuer and Dienstgeberbeitrag are payroll (P4); Stabilitätsabgabe is banks only",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 10: motorbezogene Versicherungssteuer (cars) and NoVA (cars) modelled; motorcycles, vans, lorries (Kraftfahrzeugsteuer) not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 10: motorbezogene Versicherungssteuer (cars) and NoVA (cars) modelled; motorcycles, vans, lorries (Kraftfahrzeugsteuer) not modelled",
+  "unsupported": [
+   "would unlock: VersStG § 6 (1) Z 1, 3 (motorcycles, N1); KfzStG 1992 (vehicles above 3,5 t); NoVAG § 6 (1) (motorcycles)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Motorbezogene Versicherungssteuer",
+  "statute": "Versicherungssteuergesetz 1953 § 6 (1) Z 2, (2)",
+  "dated": "RIS, Fassung vom 1. Juli 2025 (`at/law/versstg_2025-07-01.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "cars first registered after 2025, cars of 2021-2025 without WLTP CO2 (lit. d), motorcycles, vans, lorries",
+   "5200 motorbezogene Versicherungssteuer: a car first registered in 2020 is taken under lit. b (before 1 October 2020)",
+   "5200 motorbezogene Versicherungssteuer: annual payment of the premium assumed (§ 6 (3) surcharges of 6-10 % not applied); the 6,20 EUR monthly minimum is booked as 74 EUR a year"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Normverbrauchsabgabe",
+  "statute": "Normverbrauchsabgabegesetz 1991 § 6 (2), (4), (7)",
+  "dated": "RIS, Fassung vom 1. Juli 2025 (`at/law/novag_2025-07-01.txt`); § 6 (7) identical in the Fassung vom 31.12.2025 (`at/law/novag_2025-12-31.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "cars without CO2 (§ 6 (6) cylinder-capacity rule not modelled), motorcycles, vans",
+   "5200 NoVA: the vehicle's value is taken as the net price (Bemessungsgrundlage, NoVAG § 5); a used car imported and first registered in Austria is taxed on the same table"
+  ]
+ },
+ {
+  "oecd": "6000",
+  "tax": "Kirchenbeitrag (katholische, evangelische, altkatholische Kirche)",
+  "statute": "Gesetz über die Erhebung von Kirchenbeiträgen im Lande Österreich, GBlÖ Nr. 543/1939, § 1 (the churches are entitled to levy Kirchenbeiträge under contribution rules they issue) and § 3 (1)-(2) (the contributions are fixed and collected by the churches; civil courts; state approval), RIS open data NOR40006928, NOR40006930 (Gesetzesnummer 10009211, fetched 2026-11-22, `at/law/kibg_1939_p1.xml`, `at/law/kibg_1939_p3.xml`)",
+  "dated": "2025 (texts as cited)",
+  "grade": "R",
+  "status": "reclassified",
+  "reclass": "not a tax (OECD guide § 6): the churches fix and collect the contribution themselves; claims are enforced in the civil courts; the state only approves the contribution rules",
+  "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+  "law": "Gesetz über die Erhebung von Kirchenbeiträgen im Lande Österreich, GBlÖ Nr. 543/1939, § 1 (the churches are entitled to levy Kirchenbeiträge under contribution rules they issue) and § 3 (1)-(2) (the contributions are fixed and collected by the churches; civil courts; state approval), RIS open data NOR40006928, NOR40006930 (Gesetzesnummer 10009211, fetched 2026-11-22, `at/law/kibg_1939_p1.xml`, `at/law/kibg_1939_p3.xml`)",
+  "evidence_grade": "A",
+  "kernel_parts": [],
+  "unsupported": [],
+  "gap": 5
+ }
+]

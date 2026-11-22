@@ -1,0 +1,244 @@
+{
+ "country": "RS",
+ "name": "Serbia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:33:29"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Zakon o porezu na dohodak građana čl. 72-72a",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/RsGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Porez na dodatu vrednost",
+   "statute": "Zakon o porezu na dodatu vrednost čl. 23 st. 1 (20 %), st. 2 t. 1-21 (10 %); čl. 25 (oslobođenja); čl. 33 (8.000.000 dinara)",
+   "dated": "official consolidation, version of čl. 23 in force from 1.7.2018 to 2026 (pravno-informacioni-sistem.rs via lexifina/serbia-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food at 10 % (čl. 23 st. 2: bread, milk, flour, sugar, oils ...); other food 20 %",
+    "books: monographic and serial publications and textbooks at 10 % (čl. 23 st. 2 t. 7, 9) taken as all books"
+   ],
+   "yif16": "downgraded",
+   "yif17": "upgraded",
+   "gap": 6,
+   "family_file": "lean/RsGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Zakon o akcizama",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/RsGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Porez na dobit pravnih lica",
+   "statute": "Zakon o porezu na dobit pravnih lica čl. 39 (15 %) [year in force 2025 (pass 16), re-cited 2025: paragraf.rs text captured by the Internet Archive 2025-06-24 (rs/law/pdpl_wb20250624.*): čl. 39 \"iznosi 15%\", word for word the text used]",
+   "dated": "official consolidation in force in 2025 (via lexifina/serbia-law, commit a90dae4616)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "porez na dobit po odbitku (čl. 40, 20 %) not modelled",
+    "loss carry-forward (5 years) not modelled"
+   ],
+   "yif16": "re-cited 2025",
+   "gap": 6,
+   "family_file": "lean/RsGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad",
+   "statute": "Zakon o porezu na dobit pravnih lica čl. 40 (20 %; 25 % to listed tax havens)",
+   "dated": "Zakon o porezu na dobit pravnih lica čl. 40 st. 1 (20 %), st. 5 (25 % to preferential-tax jurisdictions), version in force in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "gap": 6,
+   "family_file": "lean/RsGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Porez po odbitku (usluge) (services)",
+   "statute": "Zakon o porezu na dobit pravnih lica čl. 40 (withholding)",
+   "dated": "Zakon o porezu na dobit pravnih lica čl. 40 st. 1 (20 % on market research, accounting, audit and other legal and business consulting services), version in force in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as the listed consulting/audit services; the 25 % tax-haven rate is not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "gap": 6,
+   "family_file": "lean/RsGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/RsGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/RsGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "porez na imovinu (Beograd)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "porez na imovinu: rates set by each local government within the Zakon o porezima na imovinu ranges; Beograd decision not read"
+   ],
+   "family_file": "lean/RsGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Porez na prenos apsolutnih prava",
+   "statute": "Zakon o porezima na imovinu čl. 25 st. 1 (the seller pays), čl. 27 (contract price, not below market value), čl. 30 (2,5 %) [year in force 2025 (pass 16), unchanged-confirmed: rs/law/zpi.txt (Paragraf, fetched 2026-11-21): the act's amendment list ends at 94/2024 (applied from 2025); no 2025 or 2026 amendment]",
+   "dated": "consolidated to Sl. glasnik RS 94/2024 (paragraf.rs)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge on Disposal (seller-borne)"
+   ],
+   "unsupported": [
+    "market-value floor on the base",
+    "čl. 31 exemptions",
+    "used vehicles"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/RsGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Доприноси за обавезно социјално осигурање на терет послодавца (ПИО 10 %, здравство 5,15 %)",
+   "statute": "Закон о доприносима за обавезно социјално осигурање чл. 13 ст. 1, чл. 44 ст. 2 т. 1-2, ст. 3",
+   "dated": "versions in force in 2025: чл. 44 of 1.1.2023 (unchanged until 2026), чл. 13 of 1.2.2025 (official consolidation, pravno-informacioni-sistem.rs, via lexifina/serbia-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "maximum monthly base (чл. 42: five times the average wage; 2025 amount not read): not applied",
+    "minimum monthly base (чл. 37: 35 % of the average wage) not applied",
+    "чл. 45 refunds for new employees not applied"
+   ],
+   "gap": 1,
+   "family_file": "lean/RsGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "none recorded",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/RsGlobal/Wealth.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4300",
+   "tax": "Porez na nasleđe i poklon",
+   "statute": "Zakon o porezima na imovinu čl. 19 (second order of succession 1,5 %; third and further, unrelated 2,5 %), čl. 21 tač. 1) and 5)-5a) (first order, spouse, parent and public-benefit foundations exempt) [year in force 2025 (pass 16), unchanged-confirmed: as RS9: no amendment after 94/2024 in the copy fetched 2026-11-21]",
+   "dated": "consolidated to Sl. glasnik RS 94/2024 (paragraf.rs)",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "čl. 21 tač. 2)-3) (second-order heir: farm assets or one flat after a year in the same household) and the other exemptions not applied; the base is market value less debts (čl. 14: the input value stands in); a parent's gift is taxed at 1,5 % (only the deceased's parent is exempt), taken as exempt here"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/RsGlobal/Wealth.lean",
+   "family_guards": 8
+  }
+ ],
+ "grades": {
+  "A": 7,
+  "B": 0,
+  "C": 6
+ },
+ "guards": 27,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

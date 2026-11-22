@@ -1,0 +1,18 @@
+name = "BdGlobal"
+version = "0.1.0"
+defaultTargets = ["BdGlobal", "bdglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); BdTax = the 1.x model, vendored from cmp20/world/B11-south-asia/bd/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "BdTax"
+
+[[lean_lib]]
+name = "BdGlobal"
+
+[[lean_exe]]
+name = "bdglobal"
+root = "BdGlobal.Main"

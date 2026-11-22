@@ -1,0 +1,59 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: trafikkforsikringsavgift (cars, vans, motorcycles) and engangsavgift on new electric cars modelled; engangsavgift on combustion-engine cars (NOx is not an input attribute), vektårsavgift and omregistreringsavgift not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: trafikkforsikringsavgift (cars, vans, motorcycles) and engangsavgift on new electric cars modelled; engangsavgift on combustion-engine cars (NOx is not an input attribute), vektårsavgift and omregistreringsavgift not modelled",
+  "unsupported": [
+   "would unlock: the car's NOx mg/km (engangsavgift § 3 a 2) and a rule for negative CO2 deductions below 70 g/km; Stortingsvedtak om vektårsavgift and om omregistreringsavgift 2025"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Trafikkforsikringsavgift",
+  "statute": "Stortingsvedtak om avgift på trafikkforsikringer for 2025 (FOR-2024-12-13-3212) § 1, § 2",
+  "dated": "Lovdata (`no/law/stv_tfa2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "tractors, mopeds, motor equipment and other groups",
+   "5200 trafikkforsikringsavgift: the insurance contract is taken as renewed on 1 January 2025 (column 'fra 1. mars 2024 t.o.m. februar 2025' all year); a renewal from March 2025 gives the lower last column (grade C for the split)",
+   "5200 trafikkforsikringsavgift: a diesel vehicle is taken as having a factory-fitted particle filter (group a, not b)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Engangsavgift på motorvogner",
+  "statute": "Stortingsvedtak om engangsavgift på motorvogner mv. for 2025 (FOR-2024-12-13-3211) § 2, § 3, § 5",
+  "dated": "Lovdata (`no/law/stv_engangs2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "new cars with a combustion engine (§ 3 needs NOx), other groups",
+   "5200 engangsavgift: massKg is read as the egenvekt; the bruksfradrag for a used import (§ 4) is not applied"
+  ]
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000) (none levied)",
+  "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVNOR v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/NOR.csv`, SHA256SUMS; general government S13; 2025 not yet published): heading 6000 total 0 in 2021-2024",
+  "dated": "OECD Revenue Statistics 2021-2024 (2025 not yet published); no 6000 tax known in the national law read",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": [],
+  "gap": 2
+ }
+]

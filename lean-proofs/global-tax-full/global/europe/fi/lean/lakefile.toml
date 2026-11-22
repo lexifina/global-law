@@ -1,0 +1,18 @@
+name = "FiGlobal"
+version = "0.1.0"
+defaultTargets = ["FiGlobal", "figlobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); FiTax = the 1.x model, vendored from cmp20/baltic/fi/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "FiTax"
+
+[[lean_lib]]
+name = "FiGlobal"
+
+[[lean_exe]]
+name = "figlobal"
+root = "FiGlobal.Main"

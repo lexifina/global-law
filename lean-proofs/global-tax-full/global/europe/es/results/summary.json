@@ -1,0 +1,388 @@
+{
+ "country": "ES",
+ "name": "Spain",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:59"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Ley 35/2006 del IRPF arts. 33-38, 46, 49, 66",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/EsGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto sobre el Valor Añadido",
+   "statute": "Ley 37/1992 arts. 20 Uno, 90, 91 [year in force 2025 (pass 16), unchanged-confirmed: es/law/liva.txt redacción lists: art. 90 last changed 15/07/2012; art. 91 changed from 1.1.2025 (Dos.1.1º, RDL 4/2024, Ley 7/2024), next changes RDL 26/2026 and 29/2026 with effect 1.12.2026 (not yet in the text read); art. 20 changed only in 2026 (1.23º e'), effect 1.12.2026): the 2025 wording is the text read]",
+   "dated": "BOE consolidado; art. 91 in its 2025 wording (Ley 7/2024, RDL 4/2024 from 1.1.2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "4 % basic foods not separated from food",
+    "recargo de equivalencia, régimen simplificado"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto sobre Hidrocarburos (petrol, diesel)",
+   "statute": "Ley 38/1992 art. 50.1 epígrafes 1.2.2, 1.3; epígrafe 1.4 (gasóleo combustible) [year in force 2025 (pass 16), unchanged-confirmed: es/law/liiee.txt redacción list for art. 50: no version between 07/10/2018 and 22/03/2026; the 2026 changes (RDL 7/2026 from 22.3.2026, RDL 18/2026 and 25/2026 by month) are after 2025; 1.2.2 400,69 + 72 and 1.3 307 + 72 EUR / 1 000 l as read]",
+   "dated": "BOE consolidado (unchanged since 2013)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate"
+   ],
+   "unsupported": [
+    "regional refunds, professional diesel refund"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto sobre las Labores del Tabaco (cigarettes)",
+   "statute": "Ley 38/1992 art. 60.1 epígrafe 2 [year in force 2025 (pass 16), unchanged-confirmed: es/law/liiee.txt: last redacción en vigor 01/01/2025 (Ley 7/2024 DF 2.9), none after]",
+   "dated": "BOE consolidado; Ley 7/2024 from 1.1.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (minimum)"
+   ],
+   "unsupported": [
+    "cigars, fine-cut, other tobacco"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto sobre el Alcohol y Bebidas Derivadas",
+   "statute": "Ley 38/1992 art. 39 [year in force 2025 (pass 16), unchanged-confirmed: es/law/liiee.txt: last redacción en vigor 30/06/2013 (RDL 7/2013 ... RDL 3/2016 note), none in 2024-2026]",
+   "dated": "BOE consolidado",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol)"
+   ],
+   "unsupported": [
+    "productos intermedios (art. 32)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto sobre la Cerveza",
+   "statute": "Ley 38/1992 art. 26 [year in force 2025 (pass 16), unchanged-confirmed: es/law/liiee.txt: last redacción en vigor 17/01/2005 (Ley 2/2004; RDL 12/2005)]",
+   "grade": "A",
+   "status": "not modelled (kernel input: degree Plato)",
+   "kernel_parts": [],
+   "unsupported": [
+    "per hl and degree Plato"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre Sociedades",
+   "statute": "Ley 27/2014 art. 29.1 (25 %), DT 44.ª 1 a) (2025: 21 % / 22 % microempresas), 1 b) (24 % entidades de reducida dimensión, art. 101: cifra de negocios < 10 millones), art. 26.1 (70 %, 1 millón), art. 21 (exención 95 %) [year in force 2025 (pass 16), unchanged-confirmed: es/law/lis.txt: art. 29 last redacción en vigor 22/12/2024; DT 44.ª added by Ley 7/2024 DF 8.8 for periods from 1.1.2025; no later note]",
+   "dated": "BOE consolidado (2025 rates by DT 44.ª)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "entidades de reducida dimensión (art. 101, turnover < 10 M): 24 % in 2025 not separated (25 % applied)",
+    "art. 26 limits for turnover ≥ 20 M (50 % / 25 %)",
+    "art. 16 interest limitation",
+    "DT 44.ª and art. 101 test the previous period's turnover: the line's turnover is used for it"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Corporate.lean",
+   "family_guards": 23
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la Renta de no Residentes (retención)",
+   "statute": "TRLIRNR art. 25.1 f): 19 por ciento; TRLIRNR art. 25.1 f): 19 por ciento; TRLIRNR art. 25.1 a): con carácter general el 24 por 100 [year in force 2025 (pass 16), unchanged-confirmed: es/law/trlirnr.txt: art. 25 last redacción en vigor 01/01/2015]",
+   "dated": "BOE consolidado (2025 rates by DT 44.ª)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "StateWht (2.4.0, recipient state)",
+    "StateWht (2.4.0, recipient state)"
+   ],
+   "unsupported": [
+    "treaty rates out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Corporate.lean",
+   "family_guards": 23
+  },
+  {
+   "oecd": "1200",
+   "tax": "IRNR retención (servicios) (services)",
+   "statute": "TRLIRNR (RDLeg. 5/2004) art. 13.1 b), 24.2, 25.1 a), 31 [year in force 2025 (pass 16), unchanged-confirmed: es/law/trlirnr.txt: art. 24 and 25 last redacción 01/01/2015, art. 31 01/01/2016; art. 13 block carries no 2024-2026 note]",
+   "dated": "BOE texto consolidado (`es/law/trlirnr.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "StateWht (2.4.0, recipient state)",
+    "StateWht (2.4.0, recipient state)"
+   ],
+   "unsupported": [
+    "services are taken as provided or used in Spain; the art. 24.2 net base is not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Corporate.lean",
+   "family_guards": 23
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes recorded by the registry",
+   "statute": "Impuesto sobre Actividades Económicas (TRLRHL arts. 78-91); temporary bank and energy levies (Ley 38/2022)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVESP v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/ESP.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6200 other taxes on production 160 million EUR (2024); not modelled",
+   "unsupported": [
+    "the statutes of the items named by the OECD table"
+   ],
+   "triage": "model for companies: IAE (TRLRHL arts. 78-91), exempt below EUR 1 m turnover; temporary bank and energy levies sector-only (minor)",
+   "gap_note": true,
+   "family_file": "lean/EsGlobal/Other.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 10: IEDMT (new cars, national rates) and IVTM (art. 95.1 tariff) modelled; IVTM municipal coefficient, IEDMT on used cars and other classes not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 10: IEDMT (new cars, national rates) and IVTM (art. 95.1 tariff) modelled; IVTM municipal coefficient, IEDMT on used cars and other classes not modelled",
+   "unsupported": [
+    "would unlock: the reference municipality's IVTM ordinance (coefficient, art. 95.4; bonificaciones, art. 95.6); the Orden HFP of average prices for used cars; autonomous IEDMT rates"
+   ],
+   "family_file": "lean/EsGlobal/Other.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Impuesto especial sobre determinados medios de transporte",
+   "statute": "Ley 38/1992 de Impuestos Especiales art. 65, 69 a), 70 [year in force 2025 (pass 16), unchanged-confirmed: es/law/iedmt_ley38_1992.txt: art. 65 last redacción 31/10/2013, art. 69 26/12/2008, art. 70 11/07/2021]",
+   "dated": "BOE texto consolidado, fetched 2026-11-21 (`es/law/iedmt_ley38_1992.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "cars without CO2 (epígrafe 4.º b) applies only where the measurement is required and not proven), motorcycles, other vehicles",
+    "5200 IEDMT: the vehicle's value is taken as the VAT base of its acquisition (art. 69 a)); a used car first registered in Spain (art. 69 b), market value) is not distinguished; Península rates (no Canarias, no autonomous rates)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Other.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Impuesto sobre vehículos de tracción mecánica",
+   "statute": "TRLRHL (RDLeg. 2/2004) art. 95.1 A) [year in force 2025 (pass 16), unchanged-confirmed: es/law/trlrhl.txt: art. 95 block carries no modification note (2004 text)]",
+   "dated": "BOE texto consolidado, fetched 2026-11-21 (`es/law/trlrhl.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "vehicles other than turismos (autobuses, camiones, tractores, remolques, ciclomotores y motocicletas)",
+    "5200 IVTM: the municipal coefficient (TRLRHL art. 95.4) and bonificaciones (art. 95.6) are not applied: the art. 95.1 tariff is booked (grade C for the municipal part)",
+    "5200 IVTM: part-year prorating is by quarters (art. 96.3), the model prorates by months"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Other.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "4400",
+   "tax": "Impuesto sobre Transmisiones Patrimoniales Onerosas (inmuebles)",
+   "statute": "TRLITPAJD art. 11.1 a) (6 %, tipo supletorio) [year in force 2025 (pass 16), unchanged-confirmed: es/law/itpajd.txt: art. 11 last redacción en vigor 01/01/2002]",
+   "dated": "BOE consolidado (current text with amendment notes)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "the Comunidad de Madrid's own rate (DLeg 1/2010, not reached) replaces the 6 % default; new dwellings sold by developers bear IVA + AJD instead (not separated)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "4100",
+   "tax": "Impuesto sobre Bienes Inmuebles (Madrid)",
+   "statute": "TRLRHL (RDLeg 2/2004) arts. 65, 71; Ordenanza Fiscal reguladora del IBI de Madrid arts. 3.2, 8.2 (modificación BOCM núm. 308, 27.12.2024)",
+   "dated": "ordinance amendment in force 1.1.2025 (BOCM-20241227-61); TRLRHL BOE consolidated text",
+   "grade": "B",
+   "kernel_parts": [
+    "charge (valor catastral x tipo)"
+   ],
+   "unsupported": [
+    "differentiated non-residential rates (art. 8.3) not read",
+    "base-liquidable reduction (TRLRHL arts. 66-70), bonificaciones, recargo on empty dwellings",
+    "valor catastral is an input (asset.assessed)"
+   ],
+   "family_file": "lean/EsGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contingencias comunes (empresa)",
+   "statute": "Orden PJC/178/2025: CC 23,60 % empresa; tope 4.909,50 €/mes",
+   "dated": "Orden PJC/178/2025 (2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/EsGlobal/Social.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "2200",
+   "tax": "Desempleo (empresa)",
+   "statute": "Orden PJC/178/2025: desempleo 5,50 % empresa",
+   "dated": "Orden PJC/178/2025 (2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/EsGlobal/Social.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "2200",
+   "tax": "Formación profesional (empresa)",
+   "statute": "Orden PJC/178/2025: FP 0,60 % empresa",
+   "dated": "Orden PJC/178/2025 (2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/EsGlobal/Social.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "2200",
+   "tax": "MEI (empresa)",
+   "statute": "Orden PJC/178/2025 art. 17 bis: MEI 0,67 % empresa",
+   "dated": "Orden PJC/178/2025 (2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/EsGlobal/Social.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4200",
+   "tax": "Impuesto sobre el Patrimonio (Comunidad de Madrid)",
+   "statute": "Ley 19/1991 arts. 4.Nueve, 28, 30.2; DLeg Madrid 1/2010 arts. 19, 20 [year in force 2025 (pass 16), re-cited 2025: LIP (es/law/lip.txt): art. 4 last 02/07/2022, art. 28 18/09/2011, art. 30 01/01/2021; Madrid arts. 19-20 read in the BOE versions published 30/12/2024, 27/06/2025 and 29/12/2025 (es/law/madrid_dleg1_2010_p20241230.txt, _p20250627, _p20251229): identical to the text used]",
+   "dated": "BOE consolidado; Madrid arts. 19-20 as published 30/12/2024, 27/06/2025 and 29/12/2025",
+   "grade": "A",
+   "kernel_parts": [
+    "WealthTax (homeExempt, allowance)"
+   ],
+   "unsupported": [
+    "límite conjunto (art. 31)",
+    "business exemptions (art. 4.Ocho)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/EsGlobal/Wealth.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "4200",
+   "tax": "Impuesto Temporal de Solidaridad de las Grandes Fortunas",
+   "statute": "Ley 38/2022 art. 3 [year in force 2025 (pass 16), unchanged-confirmed: es/law/ley38_2022.txt: art. 3 last redacción en vigor 29/12/2023]",
+   "dated": "BOE consolidado; prorrogued by RDL 8/2023 DA 5.2",
+   "grade": "A",
+   "kernel_parts": [
+    "WealthTax"
+   ],
+   "unsupported": [
+    "límite conjunto (apartado Doce)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/EsGlobal/Wealth.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "4300",
+   "tax": "Impuesto sobre Sucesiones y Donaciones (Comunidad de Madrid)",
+   "statute": "Ley 29/1987 arts. 20-22; DLeg Madrid 1/2010 arts. 21, 23, 24, 25 [year in force 2025 (pass 16), fixed: Madrid texts as published 30/12/2024, 27/06/2025 and 29/12/2025 (BOE redacciones, es/law/madrid_dleg1_2010_p20241230.*, _p20250627.*, _p20251229.*): arts. 21 Uno 1, 23 and 24 identical through 2025 (the current art. 21 is the Ley 3/2026 wording from 1.7.2026; its group amounts did not change); art. 25 changed on 1.7.2025 (Ley 2/2025): until 30.6.2025 group III had 25 % and only collaterals of the 2nd and 3rd degree by consanguinity (mortis causa and inter vivos), from 1.7.2025 50 % for all of group III. Now split by the transfer's \"date\": 25 % before 1.7.2025, 50 % from 1.7.2025 or when undated]",
+   "dated": "BOE consolidado; Madrid DLeg 1/2010 as published 30/12/2024 and 27/06/2025 (art. 25 from 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Charge (Madrid tarifa, coefficient, bonificaciones)"
+   ],
+   "unsupported": [
+    "patrimonio preexistente bands",
+    "gift accumulation (art. 30)",
+    "business and home reductions",
+    "art. 25 group III: 25 % for devengos to 30.6.2025, 50 % from 1.7.2025 (split by the transfer's date; an undated group III transfer: grade C, not charged)"
+   ],
+   "yif16": "fixed",
+   "family_file": "lean/EsGlobal/Wealth.lean",
+   "family_guards": 18
+  }
+ ],
+ "grades": {
+  "A": 16,
+  "B": 3,
+  "C": 3
+ },
+ "guards": 73,
+ "sorry": 0,
+ "cases": 9,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

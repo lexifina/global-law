@@ -1,0 +1,260 @@
+{
+ "country": "CY",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Έκτακτη εισφορά για την άμυνα (SDC) on extra incomes",
+   "statute": "SDC Law 117(Ι)/2002 s. 3(1)(α),(β),(δ)",
+   "dated": "cylaw consolidation as of 2025-11-07",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "household fields already charged by the 1.x model (surtaxes)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Φόρος Κεφαλαιουχικών Κερδών (CGT)",
+   "statute": "CGT Law 52/1980 s. 4, 5(1), 5(2)",
+   "dated": "cylaw archived 2025-04-19",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "CYP limits converted at 0,585274 (euro changeover rate, not read)",
+    "lifetime exemption taken as unused",
+    "cost indexation (s. 6)",
+    "shares of property companies"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Εταιρικός φόρος (corporate income tax)",
+   "statute": "ITL 118(Ι)/2002 s. 29(2), s. 8(20)",
+   "dated": "cylaw consolidation as of 2025-11-09 (15 % from 2026 by Law 244(Ι)/2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime (participation exemption)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "loss carry-forward (s. 13) not read",
+    "interest limitation (s. 11A) not read",
+    "SDC on foreign dividends",
+    "withholding: SDC s. 3(2)(a1)/(b1) 17 % to affiliated companies in low-tax / non-cooperative jurisdictions not applied (pass 3i)"
+   ],
+   "withholding": {
+    "grade": "A",
+    "rules": "royalty 10 %, services (technical assistance) 10 %: ITL s. 21, 24; dividend 0 % (ITL s. 8(20); SDC s. 3(2)(a) residents only); interest 0 % (ITL s. 8(19); SDC s. 3(2)(b))",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding on royalties (non-residents)",
+   "statute": "ITL s. 21",
+   "dated": "as above",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "5 % on film rentals (s. 21) not modelled"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Κοινωνικές Ασφαλίσεις και ΓεΣΥ (employer)",
+   "statute": "SIL 59(Ι)/2010 art. 5(1)(στ); GHS Law 89(Ι)/2001 art. 19(1)(β)",
+   "dated": "cylaw as of 2025-09-12; GHS law (1.x folder)",
+   "grade": "B",
+   "kernel_parts": [
+    "R5Common.employerOn"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "8,8 % applied (actuarial proviso; 8,9 % printed)",
+    "Social Cohesion Fund, redundancy, HRDA"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Χαρτόσημο (stamp duty on contracts)",
+   "statute": "Stamp Duty Law 19/1963 First Schedule",
+   "dated": "cylaw consolidation (latest amendment 154(Ι)/2019); pass 3q year-in-force audit: re-cited: amendment history ends at 168(Ι)/2024 in the cylaw capture of 16/07/2025 (Wayback; the earlier 'latest 154(Ι)/2019' was wrong); the 2025 reform abolishing stamp duty applies from 2026",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (banded, per started thousand, capped)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "Land Registry transfer fees (Cap. 219)"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Φόρος Προστιθέμενης Αξίας (VAT)",
+   "statute": "VAT Law 95(Ι)/2000 art. 17, 18, 18Α, 18Β; Fifth, Seventh, Twelfth, Fifteenth Schedules; First Schedule (€15.600)",
+   "dated": "cylaw consolidation including Law 104(Ι)/2025 (archived copy); pass 3q year-in-force audit: fixed: the cited text is a 2026 consolidation (to ΚΔΠ 103/2026); against the cylaw capture of 05/12/2024 and the 2025 orders (ΚΔΠ 159, 205, 278, 337, 364/2025; Law 104(Ι)/2025 definitions): household electricity is not in the Twelfth Schedule in 2025 (back only from 1/4/2026): 19 %, not 9 %; other rates and items unchanged",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat (four rate classes)"
+   ],
+   "guards": 5,
+   "unsupported": [
+    "medicines taxed at 19 % (no schedule entry found)",
+    "transport at 5 % (buses); taxis 9 %",
+    "natural gas taken at the 5 % LPG rate"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Ειδικός φόρος κατανάλωσης (excise)",
+   "statute": "Excise Duties Law 91(Ι)/2004 First (incl. item 7 heating gas oil €74,73, FT review third pass), Second, Third Schedules",
+   "dated": "cylaw consolidation, latest amendment 16(Ι)/2024 (archived copy); pass 3q year-in-force audit: re-cited: amendment history ends at 16(Ι)/2024 in the cylaw capture of 22/01/2026: unchanged in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Excise (pure alcohol, mixed specific + ad valorem with minimum)"
+   ],
+   "guards": 5,
+   "unsupported": [
+    "cigars, fine-cut and heated tobacco per kg",
+    "intermediate products (€45/100 l)",
+    "small-brewery beer rate (€3)"
+   ]
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4100",
+   "why": "4100: national immovable property tax abolished: Immovable Property Tax Law 24/1980 s. 27 (inserted by 86(I)/2016): the obligation to levy the tax 'από την 1η Ιανουαρίου 2017 ... καταργείται' (cylaw consolidated text, Wayback 2025-10-09, law/cylaw_1980_1_24_ipt_cap20251009.html); municipal and community immovable property fees not read (registry map for those); grade B",
+   "source": "statute",
+   "grade": "B"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance or gift tax: the Estate Duty Law 67/1962 (which also reached gifts deemed to pass on death) is repealed for persons who died on or after 1 January 2000 by Law 74(I)/2000 art. 2 ('Ο βασικός νόμος καταργείται σε σχέση με πρόσωπα που απεβίωσαν κατά ή μετά την 1η Ιανουαρίου 2000'; OG 3413 of 16/06/2000; cylaw Wayback 2022-02-20 of nomoi/arith/2000_1_074.pdf, law/cylaw_2000_1_074.pdf); the estate of a person dying after that date owes only the taxes listed by Law 78(I)/2000 (income tax, SDC, immovable property tax, capital gains); no separate gift tax law found; grade A",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Constitution of the Republic of Cyprus (1960) art. 24(2): no contribution by way of tax, duty or rate of any kind whatsoever shall be imposed save by or under the authority of a law (Constitute Project English text, law/cp_Cyprus_2013.txt); no law levies it; tax laws read: ITL 118(I)/2002, SDC Law 117(I)/2002, CGT Law 52/1980, Stamp Duty Law 19/1963, VAT Law 95(I)/2000, Excise Duties Law 91(I)/2004, Law 74(I)/2000 (estate duty repealed). convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "6000",
+   "why": "6000: no zakat or other tax outside the taxes listed: Constitution of the Republic of Cyprus (1960) art. 24(2): no contribution by way of tax, duty or rate of any kind whatsoever shall be imposed save by or under the authority of a law (Constitute Project English text, law/cp_Cyprus_2013.txt); no law levies it; tax laws read: ITL 118(I)/2002, SDC Law 117(I)/2002, CGT Law 52/1980, Stamp Duty Law 19/1963, VAT Law 95(I)/2000, Excise Duties Law 91(I)/2004, Law 74(I)/2000 (estate duty repealed). convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "cy-h1",
+   "total": 36660,
+   "byOecd": {
+    "1100": 25728,
+    "2100": 4580,
+    "2200": 4680,
+    "5111": 683,
+    "5121": 989
+   },
+   "borne": {
+    "consumer": 1672,
+    "employer": 4680,
+    "entity": 30308,
+    "withheld": 0
+   },
+   "net": 133692,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "CGT: the lifetime exemption is taken as unused; cost indexation (s. 6) not applied",
+    "employer: Social Cohesion Fund, redundancy and HRDA levies not modelled"
+   ]
+  },
+  {
+   "id": "cy-c1",
+   "total": 281750,
+   "byOecd": {
+    "1200": 53750,
+    "5111": 228000
+   },
+   "borne": {
+    "consumer": 228000,
+    "employer": 0,
+    "entity": 43750,
+    "withheld": 10000
+   },
+   "net": 356250,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "Special Defence Contribution on dividends received from abroad (Law 117(Ι)/2002) not modelled"
+   ]
+  },
+  {
+   "id": "cy-w1",
+   "total": 52500,
+   "byOecd": {
+    "1100": 20000,
+    "1200": 32500
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 12500,
+    "withheld": 40000
+   },
+   "net": 87500,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": []
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 25,
+ "theorems": 1
+}

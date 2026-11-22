@@ -1,0 +1,78 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Sales tax",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "not reached: tried world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "no sales-tax law is held: Law No. 37 of 2025 is the Income Tax Law (modelled under 1200) and the 2020 'Xeerarka Maaliyadda' is the public financial management regulation; the archived mof.gov.so PDFs hold only the 2020 customs tariff and valuation book"
+  ],
+  "tried": "world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so"
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excises",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "not reached: tried world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "no excise text for 2025 is held (only the 2020 customs tariff schedule on mof.gov.so, not read)"
+  ],
+  "tried": "world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so"
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Income tax on corporations",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Law No. 37 of 2025 (Income Tax Law) First Schedule art. 3 (rate of income tax for corporations: 15 % flat); art. 4 (1): Somali permanent establishments at the same rate",
+  "dated": "Income Tax Law (Sharciga Canshuurta Dakhliga), Law No. 37 of 11 May 2025, in force on the President's signature (art. 106); the previous law applies only to tax years ending before that date (art. 105 (3) (b)), so the 2025 tax year falls under Law 37",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": []
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Withholding tax on Somali-source payments (Law 37/2025 art. 91-92)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Law No. 37 of 2025 art. 91 (investment returns) and 92 (1) (t) (service fees paid to non-residents), rates in First Schedule art. 5 (1) (t) and (j): dividends 5 %, interest 10 %, royalties 15 %, service fees 10 %",
+  "dated": "Income Tax Law (Sharciga Canshuurta Dakhliga), Law No. 37 of 11 May 2025, in force on the President's signature (art. 106); the previous law applies only to tax years ending before that date (art. 105 (3) (b)), so the 2025 tax year falls under Law 37",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "finality of the withholding for non-residents (art. 94 not read)"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Employer social security contributions",
+  "statute": "not reached: tried SSPTW Africa 2019 (no Somalia page answered via Wayback), Somali law texts held for PIT/CIT",
+  "dated": "-",
+  "unsupported": [
+   "no contributory social-insurance law found for Somalia; absence not citable from a source reached"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "SSPTW Africa 2019 (no Somalia page answered via Wayback), Somali law texts held for PIT/CIT"
+ }
+]

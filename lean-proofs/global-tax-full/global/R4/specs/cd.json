@@ -1,0 +1,139 @@
+{
+ "cc": "CD",
+ "name": "DR Congo",
+ "dated": "Code des impôts 2023 (DGI) and the 2023 ordinance-laws held; 2024-2025 finance laws not held: grade B",
+ "sources": "Sources: Code des impôts 2023 (`cmp20/world/B08-central-africa-fr/cd/law/CODE-DES-IMPOTS-2023.txt`). Pass 11: Code des accises (Ordonnance-loi n° 18/002 du 8 mars 2018) from droitcongolais.info (file 621.03.18-Code-des-accises.pdf, R4/fetch/cd11, SHA256SUMS); finance laws 2019-2025 not read for later changes.",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée",
+  "standard": 1600,
+  "classes": {},
+  "grade": "B",
+  "statute": "Ordonnance-loi TVA art. 35 (taux normal 16 %) [text version: Ordonnance-loi TVA as printed in the DGI Code des impôts, édition 2023 (texts in force to 2023); the finance laws for 2024 and 2025 not held (flag)]",
+  "doc": "TVA art. 35: \"les taux de la taxe sur la valeur ajoutée sont les suivants : taux normal : 16% applicable à toutes les opérations imposables à l'exclusion des opérations soumises au taux\" réduit / zéro (lists not read). Exemptions not read.",
+  "notes": [
+   "DR Congo: Code des impôts 2023; reduced 8 % list and exemptions not read"
+  ],
+  "unsupported": [
+   "reduced rate list",
+   "exemptions",
+   "2024-2025 finance laws"
+  ]
+ },
+ "excise": {
+  "name": "Droits d'accises",
+  "grade": "B",
+  "statute": "Code des accises (Ordonnance-loi n° 18/002 du 8 mars 2018) art. 28 (rates); base art. 25-27 (value before excise and VAT); finance laws 2019-2025 not read (flag) [text version: Ordonnance-loi n° 18/002 du 8 mars 2018 as published (droitcongolais.info file 621.03.18, R4/fetch/cd11); finance laws 2019-2025 not read (flag)]",
+  "doc": "art. 28: '17) bières de malt: i. d'un titre alcoométrique volumique excédant 0,5 % vol titrant moins de 6° 24 %; ii. ... titrant 6° et plus 28 %; 18) boissons à base de jus de fruits ou de légumes, limonades et autres boissons sucrées, aromatisées ou non: 10 %; 22) cigares ... cigarillos et cigarettes ...: 60 %; 31) eaux de vie, liqueurs et autres boissons spiritueuses: 80 %; 33) essences ... gasoils ...: i. essences et gasoils et autres produits: 25 %; 75) vins de raisins frais, y compris les vins enrichis en alcool: 45 %'.",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Droits d'accises bières de malt (< 6°)",
+    "maxAbvBp": 599,
+    "advBp": 2400,
+    "vatBp": 1600,
+    "statute": "art. 28 17) i.: 24 %"
+   },
+   {
+    "good": "beer",
+    "name": "Droits d'accises bières de malt (6° et plus)",
+    "minAbvBp": 599,
+    "advBp": 2800,
+    "vatBp": 1600,
+    "statute": "art. 28 17) ii.: 28 %"
+   },
+   {
+    "good": "wine",
+    "name": "Droits d'accises vins",
+    "advBp": 4500,
+    "vatBp": 1600,
+    "statute": "art. 28 75): 45 %"
+   },
+   {
+    "good": "spirits",
+    "name": "Droits d'accises boissons spiritueuses",
+    "advBp": 8000,
+    "vatBp": 1600,
+    "statute": "art. 28 31): 80 %"
+   },
+   {
+    "good": "nonAlcoholic",
+    "name": "Droits d'accises boissons sucrées",
+    "advBp": 1000,
+    "vatBp": 1600,
+    "statute": "art. 28 18): 10 %"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Droits d'accises cigarettes",
+    "advBp": 6000,
+    "vatBp": 1600,
+    "statute": "art. 28 22): 60 %"
+   },
+   {
+    "good": "petrol",
+    "name": "Droits d'accises essences",
+    "advBp": 2500,
+    "vatBp": 1600,
+    "statute": "art. 28 33) i.: 25 %"
+   },
+   {
+    "good": "diesel",
+    "name": "Droits d'accises gasoils",
+    "advBp": 2500,
+    "vatBp": 1600,
+    "statute": "art. 28 33) i.: 25 %"
+   }
+  ],
+  "notes": [
+   "fuel prices in the DRC are administered (structure des prix): the region's ad valorem convention (value before excise and VAT) is applied",
+   "the 'titrant 6°' threshold is read as 6 % vol",
+   "mineral waters 5 %, other non-alcoholic drinks 15 % not separated"
+  ]
+ },
+ "cit": {
+  "name": "Impôt professionnel sur les bénéfices",
+  "rate": 3000,
+  "step": 1,
+  "grade": "B",
+  "statute": "Code des impôts 2023, Ordonnance-loi 69/009 art. 83 (30 %, as amended to LF 18/025)",
+  "doc": "art. 83: \"Le taux de l'impôt professionnel est fixé à 30% sur les bénéfices et profits des personnes morales et physiques soumises au régime de droit commun. Le taux de l'impôt professionnel est fixé à 14% sur les sommes payées en rémunération des prestations de services de toute nature fournies par des personnes physiques ou morales non établies en République Démocratique du Congo.\" Code des impôts 2023 edition; LF 2024-2025 not held: grade B.",
+  "notes": [
+   "art. 83: 30 %; minimum tax and loss rules not read"
+  ],
+  "unsupported": [
+   "minimum tax",
+   "loss rules"
+  ]
+ },
+ "wht": {
+  "name": "Impôt professionnel sur les prestations des non-résidents",
+  "grade": "B",
+  "statute": "Ordonnance-loi 69/009 art. 83 al. 2 (14 %); twelfth pass: Code des impôts 2023, Livre I IIe partie art. 13 1°, art. 26 (impôt mobilier 20 %); Code des impôts 2023, Livre I IIe partie art. 13 3°, art. 26 (impôt mobilier 20 % on interest on capital borrowed by DRC companies); Code des impôts 2023, Livre I IIe partie art. 13 8°, art. 26 (20 % of the net royalty; charges fixed at 30 % of the gross absent evidence: 14 % of the gross) [text version: DGI Code des impôts, édition 2023 (texts in force to 2023); the finance laws for 2024 and 2025 not held (flag)]",
+  "doc": "art. 83 al. 2 (see the CIT entry): 14 % on payments for services of any kind supplied by persons not established in the DRC. Twelfth pass (kernel 2.3.0 grade-C withholding): dividend 20 %: Code des impôts 2023, Livre I IIe partie art. 13 1°, art. 26 (impôt mobilier 20 %); interest 20 %: Code des impôts 2023, Livre I IIe partie art. 13 3°, art. 26 (impôt mobilier 20 % on interest on capital borrowed by DRC companies); royalty 14 %: Code des impôts 2023, Livre I IIe partie art. 13 8°, art. 26 (20 % of the net royalty; charges fixed at 30 % of the gross absent evidence: 14 % of the gross)",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1400,
+    "statute": "art. 83 al. 2 (14 %)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 2000,
+    "statute": "Code des impôts 2023, Livre I IIe partie art. 13 1°, art. 26 (impôt mobilier 20 %)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 2000,
+    "statute": "Code des impôts 2023, Livre I IIe partie art. 13 3°, art. 26 (impôt mobilier 20 % on interest on capital borrowed by DRC companies)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1400,
+    "statute": "Code des impôts 2023, Livre I IIe partie art. 13 8°, art. 26 (20 % of the net royalty; charges fixed at 30 % of the gross absent evidence: 14 % of the gross)"
+   }
+  ],
+  "unsupported": [
+   "royalties taxed on the net amount (gross less 30 % flat charges, art. 13 8°)"
+  ]
+ }
+}

@@ -1,0 +1,35 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "SDSS contributions (employer: SFS, SVDS, SRL)",
+  "statute": "TSS FAQ no. 13 table (rates); Ley 87-01 arts. 57, 143 and CNSS Res. 151-10 as recited in TSS Resoluciones 01-2024 and 01-2025 (caps)",
+  "dated": "TSS Res. 01-2024 (signed Feb 2024, from 1 Feb 2024) and Res. 01-2025 (11 Mar 2025, from 1 Apr 2025), Wayback copies of tss.gob.do/assets; pass 9, 2026-11-21",
+  "grade": "B",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "SRL risk factor taken at the minimum",
+   "annual cap = sum of monthly caps (even monthly pay assumed)"
+  ]
+ },
+ {
+  "oecd": "3000",
+  "tax": "INFOTEP 1 % (employer)",
+  "statute": "Ley 116-80 art. 24 a): \"El uno por ciento (1%) que sobre el monto total de las planillas de sueldos o salarios fijos que paguen mensualmente las empresas y entidades privadas\"",
+  "dated": "Ley 116-80, Gaceta Oficial 9522 of 20 Jan 1980 (UNESCO SITEAL copy of the G.O. text); no amending act found; pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "worker 0.5 % on profit shares and bonuses (art. 24 b) not modelled",
+   "public non-profit employers outside: employer taken as private"
+  ]
+ }
+]

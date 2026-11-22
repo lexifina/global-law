@@ -1,0 +1,34 @@
+{"GA": [
+ {"package": "P7", "oecd": "5200", "kind": "licence", "fam": "patente", "grade": "B",
+  "name": "Contribution des patentes, stated profession: architect or design office employing more than 2 persons, Libreville / Port-Gentil (tableau A, class 3, 170 000 F)",
+  "statute": "CGI 2025 art. 252-253 and the tariff annexed under art. 271 (tableau A)",
+  "doc": "art. 253: the patente is a fixed duty set by the general tariff for the professions of tableau A, or the exceptional tariff of tableaux B and C; the annexed tariff gives, for 'Architecte ou Bureau d'études (tenant un) — employant plus de 2 personnes', tableau A, class 3, 170 000 F (Libreville or Port-Gentil column). Every company line is taken to carry on that profession in one establishment in Libreville.",
+  "unsupported": ["the trade of the company is not in the input: one stated profession is applied to every company", "other towns' columns and other professions (tableaux A, B, C)", "one fixed duty per establishment (art. 256)"],
+  "lic": {"tiers": [], "top": [0, 170000, 170000]},
+  "tests": [{"turnover": 500000000, "expect": [170000]}, {"turnover": 5000000000, "rv": 30000000, "expect": [170000]}]}
+],
+"KM": [
+ {"package": "P7", "oecd": "5200", "kind": "licence", "fam": "patente", "grade": "B", "replaces": "^Other notable taxes \\(patente",
+  "name": "Contribution des patentes, stated profession: wholesale general-merchandise trader in a capital of the islands (150 000 F + 1/10 of rental value + 30 % communal centime)",
+  "statute": "CGI 2022 (updated to 1 January 2022) art. 165-166, 171, 179, 193 (L.F. 2021) and the annexed tariff ('Marchandises générales (Marchand de) — en gros'); LF 2023-2025 not checked",
+  "doc": "art. 165: the patente is a fixed duty and a proportional duty under the annexed tariff; art. 166: the fixed duty is set by the activity and reduced by 20 % outside the islands' capitals; art. 171: the proportional duty is on the rental value of the premises; tariff: general-merchandise trader, wholesale, fixed duty 150 000 FC, proportional duty 10e (one tenth of the rental value); art. 193 (L.F. 2021): a communal additional centime of 30 % on the patente. Every company line is taken to be such a trader in Moroni.",
+  "unsupported": ["the trade of the company is not in the input: one stated profession is applied to every company", "20 % reduction of the fixed duty outside the islands' capitals (art. 166)", "retail traders 50 000 FC and the other activities of the tariff"],
+  "lic": {"tiers": [], "top": [0, 150000, 150000], "rentPpm": 100000, "surchargePpm": 300000},
+  "tests": [{"turnover": 1000000000, "rv": 10000000, "expect": [150000, 1000000, 345000]}, {"turnover": 1000000000, "rv": 0, "expect": [150000, 45000]}]},
+ {"package": "P7", "oecd": "5200", "kind": "vehicle", "fam": "vignette", "grade": "B",
+  "name": "Vignette automobile et droit de stationnement (vehicles up to 5 years old, by fiscal horsepower, + 1 000 FC parking duty)",
+  "statute": "CGI 2022 art. 432 (L.F. 2019); LF 2023-2025 not checked",
+  "doc": "art. 432: vehicles up to 5 years old 0-5 CV 9 000 FC, 6-9 CV 12 000, 10-12 CV 18 000, 12 CV and more 22 500 (6-10 years: 6 000 / 9 000 / 12 000 / 18 000; 11-20 years: 3 000 / 6 000 / 9 000 / 12 000), and a parking duty of 1 000 FC per car, added here to each amount. The vehicle's age is not in the input: vehicles are taken to be at most 5 years old.",
+  "unsupported": ["older vehicles' columns (6-10 and 11-20 years)", "motorcycles 2 000-3 000 FC (art. 433)"],
+  "bands": [[5, 10000], [9, 13000], [12, 19000]], "top": 23500,
+  "tests": [{"hps": [9, 12, 13], "expect": [13000, 19000, 23500]}, {"hps": [4], "company": true, "expect": [10000]}]}
+],
+"TD": [
+ {"package": "P7", "oecd": "5200", "kind": "vehicle", "fam": "tvs", "grade": "B",
+  "name": "Taxe sur les véhicules de tourisme et breaks des sociétés (by fiscal horsepower)",
+  "statute": "CGI 2016 art. 199 (LF 2023, the DGI circular on LF 2024 and LF 2025 checked: art. 199 not amended)",
+  "doc": "art. 199 I: passenger cars and estate cars belonging to companies up to 7 CV 80 000 F, above 7 and up to 11 CV 120 000 F, above 11 CV 160 000 F; II: cars more than 5 years old at the balance-sheet date are reduced by 50 %, those over 10 years exempt. Households' cars are outside this tax (nil tariff here).",
+  "unsupported": ["50 % reduction for cars over 5 years and exemption over 10 years (age not in the input: cars taken as at most 5 years old)", "taxe pour la protection de l'environnement on vehicle owners (art. 200-202)"],
+  "bands": [], "top": 0, "companyBands": [[7, 80000], [11, 120000]], "companyTop": 160000,
+  "tests": [{"hps": [9, 12], "company": true, "expect": [120000, 160000]}, {"hps": [9], "expect": [0]}]}
+]}

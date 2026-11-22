@@ -1,0 +1,228 @@
+{
+ "country": "FM",
+ "name": "Micronesia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:29:32"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "No tax on individuals' interest, dividends or capital gains (cited absence)",
+   "statute": "FSMC Title 54 ch. 1 §§ 112, 141 (2014 codification)",
+   "dated": "2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "the national income tax charges wages and salaries and business gross revenues only; state taxes not read"
+   ],
+   "family_file": "lean/FmGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5112",
+   "tax": "Pohnpei State sales tax (first commercial sale: 25 % alcohol and tobacco, 2 % fuel and food, 7 % vehicles, 5 % other merchandise)",
+   "statute": "Code of the State of Pohnpei (2012 edition) Title 12 ch. 2, 12 PC 2-101 to 2-103",
+   "dated": "not modelled (session 11 year-in-force audit: Pohnpei Code 2012 edition (advance copy) and FSM Code 2014 codification, later public laws not read; no 2025 version reached: grade C)",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "session 11 year-in-force audit: Pohnpei Code 2012 edition (advance copy) and FSM Code 2014 codification, later public laws not read; no 2025 version reached: grade C"
+   ],
+   "family_file": "lean/FmGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5120",
+   "tax": "FSM national import duties (cigarettes 25 %, other tobacco 50 %, soft drinks, beer, wine 25 %, spirits $10/gallon, fuel 5 c/gallon)",
+   "statute": "FSM Code (2014 edition) Title 54 ch. 2 § 221 (PL 9-139 § 9)",
+   "dated": "not modelled (session 11 year-in-force audit: Pohnpei Code 2012 edition (advance copy) and FSM Code 2014 codification, later public laws not read; no 2025 version reached: grade C)",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "session 11 year-in-force audit: Pohnpei Code 2012 edition (advance copy) and FSM Code 2014 codification, later public laws not read; no 2025 version reached: grade C"
+   ],
+   "family_file": "lean/FmGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value added tax",
+   "statute": "FSM Code Title 54 (no VAT)",
+   "grade": "B",
+   "status": "not levied",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FmGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5113",
+   "tax": "Tax on gross revenues",
+   "statute": "FSMC Title 54 § 141",
+   "dated": "FSMC 2014",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "state taxes"
+   ],
+   "family_file": "lean/FmGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Major corporations tax (54 FSMC § 321: 21 % / 25 % / 30 %)",
+   "statute": "54 FSMC ch. 3 § 321 as amended by Public Law No. 21-09 (2019); §§ 325, 352 (PL 23-23, PL 20-158)",
+   "dated": "2025: PL 21-09 (approved 5 July 2019; taxable years ending from 31 March 2020), read in lexifina/micronesia-law; gap-closing fix: the earlier cited absence of a profits tax was wrong",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "only companies flagged majorCorporation (ch. 3 definition not read)",
+    "later amendments of § 321 not excluded (repository holds part of the public laws)"
+   ],
+   "family_file": "lean/FmGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200/1100",
+   "kernel_parts": [
+    "Wht",
+    "Absent"
+   ],
+   "unsupported": [
+    "state taxes not read"
+   ],
+   "tax": "No withholding tax on payments abroad (cited)",
+   "statute": "FSMC Title 54 ch. 1 §§ 121, 131, 141 (2014 codification)",
+   "dated": "2014 codification (fsmlaw.org)",
+   "grade": "A",
+   "family_file": "lean/FmGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property (partly)",
+   "statute": "state-level only",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): "
+   ],
+   "family_file": "lean/FmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties): not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Social security employer tax 7.5 % (to $9,000 a quarter)",
+   "statute": "FSMC Title 53 §§ 603 (15), 902",
+   "dated": "2014 codification (ceiling of 2023 scheduled in it)",
+   "grade": "A",
+   "kernel_parts": [
+    "Family"
+   ],
+   "unsupported": [
+    "quarterly ceiling taken as $36,000 a year"
+   ],
+   "family_file": "lean/FmGlobal/Social.lean",
+   "family_guards": 2
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 8,
+  "C": 3
+ },
+ "guards": 14,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

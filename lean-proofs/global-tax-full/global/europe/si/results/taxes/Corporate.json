@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Davek od dohodkov pravnih oseb",
+  "statute": "ZORZFS (Uradni list RS 131/2023) 64. člen (1): 22 % for 2024-2028, notwithstanding ZDDPO-2 60. člen [year in force 2025 (pass 17), re-cited 2025: PwC Slovenia, Corporate - Taxes on corporate income, Internet Archive 2025-05-27 (si/law/pwc_cit_wb20250527.*): the reconstruction law raised the rate to 22 % for 2024-2028, as modelled]",
+  "dated": "ZORZFS (Uradni list RS 131/2023) 64. člen; PwC Slovenia CIT page, Internet Archive 2025-05-27",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "loss offset limit (63 % of the base, ZDDPO-2) and the investment and R&D reliefs not modelled"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad",
+  "statute": "ZDDPO-2 70. člen (15 %)",
+  "dated": "PwC WWTS Corporate - Withholding taxes, 2025-06-17 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Davčni odtegljaj (storitve) (services)",
+  "statute": "ZDDPO-2 čl. 70 (withholding on services)",
+  "dated": "2025-06-17",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "services are taken as paid to a state not on the low-tax list",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

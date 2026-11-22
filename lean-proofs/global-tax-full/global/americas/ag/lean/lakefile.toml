@@ -1,0 +1,22 @@
+name = "AgGlobal"
+version = "0.1.0"
+defaultTargets = ["AgGlobal", "agglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); AgTax = the 1.x model, vendored from cmp20/world/B15-no-pit/ag/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AgTax"
+
+[[lean_lib]]
+name = "AgGlobal"
+
+[[lean_exe]]
+name = "agglobal"
+root = "AgGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

@@ -1,0 +1,22 @@
+name = "MwGlobal"
+version = "0.1.0"
+defaultTargets = ["MwGlobal", "mwglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); MwTax = the 1.x model, vendored from cmp20/world/B09-southern-africa/mw/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "MwTax"
+
+[[lean_lib]]
+name = "MwGlobal"
+
+[[lean_exe]]
+name = "mwglobal"
+root = "MwGlobal.Main"

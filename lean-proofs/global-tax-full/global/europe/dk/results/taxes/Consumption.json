@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Merværdiafgift (moms)",
+  "statute": "Momsloven (LBK nr 209 af 27/02/2024) § 33 (25 pct.); § 13 (fritagelser); § 48, stk. 1 (50.000 kr.) [year in force 2025 (pass 17), re-cited 2025: PwC Denmark, Corporate - Other taxes, Internet Archive 2025-06-15 (dk/law/pwc_corpother_wb20250615.*): general rate 25 %, as modelled]",
+  "dated": "LBK nr 209 af 27/02/2024; PwC Denmark other taxes, Internet Archive 2025-06-15",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Øl- og vinafgiftsloven § 1-2, spiritusafgiftsloven § 1, tobaksafgiftsloven § 2, mineralolieafgiftsloven § 1 and CO2-afgiftsloven § 1, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "still wine 6-15 % vol; petrol with 9.8 % bio content and sulphur-free gas oil with 6.8 % biodiesel; fuel rates are energy tax + CO2 tax",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties whose 2025 rate changed during the year (petrol, diesel, heatingOil)",
+  "statute": "Øl- og vinafgiftsloven § 1-2, spiritusafgiftsloven § 1, tobaksafgiftsloven § 2, mineralolieafgiftsloven § 1 and CO2-afgiftsloven § 1; TEDB situations 1.1, 1.7 and 31.12.2025",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: the TEDB record 4066 carries no change date for 2025 (only the CO2 phase-in from 2025); lexifina/denmark-law shows no 2025 change to the mineral-oil tax act in its log (gas and coal duties only); the 1.1 to 1.7 jump (diesel 3 545 -> 4 208 DKK) is not explained by a text read",
+  "unsupported": [
+   "would unlock: the day the rate changed, from the act or decree (then dated kernel 2.1 ExciseRule rules, validFrom / validTo, as IT fuel)"
+  ],
+  "gap_note": true
+ }
+]

@@ -1,0 +1,22 @@
+name = "BwGlobal"
+version = "0.1.0"
+defaultTargets = ["BwGlobal", "bwglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); BwTax = the 1.x model, vendored from cmp20/world/B09-southern-africa/bw/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "BwTax"
+
+[[lean_lib]]
+name = "BwGlobal"
+
+[[lean_exe]]
+name = "bwglobal"
+root = "BwGlobal.Main"

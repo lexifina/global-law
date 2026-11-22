@@ -1,0 +1,58 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "Podatek od niektórych instytucji finansowych (bank tax 0.0366 %/month); podatek od sprzedaży detalicznej",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVPOL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/POL.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6200 1 670 million PLN (2023), 55 559 (2024; unnamed); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "minor here: bank tax and retail sales tax are sector taxes",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: akcyza on passenger cars (5121, new registrations) and podatek od środków transportowych (cars, motorcycles, vans cited as not taxable) modelled; lorries, buses and trailers not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: akcyza on passenger cars (5121, new registrations) and podatek od środków transportowych (cars, motorcycles, vans cited as not taxable) modelled; lorries, buses and trailers not modelled",
+  "unsupported": [
+   "would unlock: ustawa o podatkach i opłatach lokalnych art. 10 with the reference municipality's 2025 resolution (rates within the ministerial maxima)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Akcyza od samochodów osobowych",
+  "statute": "Ustawa o podatku akcyzowym art. 100 ust. 1, 104 ust. 1, 105, 109a ust. 1, 163a ust. 1",
+  "dated": "tekst jednolity Dz. U. 2025 poz. 126 (`pl/law/akcyza_tj2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "vehicles other than passenger cars, cars without engine size (an electric car needs none)",
+   "5121 akcyza: the vehicle's value is taken as the art. 104 base (price net of VAT and excise, or the amount paid abroad); a car first registered in Poland in the year is taken as not yet registered there (art. 100 ust. 1)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Podatek od środków transportowych",
+  "statute": "Ustawa o podatkach i opłatach lokalnych art. 8",
+  "dated": "tekst jednolity Dz. U. 2025 poz. 707 (`pl/law/upol_tj2025_707.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "lorries, tractor units, trailers and buses (taxable at the municipality's rates, not modelled)"
+  ]
+ }
+]

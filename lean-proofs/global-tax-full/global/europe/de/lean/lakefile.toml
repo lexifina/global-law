@@ -1,0 +1,19 @@
+name = "DeGlobal"
+version = "0.1.0"
+defaultTargets = ["DeGlobal", "deglobal"]
+
+# Kernel-2.0 pilot for Germany (cmp20/global/DESIGN.md §8). DeTax = the 1.x model (cmp/de/lean), vendored; its
+# Main.lean is DeTax/Legacy.lean with `main` renamed `legacyMain`.
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "DeTax"
+
+[[lean_lib]]
+name = "DeGlobal"
+
+[[lean_exe]]
+name = "deglobal"
+root = "DeGlobal.Main"

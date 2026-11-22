@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Podatek od czynności cywilnoprawnych (sprzedaż nieruchomości)",
+  "statute": "ustawa o PCC art. 7 ust. 1 pkt 1 lit. a (2 %) [year in force 2025 (pass 17), re-cited 2025: PwC Poland, Corporate - Other taxes, Internet Archive 2025-06-23: sale of real estate taxed at 2 % of market value (first-home exemption since 2023 and the 6 % rate from the sixth flat since 2024 noted there), as modelled]",
+  "dated": "t.j. Dz.U. 2024 poz. 295; PwC Poland other taxes, Internet Archive 2025-06-23",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "sales subject to VAT (new dwellings from developers) are outside PCC (art. 2 pkt 4): not separated; 2025 amendments not checked; the 6 % rate for multiple dwellings not modelled"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "4100",
+  "tax": "Podatek od nieruchomości",
+  "statute": "Ustawa z 12 stycznia 1991 r. o podatkach i opłatach lokalnych (Dz.U. 2023 poz. 70 ze zm.): the council sets the rates by resolution, at most (2025): 1,19 zł per m² of usable area of residential buildings, 0,73 zł per m² of other land",
+  "dated": "Act on local taxes and charges as applicable 2025 (maximum rates indexed for 2025); EC Taxes in Europe Database (TEDB), tax 461, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rates declared: Warsaw's 2025 resolution was not reached",
+   "buildings used for business (at most 34,00 zł/m²), business land (1,38 zł/m²) and structures (2 %): not modelled; a business rate is flagged",
+   "the land under a home is not part of the home asset: give it as a land asset with its area"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rates are inputs: localRates.propertyTax (residential buildings, zł/m²), propertyTaxLand (zł/m²)"
+ }
+]

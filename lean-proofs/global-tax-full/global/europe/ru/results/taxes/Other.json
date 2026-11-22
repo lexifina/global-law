@@ -1,0 +1,28 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Taxes on use of goods (motor vehicle taxes)",
+  "statute": "the country's motor-vehicle tax act",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "not read in the P7 pass",
+  "unsupported": [
+   "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+  ],
+  "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "Transport tax (НК гл. 28, regional), mineral extraction tax (гл. 26)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "the registry's row (background, not a read text); not modelled",
+  "unsupported": [
+   "would unlock: the statutes named in the registry row"
+  ],
+  "triage": "obsolete placement: transport tax belongs to 5200; mineral extraction tax is sector-only (minor)"
+ }
+]

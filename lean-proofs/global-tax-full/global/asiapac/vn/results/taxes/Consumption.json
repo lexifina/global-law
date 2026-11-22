@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Thuế giá trị gia tăng",
+  "statute": "Law 48/2024/QH15 Điều 5, 9; Resolution 204/2025/QH15 art. 1 (1) (as quoted in the official consolidation); first half: Law 13/2008 + Resolution 174/2024 (own period, B)",
+  "dated": "consolidation 12/VBHN-VPQH (provisions in force from 1 July 2025)",
+  "grade": "B",
+  "kernel_parts": [
+   "DatedVat (kernel 2.1)"
+  ],
+  "unsupported": [
+   "H1 2025 under Law 13/2008 and Resolution 174/2024 not read",
+   "the household-business threshold of Điều 5 khoản 25 (2025 wording replaced in 2026)",
+   "credit method vs direct method"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Thuế tiêu thụ đặc biệt (petrol, cigarettes, beer, spirits, wine); thuế bảo vệ môi trường (petrol, diesel, kerosene)",
+  "statute": "Luật Thuế tiêu thụ đặc biệt 27/2008/QH12 as amended (VBHN 08/VBHN-VPQH, Công báo 931+932/2022) Điều 6, Điều 7; Luật Thuế bảo vệ môi trường 57/2010/QH12; Nghị quyết 60/2024/UBTVQH15 Điều 1 khoản 1",
+  "dated": "SCT law in force to 31 Dec 2025 (no amendment after Law 03/2022: next consolidation 111/VBHN-VPQH is of Law 66/2025, from 2026); EPT resolution 1 Jan-31 Dec 2025 (repealed from 2026 by NQ 109/2025)",
+  "grade": "A",
+  "status": "modelled",
+  "kernel_parts": [
+   "ExciseRule (.beforeTax base, custom SCT charge)"
+  ],
+  "unsupported": [
+   "SCT base read from the retail price net of VAT and EPT; the statute's base is the producer's or importer's selling price (Điều 6 khoản 1-2)",
+   "EPT on E5/E10 on the nominal petrol share (95 % / 90 %)",
+   "cut tobacco, cigars, cars, motorcycles and SCT services not modelled"
+  ]
+ }
+]

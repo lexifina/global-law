@@ -1,0 +1,33 @@
+S = {'cc': 'LT', 'fam': 'Consumption', 'family_name': '5111 Pridėtinės vertės mokestis', 'doc': '# LT 2025: Pridėtinės vertės mokestis (5111); excises not modelled in this pass\n\nSource: Pridėtinės vertės mokesčio įstatymas, e-seimas consolidated edition "nuo 2023-05-01 iki 2025-04-30" as captured by the Internet Archive on 2025-01-21 (`lt/law/pvm_ed20230501_wb20250121.html`); the 2025-05-01 and later 2025 editions are not archived; sha256 in `law/SHA256SUMS`.\n* 2 str. 32 d.: "Standartinis PVM tarifas – 21 procento PVM tarifas."\n* 19 str. 3 d.: "Lengvatinis 9 procentų PVM tarifas taikomas: 1) šilumos energijai, tiekiamai gyvenamosioms patalpoms šildyti ...; 2) spausdintoms ir elektroninėms knygoms ...; 3) ... apgyvendinimo paslaugoms; 4) keleivių vežimo ... reguliariais reisais" (items 6, 8, 9 ended in 2023)\n* 19 str. 4 d.: "Lengvatinis 5 procentų PVM tarifas taikomas: 1) vaistams, medicinos pagalbos priemonėms ...; 3) spausdintiems ir (arba) elektroniniams laikraščiams, žurnalams ..."\n* 71 str. 2 d.: registration when supplies over the last 12 months exceed the limit: "neviršijo 45 000 eurų"\n', 'vat': {'name': 'Pridėtinės vertės mokestis', 'standard': 2100, 'threshold': 45000, 'statute': 'PVM įstatymas (IX-751) 2 str. 32 d. (21 %), 19 str. 1, 3, 4 d. (9 %, 5 %), 71 str. 2 d. (45 000 eurų)', 'classes': {'health': 'exempt', 'education': 'exempt', 'financial': 'exempt', 'insurance': 'exempt', 'rent': 'exempt', 'books': 'reduced', 'hotels': 'reduced', 'transport': 'reduced', 'medicines': 'superReduced', 'newspapers': 'superReduced'}, 'reduced': 900, 'superReduced': 500}, 'notes': ['LT 5111: consolidated edition 2023-05-01 to 2025-04-30 (later 2025 editions not reached)'], 'unsupported': [('g.consumption.any (fun s => s.good == .health || s.good == .education || s.good == .rent || s.good == .financial || s.good == .insurance)', "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item"), ('!g.consumption.isEmpty', 'the edition read ends on 2025-04-30: changes from 2025-05-01 not checked'), ('g.consumption.any (fun s => s.good == .medicines)', '5 % only for reimbursed and prescription medicines; others 21 %'), ('g.consumption.any (fun s => s.good == .petrol || s.good == .diesel || s.good == .cigarettes || s.good == .beer || s.good == .wine || s.good == .spirits)', 'excise (Akcizų įstatymas (not read)) not modelled in this pass')], 'guards': ['vat.embedded { good := .clothing, amount := 12100 } == 2100', 'vat.embedded { good := .books, amount := 10900 } == 900', 'vat.embedded { good := .medicines, amount := 10500 } == 500', 'vat.net { turnover := 45000, sales := [{ good := .other, net := 45000 }] } == 0'], 'taxes': [{'oecd': '5111', 'tax': 'Pridėtinės vertės mokestis', 'statute': 'PVM įstatymas (IX-751) 2 str. 32 d. (21 %), 19 str. 1, 3, 4 d. (9 %, 5 %), 71 str. 2 d. (45 000 eurų)', 'dated': 'consolidated edition 2023-05-01 to 2025-04-30 (later 2025 editions not reached)', 'grade': 'A', 'kernel_parts': ['Vat'], 'unsupported': ["exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item", 'the edition read ends on 2025-04-30: changes from 2025-05-01 not checked', '5 % only for reimbursed and prescription medicines; others 21 %']}, {'oecd': '5121', 'tax': 'Excise duties', 'statute': 'Akcizų įstatymas (not read)', 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'unsupported': ["not read in the P1 pass: would unlock with the act's 2025 rate articles"]}]}
+
+# ---- pass 17 (R1 Europe, 2026-11-21): kernel 2.7.0 items, audit follow-ups (tools/p17_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+p17_rows(S)
+p6_finish(S)
+
+# ---- gap pass (R1 Europe, 2026-11-21): gap-closing pass (tools/pgap_rows.py, tools/gap_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/pgap_rows.py")).read())
+pgap_rows(S)
+p6_finish(S)

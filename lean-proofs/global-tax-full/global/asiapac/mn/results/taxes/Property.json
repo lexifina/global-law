@@ -1,0 +1,44 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Үл хөдлөх эд хөрөнгийн албан татвар (immovable property tax)",
+  "statute": "Үл хөдлөх эд хөрөнгийн албан татварын тухай хууль (legalinfo.mn /mn/detail/39, amendments to 2024-06-05 noted) arts. 4.1, 5.1, 6.1, 7.1.2, 8.1",
+  "dated": "consolidation with amendment notes to 2024-06-05; UB resolution 123 in force from 2024-01-01",
+  "grade": "A",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "two dwellings in the capital exempt (art. 7.1.2): cited 0",
+   "other real estate and land: the Khural's rate from localRates.propertyTax (kernel 2.8.0 LocalTax, range 0.6-2.0 %); no declared Ulaanbaatar rate: grade C without the input",
+   "a third or later dwelling: grade C",
+   "land (art. 5.2, 7.2 reliefs) not modelled"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "State stamp duty on notarised real estate contracts (0.05 %)",
+  "statute": "Улсын тэмдэгтийн хураамжийн тухай хууль (2010; legalinfo.mn lawId=515, read in lexifina/mongolia-law law/2010/515, consolidated text with amendment notes) art. 9.1.2",
+  "dated": "2025: consolidated text, no amendment note on 9.1.2; read in lexifina/mongolia-law (gap-closing session: C -> A)",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "0.03 % between spouses, children and parents not distinguished",
+   "booked on the buyer (the law names no payer)"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Securities transaction tax: not levied",
+  "statute": "R3 registry, registry/ASIA_PACIFIC.json (stt: exists N)",
+  "dated": "2025",
+  "grade": "B",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": [],
+  "status": "not levied"
+ }
+]

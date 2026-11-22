@@ -1,0 +1,232 @@
+{
+ "country": "LK",
+ "name": "Sri Lanka",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:33:06"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "WHT on dividends (final)",
+   "statute": "IRA 2017 s. 84A (1A); First Schedule para. 10 (1) (d) (v) (Act No. 45 of 2022 s. 33 (6))",
+   "dated": "2025: IRD consolidated text incorporating amendments up to 31 March 2025 (Act No. 2 of 2025): 15 % in Y/A 2024/25 and 2025/26 (no split); session 12 year in force",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "s. 84A (1A) advance income tax booked as final (credit against the year's tax not read)"
+   ],
+   "family_file": "lean/LkGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1100",
+   "tax": "Capital gains tax",
+   "statute": "IRA 2017 First Schedule para. 1 (2) (a) (gains from the realisation of investment assets, 10 %)",
+   "dated": "2025: IRD consolidated text incorporating amendments up to 31 March 2025: para. 1 (2) (a) 10 % unamended, the same in Y/A 2024/25 and 2025/26 (no split); session 12 year in force",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "principal residence exemption"
+   ],
+   "family_file": "lean/LkGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value added tax (18 %)",
+   "statute": "Value Added Tax Act, No. 14 of 2002 s. 2 (1) (ix), s. 10 (viii), First Schedule Part III (as amended by Act No. 4 of 2025)",
+   "dated": "IRD consolidated text to 2025 (26 Dec 2025) with effective dates; rate from 1 Jan 2024, Part III for taxable periods from 1 Jan 2024; Act No. 4 of 2025 read",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "partial exemptions (food, prescription medicines, public transport, life insurance) applied by whole class"
+   ],
+   "family_file": "lean/LkGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5113",
+   "tax": "Social Security Contribution Levy (2.5 % of the liable turnover)",
+   "statute": "Social Security Contribution Levy Act, No. 25 of 2022 ss. 2, 3, 4 (1) (c), 5 (1) (c), First and Second Schedules, as amended by Acts No. 15 of 2023, No. 15 of 2024 and No. 24 of 2025",
+   "dated": "2025: Act No. 25 of 2022 with Act No. 15 of 2024 (registration Rs 60 million from 2024) and Act No. 24 of 2025 (exemptions deemed from 18 Feb and 1 Jul 2025), read in lexifina/sri-lanka-law (official source parliament.lk); gap-closing session: C -> A; reclassified 5126 -> 5113 (OECD Interpretative Guide §63: multi-stage cumulative turnover tax)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "liable share by company.sector only (manufacturing 85 %, wholesale/retail 50 %, telecom/tourism 100 %); other sectors grade C",
+    "First Schedule exemptions not applied",
+    "imports by the company not in the facts"
+   ],
+   "family_file": "lean/LkGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duty",
+   "statute": "Excise (Special Provisions) Act No. 13 of 1989 and gazette rate notices",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: the build server law folders (1.x builder: PIT texts only); would unlock: the 2025 excise gazette notices (cigarettes per 1,000 sticks, liquor per litre of alcohol, petroleum)"
+   ],
+   "family_file": "lean/LkGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "IRA 2017 First Schedule para. 4 (1) (d) (Act No. 45 of 2022 s. 33 (3)); Act No. 2 of 2025 s. 3 (2)",
+   "dated": "2025: IRD consolidated text incorporating amendments up to 31 March 2025 (dated 30 June 2025, Internet Archive 2026-03-08): 30 % with effect from 1 April 2023, the same in Y/A 2024/25 and 2025/26 (no split); session 12 year in force",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "sector rates para. 4 (2A)-(2C) not modelled"
+   ],
+   "family_file": "lean/LkGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "IRA 2017 ss. 84 (1) (a) (i), 85 (1) (b); First Schedule para. 10 (1) (c) (ii), (d) (ii), (iv), (v)",
+   "dated": "Act No. 24 of 2017 as enacted; Act No. 45 of 2022 s. 33 (6); Act No. 2 of 2025 s. 3 (3) (from 2025-04-01)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "s. 84A (1A) scope not read"
+   ],
+   "family_file": "lean/LkGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Sri Lanka as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Sri Lanka for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C144&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/lk.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 10063011 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 10063019 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 10063021 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 10063029 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 17019910 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019920 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019930 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019940 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019990 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 22030010 (MFN duty 'Rs.550/= per l': specific or compound duty, unit/currency not mapped); 22030020 (MFN duty 'Rs.550/= per l': specific or compound duty, unit/currency not mapped); 22030090 (MFN duty 'Rs.550/= per l': specific or compound duty, unit/currency not mapped); 22042100 (MFN duty 'Rs.440/= per l': specific or compound duty, unit/currency not mapped); 22083000 (MFN duty 'Rs.2750/= per l': specific or compound duty, unit/currency not mapped); 24022010 (MFN duty '80% or Rs.9100/= per kg gross weight': specific or compound duty, unit/currency ); 24031910 (MFN duty '255% or Rs.4100/= per kg gross weight': specific or compound duty, unit/cu"
+   ],
+   "family_file": "lean/LkGlobal/Customs.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LkGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LkGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none (estate duty abolished 2004)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LkGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on property transfers (provincial)",
+   "statute": "provincial finance statutes",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/LkGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Local authority rates",
+   "statute": "Municipal Councils Ordinance",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/LkGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (EPF, ETF are provident funds)",
+   "statute": "EPF Act 1958; ETF Act 1980",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LkGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 7,
+  "C": 3
+ },
+ "guards": 21,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

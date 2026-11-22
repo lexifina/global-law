@@ -1,0 +1,30 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto a la Renta Empresarial (IRE)",
+  "statute": "Ley 6380/19 art. 21 (10 %)",
+  "dated": "DNIT text of the act (2019)",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "IRE SIMPLE / RESIMPLE regimes and the INR presumed net income shares not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "Ley 6380/19 art. 43 2 (IDU 15 %, non-resident); Ley 6380/19 art. 76 (INR 15 %; presumed base not applied); Ley 6380/19 art. 76 (INR 15 %; presumed base not applied); Ley 6380/19 art. 76 (INR 15 %; presumed base not applied)",
+  "dated": "DNIT text of the act (2019)",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "kinds without a rule read: no withholding computed"
+  ]
+ }
+]

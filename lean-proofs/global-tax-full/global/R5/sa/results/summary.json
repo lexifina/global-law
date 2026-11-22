@@ -1,0 +1,537 @@
+{
+ "country": "SA",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Individuals capital income and gains",
+   "statute": "no personal income tax on residents (1.x no-PIT stub, with its citation)",
+   "dated": "2025",
+   "grade": "B",
+   "status": "not levied",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "non-resident or business income of individuals (e.g. SA non-Saudi individuals in business, art. 7(a)(2)) not modelled"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "1200",
+   "tax": "الزكاة (zakat on companies, Saudi/GCC share)",
+   "statute": "Zakat Collection Law (1370H) art. 2; rate and base per Implementing Regulations (not read)",
+   "dated": "laws.boe.gov.sa archived 2025-07-10",
+   "grade": "B",
+   "kernel_parts": [
+    "R5Common.zakatOnBase"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "zakat base of the Regulations is an input (zakatBase); default taxable profit",
+    "zakat of Saudi individuals"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "ضريبة الدخل (income tax on companies)",
+   "statute": "ITL (M/1) art. 7, 21",
+   "dated": "laws.boe.gov.sa archived 2025-05-07",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRule (2.1, shareKey zakatShareBp, complement)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "loss cap in the Regulations",
+    "natural gas and hydrocarbons rates by flag",
+    "Saudi/GCC share as input zakatShareBp (kernel 2.1 CorpRule.shareOf)"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "ضريبة الاستقطاع (withholding)",
+   "statute": "ITL art. 68(a); Implementing Regulations (MR 1535, as amended to MR 2568) art. 63(1)",
+   "dated": "laws.boe.gov.sa archived 2025-05-07; ZATCA Regulations archived 2025-11-18",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "services taken as management fees (20 %); technical services 5 %/15 % not distinguished"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "GOSI employer contributions (Law 1421H existing contributors: annuities 9 %, occupational hazards 2 %; Law 1445H new entrants: annuities 9 % Jan-Jun / 9.5 % Jul-Dec 2025, hazards 2 %; SANED 0.75 %)",
+   "statute": "Royal Decree M/273 (26/12/1445H) items 2-4 and Social Insurance Law 1445H art. 8(2), 15, 29(1); Council of Ministers decision 1022 item 3(6); Social Insurance Law 1421H (M/33) art. 18(1), 18(2)(a), 19(1)(b); Unemployment Insurance Law M/18 (1435H)",
+   "dated": "pass 3r re-cite: Law 1445H, decree M/273 and CoM decision 1022 as published by GOSI (cmsapi.gosi.gov.sa newSystem page, Wayback 24/10/2025; law/sa_gosi_si1445_2025.*); Law 1421H on laws.boe.gov.sa, Wayback 07/08/2025, status in force, art. 18-19 unamended (law/sa_boe_si1421_2025.*); SANED guide served by gosi.gov.sa on 16/07/2025 (law/sa_gosi_saned_guide_2025.pdf, created 2022)",
+   "grade": "B",
+   "kernel_parts": [
+    "R5Common.employerOn",
+    "TaxKernel.Global.charge"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "existing contributor (Law 1421H) unless gosiScheme \"1445\" is given (a worker first insured from 3/7/2024)",
+    "the 2025 split of the Law 1445H annuities (9 % to June, 9.5 % from July) reads the decree's twelve months as the contribution months July 2024 - June 2025",
+    "SANED rate of existing contributors from GOSI's guide (decision under M/18 not read): grade B part",
+    "wage base = basic wage + housing per the Regulations: wages used",
+    "GCC nationals: unified GCC insurance protection (not modelled)"
+   ],
+   "status": "modelled"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Expatriate levy (المقابل المالي على العمالة الوافدة)",
+   "statute": "MoF Fiscal Balance Program (Dec 2016): SAR 800 a month per expatriate where expatriates outnumber Saudi workers, SAR 700 otherwise, from 2020; MHRSD 20/02/2024: small-establishment exemption (<= 9 workers incl. owner: 2 or 4 expatriates) extended 3 years; licensed industrial facilities: State bears the levy to 31/12/2025",
+   "dated": "Arab News 23/12/2016 (Fiscal Balance Program as announced); EY tax news 2018-0152 (tier test); hrsd.gov.sa news 200220241 read 2026-11-21; pass 3q year-in-force audit: downgraded: 2016 programme (press), EY 2018, MHRSD 2024 statement; no 2025 source for the amounts",
+   "grade": "C",
+   "kernel_parts": [
+    "charge .payroll (per worker x monthly amount x 12)",
+    "flatCharge 0 (cited zero, licensed industrial)"
+   ],
+   "guards": 6,
+   "unsupported": [
+    "pass 3q year-in-force audit: downgraded to C: 2016 programme (press), EY 2018, MHRSD 2024 statement; no 2025 source for the amounts",
+    "Council of Ministers decision text not read (B from official announcements and secondary sources)",
+    "inputs company.expatWorkers / saudiWorkers optional: without them grade C",
+    "household lines: levy on the employer not computed (employer workforce not an input)",
+    "dependants' fee (on the expatriate, not the employer) not 3000: not modelled"
+   ],
+   "pass": "3l",
+   "status": "unsupported"
+  },
+  {
+   "package": "P7",
+   "oecd": "4100",
+   "tax": "رسوم الأراضي البيضاء (white land fees)",
+   "statute": "White Land Fees Law (M/4, 1437H; title amended by M/244, 1446H) art. 3 (2.5 %)",
+   "dated": "laws.boe.gov.sa archived 2025-07-10",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "plots subject per the Regulations: input whiteLand",
+    "M/244 rate changes not shown in the archive"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "ضريبة التصرفات العقارية (RETT)",
+   "statute": "RETT Law (22/09/2024) art. 2, 3",
+   "dated": "laws.boe.gov.sa archived 2025-05-13",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty (higher of price and market value)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "first-home relief (state-borne)",
+    "art. 3 exempt transfers are not purchases"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "ضريبة القيمة المضافة (VAT)",
+   "statute": "VAT Law (M/113) art. 2; Implementing Regulations ch. 5 (financial services, residential lease exempt), ch. 6 (qualifying medicines zero)",
+   "dated": "laws.boe.gov.sa archived 2025-05-07; ZATCA VAT Regulations (EN) archived 2025-04-20",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "life insurance not split",
+    "registration threshold not applied"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "الضريبة الانتقائية (excise)",
+   "statute": "Excise Tax Law (M/86) art. 2; Implementing Regulations art. 3(1) tobacco 100 %; ZATCA commodities list: soft and sweetened drinks 50 %, energy drinks 100 % (price before excise and VAT)",
+   "dated": "Law: ZATCA copy archived 2025-08-03; Regulations: copy archived 2026-08-07 (art. 3 recast 28/12/2025 for 2026 drinks; tobacco paragraph read as unchanged); commodities list archived 2025-04-29",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (2.1, valueBase beforeTax, sub)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "standard retail price list floor not applied",
+    "lines need sub softDrinks/sweetenedDrinks/energyDrinks",
+    "e-cigarettes not in the basket"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Saudi Arabia, Kingdom of as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Saudi Arabia, Kingdom of for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C682&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/sa.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, customsFamily)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 220300000000 (MFN duty '': empty); 220421000000 (MFN duty 'Prohibited for Import': specific or compound duty, unit/currency not mapped); 220830000000 (MFN duty 'Prohibited for Import': specific or compound duty, unit/currency not mapped); 490199110001 (MFN duty 'Prohibited for Import': specific or compound duty, unit/currency not mapped); 490199110002 (MFN duty 'Prohibited for Import': specific or compound duty, unit/currency not mapped)",
+    "GCC customs union (origin BH, KW, OM, QA, AE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)",
+    "Pan-Arab free trade area (GAFTA) (origin BH, EG, IQ, JO, KW, LB, LY, MA, OM, PS, QA, SD, SY, TN, AE, YE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "module": "Customs.lean"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Basic Law of Governance (Royal Order A/90 of 1992) art. 20: taxes and fees are imposed, amended, abolished or remitted only in accordance with the law (Constitute Project English text, law/cp_Saudi_Arabia_2013.txt); no law levies it; tax laws read: Income Tax Law (M/1 of 1425), zakat regulations, VAT Law (M/113), Excise Tax Law, Real Estate Transaction Tax regulations, White Land Fees Law. convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Basic Law of Governance (Royal Order A/90 of 1992) art. 20: taxes and fees are imposed, amended, abolished or remitted only in accordance with the law (Constitute Project English text, law/cp_Saudi_Arabia_2013.txt); no law levies it; tax laws read: Income Tax Law (M/1 of 1425), zakat regulations, VAT Law (M/113), Excise Tax Law, Real Estate Transaction Tax regulations, White Land Fees Law. convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "sa-h1",
+   "total": 70319,
+   "byOecd": {
+    "1100": 0,
+    "2100": 11700,
+    "2200": 14100,
+    "4400": 40000,
+    "5111": 3650,
+    "5121": 869
+   },
+   "borne": {
+    "consumer": 4519,
+    "employer": 14100,
+    "entity": 51700,
+    "withheld": 0
+   },
+   "net": 278300,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT: life insurance (exempt) not split from other insurance (15 %)",
+    "tobacco excise: the standard retail price list floor (higher of declared and listed price) not applied",
+    "GOSI: every worker taken as an existing contributor (Law 1421H); a worker first insured from 3/7/2024 needs gosiScheme \"1445\" (annuities 9 % / 9.5 % in 2025)",
+    "wage base = basic wage + housing per the Regulations: wages used",
+    "zakat of Saudi individuals (business assets) not modelled"
+   ]
+  },
+  {
+   "id": "sa-c1",
+   "total": 453500,
+   "byOecd": {
+    "1200": 153500,
+    "5111": 300000
+   },
+   "borne": {
+    "consumer": 300000,
+    "employer": 0,
+    "entity": 140000,
+    "withheld": 13500
+   },
+   "net": 660000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Implementing Regulations) not applied",
+    "losses: annual cap of the Implementing Regulations not read; offset in full",
+    "3000 expatriate levy (SAR 700/800 a month per expatriate worker): company.expatWorkers not given (grade C)"
+   ]
+  },
+  {
+   "id": "sa-h2",
+   "total": 216100,
+   "byOecd": {
+    "1100": 0,
+    "2100": 52650,
+    "2200": 63450,
+    "4100": 100000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 63450,
+    "entity": 152650,
+    "withheld": 0
+   },
+   "net": 447350,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "GOSI: every worker taken as an existing contributor (Law 1421H); a worker first insured from 3/7/2024 needs gosiScheme \"1445\" (annuities 9 % / 9.5 % in 2025)",
+    "wage base = basic wage + housing per the Regulations: wages used",
+    "zakat of Saudi individuals (business assets) not modelled"
+   ]
+  },
+  {
+   "id": "sa-c2",
+   "total": 408500,
+   "byOecd": {
+    "1200": 408500
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 400000,
+    "withheld": 8500
+   },
+   "net": 1600000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Implementing Regulations) not applied",
+    "3000 expatriate levy (SAR 700/800 a month per expatriate worker): company.expatWorkers not given (grade C)"
+   ]
+  },
+  {
+   "id": "sa-h3",
+   "total": 855,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 255,
+    "5121": 600
+   },
+   "borne": {
+    "consumer": 855,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT: life insurance (exempt) not split from other insurance (15 %)",
+    "zakat of Saudi individuals (business assets) not modelled"
+   ]
+  },
+  {
+   "id": "sa-h4",
+   "total": 1300,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 300,
+    "5121": 1000
+   },
+   "borne": {
+    "consumer": 1300,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT: life insurance (exempt) not split from other insurance (15 %)",
+    "tobacco excise: the standard retail price list floor (higher of declared and listed price) not applied",
+    "zakat of Saudi individuals (business assets) not modelled"
+   ]
+  },
+  {
+   "id": "sa-p1",
+   "total": 200000,
+   "byOecd": {
+    "1200": 200000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 200000,
+    "withheld": 0
+   },
+   "net": 800000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Implementing Regulations) not applied",
+    "3000 expatriate levy grade C (year-in-force audit, pass 3q): the Fiscal Balance Program amounts of 2016 (press) with a 2024 MHRSD statement on exemptions is the version read; its 2025 version or amendment history was not reached, so the rule is not applied"
+   ]
+  },
+  {
+   "id": "sa-p2",
+   "total": 20000,
+   "byOecd": {
+    "1200": 20000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 20000,
+    "withheld": 0
+   },
+   "net": 80000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Implementing Regulations) not applied",
+    "3000 expatriate levy grade C (year-in-force audit, pass 3q): the Fiscal Balance Program amounts of 2016 (press) with a 2024 MHRSD statement on exemptions is the version read; its 2025 version or amendment history was not reached, so the rule is not applied"
+   ]
+  },
+  {
+   "id": "sa-p3",
+   "total": 20000,
+   "byOecd": {
+    "1200": 20000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 20000,
+    "withheld": 0
+   },
+   "net": 80000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (Implementing Regulations) not applied",
+    "3000 expatriate levy grade C (year-in-force audit, pass 3q): the Fiscal Balance Program amounts of 2016 (press) with a 2024 MHRSD statement on exemptions is the version read; its 2025 version or amendment history was not reached, so the rule is not applied"
+   ]
+  },
+  {
+   "id": "sa-g1",
+   "total": 26100,
+   "byOecd": {
+    "1100": 0,
+    "2100": 11700,
+    "2200": 14400
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 14400,
+    "entity": 11700,
+    "withheld": 0
+   },
+   "net": 108300,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "wage base = basic wage + housing per the Regulations: wages used",
+    "zakat of Saudi individuals (business assets) not modelled"
+   ]
+  },
+  {
+   "id": "sa-g2",
+   "total": 63450,
+   "byOecd": {
+    "1100": 0,
+    "2100": 52650,
+    "2200": 10800
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 10800,
+    "entity": 52650,
+    "withheld": 0
+   },
+   "net": 547350,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "wage base = basic wage + housing per the Regulations: wages used",
+    "3000 expatriate levy on the employer (SAR 700/800 a month) not computed on a household line: the employer's workforce is not an input",
+    "zakat of Saudi individuals (business assets) not modelled"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 21,
+ "theorems": 1
+}

@@ -1,0 +1,371 @@
+{
+ "country": "CR",
+ "name": "Costa Rica",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:25"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "see the pass 11 entry below for disposals",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "tax": "Impuesto sobre ganancias de capital (15 %)",
+   "statute": "Ley 7092 arts. 28 bis, 30, 30 bis, 31 ter (Ley 9635)",
+   "dated": "SINALEVI version 83 (includes Ley 10600 of Nov 2024)",
+   "grade": "A",
+   "unsupported": [
+    "losses (art. 31 bis)",
+    "valuation floors for real estate and unlisted shares"
+   ],
+   "oecd": "1100",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto sobre el Valor Agregado",
+   "statute": "Ley 6826 (texto Ley 9635) arts. 8, 9, 10, 11",
+   "dated": "SINALEVI consolidated text versión 31 (reforms to Ley 10712 of 7 April 2026, which does not touch the modelled goods)",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "consumption caps on electricity, water and rent",
+    "canasta básica coverage of food"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuestos selectivos de consumo, único a los combustibles, bebidas y tabaco",
+   "statute": "Ley 4961; Ley 8114; Ley 7972; Ley 9028",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "not attempted (amounts indexed by decree)",
+   "unsupported": [
+    "would unlock: the 2025 decrees updating the fuel and selective amounts"
+   ],
+   "family_file": "lean/CrGlobal/Consumption.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre las utilidades",
+   "statute": "Ley 7092 art. 15 a) (30 %)",
+   "dated": "SINALEVI version 148972 (in force 2025)",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "small-company scale (art. 15 b), limits updated by decree) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Ley 7092 art. 59 c), g), h), j)",
+   "dated": "SINALEVI version 148972 (Leyes 9635/2018, 10335/2022)",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "5 % dividend cases, 5.5 % bank interest, 8.5 % transport, 5.5 % reinsurance not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "Ley Constitutiva de la CCSS; Ley de Protección al Trabajador",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: CCSS contributions of independents (scale set by the Junta Directiva) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: CCSS contributions of independents (scale set by the Junta Directiva) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Ley 7509 impuesto sobre bienes inmuebles 0.25 % of the declared value (municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 7509 impuesto sobre bienes inmuebles 0.25 % of the declared value (municipal); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 7509 impuesto sobre bienes inmuebles 0.25 % of the declared value (municipal); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4100 = 2021:150279.2 2022:154930.3 2023:160818.0 2024:172137.8; named lines: 4100 Immovable property tax (2024: 5490.9); 4100 Municipal immovable property tax (2024: 166646.9)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4200 (recurrent taxes on net wealth, Guide §51) in 2021-2024; 2025 not yet published, no 2025 wealth tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribuciones especiales de mejoras (municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribuciones especiales de mejoras (municipal); OECD CR 4520 9.8 in 2023, 0 in 2024. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribuciones especiales de mejoras (municipal); OECD CR 4520 9.8 in 2023, 0 in 2024. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4500 = 2021:45.7 2022:8.4 2023:9.8 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales tax (single stage)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 5112 = ?",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+   "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/CrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD CR 6200 'Other' (203,827 in 2024) and 'Transfers of vehicles, aircraft and boats' (30,783; by nature a 4400 transfer tax, Guide §53): not read"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD CR 6200 'Other' (203,827 in 2024) and 'Transfers of vehicles, aircraft and boats' (30,783; by nature a 4400 transfer tax, Guide §53): not read",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 6000 = 2021:83318.6 2022:394874.2 2023:222619.1 2024:234816.8; named lines: 6200 Other (2024: 203826.9); 6200 Transfers of vehicles, aircraft and boats (2024: 30783.1)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/CrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Costa Rica (DSD_REV_LAC@DF_REVCRI v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/CRI.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for Costa Rica (DSD_REV_LAC@DF_REVCRI v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/CRI.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for Costa Rica (DSD_REV_LAC@DF_REVCRI v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/CRI.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/CrGlobal/Property.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5200",
+   "tax": "Impuesto a la propiedad de vehículos automotores (marchamo), período 2025",
+   "statute": "Ley 7088 art. 9 (as reformed by Ley 10390 of 2 Oct 2023), SINALEVI version 36 of 16 Sep 2024 (`cr/law/ley7088_sinalevi_v144138.json`; tables are images, `cr/law/img36/`, read by OCR and checked by eye)",
+   "dated": "SINALEVI version 36 (16 Sep 2024): Decreto 44658 tramos; devengo 30 Sep 2024 (art. 9 d) ii); fetched 2026-11-21 pass 15",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "VehicleTax",
+    "vehicleTaxFamily"
+   ],
+   "unsupported": [
+    "value read as the value before depreciation",
+    "age from first registration year (law: model year)",
+    "first registrations of 2025, electric vehicles (Ley 9518), taxis and heavy goods not computed"
+   ],
+   "family_file": "lean/CrGlobal/Property.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "CCSS Seguro de Salud and IVM, Banco Popular (employer)",
+   "statute": "Reglamento del Seguro de Salud art. 62; Reglamento IVM Transitorio XI; Ley 4351 art. 5 (a)",
+   "dated": "SINALEVI versions fetched 2026-11-20 (Transitorio XI row 1 Jan 2023 - 31 Dec 2025)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "minimum contribution base"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Social.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "2200",
+   "tax": "Ley de Protección al Trabajador: FCL and ROP (employer)",
+   "statute": "Ley 7983 arts. 3, 13 c) (Ley 9906 de 2020)",
+   "dated": "SINALEVI version 145867 fetched 2026-11-21",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Social.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "3000",
+   "tax": "FODESAF, IMAS and INA (employer)",
+   "statute": "Ley 5662 art. 15 b); Ley 4760 art. 14 a); Ley 6868 art. 15 a)",
+   "dated": "SINALEVI versions 150444, 143291, 142854 fetched 2026-11-21",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "charge",
+    "Contribution"
+   ],
+   "unsupported": [
+    "INA: employer size unknown for households (charged)",
+    "agricultural INA rate"
+   ],
+   "status": "modelled",
+   "family_file": "lean/CrGlobal/Social.lean",
+   "guards": 9
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Ley 7509 (bienes inmuebles 0,25 %); Ley 6999 (traspaso 1,5 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/CrGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 7,
+  "B": 5,
+  "C": 7
+ },
+ "guards": 26,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

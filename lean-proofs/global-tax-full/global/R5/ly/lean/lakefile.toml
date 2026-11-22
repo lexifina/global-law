@@ -1,0 +1,22 @@
+name = "LyGlobal"
+version = "0.1.0"
+defaultTargets = ["LyGlobal", "lyglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); LyTax = the 1.x model, vendored from cmp20/world/B06-mena/ly/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "LyTax"
+
+[[lean_lib]]
+name = "LyGlobal"
+
+[[lean_exe]]
+name = "lyglobal"
+root = "LyGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

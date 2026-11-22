@@ -1,0 +1,62 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "Impuesto sobre Actividades Económicas (TRLRHL arts. 78-91); temporary bank and energy levies (Ley 38/2022)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVESP v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/ESP.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6200 other taxes on production 160 million EUR (2024); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "model for companies: IAE (TRLRHL arts. 78-91), exempt below EUR 1 m turnover; temporary bank and energy levies sector-only (minor)",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 10: IEDMT (new cars, national rates) and IVTM (art. 95.1 tariff) modelled; IVTM municipal coefficient, IEDMT on used cars and other classes not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 10: IEDMT (new cars, national rates) and IVTM (art. 95.1 tariff) modelled; IVTM municipal coefficient, IEDMT on used cars and other classes not modelled",
+  "unsupported": [
+   "would unlock: the reference municipality's IVTM ordinance (coefficient, art. 95.4; bonificaciones, art. 95.6); the Orden HFP of average prices for used cars; autonomous IEDMT rates"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Impuesto especial sobre determinados medios de transporte",
+  "statute": "Ley 38/1992 de Impuestos Especiales art. 65, 69 a), 70 [year in force 2025 (pass 16), unchanged-confirmed: es/law/iedmt_ley38_1992.txt: art. 65 last redacción 31/10/2013, art. 69 26/12/2008, art. 70 11/07/2021]",
+  "dated": "BOE texto consolidado, fetched 2026-11-21 (`es/law/iedmt_ley38_1992.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "cars without CO2 (epígrafe 4.º b) applies only where the measurement is required and not proven), motorcycles, other vehicles",
+   "5200 IEDMT: the vehicle's value is taken as the VAT base of its acquisition (art. 69 a)); a used car first registered in Spain (art. 69 b), market value) is not distinguished; Península rates (no Canarias, no autonomous rates)"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "5200",
+  "tax": "Impuesto sobre vehículos de tracción mecánica",
+  "statute": "TRLRHL (RDLeg. 2/2004) art. 95.1 A) [year in force 2025 (pass 16), unchanged-confirmed: es/law/trlrhl.txt: art. 95 block carries no modification note (2004 text)]",
+  "dated": "BOE texto consolidado, fetched 2026-11-21 (`es/law/trlrhl.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "vehicles other than turismos (autobuses, camiones, tractores, remolques, ciclomotores y motocicletas)",
+   "5200 IVTM: the municipal coefficient (TRLRHL art. 95.4) and bonificaciones (art. 95.6) are not applied: the art. 95.1 tariff is booked (grade C for the municipal part)",
+   "5200 IVTM: part-year prorating is by quarters (art. 96.3), the model prorates by months"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

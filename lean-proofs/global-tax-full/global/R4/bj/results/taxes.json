@@ -1,0 +1,326 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2023 art. 241 (18 %)",
+  "dated": "CGI 2023 (LF 2024-2025 not available)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exemptions art. 238 not read"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Taxe sur certains produits (tabacs, boissons) + taxe sur les produits pétroliers",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2023 art. 276-277, 283",
+  "dated": "CGI 2023",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc"
+  ],
+  "unsupported": [
+   "energy drinks 20 %, imported water/juice 20 %",
+   "2024-2025 changes"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés + minimum de perception",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2023 art. 43, 46, 47",
+  "dated": "CGI 2023",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "loss age (5 years)",
+   "produits encaissables taken as turnover"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenue non-résidents (20 %); IRCM 5 % on dividends to non-residents, 15 % on interest",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2023 art. 142; art. 86 1), 88 (twelfth pass)",
+  "dated": "CGI 2023",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": []
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI 2023 (whole code)",
+  "dated": "CGI 2023",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "BJ CGI 2023 (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net' finds no charging provision"
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts 2023 (loi n° 2021-15 du 23 décembre 2021, mise à jour LF 2023 loi 2022-33)",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://finances.bj/wp-content/uploads/2023/01/63c7b8d3eef3c_Benin-CGI-2023-officiel.pdf)",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Contribution des patentes (fixed duty on turnover + proportional duty on rental value; Cotonou, 1st zone)",
+  "statute": "CGI 2023 art. 199, 202, 204-205 (loi n° 2021-15 du 20 décembre 2021; edition 2023, later finance laws not held)",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "importer/exporter tariff on imports and exports (art. 203), 2nd zone (60 000 F) and the other communes' rates (12-25 %, art. 205), household-waste levy 2 000-50 000 F set by councils (art. 199-2), supplementary patente 0,5 % on public contracts (art. 207), first-12-months exemption (art. 198)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "CGI-2023.txt (whole code)",
+  "dated": "CGI 2023",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "BJ: the general tax code held (CGI-2023.txt, 627k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Taxe sur les véhicules à moteur (private vehicles by fiscal horsepower; company passenger cars)",
+  "statute": "CGI 2023 art. 166, 168 1) and 4) (edition 2023, later finance laws not held)",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "public transport tariff by seats / tonnage and three-wheelers (art. 168 2-3)",
+   "prorata for vehicles first registered during the year (art. 169)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.vehicleFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRCM on dividends (10 %)",
+  "statute": "CGI 2023 art. 86 2) (edition 2023, later finance laws not held)",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "5 % on dividends of companies listed on the BRVM and to non-residents (art. 86 1)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRCM on interest from claims and deposits (15 %)",
+  "statute": "CGI 2023 art. 88",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "bonds 6 % / 3 % / 0 % (art. 87)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les revenus fonciers (12 %)",
+  "statute": "CGI 2023 art. 104",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "4 000 F ORTB fee per assessment (art. 104 2)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Taxe sur les plus-values immobilières (5 % of the gain)",
+  "statute": "CGI 2023 art. 108, 111, 115 (as amended by LF 2023)",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "minimum of 1 % of the sale price (art. 115 2)",
+   "exemptions (art. 110)",
+   "construction gain set at 10 % of its price (art. 113)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.gainsFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Versement patronal sur salaires (4 %)",
+  "statute": "CGI 2023 art. 191, 194",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "2 % for private schools (art. 194)",
+   "exemptions (art. 192)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Taxe foncière unique (default rates 6 % built on rental value, 5 % unbuilt on administrative value)",
+  "statute": "CGI 2023 art. 157-159 (art. 159 as amended by LF 2023)",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "council rates within the 3-8 % ranges",
+   "additional levies on top of the TFU (art. 159 3)",
+   "temporary exemption of new owner-occupied buildings (art. 154)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Registration duty on transfers of immovable property (5 %)",
+  "statute": "CGI 2023 art. 331 1)",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "exchanges 2 % (art. 332)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Registration duty on gifts inter vivos (5 %)",
+  "statute": "CGI 2023 art. 394 2)",
+  "dated": "CGI 2023",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateBandFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Inheritance tax",
+  "statute": "CGI 2023 art. 394 1)",
+  "dated": "CGI 2023",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "BJ: art. 394 1) — transfers on death are registered free of duty (gifts inter vivos 5 %, modelled)"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNSS employer contributions (family benefits 9 %, pensions 6,4 %, occupational risks 1 %)",
+  "statute": "CNSS Bénin, page 'Recouvrement' (taux de cotisation; Code de sécurité sociale, loi n° 98-019 du 21 mars 2003), held copy w5/bj_cnss_recouvrement.html",
+  "dated": "CGI 2023",
+  "unsupported": [
+   "occupational-risk rate by activity (1 to 4 %): the lowest class (1 %) is applied",
+   "the employee's 3,6 % (1.x PIT side)",
+   "rates read on the fund's page, not in the decree"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Benin as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Benin for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C204&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/bj.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "WAEMU (UEMOA) customs union (origin BF, ML, NE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+  ]
+ }
+]

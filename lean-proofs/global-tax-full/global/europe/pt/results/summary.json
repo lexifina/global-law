@@ -1,0 +1,304 @@
+{
+ "country": "PT",
+ "name": "Portugal",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:15:03"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Mais-valias mobiliárias (taxa especial)",
+   "statute": "CIRS art. 72.º (28 %)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-06-03 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "real estate gains (50 % added to income at progressive rates; reinvestment relief for the home) not modelled",
+    "short-term gains of high earners are aggregated at progressive rates (not modelled)"
+   ],
+   "family_file": "lean/PtGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Imposto sobre o valor acrescentado",
+   "statute": "CIVA art. 18.º n.º 1 a) 6 % (lista I), b) 13 % (lista II), c) 23 %; art. 9.º (isenções) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/civa18.txt: the only 2025 change (DL 33/2025, 24 March) revokes n.º 6 and rewrites n.º 10 (art objects); n.º 1 a)-c) (6/13/23 %) carry no later redação note]",
+   "dated": "Portal das Finanças current text (continental rates)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "small-business exemption (art. 53.º) not read: no threshold applied",
+    "continental rates (Açores and Madeira lower) ; lists I and II by category"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/PtGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Código dos Impostos Especiais de Consumo (CIEC, DL 73/2010) art. 78 (cerveja), 87 (álcool), 92-93 (ISP), 103 (tabaco); Portarias fixing the ISP unit rates, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "beer: banded by degree Plato (12.06-33.85 EUR per hl); the kernel's Plato rule is linear: not modelled",
+    "ISP on petrol and gas oil includes the carbon component (ISP + CO2)",
+    "fuel: the TEDB gives the same amounts at 1.1, 1.7 and 31.12.2025; portarias changing the ISP unit rates between those dates are not excluded",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/PtGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Imposto sobre o Rendimento das Pessoas Coletivas",
+   "statute": "CIRC art. 87.º n.º 1 (20 %), n.º 2 (16 % sobre os primeiros 50 000 €, PME), na redação da Lei n.º 45-A/2024 (OE 2025)",
+   "dated": "Lei 45-A/2024 (in force 1.1.2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "SME status (DL 372/2007 annex: < 250 employees and turnover ≤ 50 M€ or balance ≤ 43 M€) approximated by turnover ≤ 50 M€",
+    "derrama municipal (Lei 73/2013 art. 18, up to 1,5 %) not modelled",
+    "tributação autónoma not modelled",
+    "withholding (art. 94.º) not read"
+   ],
+   "family_file": "lean/PtGlobal/Corporate.lean",
+   "family_guards": 17
+  },
+  {
+   "oecd": "1200",
+   "tax": "Derrama estadual",
+   "statute": "CIRC art. 87.º-A n.º 1, 2 (Lei n.º 114/2017)",
+   "dated": "Portal das Finanças CIRC, Wayback 2025-04-19",
+   "grade": "A",
+   "kernel_parts": [
+    "charge",
+    "Schedule"
+   ],
+   "unsupported": [
+    "the principal-activity condition (commercial, industrial or agricultural) is taken as met"
+   ],
+   "family_file": "lean/PtGlobal/Corporate.lean",
+   "family_guards": 17
+  },
+  {
+   "oecd": "1200",
+   "tax": "Retenção na fonte de IRC (não residentes) (dividend, interest, royalty, services)",
+   "statute": "CIRC art. 4.º n.º 3 c) 7), art. 87.º n.º 4, art. 94.º n.º 1 a), c), g), n.º 3 b) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/irc87.txt: n.º 4 (25 %) carries no redação note (Lei 2/2014 republication); Lei 64/2025 changes n.º 1, 2, 5 for periods from 2026 (norma transitória art. 3.º); irc94.txt n.º 4 (25 %) in the Lei 2/2014 redação]",
+   "dated": "Portal das Finanças, código consolidado fetched 2026-11-21 (`pt/law/irc87.txt`, `irc94.txt`, `irc4.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as performed or used in Portugal and not transport, communications or financial",
+    "35 % to listed tax havens and the EU directive exemptions not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/PtGlobal/Corporate.lean",
+   "family_guards": 17
+  },
+  {
+   "oecd": "1200",
+   "tax": "Retenção na fonte de IRS (não residentes) (dividend, interest, royalty, services)",
+   "statute": "CIRS art. 71.º n.º 1 a), n.º 4 a) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/cirs71.txt: last redação Lei 45-A/2024 (OE 2025, from 1.1.2025); no later law]",
+   "dated": "Portal das Finanças, código consolidado fetched 2026-11-21 (`pt/law/cirs71.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "royalties are taken as received by a holder other than the original author (capital income); an author's royalties are professional income at 25 % (n.º 4 a))",
+    "services are taken as performed or used in Portugal (CIRS art. 18.º)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/PtGlobal/Corporate.lean",
+   "family_guards": 17
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes recorded by the registry",
+   "statute": "Contribuição extraordinária sobre o setor energético; derrama estadual (recorded under CIT)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVPRT v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/PRT.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6100 general services and licences granted to corporations 305,9, 6200 miscellaneous taxes 0,3 million EUR (2024); not modelled",
+   "unsupported": [
+    "the statutes of the items named by the OECD table"
+   ],
+   "triage": "minor here: CESE is an energy-sector levy; derrama estadual is under CIT (P2)",
+   "gap_note": true,
+   "family_file": "lean/PtGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: IUC category B (cars first registered from July 2007) modelled; category A (older cars), the diesel adicional de IUC, ISV (registration) and other categories not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: IUC category B (cars first registered from July 2007) modelled; category A (older cars), the diesel adicional de IUC, ISV (registration) and other categories not modelled",
+   "unsupported": [
+    "would unlock: Código do IUC art. 9 (category A table, an image on the portal); Lei 82-B/2014 art. 216 (adicional de IUC, diesel); Código do ISV art. 7 tables (images) with the cilindrada and CO2 of a new car"
+   ],
+   "family_file": "lean/PtGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Imposto único de circulação (categoria B)",
+   "statute": "Código do Imposto Único de Circulação (Lei 22-A/2007, anexo II) art. 2.º n.º 1 b), 5.º n.º 1 e), 10.º (redação da Lei 82/2023) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/iuc2_portal.txt and iuc10_portal.txt: last redação Lei 82/2023; iuc5_portal.txt: DL 161/2026 changes n.º 4, 5, 10 with effect from 1.1.2027, n.º 1 e) unchanged]",
+   "dated": "Portal das Finanças, codigos tributarios, read 2026-11-21 (`pt/law/iuc2_portal.txt`, `iuc5_portal.txt`, `iuc10_portal.txt`; the art. 10 n.º 1 and 2 tables are images: `iuc10_oe2024_01.png`, `iuc10_oe2024_02.png`, read by OCR); OE 2025 (Lei 45-A/2024, `pt/law/Lei_45_A_2024.txt`) changes no IUC rate",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "cars first registered before July 2007 (category A, art. 9), motorcycles, goods vehicles and other categories",
+    "5200 IUC: CO2 of a car first registered from 2020 is read in the WLTP column, earlier ones in the NEDC column (Lei 119/2019 note); a car of 2007 is taken as registered after 1 July 2007; amounts rounded down to whole euros",
+    "5200 adicional de IUC (Lei 82-B/2014 art. 216, kept by Lei 45-A/2024 art. 113) on diesel cars not modelled (grade C)",
+    "5200 ISV (Código do ISV) on a car registered in the year not modelled (grade C)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/PtGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4400",
+   "tax": "IMT",
+   "statute": "CIMT art. 17.º n.º 1 a), c), d), e) (rates: redação Lei 82/2023 and DL 48-A/2024) with the 2025 limits of Lei 45-A/2024 art. 100.º (HPP 0/2/5/7/8 % marginal to EUR 648 022, then 6 % / 7,5 % on the whole value; other dwellings from 1 %; rústicos 5 %; other urban 6,5 %) [year in force 2025 (pass 16), re-cited 2025: Portal das Finanças art. 17.º captured 2025-06-21 (pt/law/cimt17_wb20250621.*): HPP 0/2/5/7/8 % to EUR 648 022, then 6 % to 1 128 287 and 7,5 % above (limits of Lei 45-A/2024, rates DL 48-A/2024 and Lei 82/2023), rústicos 5 %, other 6,5 %: as modelled; the 2026 limits (Lei 73-A/2025) and n.º 10 (DL 97/2026) are after 2025]",
+   "dated": "2025 limits: Lei 45-A/2024 art. 100.º; CIMT art. 17.º on Portal das Finanças, Internet Archive 2025-06-21",
+   "grade": "A",
+   "kernel_parts": [
+    "charge per Purchase (marginal then whole-value rate)"
+   ],
+   "unsupported": [
+    "IMT Jovem",
+    "VPT floor on the base",
+    "imposto do selo verba 1.1"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/PtGlobal/Property.lean",
+   "family_guards": 22
+  },
+  {
+   "oecd": "4100",
+   "tax": "Imposto municipal sobre imóveis (prédios urbanos, Lisboa)",
+   "statute": "Código do IMI art. 112.º n.º 1 c), n.º 5 (redação da Lei n.º 7-A/2016); Município de Lisboa: 0,3 % for 2025 [year in force 2025 (pass 16), unchanged-confirmed: pt/law/cimi112_portal.txt: last amending law Lei 56/2023; no 2025 or 2026 redação]",
+   "dated": "Portal das Finanças, códigos tributários, CIMI art. 112.º (fetched 2026-11-21, `pt/law/cimi112_portal.txt`); Lisbon's rate from the 2025 municipal budget as reported (rr.pt, 29.11.2024: the urban rate stays at 0,3 %)",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "IMI: the asset's value is taken as the valor patrimonial tributário; the own-home exemption (EBF art. 46.º), the art. 112.º-A family deduction and the AIMI are not applied",
+    "IMI on land: rústico (0,8 %) or terreno para construção (urban, 0,3 %) cannot be told apart from the input (grade C)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/PtGlobal/Property.lean",
+   "family_guards": 22
+  },
+  {
+   "oecd": "4100",
+   "tax": "Adicional ao imposto municipal sobre imóveis (AIMI)",
+   "statute": "Código do IMI art. 135.º-B, 135.º-C n.º 2 a), 135.º-D, 135.º-F n.º 1-3 (adicional ao IMI; redação da Lei n.º 71/2018 e da Lei n.º 56/2023) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/cimi135b/c/f_portal.txt: last amending laws Lei 56/2023 (135.º-B, -C) and Lei 71/2018 (135.º-F)]",
+   "dated": "Portal das Finanças, Código do IMI art. 135.º-A, -B, -C, -F, -I (fetched 2026-11-21; amendment notes: no change after Lei 56/2023, so in force throughout 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "WealthTax"
+   ],
+   "unsupported": [
+    "AIMI on companies (0,4 % without the deduction, art. 135.º-F n.º 1) not modelled: a company's urban property is not in the input as dwellings",
+    "AIMI: real estate other than the home is taken as residential (habitacional); commercial, industrial and service buildings are excluded by art. 135.º-B n.º 2 and cannot be told apart in the input",
+    "AIMI: land is left out (a terreno para construção is in the base, a rústico is not; the input does not say which)",
+    "AIMI: a married couple's dwellings are taken as owned in equal halves"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/PtGlobal/Property.lean",
+   "family_guards": 22
+  },
+  {
+   "oecd": "2200",
+   "tax": "Taxa social única (entidade empregadora)",
+   "statute": "Código dos Regimes Contributivos do Sistema Previdencial de Segurança Social (Lei 110/2009) art. 53.º: 23,75 % entidade empregadora",
+   "dated": "Código dos Regimes Contributivos as in force in 2025 (via the 1.x model)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PtGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "Código do Imposto do Selo verba 1.2 (10 %; family exempt)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/PtGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Portugal, Individual - Other taxes, accessed 2025-08-01 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-08-01 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PtGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 8,
+  "B": 5,
+  "C": 3
+ },
+ "guards": 59,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

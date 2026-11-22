@@ -1,0 +1,205 @@
+{
+ "country": "DE",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "status": "pilot built",
+ "year": "2025",
+ "pit": "1.x model vendored unchanged; legacy output byte-identical on the 56-household adapter grid",
+ "taxes": [
+  {
+   "oecd": "1200",
+   "tax": "Körperschaftsteuer + Solidaritätszuschlag",
+   "statute": "KStG § 23 (1), § 8b (1), (4), (5); EStG § 10d (2); SolZG § 3 (1) Nr. 1, § 4",
+   "dated": "gesetze-im-internet.de as archived 2025-06..08",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime (loss cap, participation exemption)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "§ 8b (2) gains on shares held by the company",
+    "interest barrier § 4h EStG / § 8a KStG"
+   ]
+  },
+  {
+   "oecd": "1200",
+   "tax": "Gewerbesteuer",
+   "statute": "GewStG § 8 Nr. 1, 5, § 9 Nr. 2a, § 11 (1) S. 3, (2), § 16 (4) (2025: 200 %)",
+   "dated": "archived 2025; § 36 (5b) dates the 280 % to 2027",
+   "grade": "A",
+   "kernel_parts": [
+    "twoStage"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "§ 10a loss carry-forward",
+    "§ 8 Nr. 1 b-f (rents, royalties)",
+    "municipal Hebesatz is an input (deHebesatz)"
+   ]
+  },
+  {
+   "oecd": "1100",
+   "tax": "ESt on gains: § 20 (2) (Abgeltungsteuer) and § 23 (private sales, tariff)",
+   "statute": "EStG § 20 (2), (9), § 23 (1) Nr. 1, 2, (3) S. 5, § 32d (1)",
+   "dated": "archived 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "stackedTax",
+    "AnnualExempt (threshold)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "§ 17 holdings ≥ 1 %",
+    "§ 23 (3) S. 4 depreciation add-back",
+    "§ 20 (6) loss ring-fencing"
+   ]
+  },
+  {
+   "oecd": "5111",
+   "tax": "Umsatzsteuer",
+   "statute": "UStG § 12 (1), (2) Nr. 1 + Anlage 2, Nr. 10, 11; § 19 (1); § 4 Nr. 8, 10, 12, 14, 21 [year in force 2025 (pass 16), re-cited 2025: § 4 captured 2025-07-02 (de/law/ustg_1980___4_wb20250702.*): Nr. 8, 10, 12, 14, 21 identical; the 2026 text drops Nr. 4a (tax warehouses, not used)]",
+   "dated": "UStG §§ 12, 19 archived 2025; § 4 archived 2025-07-02",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "Anlage 2 item by item (food/books/newspapers/water classes)",
+    "§ 19: current-year 100 000 € limit taken as met"
+   ],
+   "yif16": "re-cited 2025"
+  },
+  {
+   "oecd": "5121",
+   "tax": "Energiesteuer (petrol, diesel)",
+   "statute": "EnergieStG § 2 (1) Nr. 1 b), Nr. 4 b)",
+   "dated": "archived 2025-07-07",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "alcohol, beer, tobacco, coffee, electricity duties"
+   ]
+  },
+  {
+   "oecd": "4300",
+   "tax": "Erbschaft- und Schenkungsteuer",
+   "statute": "ErbStG § 10 (1) S. 6, § 14 (1), (3), §§ 15, 16, 17, 19 (1), (3)",
+   "dated": "archived 2025-07-09",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax",
+    "slabRelieved",
+    "withLookback"
+   ],
+   "guards": 6,
+   "unsupported": [
+    "§ 13 family home, §§ 13a-13d business and rented-property reliefs",
+    "§ 14 (1) S. 3 actual prior tax"
+   ]
+  },
+  {
+   "oecd": "4400",
+   "tax": "Grunderwerbsteuer",
+   "statute": "GrEStG § 11 (3,5 %, rounding); Land rate by input",
+   "dated": "archived 2025-06",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "Land rates (Art. 105 (2a) GG) not read: input deGrEStRateBp",
+    "§ 3 Nr. 4, 6 family exemptions (seller's relation not in the input)"
+   ]
+  }
+ ],
+ "cases": [
+  {
+   "id": "de-h1",
+   "total": 113779,
+   "byOecd": {
+    "1100": 76397,
+    "2100": 12930,
+    "4300": 5300,
+    "4400": 17500,
+    "5111": 998,
+    "5121": 654
+   },
+   "borne": {
+    "consumer": 1652,
+    "employer": 0,
+    "entity": 112127,
+    "withheld": 0
+   },
+   "net": 583473,
+   "unsupported": []
+  },
+  {
+   "id": "de-h2",
+   "total": 95707,
+   "byOecd": {
+    "1100": 9270,
+    "2100": 16437,
+    "4300": 46000,
+    "4400": 24000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 95707,
+    "withheld": 0
+   },
+   "net": 388352,
+   "unsupported": []
+  },
+  {
+   "id": "de-c1",
+   "total": 719804,
+   "byOecd": {
+    "1100": 0,
+    "1200": 339804,
+    "2100": 0,
+    "5111": 380000
+   },
+   "borne": {
+    "consumer": 380000,
+    "employer": 0,
+    "entity": 339804,
+    "withheld": 0
+   },
+   "net": 1660196,
+   "unsupported": [
+    "Gewerbesteuer: loss carry-forward (GewStG § 10a) not read; trade tax computed without it"
+   ]
+  },
+  {
+   "id": "de-c2",
+   "total": 3423,
+   "byOecd": {
+    "1100": 0,
+    "1200": 3423,
+    "2100": 0,
+    "5111": 0
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 3423,
+    "withheld": 0
+   },
+   "net": 11577,
+   "unsupported": [
+    "Gewerbesteuer at the 2025 statutory minimum Hebesatz (200 %): give deHebesatz for the municipality"
+   ]
+  }
+ ],
+ "sorry": 0,
+ "testing": {
+  "software": [],
+  "datasets": [],
+  "note": "built from the statute only; no referee value looked at (CONTRACTWORLD order)"
+ }
+}

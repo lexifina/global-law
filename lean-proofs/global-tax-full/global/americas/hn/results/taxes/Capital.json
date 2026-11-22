@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "see the pass 11 entry below for disposals",
+   "other income kinds"
+  ]
+ },
+ {
+  "tax": "Impuesto único sobre ganancias de capital (10 %)",
+  "statute": "LISR art. 10",
+  "dated": "LISR consolidated to Acuerdo SAR 07-2025",
+  "grade": "B",
+  "unsupported": [
+   "base rules and exemptions not in the held text"
+  ],
+  "oecd": "1100",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ]
+ }
+]

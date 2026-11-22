@@ -1,0 +1,296 @@
+{
+ "country": "LU",
+ "name": "Luxembourg",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:49"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Bénéfices de spéculation (art. 99bis), stacked",
+   "statute": "L.I.R. art. 99bis, 102bis; L. 04.04.25 art. 1, L. 27.06.25 art. 1",
+   "dated": "texte coordonné en vigueur au 1er janvier 2025 (`lu/law/LIR_2025-01-01.txt`); Mémorial A 2025 n° 121 and n° 271 (`lu/law/loi_2025_a121.txt`, `loi_2025_a271.txt`)",
+   "grade": "A",
+   "unsupported": [
+    "the 500 EUR Freigrenze is applied to each rule (movables, real estate) rather than to their total",
+    "real estate sold 1.7-30.9.2025: the compromis registration by 30.6.2025 is not an input (taken as registered)",
+    "an undated real-estate disposal is not priced (grade C)"
+   ],
+   "kernel_parts": [
+    "StackRule (2.5.0; 2.7.0 dateFrom / dateTo)",
+    "GainRule"
+   ],
+   "family_file": "lean/LuGlobal/Capital.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "1100",
+   "tax": "Plus-values de cession (art. 99ter: quart du taux global to 30.9.2025, demi-taux global from 1.10.2025; art. 100: demi-taux global), stacked",
+   "grade": "A",
+   "statute": "L.I.R. art. 99ter, 100, 102 (6), 102bis, 130 (4), 131 (1) c, d, 132 (2); Loi du 22 mai 2024 art. 14 (as amended by L. 04.04.25 art. 7 and L. 27.06.25 art. 7); L. 04.04.25 art. 2, L. 27.06.25 art. 2",
+   "dated": "texte coordonné en vigueur au 1er janvier 2025 (`lu/law/LIR_2025-01-01.txt`); Mémorial A 2024 n° 219 (art. 14), A 2025 n° 121 (art. 2, 7; effect 1.1.2025, art. 9) and n° 271 (art. 2, 7; in force 1.7.2025, art. 8), legilux filestore PDFs read (`lu/law/loi_2024_a219.txt`, `loi_2025_a121.txt`, `loi_2025_a271.txt`)",
+   "kernel_parts": [
+    "StackRule (2.6.0: averageRate, shareBp; 2.7.0: dateFrom / dateTo, rateFromStack)",
+    "GainRule"
+   ],
+   "unsupported": [
+    "the art. 130 (4) ten-year look-back and the art. 130 (5) 75 000 euros for inherited buildings not applied",
+    "the abattement is counted once per rule (more than once with two of: real estate to 30.9.2025, from 1.10.2025, participations)",
+    "an undated real-estate disposal is not priced (grade C)",
+    "real estate sold 1.7-30.9.2025 more than two years after acquisition: the compromis registration by 30.6.2025 is not an input"
+   ],
+   "family_file": "lean/LuGlobal/Capital.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "statute": "Loi modifiée du 12 février 1979 concernant la TVA art. 39 (17 %, 8 %, 3 %, 14 %), art. 40 et annexes A-C, art. 44 (exonérations), art. 57bis (50 000 euros)",
+   "dated": "texte coordonné 2025-01-01 (to the loi du 20 décembre 2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+    "wine taken at 14 % (annexe C 1°: still wine of 13 % vol or less; sparkling and stronger wine 17 %)",
+    "children's clothing (annexe B 6°, 3 %) not separated: clothing at 17 %"
+   ],
+   "family_file": "lean/LuGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Loi du 17 décembre 2010 fixant les droits d'accise et les taxes assimilées, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/LuGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impôt sur le revenu des collectivités",
+   "statute": "LIR art. 174 (1) (14 % / 24 500 € + 30 % / 16 %), as amended by L. 20.12.24",
+   "dated": "legilux consolidation 2025-01-01 (L. 20.12.24 art. 12)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "contribution au fonds pour l'emploi (7 % of the IRC) not modelled",
+    "impôt commercial communal (Luxembourg-ville) not modelled",
+    "impôt sur la fortune of companies (4200) in P6",
+    "withholding on dividends (art. 146-148, 15 %) not read"
+   ],
+   "family_file": "lean/LuGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Retenue à la source (revenus de capitaux) (dividend, interest, royalty, services)",
+   "statute": "L.I.R. art. 146, 148, 152",
+   "dated": "loi modifiée du 4 décembre 1967, texte coordonné au 1.1.2025 (`lu/law/LIR_2025-01-01.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "the art. 147 exemption (parent companies, 10 % / EUR 1,2 m) not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/LuGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/LuGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "European Commission TEDB, LU: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 391, 392, 788, 4003, 398, 403, 2502) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+   ],
+   "gap": 2,
+   "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVLUX v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/LUX.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6100 chancellery stamps, taxes on electricity production and distribution, natural gas consumption, water, foreign-affairs services (34,2 million EUR in 2024); the national taxes behind it not read",
+   "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVLUX v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/LUX.csv`, SHA256SUMS; general government S13; 2025 not yet published)",
+   "family_file": "lean/LuGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "impôt foncier (Luxembourg-ville)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/LuGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Droits d'enregistrement et de transcription (immeubles)",
+   "statute": "droits d'enregistrement et de transcription on sales of Luxembourg real estate: 7 % in all (acts not read)",
+   "dated": "2025-08-03",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "Luxembourg City surtax (3 %) not applied; the Bëllegen Akt credit on a buyer's own home and the base (higher of price and value) not read"
+   ],
+   "family_file": "lean/LuGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Assurance pension (part patronale)",
+   "statute": "CSS art. 238 (taux global 24 %), art. 239 (un tiers à charge de l'État), art. 240, 1) (parts égales assurés et employeurs): 8 %; art. 241 (3): maximum cotisable le quintuple du SSM",
+   "dated": "CSS recueil 2025 (arrêtés of December 2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LuGlobal/Social.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "2200",
+   "tax": "Assurance maladie - soins de santé (part patronale)",
+   "statute": "CSS art. 29 note 4) (5,60 %), art. 32 (parts égales): 2,80 %",
+   "dated": "CSS recueil 2025 (arrêtés of December 2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LuGlobal/Social.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "2200",
+   "tax": "Assurance maladie - prestations en espèces (part patronale)",
+   "statute": "CSS art. 29 al. 2 (majoré de 0,5 pour cent), art. 32 (parts égales): 0,25 %",
+   "dated": "CSS recueil 2025 (arrêtés of December 2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LuGlobal/Social.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "2200",
+   "tax": "Assurance accident",
+   "statute": "CSS art. 141 note 3) (A 18.12.2024: taux de cotisation unique 2025 0,70 pourcent), art. 150 (charge de l'employeur)",
+   "dated": "CSS recueil 2025 (arrêtés of December 2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LuGlobal/Social.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "2200",
+   "tax": "Mutualité des employeurs (classe 2)",
+   "statute": "CSS art. 52-55; Statuts de la Mutualité art. 3-6 (classe 2: nouvel affilié); CCSS taux au 01.01.2025 (classe 2 0,99 %)",
+   "dated": "CSS recueil 2025; CCSS avis 14.03.2025 (taux au 01.01.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "employer's absenteeism class (class 2 taken)"
+   ],
+   "family_file": "lean/LuGlobal/Social.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "Loi du 27 décembre 1817 (droits de succession)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/LuGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Impôt sur la fortune des personnes physiques (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Luxembourg, Individual - Other taxes, accessed 2025-06-24 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-24 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LuGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 9,
+  "B": 4,
+  "C": 4
+ },
+ "guards": 54,
+ "sorry": 0,
+ "cases": 8,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

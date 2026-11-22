@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "capitalGains ignored by the 1.x model (gains are charged by the family below)",
+   "other income kinds"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "Impuesto a la renta de segunda categoría: ganancias de capital (6.25 % of 80 % = 5 %)",
+  "statute": "LIR TUO arts. 2, 21.1, 36, 52-A",
+  "dated": "SUNAT consolidated LIR (chapters fetched 2026-11-21), in force 2025",
+  "grade": "A",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "real estate acquired before 2004",
+   "habitualidad (third category)",
+   "pre-2009 share valuation"
+  ]
+ }
+]

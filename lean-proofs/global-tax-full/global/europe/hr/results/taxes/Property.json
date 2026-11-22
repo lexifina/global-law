@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Porez na promet nekretnina",
+  "statute": "Zakon o porezu na promet nekretnina (3 %; not where VAT is charged)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-08-02 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "exemptions (first home of citizens, close-family transfers) not modelled; inheritances and gifts of real estate also bear the tax (not modelled: purchases only)"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Porez na nekretnine",
+  "statute": "Zakon o lokalnim porezima (NN 115/16, 101/17, 114/22, 114/23, 152/24) čl. 26 st. 1-2 (0,60-8,00 EUR per m² of useful area a year, set by the municipal council's decision), čl. 27 st. 1 t. 1-2 (not on property used for permanent residence or let for permanent residence at least ten months), čl. 2 st. 1 t. 12 (residential property)",
+  "dated": "NN 152/2024 (Zakon o izmjenama i dopuni Zakona o lokalnim porezima), in force 1.1.2025 (čl. 15); lexifina/croatia-law zakon/2024/2504",
+  "grade": "A",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rate declared: the Zagreb decision (odluka o lokalnim porezima) for 2025 was not reached (rate input localRates.propertyTax)",
+   "a dwelling let for permanent residence at least ten months a year is exempt (čl. 27 st. 1 t. 2): give no rate for it",
+   "rates by zone and the increase for age or amenities (čl. 26 st. 5-6) are the municipality's: give the rate that applies",
+   "business premises are not 'nekretnina' (čl. 2 st. 1 t. 12): only residential property other than the main home is read"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rate is an input: localRates.propertyTax"
+ }
+]

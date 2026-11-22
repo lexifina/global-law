@@ -1,0 +1,104 @@
+{
+ "cc": "RW",
+ "name": "Rwanda",
+ "dated": "Law Nº 027/2022 of 20/10/2022 on income taxes, as amended by Law Nº 051/2023 of 05/09/2023 and Law Nº 014/2025 of 27/05/2025",
+ "sources": "Sources: Official Gazette texts (trilingual) in `cmp20/world/B10-anglophone-africa/rw/law/` (law027_2022.txt, law051_2023.txt, law014_2025.txt). Third pass: VAT Law 049/2023 and Excise Law 011/2025 fetched from apis.amategeko.gov.rw (documents-files/4497, /10055).",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 1800,
+  "classes": {},
+  "grade": "A",
+  "statute": "Law Nº 049/2023 of 05/09/2023 art. 4 (b) (18 %); Law Nº 009/2025 of 27/05/2025 does not change the rate",
+  "doc": "Law 049/2023 art. 4: \"... (b) or 18% for other goods and services supplied in Rwanda\" (zero-rated and exempt supplies under the Law). Official gazette PDFs fetched from the amategeko.gov.rw API (`R4/rw/law/fetch/`, SHA256SUMS).",
+  "notes": [
+   "VAT 18 %; zero-rated and exempt supplies (Law 049/2023 annexes) not separated from the basket lines"
+  ],
+  "unsupported": [
+   "zero-rated and exempt supplies"
+  ]
+ },
+ "excise": {
+  "name": "Excise duty",
+  "grade": "B",
+  "statute": "Law Nº 011/2025 of 27/05/2025 art. 4 and annex (in force on publication; Law Nº 050/2023 before), art. 6 (b) (base: selling price)",
+  "doc": "Law 011/2025 annex: \"Beer whose local raw material content, excluding water, is at least 70% ... 40% ... Other beers 65% ... Wine whose local raw material content ... 40% ... Other wines 70% of the value of a litre not exceeding FRW 40,000 ... Lemonade, soda ... 39%\"; art. 6 (b): \"the tax base for a product manufactured in Rwanda ... is the selling price of the product\" (taken as the value before excise and VAT). Grade B: in force from its publication (mid-2025; Law 050/2023 applied before) and the selling-price base read as the pre-tax value.",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Excise duty (other beers)",
+    "advBp": 6500,
+    "vatBp": 1800,
+    "statute": "Law 011/2025 annex item 6 (65 %)"
+   },
+   {
+    "good": "wine",
+    "name": "Excise duty (other wines)",
+    "advBp": 7000,
+    "vatBp": 1800,
+    "statute": "Law 011/2025 annex item 8 (70 %)"
+   },
+   {
+    "good": "nonAlcoholic",
+    "name": "Excise duty (lemonade, soda)",
+    "advBp": 3900,
+    "vatBp": 1800,
+    "statute": "Law 011/2025 annex (39 %)"
+   }
+  ],
+  "notes": [
+   "Law 011/2025: beer and wine with at least 70 % local raw material are at 40 % (not separable); spirits, tobacco, fuel and the pre-publication Law 050/2023 rates not modelled"
+  ],
+  "unsupported": [
+   "local-content 40 % rates",
+   "spirits, tobacco and fuel lines",
+   "Law 050/2023 for the months before publication"
+  ]
+ },
+ "cit": {
+  "name": "Corporate income tax",
+  "rate": 2800,
+  "step": 1000,
+  "grade": "A",
+  "statute": "Law 027/2022 art. 48 (1) as amended by Law 051/2023 (28 %, rounded down to FRW 1 000)",
+  "doc": "Law 051/2023 amending art. 48 (1): \"Taxable Business profit is rounded down to the nearest 1000 Rwandan Francs and taxable at a rate of 28%\" (the 2022 text said thirty percent). Law 014/2025 amends the capital gains rate (10 %) and gaming, not art. 48.",
+  "notes": [
+   "Law 027/2022 art. 48: reduced rates for newly listed companies and incentive regimes not applied"
+  ],
+  "unsupported": [
+   "listed-company and incentive rates",
+   "loss rules not read"
+  ]
+ },
+ "wht": {
+  "name": "Withholding tax (art. 60)",
+  "grade": "A",
+  "statute": "Law 027/2022 art. 60 (15 %)",
+  "doc": "art. 60: \"A withholding tax of fifteen percent (15%) of the total amount excluding value added tax … is levied on payments made by resident persons\"; payments subject to it: \"1° dividends …\", interest, royalties, service fees (5 % for listed securities' dividends and interest).",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "Law 027/2022 art. 60 (15 %)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "Law 027/2022 art. 60 (15 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "Law 027/2022 art. 60 (15 %)"
+   },
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "Law 027/2022 art. 60 (15 %)"
+   }
+  ],
+  "unsupported": [
+   "5 % on listed securities",
+   "treaties"
+  ]
+ }
+}

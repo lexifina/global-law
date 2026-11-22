@@ -1,0 +1,22 @@
+name = "UgGlobal"
+version = "0.1.0"
+defaultTargets = ["UgGlobal", "ugglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); UgTax = the 1.x model, vendored from cmp20/world/B10-anglophone-africa/ug/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "UgTax"
+
+[[lean_lib]]
+name = "UgGlobal"
+
+[[lean_exe]]
+name = "ugglobal"
+root = "UgGlobal.Main"

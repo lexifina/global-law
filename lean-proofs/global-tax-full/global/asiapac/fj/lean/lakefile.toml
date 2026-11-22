@@ -1,0 +1,18 @@
+name = "FjGlobal"
+version = "0.1.0"
+defaultTargets = ["FjGlobal", "fjglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); FjTax = the 1.x model, vendored from cmp20/world/B14-pacific/fj/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "FjTax"
+
+[[lean_lib]]
+name = "FjGlobal"
+
+[[lean_exe]]
+name = "fjglobal"
+root = "FjGlobal.Main"

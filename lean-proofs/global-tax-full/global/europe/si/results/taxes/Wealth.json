@@ -1,0 +1,29 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Inheritance and gift tax",
+  "statute": "Zakon o davku na dediščine in darila",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "not read in the P6 pass",
+  "unsupported": [
+   "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+  ]
+ },
+ {
+  "oecd": "4200",
+  "tax": "Taxes on net wealth (4200)",
+  "statute": "European Commission TEDB, SI: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 812, 6880, 536, 537, 543, 545, 714, 811, 813, 814, 3741)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "unsupported": [
+   "the national taxes the OECD books under 4200 (named above) and their 2025 statutes"
+  ],
+  "gap": 2,
+  "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVSVN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/SVN.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 4200: 4220 tax on balance wealth paid by banks 93,8 million EUR (2024; the bank balance-sheet tax, in force in 2025); the national taxes behind it not read",
+  "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVSVN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/SVN.csv`, SHA256SUMS; general government S13; 2025 not yet published)"
+ }
+]

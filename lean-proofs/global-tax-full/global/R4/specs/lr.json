@@ -1,0 +1,206 @@
+{
+ "cc": "LR",
+ "name": "Liberia",
+ "dated": "Liberia Revenue Code (amended 2020) and Tax Amendment Act of December 2024 (approved 17 Dec 2024, in force on publication 20 Dec 2024)",
+ "sources": "Sources: Consolidated Liberia Revenue Code as amended 2020 (`cmp20/world/B10-anglophone-africa/lr/law/REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt`) and the Tax Amendment Act of December 2024 (approved 17 December 2024; OCR of `world/B10-anglophone-africa/lr/law/TAX-AMENDMENT-ACT-OF-DECEMBER-2024-AMENDING-THE-LIBERIA-CONSOLIDATED-REVENUE-CODE-AS-AMENDED.pdf`: it amends ss. 50, 55, 74, 203, 204, 211, 602, 702, 704, 741, 806 and 905 and leaves s. 200 as the 2020 consolidation prints it; not the later Tax Amendment Act of December 2025, `LRC-Amendment-December-2025.pdf`, approved 2026). Pass 10 (GST): Liberia Revenue Code as amended (2020 consolidation, `world/B10-anglophone-africa/lr/law/REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt`) Part III Chapter 10 s. 1000-1002, 1021-1022 (the sections are in the text body, not only the table of contents); Tax Amendment Act of 2024 amending certain portions of Chapters 8 and 10 (approved 17 Dec 2024, printed 20 Dec 2024, OCR `TAX-AMENDMENT-ACT-OF-2024-AMENDING-CERTAIN-PORTIONS-…_ocr.txt`). The December 2024 excise schedule was read on the page image (p. 12 of the Tax Amendment Act of December 2024): US$ per litre, imported / local columns. The LRC Amendment of December 2025 (services tax 13 %) applies from 2026.",
+ "vat": {
+  "name": "Goods and services tax (goods tax and services tax)",
+  "standard": 1200,
+  "reduced": 1500,
+  "classes": {
+   "communication": "reduced",
+   "rent": "exempt",
+   "health": "exempt",
+   "medicines": "exempt",
+   "education": "exempt",
+   "financial": "exempt",
+   "insurance": "exempt",
+   "transport": "exempt"
+  },
+  "grade": "A",
+  "statute": "Liberia Revenue Code s. 1000 (b) (3) (goods tax) and s. 1021 (b) (1) (services tax) as amended by the Tax Amendment Act of 2024 (Chapters 8 and 10), in force on publication 20 Dec 2024: 12 %; s. 1022 (a) list of taxable services; s. 1001 (e) exempt supplies",
+  "doc": "Tax Amendment Act of 2024 Part 2 s. 1: \"Section 1000(b)(3) is amended to read as follows: (3) The rate of goods tax is 12 percent of the Section 1004 taxable amount, except that if the supply is an export of goods, the rate of tax is zero (0) percent.\" \"Section 1021(b)(1) and Section 1021(b)(2) are amended to read as follows: (b) Rate of Tax. (1) General Rule. The rate of services tax is 12 percent of the taxable amount described in Section 1025. (2) Exceptions. The rate of services tax at 12 percent of the taxable amount shall not apply to telecommunication services.\" Part 3: \"this Act shall take effect upon publication into handbills\" (printed 20 December 2024). LRC s. 1000 (a): goods tax on \"(1) Every taxable supply ... by a registered manufacturer, and (2) Every taxable import\"; s. 1022 (a) taxable services: \"(1) Electricity services; (2) Telecommunications services; (3) The Provision of water for a fee; (4) Services supplied in carrying on the business of a hotel ...; (5) ... a restaurant or café ...; (6) Gambling services ...; (7) Sale of tickets by international transport services ...; (8) Services of a travel agency ...; (9) Sporting or game arranger services ...; (10) Other services (specified in regulations) ...\". Former s. 1021 (b) (2) (2020 text): \"An additional 5 percent surtax applies to telecommunications services\" (with the 10 % general rate).",
+  "notes": [
+   "the goods tax falls on imports and on supplies by registered manufacturers, not on retail margins: charging 12 % on the tax-inclusive basket price overstates it (convention: whole price)",
+   "services outside the s. 1022 list (rent, health, education, financial, insurance, local transport) are untaxed",
+   "telecommunications: the 2024 amendment takes them out of the 12 % rate without stating another; the former 10 % + 5 % surtax (15 %) is used (flagged); the December 2025 amendment (2026) restores '13 % + 5 % surtax'",
+   "pharmaceuticals are exempt as specified by regulation (s. 1001 (e) (3)); only school textbooks are exempt among books"
+  ],
+  "unsupported": [
+   "telecommunications rate after the 2024 amendment not stated (15 % used)",
+   "retail margins outside the goods tax"
+  ]
+ },
+ "excise": {
+  "name": "Excise tax",
+  "grade": "A",
+  "statute": "LRC Chapter 11 Schedule 1 as replaced by the Tax Amendment Act of December 2024 (approved 17 December 2024; schedule read on the page image, p. 12) [text version: the Act of December 2024 as printed (world/B10-anglophone-africa/lr/law/TAX-AMENDMENT-ACT-OF-DECEMBER-2024-...pdf); the Tax Amendment Act of December 2025 applies from 2026]: beer, wine and other fermented beverages US$0.80 a litre imported, US$0.30 local; spirits US$1.50 imported, US$0.50 local; converted at the line's fxRates.USD (kernel 2.7.0 Fx)",
+  "doc": "Tax Amendment Act of December 2024, excise schedule (page image p. 12): US$ per litre, imported / local columns: beer, wine and other fermented beverages 0.80 / 0.30; spirits 1.50 / 0.50. Nineteenth pass: kernel 2.7.0 converts US$ amounts at a declared rate; the model declares none (no official 2025 Central Bank of Liberia rate publication was reached: the CBL 'Reference Rate' page captured 15 January 2025 prints no figure), so the duty is computed at the line's own fxRates.USD and the goods are listed as grade C without it.",
+  "items": [],
+  "usdItems": [
+   {
+    "good": "beer",
+    "name": "Excise tax (beer, imported)",
+    "usdPerUnit": [
+     80,
+     100
+    ],
+    "imported": true,
+    "statute": "Schedule (Dec 2024): beer US$0.80 a litre, imported"
+   },
+   {
+    "good": "beer",
+    "name": "Excise tax (beer, local)",
+    "usdPerUnit": [
+     30,
+     100
+    ],
+    "imported": false,
+    "statute": "Schedule (Dec 2024): beer US$0.30 a litre, local"
+   },
+   {
+    "good": "wine",
+    "name": "Excise tax (wine and other fermented beverages, imported)",
+    "usdPerUnit": [
+     80,
+     100
+    ],
+    "imported": true,
+    "statute": "Schedule (Dec 2024): wine and other fermented beverages US$0.80 a litre, imported"
+   },
+   {
+    "good": "wine",
+    "name": "Excise tax (wine and other fermented beverages, local)",
+    "usdPerUnit": [
+     30,
+     100
+    ],
+    "imported": false,
+    "statute": "Schedule (Dec 2024): wine and other fermented beverages US$0.30 a litre, local"
+   },
+   {
+    "good": "spirits",
+    "name": "Excise tax (spirits, imported)",
+    "usdPerUnit": [
+     150,
+     100
+    ],
+    "imported": true,
+    "statute": "Schedule (Dec 2024): spirits US$1.50 a litre, imported"
+   },
+   {
+    "good": "spirits",
+    "name": "Excise tax (spirits, local)",
+    "usdPerUnit": [
+     50,
+     100
+    ],
+    "imported": false,
+    "statute": "Schedule (Dec 2024): spirits US$0.50 a litre, local"
+   }
+  ],
+  "usdTests": [
+   {
+    "good": "beer",
+    "quantity": 1000,
+    "fx": [
+     18500,
+     100
+    ],
+    "expect": [
+     55
+    ]
+   },
+   {
+    "good": "beer",
+    "quantity": 1000,
+    "imported": true,
+    "fx": [
+     18500,
+     100
+    ],
+    "expect": [
+     148
+    ]
+   },
+   {
+    "good": "spirits",
+    "quantity": 1000,
+    "imported": true,
+    "fx": [
+     18500,
+     100
+    ],
+    "expect": [
+     277
+    ]
+   },
+   {
+    "good": "wine",
+    "quantity": 750,
+    "fx": [
+     18500,
+     100
+    ],
+    "expect": [
+     41
+    ]
+   }
+  ],
+  "notes": [
+   "nineteenth pass (kernel 2.7.0 Fx): C -> A. The December 2024 schedule's US$ amounts are converted at the line's own fxRates.USD (fxFor, no declared rate); without it beer, wine and spirits lines are listed (grade C, 'fxRates.USD not given'). Hand cases at L$185.00 per US$: 1 litre of local beer -> 55 (0.30 x 185 = 55.50, rounded down); imported beer -> 148; imported spirits -> 277; 75 cl of local wine -> 41",
+   "origin: a good is imported when the line lists it in importedGoods (default local)"
+  ],
+  "unsupported": [
+   "a line without fxRates.USD: beer, wine and spirits listed (grade C); no declared rate (no official 2025 CBL rate publication reached)",
+   "tobacco and the other lines of the 2020 Schedule not read"
+  ]
+ },
+ "cit": {
+  "name": "Income tax (legal persons)",
+  "rate": 2500,
+  "min": {
+   "bp": 200
+  },
+  "grade": "A",
+  "statute": "LRC s. 200 rates (C) (25 % or 2 % of gross income, whichever is greater), confirmed by the Tax Amendment Act of December 2024",
+  "doc": "LRC (2020): \"(C) For income of other legal persons, a regular tax of 25% or a minimum tax of 2% of gross income, whichever is greater. (i) If the minimum tax applies, the excess of the minimum tax over the regular tax is creditable against regular tax due for the next succeeding tax year.\" The December 2024 amendment keeps \"25 percent or a minimum tax of 2 percent of gross income, whichever is greater\" (gross income taken as the turnover).",
+  "notes": [
+   "LRC: the excess of the minimum tax over the regular tax is a credit for the next year (not tracked)",
+   "gross income taken as the turnover"
+  ],
+  "unsupported": [
+   "minimum-tax carry-forward credit",
+   "loss rules"
+  ]
+ },
+ "wht": {
+  "name": "Withholding on payments to nonresidents",
+  "grade": "B",
+  "statute": "LRC s. 906 (nonresident services 15 %); twelfth pass: LRC s. 806 (b) (15 %, payments to nonresidents); LRC s. 806 (b) (15 %, payments to nonresidents); LRC s. 806 (b) (15 %, royalties and license fees to nonresidents)",
+  "doc": "LRC: a payor to a \"nonresident for services rendered is required to withhold tax at the rate of 15 percent of the amount of the payment\" (Board fees, management fees, commissions). Dividend, interest and royalty rates to nonresidents not located in the OCR. Twelfth pass (kernel 2.3.0 grade-C withholding): dividend 15 %: LRC s. 806 (b) (15 %, payments to nonresidents); interest 15 %: LRC s. 806 (b) (15 %, payments to nonresidents); royalty 15 %: LRC s. 806 (b) (15 %, royalties and license fees to nonresidents)",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "LRC s. 906 (15 %, nonresident services)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "LRC s. 806 (b) (15 %, payments to nonresidents)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "LRC s. 806 (b) (15 %, payments to nonresidents)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "LRC s. 806 (b) (15 %, royalties and license fees to nonresidents)"
+   }
+  ],
+  "unsupported": []
+ }
+}

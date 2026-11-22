@@ -1,0 +1,22 @@
+name = "LrGlobal"
+version = "0.1.0"
+defaultTargets = ["LrGlobal", "lrglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); LrTax = the 1.x model, vendored from cmp20/world/B10-anglophone-africa/lr/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "LrTax"
+
+[[lean_lib]]
+name = "LrGlobal"
+
+[[lean_exe]]
+name = "lrglobal"
+root = "LrGlobal.Main"

@@ -1,0 +1,127 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "Self-employed national insurance",
+  "statute": "National Insurance Act Chap. 32:01 s. 36 (1), (3) (lexifina/trinidad-and-tobago-law chapters/32-01, consolidation to Act 15 of 2022)",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (A): National Insurance Act Chap. 32:01 s. 36 (1) establishes 'a system of compulsory national insurance under which ... employed persons ... shall be insured' and s. 36 (3): 'the expression \"employed person\" does not include a self-employed person'; the Health Surcharge paid by the self-employed confers no entitlement (Guide §40) and the OECD TT table books it under 1110",
+  "evidence": [
+   "chapters/32-01/s-36.md, s-2.md read",
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na (1110 named lines incl. 'Health surcharge')"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "3000",
+  "tax": "Taxes on payroll and workforce",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Property Tax Act Chap. 76:04 (lexifina/trinidad-and-tobago-law chapters/76-04, MAP: rates elsewhere): rates on annual rental value in the Act, valuation and 2025 collection status (OECD TT 4100 100.4 in 2024 after years near 0) not settled",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act Chap. 76:04 (lexifina/trinidad-and-tobago-law chapters/76-04, MAP: rates elsewhere): rates on annual rental value in the Act, valuation and 2025 collection status (OECD TT 4100 100.4 in 2024 after years near 0) not settled. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act Chap. 76:04 (lexifina/trinidad-and-tobago-law chapters/76-04, MAP: rates elsewhere): rates on annual rental value in the Act, valuation and 2025 collection status (OECD TT 4100 100.4 in 2024 after years near 0) not settled. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 4100 = 2021:2.0 2022:2.4 2023:1.4 2024:100.4"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "Non-recurrent taxes on property",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales tax (single stage)",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 5112 = ?",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 5112 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+  "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "5200",
+  "tax": "use of goods (vehicles) (5200)",
+  "statute": "Motor Vehicles and Road Traffic Act Chap. 48:50 licence fees (lexifina/trinidad-and-tobago-law",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Motor Vehicles and Road Traffic Act Chap. 48:50 licence fees (lexifina/trinidad-and-tobago-law; the MAP's appendix-b line is the motor vehicles tax on imports, off-target; the annual licence fee table not located). 2025 schedule not read; needs a VehicleTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Motor Vehicles and Road Traffic Act Chap. 48:50 licence fees (lexifina/trinidad-and-tobago-law; the MAP's appendix-b line is the motor vehicles tax on imports, off-target; the annual licence fee table not located). 2025 schedule not read; needs a VehicleTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 5200 = 2021:260.1 2022:272.2 2023:300.8 2024:231.7; named lines: 5210 Motor vehicle taxes and duties (2024: 221.4); 5213 Liquor and miscellaneous business license fees (2024: 10.4)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000)",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 6000 (other taxes, Guide §85) in 2021-2024; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVTTO, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/TTO.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

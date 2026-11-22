@@ -1,0 +1,22 @@
+name = "LbGlobal"
+version = "0.1.0"
+defaultTargets = ["LbGlobal", "lbglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); LbTax = the 1.x model, vendored from cmp20/world/B06-mena/lb/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "LbTax"
+
+[[lean_lib]]
+name = "LbGlobal"
+
+[[lean_exe]]
+name = "lbglobal"
+root = "LbGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

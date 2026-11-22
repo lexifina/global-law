@@ -1,0 +1,463 @@
+{
+ "country": "JO",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail)",
+   "statute": "PIT law of the country",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "the 1.x model does not tax capital gains and the gain provisions were not read this round; interest/dividend/rent treatment is the 1.x model s"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "ضريبة الدخل والمساهمة الوطنية (income tax, national contribution)",
+   "statute": "ITL 34/2014 art. 11(b), 11(و)",
+   "dated": "ISTD consolidated text (as amended by Law 38/2018); pass 3q year-in-force audit: re-cited: ISTD consolidated ITL fetched 2026-11-20 (1.x JoTax) lists Law 38/2018 as the last amendment: unchanged in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime",
+    "charge"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "losses not read",
+    "sector by flag",
+    "withholding: bank-deposit interest 5 %/7 % (art. 12(A)(2)) not distinguished (pass 3i)"
+   ],
+   "withholding": {
+    "grade": "A",
+    "rules": "interest, royalty, services 10 % (ITL 34/2014 art. 12(B)(1), Arabic text); dividend 0 % cited (art. 4(A)(8), ISTD unofficial English consolidation: B)",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Social security contributions (employer)",
+   "statute": "SSL 1/2014 as amended to Law 11/2023 art. 59(a)(1) 11 %, 26(a) 2 %, 43(a)(1) 0.75 %, 48(a) 0.5 %; art. 20(b) ceiling 3,668 JOD/month (2025); art. 59(c) and Regulation 45/2024 art. 3-4 (old-age share reduced 40 %/20 % in small/medium firms for first-insured Jordanians under 30, on request)",
+   "dated": "SSC consolidated edition Jan 2024; SSC ceiling statement (2026 release giving 2025); pass 3r re-cite: SSC English edition law-26.1.2025 (PDF of 28/01/2025, Wayback 27/04/2025: latest amendment 16/04/2023, same rates; law/jo_ssl_en_2025.*); Regulation 45/2024 (in force 1/8/2024; SSC copy, Wayback 19/01/2025; law/jo_reg45_2024.*)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (14.25 %, JOD 44,016 a year)",
+    "employerOf (employerEmployees)"
+   ],
+   "guards": 6,
+   "unsupported": [
+    "Regulation 45/2024 reduction only with the adult's sscReduction and employerEmployees",
+    "pre-2009 members ceilings not applied"
+   ],
+   "status": "modelled"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "رسوم تصاريح العمل لغير الأردنيين (work-permit fees per foreign worker)",
+   "statute": "Regulation 142/2019 on work-permit fees for non-Jordanians and its amendments art. 2 (JOD 350 per worker a year, general rate; garments 225, day workers 800, specialised above quota 2,150) and art. 3(a) (JOD 50 per issue or renewal)",
+   "dated": "UNOFFICIAL REPRINT: jordanianlaw.com ?p=1509 (fetched 2026-11-21); amounts agree with EY mobility alert Oct 2019; MoL 2025 guide answered HTTP 451 (not read); pass 3r re-cite (corrected): MoL comprehensive work-permit guide, editions of 28/1/2025 and 22/5/2025 (Wayback 30/01/2025, 26/05/2025; law/jo_mol_permit_guide_2025a/b.*), reproducing Regulation 142/2019 and its amendments: art. 2 JOD 350 (general), art. 3(a) JOD 50",
+   "grade": "A",
+   "kernel_parts": [
+    "charge 400 per company.expatWorkers"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "sector rates not applied",
+    "without company.expatWorkers: grade C line",
+    "sector rates (art. 2(a)-(c)) not applied: general rate booked",
+    "the amending regulations themselves not read (Ministry consolidation)"
+   ],
+   "pass": "3m",
+   "status": "modelled"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "ضريبة الأبنية والأراضي داخل مناطق البلديات (Law 11/1954)",
+   "statute": "Law 11/1954 (Jordanian consolidated text) art. 5(أ) buildings 8 % of the annual rent, (ب) machine-driven industrial 10 %, (ج) vacant land 8 %; art. 9(1)-(3) (annual rent; land: 6 % of the sale price); art. 13(1) (owner); art. 14 (exemptions)",
+   "dated": "UNOFFICIAL REPRINT: jordanianlaw.com (تشريعات الأردن), fetched 2026-11-21 (law/jo_lawcom_11_1954.*); lob.gov.jo behind reCAPTCHA (not bypassed); pass 3q year-in-force audit: downgraded: unofficial reprint (fetched 2026) without amendment notes",
+   "grade": "C",
+   "kernel_parts": [
+    "charge per building: 8 % of annualValue",
+    "charge per land: 8 % of 6 % of value"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "pass 3q year-in-force audit: downgraded to C: unofficial reprint (fetched 2026) without amendment notes",
+    "unofficial reprint: amendments after its date not checked",
+    "industrial buildings (10 %) and art. 14 exemptions not distinguished",
+    "buildings without annualValue not computed"
+   ],
+   "pass": "3m",
+   "status": "unsupported"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "رسوم تسجيل الأراضي وضريبة بيع العقار (land registration fee, real-estate sale tax)",
+   "statute": "Land Registration Fees Law 26/1958 as amended to Law 7/2023, art. 3(1), 3(6) (paid by the party in whose favour: buyer), 4(و) (assessed value); Table 2023 item 1(ج) (sale 3 %, min 20 dinars per buyer), 1(أ)-(ب) (relatives, co-owners 0,5 %); Real Estate Sale Tax Law 21/1974 as amended to Law 25/2023, art. 3 (3 % from the seller), art. 4(أ) (relatives exempt)",
+   "dated": "DLS consolidations, Wayback 2025-04-20 (dls.gov.jo/ebv4.0/root_storage/ar/eb_list_page/...), law/jo_fees_law26_1958.*, jo_fees_table_2023.*, jo_salestax_law21_1974.*",
+   "grade": "A",
+   "kernel_parts": [
+    "charge 3 % of assessed value (min 20) per purchase, buyer",
+    "charge 3 % of proceeds per disposal, seller"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "relatives (0,5 % fee, tax exempt) not distinguished",
+    "Council of Ministers apartment exemptions not read",
+    "seller's tax on proceeds (no assessed value on a disposal)"
+   ],
+   "pass": "3j"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "الضريبة العامة على المبيعات (general sales tax 16 %)",
+   "statute": "General Sales Tax Law 6/1994 as amended, art. 3, 4(c), 6(a) (16 %), 7 (zero rate Table 2, exempt Table 3); ISTD tables 8-2020 (medicines 4 %, foods 2-10 %); Council of Ministers decision 9366 of 31/5/2020 (hotels and tourist restaurants 8 %)",
+   "dated": "ISTD English consolidation 'General Sales Tax Law and its Amendments 2023' (Wayback 2025-08-05 of istd.gov.jo/ebv4.0/root_storage/en/eb_list_page/general_sales_tax_law_and_its_amendments_2023-1.pdf); tables 'salestax_tables_8-2020.pdf' (Wayback 2024-05-02); law/jo_gst_law_en_2023.txt, law/jo_gst_tables_en_2020.txt",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat standard 16 %, reduced 8 %, superReduced 4 %, zero and exempt classes; basketCharge, businessCharge"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "food at the staple (exempt/zero) reading; other foods 2-10 %",
+    "special tax (Table 1) not modelled",
+    "registration threshold not applied",
+    "rate tables not checked against Cabinet decisions after 2020"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Jordan as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Jordan for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C400&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/jo.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, customsFamily)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 2203000000 (MFN duty '0.85 JD/Liter': specific or compound duty, unit/currency not mapped); 2204211000 (MFN duty '3.5 JD/Liter': specific or compound duty, unit/currency not mapped); 2204212000 (MFN duty '7.5 JD/Liter': specific or compound duty, unit/currency not mapped); 2204219000 (MFN duty '20 JD/Liter': specific or compound duty, unit/currency not mapped); 2208301000 (MFN duty '3.5 JD/Liter': specific or compound duty, unit/currency not mapped); 2208302000 (MFN duty '15 JD/Liter': specific or compound duty, unit/currency not mapped); 2208309000 (MFN duty '20 JD/Liter': specific or compound duty, unit/currency not mapped)",
+    "Pan-Arab free trade area (GAFTA) (origin BH, EG, IQ, KW, LB, LY, MA, OM, PS, QA, SA, SD, SY, TN, AE, YE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "module": "Customs.lean"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Constitution of the Hashemite Kingdom of Jordan (1952, as amended 2016) art. 111: no tax or duty shall be imposed except by law (Constitute Project English text, law/cp_Jordan_2016.txt); no law levies it; tax laws read: Income Tax Law 34/2014, General Sales Tax Law 6/1994, Land Registration Fees Law 26/1958, Real Estate Sale Tax Law 21/1974, Social Security Law 1/2014. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Constitution of the Hashemite Kingdom of Jordan (1952, as amended 2016) art. 111: no tax or duty shall be imposed except by law (Constitute Project English text, law/cp_Jordan_2016.txt); no law levies it; tax laws read: Income Tax Law 34/2014, General Sales Tax Law 6/1994, Land Registration Fees Law 26/1958, Real Estate Sale Tax Law 21/1974, Social Security Law 1/2014. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "jo-h1",
+   "total": 75024,
+   "byOecd": {
+    "1100": 25350,
+    "2100": 3301,
+    "2200": 6272,
+    "4400": 39000,
+    "5111": 1101
+   },
+   "borne": {
+    "consumer": 1101,
+    "employer": 6272,
+    "entity": 67651,
+    "withheld": 0
+   },
+   "net": 262349,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "sales tax: food taken as exempt or zero-rated staples (Table 3 / Table 2); other foods are 2, 4, 5 or 10 % by tariff item",
+    "special sales tax (Table 1: fuels, tobacco, alcohol, soft drinks, mobile services; art. 6(b)) not modelled",
+    "employer social security: art. 20(c) ceilings of members insured before 2009 not applied",
+    "4100 buildings tax: a building without `annualValue` (annual rent) is not computed (grade C)",
+    "4100 buildings and land tax: property taken as inside a municipal area; machine-driven industrial buildings (10 %) and art. 14 exemptions not distinguished",
+    "registration fee and sale tax: sales between relatives (0,5 % fee, tax exempt) not distinguished; Council of Ministers exemptions for apartments (by area) not read; seller's tax on the proceeds (the assessed value is not an input of a disposal)"
+   ]
+  },
+  {
+   "id": "jo-c1",
+   "total": 474000,
+   "byOecd": {
+    "1200": 154000,
+    "5111": 320000
+   },
+   "borne": {
+    "consumer": 320000,
+    "employer": 0,
+    "entity": 147000,
+    "withheld": 7000
+   },
+   "net": 653000,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "sales tax registration threshold (Regulation 81/2000) not applied",
+    "losses brought forward: carry-forward rule not read; not offset",
+    "withholding on interest: 10 % (art. 12(B)(1)); bank-deposit interest (5 % / 7 %, art. 12(A)(2)) not distinguished",
+    "3000 work-permit fees (JOD 350 + 50 per non-Jordanian worker a year): company.expatWorkers not given (grade C)"
+   ]
+  },
+  {
+   "id": "jo-v1",
+   "total": 1720,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 1720
+   },
+   "borne": {
+    "consumer": 1720,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "sales tax: food taken as exempt or zero-rated staples (Table 3 / Table 2); other foods are 2, 4, 5 or 10 % by tariff item",
+    "sales tax: restaurants taken at 8 % (tourist restaurants); popular restaurants are exempt (Table 3 services item 26)"
+   ]
+  },
+  {
+   "id": "jo-w1",
+   "total": 81000,
+   "byOecd": {
+    "1100": 30000,
+    "1200": 51000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 21000,
+    "withheld": 60000
+   },
+   "net": 79000,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "sales tax registration threshold (Regulation 81/2000) not applied",
+    "withholding on interest: 10 % (art. 12(B)(1)); bank-deposit interest (5 % / 7 %, art. 12(A)(2)) not distinguished",
+    "3000 work-permit fees (JOD 350 + 50 per non-Jordanian worker a year): company.expatWorkers not given (grade C)"
+   ]
+  },
+  {
+   "id": "jo-t1",
+   "total": 11250,
+   "byOecd": {
+    "1100": 900,
+    "2100": 1500,
+    "2200": 2850,
+    "4400": 6000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 2850,
+    "entity": 8400,
+    "withheld": 0
+   },
+   "net": 41600,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "employer social security: art. 20(c) ceilings of members insured before 2009 not applied",
+    "registration fee and sale tax: sales between relatives (0,5 % fee, tax exempt) not distinguished; Council of Ministers exemptions for apartments (by area) not read; seller's tax on the proceeds (the assessed value is not an input of a disposal)"
+   ]
+  },
+  {
+   "id": "jo-p1",
+   "total": 5250,
+   "byOecd": {
+    "1100": 900,
+    "2100": 1500,
+    "2200": 2850
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 2850,
+    "entity": 2400,
+    "withheld": 0
+   },
+   "net": 17600,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "employer social security: art. 20(c) ceilings of members insured before 2009 not applied",
+    "4100 buildings and land tax grade C (year-in-force audit, pass 3q): Law 11/1954 in an unofficial reprint without amendment notes is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "4100 buildings and land tax: property taken as inside a municipal area; machine-driven industrial buildings (10 %) and art. 14 exemptions not distinguished"
+   ]
+  },
+  {
+   "id": "jo-p2",
+   "total": 45200,
+   "byOecd": {
+    "1200": 42000,
+    "3000": 3200
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 45200,
+    "withheld": 0
+   },
+   "net": 154800,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "sales tax registration threshold (Regulation 81/2000) not applied",
+    "3000 work-permit fees: general rate booked; sector rates of Regulation 142/2019 art. 2(أ)-(ج) (garments 225, day workers 800, specialised workers above the quota 2,150) not applied"
+   ]
+  },
+  {
+   "id": "jo-g1",
+   "total": 1561,
+   "byOecd": {
+    "1100": 0,
+    "2100": 675,
+    "2200": 886
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 886,
+    "entity": 675,
+    "withheld": 0
+   },
+   "net": 8325,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "employer social security: art. 20(c) ceilings of members insured before 2009 not applied"
+   ]
+  },
+  {
+   "id": "jo-g2",
+   "total": 18854,
+   "byOecd": {
+    "1100": 10250,
+    "2100": 3301,
+    "2200": 5303
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 5303,
+    "entity": 13551,
+    "withheld": 0
+   },
+   "net": 46449,
+   "notModelled": [
+    "1300",
+    "2300",
+    "4100",
+    "4500",
+    "5112",
+    "5121",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "employer social security: art. 20(c) ceilings of members insured before 2009 not applied"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 22,
+ "theorems": 1
+}

@@ -1,0 +1,118 @@
+{
+ "cc": "ZM",
+ "name": "Zambia",
+ "dated": "ZRA tax information pages (official secondary: live 2026-11-21 and Wayback 2025-05-16); Income Tax (Amendment) Acts 2023-2025 held",
+ "sources": "Zambia Revenue Authority, 'Tax information' page (`cmp20/global/R4/fetch/zm8/`, live copy of 2026-11-21 and Wayback capture of 2025-05-16, SHA256SUMS); Income Tax (Amendment) Acts 2023-2025 (`cmp20/world/B09-southern-africa/zm/law/`). The consolidated Income Tax, VAT and Customs and Excise Acts are not held. Pass 9: amendment Acts from parliament.gov.zm (/acts-of-parliament → /node/<n> → sites/default/files/documents/acts/*.pdf): Customs and Excise (Amendment) Acts No. 25 of 2022, No. 25 of 2023, No. 24 of 2024 (in operation 1 Jan 2025) and No. 11 of 2025 (published 19 Aug 2025); Income Tax (Amendment) Acts No. 17 of 2018, No. 15 of 2019, No. 43 of 2021, No. 24 of 2022, No. 22 of 2023, No. 22 of 2024 (1 Jan 2025) and No. 10 of 2025 (published 19 Aug 2025). Texts and SHA256SUMS in `R4/fetch/zm9/` (pdftotext -layout). The consolidated Acts (Cap. 322, Cap. 323) are not held: only rates whose figure and unit are printed in an amending Act are modelled.",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 1600,
+  "classes": {},
+  "grade": "B",
+  "statute": "Value Added Tax Act Cap. 331 (standard rate 16 %), per the Zambia Revenue Authority guide (official secondary; the same sentence in the Wayback capture of 2025-05-16 and the live page)",
+  "doc": "ZRA, Tax information, Value Added Tax: \"STANDARD RATED SUPPLIES: These are supplies that attract VAT at the prescribed standard rate 16%. ZERO RATED SUPPLIES: These are supplies that attract VAT at 0%. EXEMPT SUPPLIES: These are supplies that do not attract any VAT at all.\" Grade B: the Act was not read.",
+  "notes": [
+   "zero-rated and exempt supplies are not listed in the guide: not applied"
+  ],
+  "unsupported": [
+   "zero-rated and exempt schedules (not read)"
+  ]
+ },
+ "excise": {
+  "name": "Excise duty (Customs and Excise Act, Second Schedule)",
+  "grade": "A",
+  "statute": "Customs and Excise Act Cap. 322 s. 76 and Second Schedule as amended to 1 Jan 2025: heading 4 subheading 2203.00.90 (clear beer) 60 %, heading 5 (22.04, 22.05 wine) 60 %, heading 6 (2207.10.00, 2207.20.10, 2207.20.90, Ex.22.08 spirits) 60 % (figures quoted as the ones replaced by Act No. 11 of 2025), heading 9 (3) (a) petroleum spirit 2710.12.10 K2.34/ltr (Act No. 24 of 2024 App. II (e))",
+  "doc": "Customs and Excise (Amendment) Act No. 24 of 2024 (in operation 1 Jan 2025), App. II: \"(e) heading 9, by the deletion of subheading (3) and the substitution therefor of the following: ... (a) Petroleum spirit (Motor spirit) 2710.12.10 Decalitre K2.34/ltr ... (e) Automotive gas-Oils diesel 2710.19.10 Decalitre K0.75\"; \"(d) heading 7 ... headings 24.01 and 24.02, by the deletion of the figure 'K400' and the substitution therefor of the figure 'K452'\"; \"(c) heading 3 ... 2202.10.20, 2202.91.00 and 2202.99.00 by the deletion of the figure 'K0.30' and the substitution therefor of the figure 'K1.00'\". Customs and Excise (Amendment) Act No. 11 of 2025 (19 Aug 2025), App. I: \"(c) heading 4 ... opposite subheading 2203.00.90, by the deletion of the figure '60%' and the substitution therefor of the figure '50%'; (d) heading 5 ... opposite headings 22.04 and 22.05, by the deletion of the figure '60%' and the substitution therefor of the figure '80%'; (e) heading 6 ... opposite subheadings 2207.10.00, 2207.20.10, 2207.20.90 and Ex.22.08, by the deletion of the figure '60%' and the substitution therefor of the figure '80%'; (f) heading 7 ... 'K452' ... 'K750'\".",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Excise clear beer (2203.00.90)",
+    "advBp": 6000,
+    "vatBp": 1600,
+    "statute": "Second Schedule heading 4, 2203.00.90: 60 % (to 18 Aug 2025)"
+   },
+   {
+    "good": "wine",
+    "name": "Excise wine (22.04)",
+    "advBp": 6000,
+    "vatBp": 1600,
+    "statute": "Second Schedule heading 5, 22.04: 60 % (to 18 Aug 2025)"
+   },
+   {
+    "good": "spirits",
+    "name": "Excise spirits (Ex.22.08)",
+    "advBp": 6000,
+    "vatBp": 1600,
+    "statute": "Second Schedule heading 6, Ex.22.08: 60 % (to 18 Aug 2025)"
+   },
+   {
+    "good": "petrol",
+    "name": "Excise petroleum spirit (2710.12.10)",
+    "perUnitNum": 2340,
+    "perUnitDen": 1000,
+    "vatBp": 1600,
+    "statute": "Second Schedule heading 9 (3) (a) (Act No. 24 of 2024): K2.34 per litre"
+   }
+  ],
+  "notes": [
+   "rates in force from 1 Jan 2025 are applied to the whole year; Act No. 11 of 2025 (from 19 Aug 2025) sets clear beer 50 %, wine and spirits 80 %, tobacco K750 and non-alcoholic drinks K2.00 (not split by date)",
+   "cigarettes (24.02: K452 from 1 Jan 2025), non-alcoholic drinks (2202.10.20: K1.00) and diesel (2710.19.10: K0.75) are not modelled: the amending Acts print the figure but not the unit it is charged per (the consolidated Second Schedule is not held); opaque beer 2203.00.10 not modelled"
+  ],
+  "unsupported": [
+   "cigarettes K452 (unit not read)",
+   "non-alcoholic K1.00 (unit not read)",
+   "diesel K0.75 (unit not read)",
+   "19 Aug 2025 rate changes (Act No. 11 of 2025)"
+  ]
+ },
+ "cit": {
+  "name": "Corporate income tax",
+  "rate": 3000,
+  "step": 1,
+  "grade": "B",
+  "statute": "Income Tax Act Cap. 323 Charging Schedule (company rate 30 %), per the Zambia Revenue Authority guide (official secondary, live page 2026-11-21); the Income Tax (Amendment) Acts 2023 and 2024 amend only sector items of the Charging Schedule",
+  "doc": "ZRA, Tax information, Income Tax (worked example): a taxable income of K1 250 000 at the 30 % rate gives K375 000; the page adds that some sectors have other rates set in the Charging Schedule (agriculture 10 %). The Income Tax (Amendment) Act 2024 s. 15 amends paragraph 5 of the Charging Schedule for sector items (e.g. copper-cathode products 20 %), not the general rate. Grade B: guide, not the Act; the sentence is on the live page (2026), not in the 2025-05-16 capture.",
+  "notes": [
+   "sector rates (agriculture 10 %, mining, manufacturing of copper products, banks) and the turnover tax regime are not modelled",
+   "Income Tax (Amendment) Act No. 10 of 2025 (published 19 Aug 2025) adds s. 14A, a minimum alternative tax of 1 % of turnover (Charging Schedule para 8) credited against income tax for five years; not modelled (regulations under s. 14A (6), application to the 2025 charge year not established)"
+  ],
+  "unsupported": [
+   "sector rates of the Charging Schedule",
+   "loss carry-forward limits",
+   "minimum alternative tax (s. 14A, from 19 Aug 2025)"
+  ]
+ },
+ "wht": {
+  "name": "Withholding tax on payments to non-residents",
+  "grade": "A",
+  "statute": "Income Tax Act Cap. 323 Charging Schedule para 6 (1) (b) as substituted by Act No. 17 of 2018 (20 % on dividends payable to non-residents and payments to non-resident contractors); para 7 proviso item on interest to a non-resident 20 % (Act No. 17 of 2018, Act No. 15 of 2019 item (x), renumbered (ix) by Act No. 43 of 2021, substituted by Act No. 10 of 2025: 20 %); thirteenth pass: ITA Cap. 323 Charging Schedule para 7 (royalties to non-residents 20 %, final), per the ZRA leaflet 'Withholding Taxes' (2023, Wayback capture 2023-08-04, `R4/fetch/p13/zm_wht_leaflet_2023.pdf`: royalties 15 % for residents, 20 % for non-residents, final for non-residents); amending Acts 2023-2025 held do not touch the item (official secondary, B)",
+  "doc": "Act No. 17 of 2018 s. 17 (c): \"in paragraph 6 (1) ... by the deletion of item (b) and the substitution therefor of the following: (b) the rate of twenty percent for— (i) dividends payable to non-residents; and (ii) payments to non-resident contractors\"; Act No. 15 of 2019 s. 11: \"(x) tax required to be deducted from the payment of interest, except interest on Treasury Bills and Government bonds to a non-resident, shall be at the rate of twenty percent.\"; Act No. 43 of 2021: \"(iii) by the renumbering of item (x) as item (ix)\"; Act No. 10 of 2025 s. 4: \"(ix) tax required to be deducted from the payment of interest to a non resident, shall be at the rate of twenty percent.\" Thirteenth pass (kernel 2.3.0 grade-C withholding): royalty 20 %: ITA Cap. 323 Charging Schedule para 7 (royalties to non-residents 20 %, final), per the ZRA leaflet 'Withholding Taxes' (2023, Wayback capture 2023-08-04, `R4/fetch/p13/zm_wht_leaflet_2023.pdf`: royalties 15 % for residents, 20 % for non-residents, final for non-residents); amending Acts 2023-2025 held do not touch the item (official secondary, B)",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 2000,
+    "statute": "Charging Schedule para 6 (1) (b) (i) (Act 17/2018): 20 %"
+   },
+   {
+    "kind": "services",
+    "rateBp": 2000,
+    "statute": "Charging Schedule para 6 (1) (b) (ii) (Act 17/2018): non-resident contractors 20 %"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 2000,
+    "statute": "Charging Schedule para 7 item (ix) (Acts 15/2019, 43/2021, 10/2025): 20 %"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 2000,
+    "statute": "ITA Cap. 323 Charging Schedule para 7 (royalties to non-residents 20 %, final), per the ZRA leaflet 'Withholding Taxes' (2023, Wayback capture 2023-08-04, `R4/fetch/p13/zm_wht_leaflet_2023.pdf`: royalties 15 % for residents, 20 % for non-residents, final for non-residents); amending Acts 2023-2025 held do not touch the item (official secondary, B)"
+   }
+  ],
+  "notes": [
+   "royalties to non-residents 20 % (ZRA leaflet 2023, B); management or consultancy fees to non-residents (s. 82A, 20 % final per the same leaflet) fall under the services rule (20 %)"
+  ],
+  "unsupported": [
+   "management/consultancy fees (s. 82A)"
+  ]
+ }
+}

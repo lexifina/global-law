@@ -1,0 +1,18 @@
+name = "ItGlobal"
+version = "0.1.0"
+defaultTargets = ["ItGlobal", "itglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); ITTax = the 1.x model, vendored from cmp20/continental/it/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "ITTax"
+
+[[lean_lib]]
+name = "ItGlobal"
+
+[[lean_exe]]
+name = "itglobal"
+root = "ItGlobal.Main"

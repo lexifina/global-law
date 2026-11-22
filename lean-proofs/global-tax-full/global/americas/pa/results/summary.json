@@ -1,0 +1,369 @@
+{
+ "country": "PA",
+ "name": "Panama",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:27"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PaGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "ITBMS",
+   "statute": "Código Fiscal art. 1057-V Parágrafos 6, 8, 9 (Ley 8 de 2010 arts. 76, 79-81, 84)",
+   "dated": "Ley 8 of 15 March 2010, rates from 1 July 2010",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "Parágrafo 8 exemptions not reprinted by Ley 8 (food, health, education, financial, rent, utilities)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo (tabaco, bebidas gaseosas, combustibles)",
+   "statute": "Ley 45 de 1995; Ley 69 de 2009; Código Fiscal (combustibles)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "pass 12: alcohol rows modelled from Ley 15 de 2013; tobacco and fuel texts not held",
+   "unsupported": [
+    "would unlock: Ley 69 de 2009 and the fuel consumption tax article as in force 2025"
+   ],
+   "family_file": "lean/PaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo (bebidas alcohólicas)",
+   "statute": "Ley 45 de 1995 arts. 7-A, 11, 20, 25 (Ley 15 de 2013 arts. 1, 2, 5, 6)",
+   "dated": "Ley 15 de 2013 (Legispan via lexifina/panama-law); later amendments not checked",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "ExciseRule (strength bands)"
+   ],
+   "unsupported": [
+    "wholesale price above B/. 18.00 a litre",
+    "strength needed"
+   ],
+   "family_file": "lean/PaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 52",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 52: \"Nadie está obligado a pagar contribución ni impuesto que no estuvieren legalmente establecidos\" (`pa/law/const_art-052.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Código Fiscal art. 1057-V Parágrafos 6, 8, 9 (Ley 8 de 2010 arts. 76, 79-81, 84); Ley 45 de 1995 arts. 7-A, 11, 20, 25 (Ley 15 de 2013 arts. 1, 2, 5, 6); Código Fiscal art. 699 (Ley 8/2010): 25 %; Código Fiscal art. 733 (dividends 10 %); 1.x model (see its summary.json); Ley 51 de 2005 art. 101 as replaced by Ley 462 de 2025 art. 84).",
+   "family_file": "lean/PaGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la renta (personas jurídicas)",
+   "statute": "Código Fiscal art. 699 (Ley 8/2010): 25 %",
+   "dated": "Ley 8 de 2010 text",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "CAIR (art. 699 par. 1: 4,67 % of gross taxable income above B/.1,500,000) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PaGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Código Fiscal art. 733 (dividends 10 %); remittances abroad 12.5 % (PwC)",
+   "dated": "PwC Worldwide Tax Summaries Panama, corporate withholding taxes, reviewed 19 August 2025 (Internet Archive 2025-09-10; the page reviewed 2026-08-04 gives the same rates); FT review 7",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "Código Fiscal text on remittances abroad not read (Órgano Judicial copy 403, Gaceta Oficial behind a script check): the 12.5 % effective rate is the PwC summary's; exemptions (art. 708) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PaGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross taxed; CSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross taxed; CSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Seguro Educativo (employer)",
+   "statute": "Decreto de Gabinete 168 de 1971 (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "re-filed name, stays C: the OECD PA table books the Seguro Educativo ('Education insurance') under 3000; it is also bundled in the P4 C entry 'Riesgos profesionales premium and Seguro Educativo' (2200), which should be split when modelled; the Seguro Educativo rate act (Decreto de Gabinete 168 de 1971 and amendments) is not in lexifina/panama-law (only Leyes 32/1992, 63/2010 mention it)"
+   ],
+   "triage": "(b) re-filed / covered",
+   "triage_note": "re-filed name, stays C: the OECD PA table books the Seguro Educativo ('Education insurance') under 3000; it is also bundled in the P4 C entry 'Riesgos profesionales premium and Seguro Educativo' (2200), which should be split when modelled; the Seguro Educativo rate act (Decreto de Gabinete 168 de 1971 and amendments) is not in lexifina/panama-law (only Leyes 32/1992, 63/2010 mention it)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 3000 = 2021:113.3 2022:130.5 2023:200.0 2024:140.9; named lines: 3000 Education insurance (2024: 140.9)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "impuesto de inmuebles (Código Fiscal art. 766, progressive above the exempt value",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto de inmuebles (Código Fiscal art. 766, progressive above the exempt value; Ley 66 de 2017 tariffs); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto de inmuebles (Código Fiscal art. 766, progressive above the exempt value; Ley 66 de 2017 tariffs); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 4100 = 2021:144.6 2022:160.3 2023:200.6 2024:123.2"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4200 (recurrent taxes on net wealth, Guide §51) in 2021-2024; 2025 not yet published, no 2025 wealth tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución de valorización (municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución de valorización (municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución de valorización (municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+   "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "impuesto de circulación / placa (municipal",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto de circulación / placa (municipal; Ley 28 de 1994 'impuesto de revisado', MAP: rates elsewhere). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto de circulación / placa (municipal; Ley 28 de 1994 'impuesto de revisado', MAP: rates elsewhere). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 5200 = 2021:247.4 2022:272.5 2023:289.8 2024:280.8; named lines: 5200 Other indirect taxes (2024: 61.5); 5213 Commercial licenses (2024: 120.9); 5213 Permission to conduct commercial and service activities (2024: 94.1); 5213 Permission to conduct industrial activities (2024: 4.3)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: Impuesto de timbre (Código Fiscal arts. 946 ff.; OECD PA 6200 'Stamp duties'): documents are not an input; text not read"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: Impuesto de timbre (Código Fiscal arts. 946 ff.; OECD PA 6200 'Stamp duties'): documents are not an input; text not read",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PAN.csv): general government heading 6000 = 2021:24.3 2022:27.6 2023:26.1 2024:28.7; named lines: 6200 Stamp duties (2024: 28.7)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PaGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Panama (DSD_REV_LAC@DF_REVPAN v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PAN.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for Panama (DSD_REV_LAC@DF_REVPAN v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PAN.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for Panama (DSD_REV_LAC@DF_REVPAN v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PAN.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/PaGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "CSS cuota patronal (employer)",
+   "statute": "Ley 51 de 2005 art. 101 (2) (d) (to 17 Mar 2025); art. 101 as replaced by Ley 462 de 2025 art. 84 (from 18 Mar 2025, art. 244)",
+   "dated": "CSS consolidation Feb 2024 (Wayback 2026-02-02) + Texto Único G.O. 30284-B 22 May 2025 (amendment list); G.O. 30238 of 18 Mar 2025; pass 13",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "Contribution",
+    "charge (custom day split)"
+   ],
+   "unsupported": [
+    "annual wage split by days 76/289 (salaries paid per month not an input)",
+    "thirteenth-month 10.75 %",
+    "riesgos profesionales"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PaGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2200",
+   "tax": "Riesgos profesionales premium and Seguro Educativo (employer)",
+   "statute": "Ley 51 de 2005; Decreto de Gabinete 168 de 1971",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P4",
+   "kernel_parts": [],
+   "tried": "not in the texts held; pass 9: Ley 462 (whole G.O. 30238 OCR'd) changes Decreto de Gabinete 68/1970 arts. 25, 31, 32 only (no premium table)",
+   "unsupported": [
+    "would unlock: the premium table by risk class; the Seguro Educativo decree"
+   ],
+   "family_file": "lean/PaGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Código Fiscal (inmuebles, transferencia 2 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/PaGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 6,
+  "C": 10
+ },
+ "guards": 19,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

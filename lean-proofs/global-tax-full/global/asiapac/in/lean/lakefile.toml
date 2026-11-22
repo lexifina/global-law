@@ -1,0 +1,18 @@
+name = "InGlobal"
+version = "0.1.0"
+defaultTargets = ["InGlobal", "inglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); InTax = the 1.x model, vendored from cmp20/world/B02-g20/in/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "InTax"
+
+[[lean_lib]]
+name = "InGlobal"
+
+[[lean_exe]]
+name = "inglobal"
+root = "InGlobal.Main"

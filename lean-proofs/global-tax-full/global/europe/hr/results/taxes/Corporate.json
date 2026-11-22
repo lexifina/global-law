@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Porez na dobit",
+  "statute": "Zakon o porezu na dobit čl. 28 st. 1 (10 % if revenue below 1.000.000,00 eura, 18 % otherwise); NN 138/2020 (12 -> 10 %), NN 114/2023 čl. 8 (threshold 1.000.000,00 eura from 1.1.2024) [year in force 2025 (pass 17), re-cited 2025: PwC Croatia, Corporate - Taxes on corporate income, Internet Archive 2025-06-22 (hr/law/pwc_cit_wb20250622.*): 18 %, and 10 % where the period's revenue is below EUR 1 000 000, as modelled]",
+  "dated": "NN 114/2023; PwC Croatia CIT page, Internet Archive 2025-06-22",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "the 18 % wording itself read only in the unofficial consolidation (the 2016 act setting it not fetched)",
+   "loss carry-forward (5 years, čl. 17) not modelled"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad",
+  "statute": "Zakon o porezu na dobit čl. 31 (dividends 10 %, interest and royalties 15 %)",
+  "dated": "PwC WWTS Corporate - Withholding taxes, 2025-05-14 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Porez po odbitku (usluge) (services)",
+  "statute": "Zakon o porezu na dobit čl. 31 (izmjena NN 114/2023, st. 12)",
+  "dated": "NN 114/2023; 2025-05-14",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "services are taken as paid to a cooperative jurisdiction (0); 25 % for EU-listed non-cooperative jurisdictions not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

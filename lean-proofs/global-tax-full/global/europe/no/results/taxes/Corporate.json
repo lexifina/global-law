@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Inntektsskatt for selskaper (skatt til staten)",
+  "statute": "Stortingets skattevedtak for inntektsåret 2025 (FOR-2024-12-13-3203) § 3-3 første ledd (22 pst.)",
+  "dated": "Stortingets skattevedtak, ikrafttredelse inntektsåret 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "fritaksmetoden (skatteloven § 2-38: dividends exempt with 3 % sjablong) not modelled",
+   "financial-sector rate 25 % (§ 3-3 annet ledd) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Kildeskatt (dividend, interest, royalty, services)",
+  "statute": "Stortingets skattevedtak for 2025 §§ 3-5, 3-6; skatteloven § 2-3 (1) i, j, §§ 10-80, 10-81",
+  "dated": "Lovdata, FOR-2024-12-13-3203 (`no/law/stv_skatt2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "the exemption for EEA companies (skatteloven § 2-38) not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

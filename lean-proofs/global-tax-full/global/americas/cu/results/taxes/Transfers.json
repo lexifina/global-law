@@ -1,0 +1,41 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Impuesto sobre Transmisión de Bienes",
+  "statute": "Ley 113 arts. 196-205 a); Ley 174 art. 90",
+  "dated": "Ley 113 as modified (GO 4.2.2021); Ley 174 for 2025",
+  "grade": "A",
+  "package": "P5",
+  "kernel_parts": [
+   "TransferDuty"
+  ]
+ },
+ {
+  "oecd": "4300",
+  "tax": "Impuesto sobre Herencias",
+  "statute": "Ley 113 art. 205 d), Anexo No. 3",
+  "dated": "as above",
+  "grade": "B",
+  "package": "P6",
+  "kernel_parts": [
+   "InheritanceTax"
+  ],
+  "unsupported": [
+   "marginal vs whole-amount reading",
+   "gifts"
+  ]
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "Constitución (2019) art. 108 m)",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución (2019) art. 108 m): \"establecer, modificar o extinguir los tributos\" (`cu/law/const_art-108.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: Ley 113 arts. 132-150; Ley 174 (2025) art. 69; Ley 113/2012 arts. 73 párr. 2, 98, 99: personas jurídicas extranjeras sin establecimiento permanente 4 % of gross income, retenido por el pagador; 1.x model (see its summary.json); Ley 174 art. 19; Ley 174 art. 91)."
+ }
+]

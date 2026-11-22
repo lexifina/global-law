@@ -1,0 +1,177 @@
+{
+ "country": "BW",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employer social security contributions",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019 — Botswana (Wayback copy, R4/fetch/ssptw11/botswana.txt)",
+   "dated": "-",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "BW has no contributory social insurance: old-age pension is universal ('Employer Universal: None ... Government Universal: The total cost'), sickness/maternity and work injury are employer-liability systems (benefits paid directly or insured with private carriers), not contributions to a public fund. Secondary source (2019), no later statute creating a contribution found. Human Resource Development Levy is on turnover (not payroll), noted under P7.",
+   "guards": 1
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Transfer duty on acquisitions of immovable property by citizens (5 % of the value above P1 500 000)",
+   "statute": "Transfer Duty Act Cap. 53:01 as amended by the Transfer Duty (Amendment) Act 2023 (in force 3 May 2023), per the BURS public notice (Wayback 2023-05-09, R4/fetch/p13/bw_tda2023.pdf: citizen exemption threshold raised from P1 000 000 to P1 500 000) and the BURS declaration form 'Transfer of immovable property' (computation 'Citizen @ 5% ((value less P1M)*5%)', R4/fetch/p13/bw_tip.pdf). Act text not read (official secondary). Liability: the transferee",
+   "dated": "-",
+   "unsupported": [
+    "non-citizen acquirers (10 % to P2 000 000, 15 % above): citizenship is not an input, the citizen rate is applied",
+    "company acquirers (rate by citizen ownership) not modelled",
+    "transactions chargeable to VAT are waived (2023)",
+    "the citizen rate of 5 % is read from the pre-2023 form (flag)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferBandFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Withholding tax on dividends received by residents (15 %, final)",
+   "statute": "Income Tax Act Cap. 52:01 s. 58 and Seventh Schedule, per the BURS page 'Withholding Taxes' (fetched 2025-09-17, R4/fetch/bw10/wht_20250917.html: 'Withholding tax on dividends applies to both residents and non-residents at the rate of 15% and it is a final tax'); official secondary",
+   "dated": "-",
+   "unsupported": [
+    "residents' interest (withholding above P1 500 a quarter; rate table not read)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Motor vehicle licence fees (annual)",
+   "statute": "Road Traffic Act (Cap. 69:01) and its vehicle registration and licensing regulations (fee schedule not identified)",
+   "dated": "-",
+   "unsupported": [
+    "no text of the 2025 licence fee schedule reached: BotswanaLII answers with a bot check (not used) and no Wayback copy of the regulations was located; the only Department of Transport fee PDF on Wayback is of 2008"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "botswanalii.org (403 check), Wayback CDX transport.gov.bw",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Value Added Tax Act Cap. 50:03 (Act not read). Rate and exemptions from two professional guides dated 2025 (facts only): PwC Worldwide Tax Summaries, Botswana, Corporate - Other taxes, section 'Value-added tax (VAT)', last reviewed 25 September 2025 (Wayback capture 2025-12-16, R4/fetch/swp/pwc_bw_corpother_wb20251216.txt; same 14 % in Individual - Other taxes, capture 2025-11-21); Deloitte International Tax, Botswana Highlights 2025 (updated January 2025), 'Value added tax' (R4/fetch/swp/deloitte_bw_2025.txt)",
+   "dated": "Income Tax Act Cap. 52:01 (repealed by the Income Tax Act 2026 from 1 July 2026): rates as stated by the Botswana Unified Revenue Service pages 'Companies' (Wayback 19 Apr 2025) and 'Other Withholding Taxes' (Wayback 17 Sep 2025); the Act text for 2025 is not held: grade B",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "zero-rated food items not listed by the guides: food taxed at the standard rate (overstates where a food is zero-rated)",
+    "exempt classes taken whole (fee-based financial services, OTC medicines, tourist transport are standard-rated in law)",
+    "BURS VAT page (Wayback 26 March 2025) prints 12 %: disagrees with both 2025 guides (14 %)"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "Customs and Excise Duty Act Cap. 50:01 Schedule 1 Part 2A",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "Botswana's own Schedule No. 1 Part 2A is not held: BURS's archived 'Tariff Volume I July 2025' holds Part 1 (customs) only and the Volume II captures are HTML stubs; no BURS statement that the SACU common rates apply was found"
+   ],
+   "tried": "R4/fetch/bw10/tariff_vol1_july2025.pdf; BURS customs downloads on Wayback (885, 931)",
+   "guards": 0
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (SACU common external tariff, Schedule No. 1 Part 1)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Customs Act 2018 / Customs and Excise Duty Act Cap. 50:01 (charging provision not held) and Botswana's Customs and Excise Tariff Schedule 1 Part 1 dated 01.07.2025 (BURS Tariff Volume I, R4/fetch/bw10/tariff_vol1_july2025.pdf; columns General, EU/UK, SADC, EFTA, MERCOSUR, AfCFTA); SACU Agreement 2002 (as amended 12 April 2013) art. 18 (1) (goods of the Common Customs Area free of customs duties between Member States) and art. 20 (1) (the Council approves the customs duties applied to goods imported into the Common Customs Area) [R4/fetch/gap/sacu_agreement_wb20210517.pdf]; common external tariff: Schedule No. 1 Part 1, 'Rate of Duty' columns General, EU/UK, EFTA, SADC, as printed in South Africa's consolidation dated 2025-04-04 (SARS Legal-LPrim-CE-Sch1P1Chpt1-to-99, Wayback 20250405095800, R4/fetch/gap/za_sch1p1_wb20250405095800.pdf) and Botswana's dated 01.07.2025 (BURS Tariff Volume I, R4/fetch/bw10/tariff_vol1_july2025.pdf): the same rates on every line below",
+   "dated": "BURS Tariff Volume I dated 01.07.2025; the same rates in South Africa's consolidation of 2025-04-04 (flag: January-June not read for Botswana itself)",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "SADC FTA, MERCOSUR and AfCFTA preference columns not applied (MFN charged for those origins)",
+    "rebates and suspensions (Schedules No. 3 and 4), anti-dumping and safeguard duties (Part 2B and Part 3)",
+    "lines of other HS headings (grade C)"
+   ],
+   "guards": 9
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Company tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Income Tax Act Cap. 52:01 (rate as stated by BURS 'Companies', Wayback 19 Apr 2025): resident companies 22 %",
+   "dated": "Income Tax Act Cap. 52:01 (repealed by the Income Tax Act 2026 from 1 July 2026): rates as stated by the Botswana Unified Revenue Service pages 'Companies' (Wayback 19 Apr 2025) and 'Other Withholding Taxes' (Wayback 17 Sep 2025); the Act text for 2025 is not held: grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "Cap. 52:01 Schedule not read",
+    "15 % manufacturing / IFSC rates"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents (s. 58, Seventh Schedule)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Income Tax Act Cap. 52:01 s. 58 and Seventh Schedule (rates as stated by BURS 'Other Withholding Taxes', Wayback 17 Sep 2025): management and consultancy fees 15 % (final), commercial royalties 15 % (final), interest to non-residents 15 % (final); twelfth pass: ITA Cap. 52:01 s. 58, Seventh Schedule para 2 (b) (15 % on each dividend paid to a non-resident; BURS 'Withholding Taxes' 2025: 15 %, final)",
+   "dated": "Income Tax Act Cap. 52:01 (repealed by the Income Tax Act 2026 from 1 July 2026): rates as stated by the Botswana Unified Revenue Service pages 'Companies' (Wayback 19 Apr 2025) and 'Other Withholding Taxes' (Wayback 17 Sep 2025); the Act text for 2025 is not held: grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "Seventh Schedule not read"
+   ],
+   "guards": 8
+  }
+ ],
+ "cases": 7,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

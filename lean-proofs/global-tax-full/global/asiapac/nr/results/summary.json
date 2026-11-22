@@ -1,0 +1,234 @@
+{
+ "country": "NR",
+ "name": "Nauru",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:25:31"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains: none (cited)",
+   "statute": "Employment and Services Tax Act 2014 ss. 11-12; Business Tax Act 2016 s. 13",
+   "dated": "2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "the ESTA text is the 2026 RONLAW consolidation"
+   ],
+   "family_file": "lean/NrGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "VAT/GST (not levied)",
+   "statute": "no VAT or GST statute among the Laws of Nauru (registry 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "no provision states the absence; to cite: the revenue laws index of ronlaw.gov.nr"
+   ],
+   "family_file": "lean/NrGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Import excise (cigarettes, beer, wine, petrol, diesel)",
+   "statute": "Customs Tariff Act 2014 Schedule 1 tariff items 2402.20.00, 2203.00.10-.30, 2204.21.10-.30, 2710.12.10, 2710.12.30 (import excise column)",
+   "dated": "2025: RONLAW current official reprint of 14 June 2024 (Sch 1 as substituted by Act 3 of 2023 and amended by SL 1, 9, 19 of 2024), read in lexifina/nauru-law (retrieved Oct 2026, no later reprint); gap-closing session: C -> A",
+   "grade": "A",
+   "kernel_parts": [
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "spirits (rate by kind of spirit)",
+    "other tobacco (per kg)",
+    "sugar, confectionery and sweetened drinks",
+    "wine taken as still wine in containers of 2 litres or less",
+    "every line taken as imported"
+   ],
+   "family_file": "lean/NrGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5123",
+   "tax": "Import duty (customs, Schedule 1 import duty column)",
+   "statute": "Customs Tariff Act 2014 Schedule 1 (reprint 14 June 2024): headings 0901, 1701, 2203, 2204, 2208, 2402, 2710.12.10-.30, 6109, 6203, 8471, 8517",
+   "dated": "2025: RONLAW reprint of 14 June 2024, read in lexifina/nauru-law; kernel 2.8.0 TariffRule (gap-closing session, new entry)",
+   "grade": "A",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "headings not read have no general rate: grade C",
+    "no preference read (PICTA not applied)",
+    "only lines given as imported (hs, origin) pay"
+   ],
+   "family_file": "lean/NrGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Business profits tax (20 % to $15 m gross revenue, 25 % above)",
+   "statute": "Business Tax Act 2016 s. 11, Schedule 1 (1) (d)",
+   "dated": "RONLAW Service 6 consolidation; Schedule 1 as amended by SL 22 of 2024 (from 1 July 2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "Categories C, D, F not distinguished"
+   ],
+   "family_file": "lean/NrGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Non-resident tax (20 % on interest, royalties, insurance premiums)",
+   "statute": "Business Tax Act 2016 ss. 13, 44, Schedule 1 (3)",
+   "dated": "as amended by SL 22 of 2024",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Services tax on services fees paid to non-residents (20 %)",
+   "statute": "Employment and Services Tax Act 2014 ss. 9, 12, 18, Schedule (4) (c)",
+   "dated": "Schedule as amended by SL 3 of 2023 (from 1 July 2022), s. 12 (1) and s. 18 as amended by Act 8 of 2020: unchanged through 2025 (RONLAW history notes); Act 21 of 2026 (from 12 May 2026) amended s. 9 (1) and definitions only",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "Regional Processing Centre services (30 %) and services to the Republic by non-resident individuals (0 % to $20,000) not distinguished"
+   ],
+   "family_file": "lean/NrGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties): not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (provident fund, non-tax)",
+   "statute": "Nauru Superannuation Act 2018",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NrGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 6,
+  "B": 8,
+  "C": 0
+ },
+ "guards": 16,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

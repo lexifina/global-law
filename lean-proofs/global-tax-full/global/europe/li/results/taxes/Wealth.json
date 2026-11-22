@@ -1,0 +1,27 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Inheritance, estate and gift tax (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Liechtenstein, Individual - Other taxes, accessed 2025-07-15 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-07-15 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4200",
+  "tax": "Vermögenssteuer (Sollertrag)",
+  "statute": "Steuergesetz Art. 5 Abs. 1 (Sollertrag 4 %), Art. 14 Abs. 2 Bst. l (the Sollertrag of the taxable wealth is Erwerb), Art. 6 Abs. 1",
+  "dated": "SteG, Lilex consolidated PDF Fassung 01.07.2026 (`li/law/steg_konso.txt`; Art. 5 unchanged in 2025 not checked)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 6: national law read for the frame only",
+  "unsupported": [
+   "the wealth tax is a 4 % notional return (Sollertrag) on the taxable net wealth, added to the Erwerb and taxed with the Erwerbssteuer tariff (no separate wealth rate); the 1.x PIT line carries no wealth, so it is not computed. To model: PIT(Erwerb + 4 % x net wealth) - PIT(Erwerb)"
+  ]
+ }
+]

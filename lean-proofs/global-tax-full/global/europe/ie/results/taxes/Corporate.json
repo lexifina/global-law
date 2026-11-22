@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Corporation tax",
+  "statute": "Taxes Consolidation Act 1997 s. 21(1) (12½ per cent for the financial year 2003 and each subsequent year); s. 21A (25 per cent on Case III, IV, V and excepted-trade income)",
+  "dated": "Revenue Notes for Guidance, Finance Act 2024 edition (the law as amended to FA 2024, in force for 2025); the statute's own revised text not reached",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "read from Revenue's notes for guidance, not from a revised text of the Act",
+   "25 % rate of s. 21A (passive and excepted-trade income) not separated: the line's profit is taken as trading income",
+   "Pillar Two (Part 4A) and the participation exemption for gains (s. 626B) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad (DWT, interest, patent royalties) (dividend, interest, royalty, services)",
+  "statute": "TCA 1997 ss. 172B, 238, 246",
+  "dated": "2025-06-13; Revenue Notes for Guidance (Wayback 2025-10)",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "royalties are taken as patent royalties (s. 238); other royalties bear none",
+   "the DWT exemptions for EU/treaty companies (s. 172D) and the s. 246 (3) interest exclusions not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

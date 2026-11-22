@@ -5,7 +5,7 @@ import TaxKernel.World
 
 Statute: the DGI's consolidated **CGI 2025** ("tel que modifié et complété 2025", Word export of 20 December 2024),
 archived official copy `web.archive.org/web/20250304013712id_/https://www.tax.gov.ma/wps/wcm/connect/d15709dd-…/CGI+2025+FR..pdf`
-(tax.gov.ma refuses lean1 and answers 403 to the laptop; sha256 f510cca73c15…, 750 pages).
+(tax.gov.ma refuses the build server and answers 403 to a second machine; sha256 f510cca73c15…, 750 pages).
 * Art. 73-I (LF n° 60-24 for 2025, art. 8): "la tranche du revenu allant jusqu'à 40 000 dirhams est exonérée ; 10%
   … 40.001 à 60.000 ; 20% … 60.001 à 80.000 ; 30% … 80.001 à 100.000 ; 34% … 100.001 à 180.000 ; 37% pour le
   surplus". LF 60-24 art. 8 III-12°: arts. 73-I and 74-I "sont applicables aux revenus autres que fonciers acquis à
@@ -21,12 +21,11 @@ archived official copy `web.archive.org/web/20250304013712id_/https://www.tax.go
   sums alongside the art. 59-I frais (which are computed on the gross).
 * W5 pattern A (2026-11-20): employee CNSS and AMO contributions. Rates: the CNSS page "Paiement de vos cotisations
   sociales", section "Barèmes et taux de cotisation" (cnss.ma, Internet Archive capture 2025-03-25; official
-  secondary: décret 2-01-2723 as amended and the AMO décrets were not reached; `ma/law/w5/`): "2- Prestations sociales
-  à court terme* Le total des salaires plafonnés (chacun plafonné à 6000 dhs) 1,05% 0,52% 1,57% 3- Prestations
-  sociales à long terme Le total des salaires plafonnés (chacun plafonné à 6000 dhs) 7,93% 3,96% 11,89% 4- Assurance
-  Maladie Obligatoire Le total des salaires réels de la période (mois/trimestre) 4,11% 2,26% 6,37%" (columns: charge
-  patronale, charge salariale, global; "* Dont 0,57% relatif à l'Indemnité pour perte d'emploi ... la charge salariale
-  est de 0,19%"). The CNSS notice "AMO Ajustement des taux de cotisation" (capture 2016-02-25) dates the AMO 2,26 %
+  secondary: décret 2-01-2723 as amended and the AMO décrets were not reached; `ma/law/w5/`), facts restated: short-term benefits
+  1,05 % employer and 0,52 % employee (1,57 % in all) on each wage capped at 6 000 dirhams; long-term benefits 7,93 %
+  and 3,96 % (11,89 %) on the same capped wage; compulsory health insurance (AMO) 4,11 % and 2,26 % (6,37 %) on the
+  whole wage of the month or quarter; 0,57 % of the short-term rate funds the job-loss allowance, 0,19 % of it from
+  the employee. The CNSS notice "AMO Ajustement des taux de cotisation" (capture 2016-02-25) dates the AMO 2,26 %
   employee share from 1 January 2016. So the employee pays 0,52 % + 3,96 % = 4,48 % of the wage up to 6 000 dirhams a
   month and 2,26 % of the whole wage; 12 equal months; dirhams, rounded down. All deducted (art. 59-II-A for the long
   term, III for the short term and the AMO). `"w5Contrib": false` restores the pre-W5 model.

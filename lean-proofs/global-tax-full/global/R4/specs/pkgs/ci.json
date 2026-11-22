@@ -1,0 +1,500 @@
+{
+ "cc": "CI",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts (DGI online edition cgici.com, wording of Ord. 2023-719) + Annexe fiscale 2025 (loi 2024-1109)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://cgici.com/ ; https://www.dgi.gouv.ci/assets/documents/EBOOK/ANNEXE_FISCALE_2025/)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (patente / contribution des patentes or contribution des licences (CGI); provision not located by keyword in the reachable text)",
+   "statute": "Code général des impôts (DGI online edition cgici.com, wording of Ord. 2023-719) + Annexe fiscale 2025 (loi 2024-1109)",
+   "why": "triage moderate: patente / contribution des patentes: business tax on traders and professions, not a household tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://cgici.com/ ; https://www.dgi.gouv.ci/assets/documents/EBOOK/ANNEXE_FISCALE_2025/)",
+   "triage": "moderate"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "contribEmployeur",
+   "level": "central",
+   "rateBp": 280,
+   "grade": "A",
+   "name": "Contributions à la charge des employeurs, local staff (contribution nationale 1,2 %, taxe d'apprentissage 0,4 %, FPC 1,2 %)",
+   "statute": "CGI (DGI online edition cgici.com, V2025) art. 134 4°, 143, 146 as amended by loi n° 2024-1109 du 18 déc. 2024 (annexe fiscale 2025) art. 16-2, 16-3",
+   "doc": "art. 146: local staff: contribution employeur proprement dite '-', contribution nationale pour le développement économique, culturel et social 1,2 %, taxe d'apprentissage 0,4 %, taxe additionnelle pour la formation professionnelle continue 1,2 %, total 2,8 % (expatriate staff 12 %); art. 134 4°: local staff exempt from the contribution proprement dite.",
+   "unsupported": [
+    "expatriate staff (12 %): the household is local staff",
+    "exemptions for disabled staff and zone incentives (art. 134-142)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnpsRetraite",
+   "level": "social",
+   "rateBp": 770,
+   "cap": 19767780,
+   "grade": "B",
+   "name": "CNPS old-age insurance, employer share (7,7 % up to the retirement ceiling)",
+   "statute": "CNPS Côte d'Ivoire, page 'Employeur' as captured on 14 September 2025 (Wayback 20250914213707; page last modified 3 January 2023; R4/fetch/p19/ci_cnps_employeur_wb20250914.html), Code de prévoyance sociale art. 23; the same rates and ceilings as the 2026 copy held earlier (ci/src/cnps_employeur.html) [text version: 2023 page as served in September 2025]",
+   "doc": "CNPS (facts restated): the retirement contribution is shared, 7,7 % employer and 6,3 % employee; ceiling 45 times the SMIG, now 19 767 780 F a year (1 647 315 FCFA a month).",
+   "unsupported": [
+    "the printed ceiling does not equal 45 x the SMIG the page prints (flag: possibly stale); used as printed",
+    "SMIG floor on the contributory wage",
+    "the employee's 6,3 %"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnpsPfAt",
+   "level": "social",
+   "rateBp": 775,
+   "cap": 840000,
+   "grade": "B",
+   "name": "CNPS family benefits 5 %, maternity 0,75 % and work accidents 2 % (employer only, up to 70 000 F a month)",
+   "statute": "CNPS Côte d'Ivoire, page 'Employeur' as captured on 14 September 2025 (Wayback 20250914213707; page last modified 3 January 2023; R4/fetch/p19/ci_cnps_employeur_wb20250914.html), Code de prévoyance sociale art. 23; the same rates and ceilings as the 2026 copy held earlier (ci/src/cnps_employeur.html) [text version: 2023 page as served in September 2025]",
+   "doc": "CNPS: '5 % pour les Prestations Familiales ; 0,75 % pour l'Assurance Maternité ; 2 à 5 % (selon le secteur d'activité) pour les Accidents du Travail ... à la charge exclusive de l'employeur'; 'Les plafonds sont de: 840 000 F par an (... 70 000 FCFA par mois)'.",
+   "unsupported": [
+    "work-accident rate by sector (2 to 5 %): the lowest (2 %) is applied",
+    "SMIG floor"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyAnnual",
+   "fam": "ipfLet",
+   "grade": "A",
+   "rateBp": 900,
+   "kinds": [
+    "realEstate"
+   ],
+   "name": "Impôt sur le patrimoine foncier, built property producing rent (9 % of rental value)",
+   "statute": "CGI (cgici.com V2025) art. 157-158 as amended by loi n° 2024-1109 (annexe fiscale 2025) art. 28-4",
+   "doc": "art. 158: 'Le taux de l'impôt sur le patrimoine foncier des immeubles bâtis et non bâtis productifs de revenus fonciers est fixé à 9 % de la valeur locative.'",
+   "unsupported": [
+    "minimum of the previous year's amount for non-productive buildings",
+    "zone and sector exemptions (art. 158 bis, ter)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyValue",
+   "fam": "ipfHome",
+   "grade": "A",
+   "rateBp": 50,
+   "kinds": [
+    "home"
+   ],
+   "name": "Impôt sur le patrimoine foncier, owner-occupied main home (0,5 % of market value)",
+   "statute": "CGI (cgici.com V2025) art. 157 al. 2, 158 as amended by loi n° 2024-1109 art. 28-4",
+   "doc": "art. 158: 'Il est de 0,5 % de la valeur marchande du bien immeuble bâti non productif de revenus dans les cas suivants : ... une seule habitation occupée par le propriétaire à titre d'habitation principale'; art. 157: base = declared market value checked by the valuation commission (art. 161 bis).",
+   "unsupported": [
+    "one secondary residence at the same rate with a certificate",
+    "market value per the commission: the household's statutory value is used"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyValue",
+   "fam": "ipfLand",
+   "grade": "A",
+   "rateBp": 100,
+   "kinds": [
+    "land"
+   ],
+   "name": "Impôt sur le patrimoine foncier des propriétés non bâties (1 % of market value)",
+   "statute": "CGI (cgici.com V2025) art. 159-161, 164 1° [text version: CGI, DGI edition 2025 ('V2025' on cgici.com, incorporating the LF 2025 annex; R4/fetch/ci8/cgi2025_cgici.txt)]",
+   "doc": "art. 164 1°: 'Le taux de l'impôt sur le patrimoine foncier des propriétés non bâties est fixé à 1 % de la valeur marchande déterminée conformément aux dispositions de l'article 161'; art. 160: urban land.",
+   "unsupported": [
+    "rural land outside art. 160 is not taxable (the household's land is treated as urban)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "mutImm",
+   "grade": "A",
+   "rateBp": 400,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Droit de mutation à titre onéreux d'immeubles (4 %)",
+   "statute": "CGI (cgici.com V2025) art. 760 1° as amended by loi n° 2023-1000 (annexe fiscale 2024) art. 2-7",
+   "doc": "art. 760 1°: 'les adjudications, ventes, reventes, cessions ... et tous autres actes civils et judiciaires translatifs de propriété ou d'usufruit de biens immeubles à titre onéreux sont assujettis à un droit de 4 %'; also land transfers not made before a notary, on the price, borne by the buyer.",
+   "unsupported": [
+    "half rate for charities and lessors in property leasing (art. 760 3°)",
+    "conservation foncière fees"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "irvmDiv",
+   "grade": "A",
+   "income": "dividend",
+   "rateBp": 1700,
+   "name": "IRVM on dividends received by individuals (17 %)",
+   "statute": "CGI (cgici.com V2025) art. 182 as amended by loi n° 2024-1109 (annexe fiscale 2025) art. 37-1",
+   "doc": "art. 182: 15 % for 'les produits et toutes les sommes imposables à l'impôt sur le revenu des valeurs mobilières non visés par le présent article'; 'Ce taux est porté à 17 % en ce qui concerne les revenus ci-dessus dont le bénéficiaire est une personne physique. Ce taux s'applique aux distributions effectuées à partir de l'année 2025.'",
+   "unsupported": [
+    "dividends of BRVM-listed companies 12 % for individuals (art. 183 1-)",
+    "bonds of 5+ years 3 % (art. 183 2-)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircInt",
+   "grade": "A",
+   "income": "interest",
+   "rateBp": 1350,
+   "name": "Impôt sur le revenu des créances on individuals' bank deposit interest (13,5 %)",
+   "statute": "CGI (cgici.com V2025) art. 192-193 [text version: CGI, DGI edition 2025 ('V2025' on cgici.com, incorporating the LF 2025 annex; R4/fetch/ci8/cgi2025_cgici.txt)]",
+   "doc": "art. 193 1°: 'Le taux de l'impôt sur le revenu des créances est fixé à 18 %'; 2° a): deposits with banks, term up to 1 year, individuals ('Particuliers') 13,5 %; b) current accounts, individuals 13,5 %.",
+   "unsupported": [
+    "longer deposit terms 10 / 5 / 1 % and other claims 18 %: the 13,5 % short-term / current-account rate is applied to all household interest"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "mutGratuit",
+   "grade": "A",
+   "classes": [
+    {
+     "rels": [
+      "child",
+      "grandchild",
+      "parent",
+      "spouse"
+     ],
+     "bands": [
+      [
+       2500000,
+       100
+      ],
+      [
+       10000000,
+       250
+      ],
+      [
+       50000000,
+       400
+      ]
+     ],
+     "top": 500
+    },
+    {
+     "rels": [
+      "sibling"
+     ],
+     "bands": [
+      [
+       10000000,
+       600
+      ]
+     ],
+     "top": 850
+    },
+    {
+     "rels": [
+      "nieceNephew"
+     ],
+     "bands": [],
+     "top": 1000
+    }
+   ],
+   "default": {
+    "bands": [],
+    "top": 1200
+   },
+   "allowRels": [
+    "child",
+    "parent",
+    "spouse"
+   ],
+   "allowance": 100000000,
+   "giftAllowance": true,
+   "testValue": 160000000,
+   "name": "Droits de mutation à titre gratuit (successions and gifts: 1-5 % direct line and spouse after F 100 m; 6-12 % others)",
+   "statute": "CGI (cgici.com V2025) art. 730, 735, 737 (loi n° 2016-1116, annexe fiscale 2017, art. 3)",
+   "doc": "art. 735: on each heir's net share — direct line and spouses: up to 2 500 000 F 1 %, 2 500 000-10 000 000 2,5 %, 10 000 000-50 000 000 4 %, above 5 %; siblings 6 % to 10 000 000 and 8,5 % above; relatives to the 4th degree 10 %; beyond and non-relatives 12 %. art. 737: abatement of 100 000 000 F on the share of each child, each ascendant and the surviving spouse; art. 730: gifts taxed at the same rates with the same abatements.",
+   "unsupported": [
+    "reduction for heirs with three or more children (art. 738)",
+    "50 % abatement on the home occupied by the surviving spouse",
+    "aggregation of earlier gifts from the same donor (art. 731)",
+    "25 % reduction for gifts by marriage contract (art. 730)",
+    "progressive bands read as marginal fractions ('Fraction de part nette taxable')"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI (cgici.com V2025, whole code, R4/fetch/ci8/cgi2025_cgici.txt)",
+   "why": "CI CGI 2025 (complete DGI online code): no tax on net wealth; full-text search for 'impôt sur la fortune', 'patrimoine net', 'impôt de solidarité sur la fortune' finds nothing (the 'impôt sur le patrimoine foncier' is a recurrent property tax, P5)"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicleTax",
+   "fam": "vignette",
+   "grade": "A",
+   "unknown": true,
+   "name": "Taxe sur les véhicules à moteur (vignette: annual, by power and age)",
+   "statute": "CGI art. 910-917 (tariff art. 915 as amended by Loi n° 2013-908 and Loi n° 2014-861, art. 916 quarter abatement, art. 917 vehicles over 10 years, Ord. n° 2002-77), CGI 2025 (DGI edition dgi.cgici.com, R4/fetch/ci8/cgi2025_cgici.txt l. 11953-12050); the LF 2025 tax annex (annexe2025.txt) does not amend art. 910-918",
+   "taxes": "[{ name := \"Taxe sur les véhicules à moteur (more than two wheels, up to 4 years, up to 15 CV)\", kinds := [\"car\", \"van\", \"truck\", \"bus\", \"tractor\"], «when» := [(.age, -1, 4), (.fiscalHp, -1, 15)], parts := [(.fiscalHp, QtyTable.ofCeilings [(4, 19000), (7, 35000), (11, 49000)] 96000)], proRata := false, statute := \"CGI art. 915 2-: up to 4 CV 19 000 F, 5-7 CV 35 000 F, 8-11 CV 49 000 F, 12-15 CV 96 000 F\" }, { name := \"Taxe sur les véhicules à moteur (passenger car above 15 CV, under two years)\", kinds := [\"car\"], «when» := [(.age, -1, 1), (.fiscalHp, 15, VehicleTax.noBound)], fixed := 250000, proRata := false, statute := \"CGI art. 915 2-: passenger cars (véhicules de tourisme) above 15 CV and under two years old 250 000 F\" }, { name := \"Taxe sur les véhicules à moteur (passenger car above 15 CV, two to 4 years)\", kinds := [\"car\"], «when» := [(.age, 1, 4), (.fiscalHp, 15, VehicleTax.noBound)], fixed := 190000, proRata := false, statute := \"CGI art. 915 2-: above 15 CV 190 000 F\" }, { name := \"Taxe sur les véhicules à moteur (other vehicle above 15 CV, up to 4 years)\", kinds := [\"van\", \"truck\", \"bus\", \"tractor\"], «when» := [(.age, -1, 4), (.fiscalHp, 15, VehicleTax.noBound)], fixed := 190000, proRata := false, statute := \"CGI art. 915 2-: above 15 CV 190 000 F\" }, { name := \"Taxe sur les véhicules à moteur (more than two wheels, 5 to 10 years)\", kinds := [\"car\", \"van\", \"truck\", \"bus\", \"tractor\"], «when» := [(.age, 4, 10)], parts := [(.fiscalHp, QtyTable.ofCeilings [(4, 14250), (7, 26250), (11, 36750), (15, 72000)] 142500)], proRata := false, statute := \"CGI art. 915 2- less the quarter of art. 916 (difference between the year of the technical visit and the year of first circulation above 4): 14 250 / 26 250 / 36 750 / 72 000 / 142 500 F\" }, { name := \"Taxe sur les véhicules à moteur (more than two wheels, over 10 years)\", kinds := [\"car\", \"van\", \"truck\", \"bus\", \"tractor\"], «when» := [(.age, 10, VehicleTax.noBound)], parts := [(.fiscalHp, QtyTable.ofCeilings [(4, 13500), (7, 25000), (11, 30000), (15, 40000)] 80000)], proRata := false, statute := \"CGI art. 917 2- (difference above 10): up to 4 CV 13 500 F, 5-7 CV 25 000 F, 8-11 CV 30 000 F, 12-15 CV 40 000 F, above 15 CV 80 000 F\" }, { name := \"Taxe sur les véhicules à moteur (two wheels, up to 4 years)\", kinds := [\"motorcycle\"], «when» := [(.age, -1, 4)], parts := [(.fiscalHp, QtyTable.ofCeilings [(1, 5000)] 12000)], proRata := false, statute := \"CGI art. 915 1-: 1 CV 5 000 F, above 1 CV 12 000 F\" }, { name := \"Taxe sur les véhicules à moteur (two wheels, 5 to 10 years)\", kinds := [\"motorcycle\"], «when» := [(.age, 4, 10)], parts := [(.fiscalHp, QtyTable.ofCeilings [(1, 3750)] 9000)], proRata := false, statute := \"CGI art. 915 1- less the quarter of art. 916: 1 CV 3 750 F, above 1 CV 9 000 F\" }, { name := \"Taxe sur les véhicules à moteur (two wheels, over 10 years)\", kinds := [\"motorcycle\"], «when» := [(.age, 10, VehicleTax.noBound)], parts := [(.fiscalHp, QtyTable.ofCeilings [(1, 3500)] 6000)], proRata := false, statute := \"CGI art. 917 1-: 1 CV 3 500 F, above 1 CV 6 000 F\" }]",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 9,
+        "firstRegYear": 2023
+       }
+      ]
+     },
+     "expect": [
+      49000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 17,
+        "firstRegYear": 2024
+       }
+      ]
+     },
+     "expect": [
+      250000
+     ]
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 17,
+        "firstRegYear": 2022
+       }
+      ]
+     },
+     "expect": [
+      190000
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 6,
+        "firstRegYear": 2018
+       }
+      ]
+     },
+     "expect": [
+      26250
+     ]
+    },
+    {
+     "line": {
+      "id": "t4",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t4",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 13,
+        "firstRegYear": 2010
+       }
+      ]
+     },
+     "expect": [
+      40000
+     ]
+    },
+    {
+     "line": {
+      "id": "t5",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t5",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 1,
+        "firstRegYear": 2025,
+        "vehicleKind": "motorcycle"
+       }
+      ]
+     },
+     "expect": [
+      5000
+     ]
+    },
+    {
+     "line": {
+      "id": "t6",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t6",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 3,
+        "firstRegYear": 2012,
+        "vehicleKind": "motorcycle"
+       }
+      ]
+     },
+     "expect": [
+      6000
+     ]
+    },
+    {
+     "line": {
+      "id": "t7",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t7",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 5000000,
+        "fiscalHp": 20,
+        "firstRegYear": 2025,
+        "vehicleKind": "truck"
+       }
+      ]
+     },
+     "expect": [
+      190000
+     ]
+    }
+   ],
+   "doc": "CGI art. 910: the tax is due on every motor vehicle for the carriage of persons or goods registered in Côte d'Ivoire (cars, lorries, vans, tractors, motorcycles); art. 912: from the owner or holder named on the registration card; art. 913: for twelve months from the technical visit (motorcycles: the calendar year). Art. 915 tariff: two wheels 1 CV 5 000 F, above 12 000 F; more than two wheels up to 4 CV 19 000 F, 5-7 CV 35 000 F, 8-11 CV 49 000 F, 12-15 CV 96 000 F, above 15 CV 190 000 F, passenger cars above 15 CV under two years 250 000 F. Art. 916: a quarter off when the year of the technical visit less the year of first circulation exceeds 4. Art. 917: above 10, two wheels 3 500 / 6 000 F, more than two wheels 13 500 / 25 000 / 30 000 / 40 000 / 80 000 F. Read: the visit falls in 2025, so the difference is the kernel age (2025 - first registration year); the quarter of art. 916 is applied for differences of 5 to 10 and not on the art. 917 tariff (the DGI guide's floor of 13 500 F for vehicles of more than two wheels agrees). Worked cases (hand): 9 CV car of 2023 -> 49 000; 17 CV car of 2024 -> 250 000, of 2022 -> 190 000; 6 CV of 2018 -> 26 250; 13 CV of 2010 -> 40 000; motorcycle 1 CV of 2025 -> 5 000, 3 CV of 2012 -> 6 000; 20 CV lorry of 2025 -> 190 000. Eighteenth pass (pass 16 had the tariff as grade C: the CGI articles were in the held DGI edition all along).",
+   "unsupported": [
+    "administrative vehicles (art. 918: 5 000 / 10 000 F) and exempt vehicles (art. 961) not distinguished",
+    "the art. 916 quarter is read as not applying on the art. 917 tariff (flag)",
+    "a vehicle without fiscal horsepower or first-registration year: listed (grade C)"
+   ]
+  }
+ ]
+}

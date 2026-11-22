@@ -1,0 +1,260 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée + centimes additionnels",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 238 1° as substituted by LF 2023 art. 16 (18 %); LF 2024 art. 14 as substituted by LF 2025 art. 32 (centimes additionnels 10 % of the VAT principal): 19,8 %",
+  "dated": "CGI 2016 as amended by LF 2023 (art. 238), LF 2024 (DGI circular) and LF 2025 (OCR, in force 1 Jan 2025)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "9 % rate on local products not separable",
+   "exemptions (art. 230) not applied"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Droits d'accises",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "not reached: tried world/B08-central-africa-fr/td/law",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "excise schedule (CGI 2016 art. 255 ff.) amended by LF 2017-2022 that are not held; LF 2025 art. 28 concerns a telecom levy"
+  ],
+  "tried": "world/B08-central-africa-fr/td/law"
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 143 as amended by LF 2024 (30 %, per the DGI circular); art. 151 (IMF 2 % of turnover from 1 Jan 2024, per the circular; floor 1 000 000 F, CGI 2016 art. 151 II)",
+  "dated": "CGI 2016 as amended by LF 2023 (art. 238), LF 2024 (DGI circular) and LF 2025 (OCR, in force 1 Jan 2025)",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "25 % rate for local processing and energy (art. 144)",
+   "loss rules not read",
+   "rounding of the base"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenues à la source (non-résidents)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 26 (prélèvement libératoire 18 % on fees paid abroad, as amended by LF 2024); art. 82 (nouveau) LF 2025 (IRCM 18 %); art. 84 (interest 18 %, LF 2024 per the circular); twelfth pass: CGI 2016 art. 59, 857 I (retenue 25 % on sums paid to persons without a professional installation in Chad); the LF 2024 cut to 18 % (art. 857) lists services, studies, head-office and assistance fees, medical services and interconnection charges only (DGI circular LF 2024 para 25): royalties kept at 25 % (flag)",
+  "dated": "CGI 2016 as amended by LF 2023 (art. 238), LF 2024 (DGI circular) and LF 2025 (OCR, in force 1 Jan 2025)",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": []
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Retenue IRCM (revenus distribués)",
+  "statute": "CGI art. 82 (nouveau), LF 2025 art. 23 (18 %)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Retenue sur revenus des créances",
+  "statute": "CGI art. 118 (18 %, LF 2024 per the DGI circular)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [],
+  "source": "DGI circular (secondary)",
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Retenue sur les plus-values",
+  "statute": "CGI art. 90 (nouveau), LF 2025 art. 24 (18 %)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "scope of art. 90 not re-read"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.gainsFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts 2016 + LF 2023, 2024, 2025 (archived dgi.td copies; LF rewrite CGI articles)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://dgi.td (archived))",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Contribution des patentes (droit déterminé 0,1 % of turnover N-2, centimes CNPS/CCC/RAV, ONASA, TVLP 10 %)",
+  "statute": "CGI 2016 art. 790 I, III, IV; LF 2023 and LF 2025 (and the DGI circular on LF 2024) do not amend it; LF 2017-2022 not held",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "communal increase of the tariff by council deliberation within the limit set annually (art. 790 II)",
+   "transporters' fixed and variable duties (art. 790 V-VIII)",
+   "new-business and youth exemptions (LF 2023-2024 circulars)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "cgi2016.txt (whole code)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "TD: the general tax code held (cgi2016.txt, 839k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "cgi2016.txt (whole code)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "TD: the general tax code held (cgi2016.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Taxe sur les véhicules de tourisme et breaks des sociétés (by fiscal horsepower)",
+  "statute": "CGI 2016 art. 199 (LF 2023, the DGI circular on LF 2024 and LF 2025 checked: art. 199 not amended)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "50 % reduction for cars over 5 years and exemption over 10 years (age not in the input: cars taken as at most 5 years old)",
+   "taxe pour la protection de l'environnement on vehicle owners (art. 200-202)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.vehicleFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Taxe forfaitaire due par les employeurs (7,5 %)",
+  "statute": "CGI 2016 art. 187-190 (LF 2023-2025 list the tax among payroll taxes without changing art. 190; edition flagged)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "exempt employers (State, communes, international bodies, domestic staff not in business expenses, art. 188)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Taxe d'apprentissage et de formation professionnelle (1,2 %)",
+  "statute": "CGI 2016 art. 171-178 (edition flagged)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "rounding of the base to the 1 000 F below (art. 177)",
+   "partial exemptions on request (art. 180)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNPS employer contributions (pensions 5 %, work injury 4 %, family 7,5 %; up to 500 000 FCFA a month)",
+  "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019, Chad (Wayback 2020-08-02, R4/fetch/p14/ssptw_chad.txt): employer 5 % (old age), 4 % (work injury), 7,5 % (family allowances, also cash maternity), maximum monthly earnings 500,000 CFA francs; official secondary, edition 2019 (flagged)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "edition 2019 (cnps.td not archived)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière des propriétés bâties, N'Djamena (10 % of rental value)",
+  "statute": "CGI 2016 art. 759-771 (communal tax; rates set by the CGI; LF 2017-2025 not checked for changes, flag)",
+  "dated": "LF 2025 (art. 23-24, in force 1 Jan 2025)",
+  "unsupported": [
+   "8 % outside N'Djamena",
+   "rental-value floor of 8 % of market value (art. 768 IV)",
+   "rounding to the nearest 100 F, nil below 1 000 F",
+   "land (contribution foncière non bâtie 21 % / 20 %, art. 787) not modelled"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyAnnualFamily"
+  ]
+ }
+]

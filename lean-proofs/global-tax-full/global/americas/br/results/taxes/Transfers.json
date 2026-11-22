@@ -1,0 +1,53 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "IPTU (São Paulo)",
+  "statute": "Lei municipal 6.989/1966 arts. 7º, 7º-A, 8º, 8º-A (Lei 15.889/2013)",
+  "dated": "compiled text on legislacao.prefeitura.sp.gov.br (fetched 2026-11-21)",
+  "grade": "A",
+  "package": "P5",
+  "kernel_parts": [
+   "PropertyTax",
+   "propertyFamily"
+  ],
+  "unsupported": [
+   "land (art. 27)",
+   "band-limit updates and exemptions"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "ITBI (São Paulo)",
+  "statute": "Lei municipal 11.154/1991 art. 10 (Lei 16.098/2014)",
+  "dated": "compiled text on legislacao.prefeitura.sp.gov.br (fetched 2026-11-21)",
+  "grade": "A",
+  "package": "P5",
+  "kernel_parts": [
+   "TransferDuty",
+   "transferFamily"
+  ],
+  "unsupported": [
+   "SFH reduced rate"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "IPVA (São Paulo)",
+  "statute": "Lei SP 13.296/2008 art. 9 (wording of Lei 17.473/2021, from 1 Jan 2022): I 1.5 % trucks; II 2 % buses and minibuses, single-cab pickups, motorcycles and the like, machinery; III 4 % any other motor vehicle; art. 7: on the valor venal; art. 13 VIII: exempt over 20 years from manufacture; art. 3 I-II, 7 II, 11: a vehicle first acquired in 2025 pays (13 - month) / 12 on the invoice value",
+  "dated": "ALESP repositório, Lei 13.296/2008 updated text (archived br/law/alesp_lei13296_2008.*), wording of Lei 17.473/2021 and Lei 18.065/2024; pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily"
+  ],
+  "unsupported": [
+   "all vehicles taken as registered in SP",
+   "transitional 2025-2026 exemptions (Lei 18.065/2024) not applied",
+   "rental-fleet 1 % not applied",
+   "2025 acquisitions by firstRegMonth; no firstRegYear (or no month for 2025): grade C",
+   "vehicles from another State in 2025 (art. 3 IX) taken as 1 January vehicles"
+  ]
+ }
+]

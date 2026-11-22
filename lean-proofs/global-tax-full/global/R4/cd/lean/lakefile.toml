@@ -1,0 +1,22 @@
+name = "CdGlobal"
+version = "0.1.0"
+defaultTargets = ["CdGlobal", "cdglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); CdTax = the 1.x model, vendored from cmp20/world/B08-central-africa-fr/cd/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "CdTax"
+
+[[lean_lib]]
+name = "CdGlobal"
+
+[[lean_exe]]
+name = "cdglobal"
+root = "CdGlobal.Main"

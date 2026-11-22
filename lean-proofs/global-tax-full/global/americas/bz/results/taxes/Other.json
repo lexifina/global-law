@@ -1,0 +1,98 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "Social security contributions of self-employed persons (voluntary scheme)",
+  "statute": "Social Security (Self-Employed Persons) Regulations (Cap. 44, S.I. of 2002) regs. 3 (3), 4 (d), 11; Social Security Act Cap. 44 ss. 71 (1), 74 (2) (a)",
+  "grade": "R",
+  "status": "reclassified: not a tax (voluntary contributions; OECD Guide §11, §42)",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment: business tax on receipts not modelled; Social Security Act Cap. 44 s. 2 defines the self-employed person (contributions not computed)\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "lexifina/belize-law sub/44/14 (Social Security (Self-Employed Persons) Regulations, Revised Edition 2020 as at 31 December 2020; official source Laws of Belize, agm.gov.bz/laws) regs. 3, 4, 11 read; cap/44/71.md, 74.md read; statutory instruments 2021-2026 scanned by title: the Social Security S.I.s (94 of 2021, 24 of 2023, 71 of 2024) amend the financial, contributions and benefit regulations, not the self-employed regulations",
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21",
+  "gap2_outcome": "(c) not a tax",
+  "gap2_note": "not a tax: the self-employed join Social Security only by choice: Social Security (Self-Employed Persons) Regulations reg. 3 (3) 'Participation shall be on a voluntary basis but once registered, the self-employed person shall contribute on a sustainable basis to the Social Security Fund' and reg. 4 (d) (insured only if he 'has opted to join the Social Security Scheme'; the contribution, reg. 11, is 7 % of the declared weekly income, $55-$320). The National Health Insurance contributions of the self-employed exist only if the Board levies them by regulations (Cap. 44 s. 71 (1) 'may be required ... by regulations', s. 74 (2) (a) 'if levied'); no such regulations are among the subsidiary legislation of Cap. 44 (sub/44/1-18) or the statutory instruments of 2020-2026 in the repository. Interpretative Guide §11 and §42: voluntary contributions are not taxes and are excluded from heading 2000.",
+  "gap_pass2": "2026-11-22"
+ },
+ {
+  "oecd": "3000",
+  "tax": "Taxes on payroll and workforce",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Land Tax Act Cap. 58 (lexifina/belize-law cap/58, read): s. 22 'The Minister may from time to time, by regulation, determine the percentage of the unimproved value' (the regulation is not in the repository)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Land Tax Act Cap. 58 (lexifina/belize-law cap/58, read): s. 22 'The Minister may from time to time, by regulation, determine the percentage of the unimproved value' (the regulation is not in the repository); land within towns pays the council's property tax at the council's rate. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Land Tax Act Cap. 58 (lexifina/belize-law cap/58, read): s. 22 'The Minister may from time to time, by regulation, determine the percentage of the unimproved value' (the regulation is not in the repository); land within towns pays the council's property tax at the council's rate. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 4100 = 2021:8.6 2022:7.9 2023:6.9 2024:7.2"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "Non-recurrent taxes on property",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+  "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000)",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 6000 (other taxes, Guide §85) in 2021-2024; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBLZ, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BLZ.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

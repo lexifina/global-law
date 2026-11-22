@@ -1,0 +1,93 @@
+{
+ "cc": "RW",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (trading licence tax (districts))",
+   "statute": "Law n° 75/2018 of 07/09/2018 determining the sources of revenue and property of decentralised entities (immovable property tax, rental income tax, trading licence tax)",
+   "why": "triage minor: trading licence tax (districts): local business licence. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "not reached",
+   "triage": "minor"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "whtDiv",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1500,
+   "name": "Withholding tax on dividends (15 %)",
+   "statute": "Law n° 027/2022 of 20/10/2022 on income tax, art. 60 1° (not amended by laws 051/2023 and 014/2025)",
+   "doc": "art. 60: a withholding tax of 15 % of the total amount is levied on payments by resident persons, including dividends (1°) and financial interests (2°).",
+   "unsupported": [
+    "finality for individuals not stated in law 027/2022 (treated as the final tax on the payment)",
+    "dividends under art. 47 (2) and collective investment distributions"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "whtInt",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 1500,
+   "name": "Withholding tax on interest (15 %)",
+   "statute": "Law n° 027/2022 art. 60 2° [text version: Law n° 027/2022 of 20/10/2022 as published, not amended on this point by Laws 051/2023 and 014/2025]",
+   "unsupported": [
+    "interest on deposits of at least one year is exempt (art. 60 2° a): not distinguished",
+    "finality not stated"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "pension",
+   "grade": "A",
+   "rateBp": 600,
+   "level": "social",
+   "name": "Mandatory pension scheme, employer share (6 % = half of 12 %)",
+   "statute": "Prime Minister's Order n° 086/2024 art. 1 (a) (12 % from 1 January 2025; repeals PMO 009/2016) and Law n° 05/2015 art. 8 (employer and employee contribute equally) [text version: Prime Minister's Order n° 086/2024 as published (12 % from 1 January 2025); Law n° 05/2015 as published]",
+   "doc": "PMO 086/2024 art. 1: contribution rate 12 % of the remuneration subject to contribution from 1 January 2025 (14 % from 2027, rising to 20 % in 2030); Law 05/2015 art. 8: shared equally between employer and employee.",
+   "unsupported": [
+    "occupational hazards and maternity leave contributions (not modelled)",
+    "employee share 6 % (2100, outside this package)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "maternity",
+   "grade": "A",
+   "rateBp": 30,
+   "level": "social",
+   "name": "Maternity leave benefits scheme, employer share (0,3 % of gross salary)",
+   "statute": "Law n° 003/2016 establishing and governing maternity leave benefits scheme (Official Gazette n° Special of 20/04/2016) art. 6-7; Law n° 049/2024 of 04/06/2024 amends registration, audit, benefit calculation, payment and reimbursement, not the rate of art. 7 [text version: Law n° 003/2016 as published (Official Gazette n° Special of 20/04/2016), with Law n° 049/2024 of 04/06/2024]",
+   "doc": "art. 6: contributions are based on the gross salary; art. 7: the contribution is 0,6 % of the salary, the employer and the employee each paying 0,3 %.",
+   "unsupported": [
+    "the employee's 0,3 %"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "hazards",
+   "rateBp": 200,
+   "level": "social",
+   "grade": "B",
+   "name": "Occupational hazards scheme, employer contribution (2 % of salary)",
+   "statute": "RSSB page 'Occupational Hazards' (Wayback 2013-07-09, R4/fetch/p14/rw_rssb_oh_2013.html): 'A contribution of 2% of salary is paid on behalf of mandatory members by employers'; Law n° 06/2003 of 22/03/2003 (RSSB copy, damaged: art. 1-5 OCR'd, the rate articles lost) not usable; edition 2013 flagged",
+   "doc": "Employer only, no employee share, no ceiling stated. Fourteenth pass (FT reviewer 4 gap).",
+   "unsupported": [
+    "official page of 2013 (older than 2025; no later instrument located that changes the rate)"
+   ]
+  }
+ ]
+}

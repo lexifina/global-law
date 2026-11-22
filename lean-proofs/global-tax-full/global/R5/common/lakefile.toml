@@ -1,0 +1,11 @@
+name = "R5Common"
+version = "0.1.0"
+defaultTargets = ["R5Common"]
+
+# Shared parts for the R5 (MENA + Western Asia) kernel-2.0 models: helpers only, no country figures.
+[[require]]
+name = "TaxKernel"
+path = "../../../kernel"
+
+[[lean_lib]]
+name = "R5Common"

@@ -1,0 +1,385 @@
+{
+ "country": "AZ",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains (routed through the 1.x PIT)",
+   "statute": "the 1.x model provisions (see Capital.lean)",
+   "dated": "1.x model (2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "stackedTax",
+    "R5Common.stackedCapital"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "the routing rule is not read from the code: exemptions by holding period / main home not applied (GL for AM AZ GE)"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Mənfəət vergisi (profit tax)",
+   "statute": "Vergi Məcəlləsi art. 105.1 (20 %), 121.1 (losses 5 years)",
+   "dated": "e-qanun.az official consolidation (framework 46948), Wayback captures 2024-12-04 and 2026-08-24: art. 105.1 and 121.1 identical (law/eqanun_46948_art105_121.txt); STS 2019 PDF and 2025 Q&A booklet agree",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime (flat 20 %)",
+    "R5Common.corpFamily"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "art. 106 exemptions, 2025 incentive regimes",
+    "participation/dividends received not read",
+    "withholding: 125.1.3/125.1.4 (insurance 4 %, international transport and telecom 6 %) not distinguished (pass 3i)"
+   ],
+   "withholding": {
+    "grade": "A",
+    "rules": "dividend 5 %, interest 10 %, royalty and rent 14 %, services 10 %: Vergi Məcəlləsi 125.1, 122.1, 123.1, 124.1, 125.1.5",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employer social insurance, unemployment and medical insurance",
+   "statute": "Law 250-IQ art. 14.4 / 14.3.1; Law 765-VQ art. 9.0.1; Law 725-IQ art. 15-10.1.2",
+   "dated": "e-qanun.az as in force 2025-07-01 / 2025-08-13 (1.x law folder)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge",
+    "Schedule"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "oil-gas / state employers by flag oilGasOrState"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Əmlak vergisi və torpaq vergisi (property tax on buildings, land tax: natural persons)",
+   "statute": "Tax Code art. 198.1.1 (buildings per m², dwellings above 30 m²: Baku 0.4 × coefficient 0.7-1.5, Ganja/Sumgait/Absheron 0.3, other cities 0.2, villages 0.1 manat), 206.3 (housing/household/garden land per 100 m²: Baku 0.6 / 1.2 above 10,000 m², ...), 199.3",
+   "dated": "e-qanun.az framework 46948, Wayback captures 2024-12-04 and 2026-08-24 (articles identical); law/eqanun_46948_art198-206.txt",
+   "grade": "A",
+   "kernel_parts": [
+    "charge per asset on areaM2 (raw JSON), zone by asset region, level local"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "enterprise property tax 1 % of fixed assets and enterprise land not computed",
+    "Baku coefficient taken as 1.0",
+    "agricultural land and the 30-manat reduction not applied",
+    "assets without areaM2 not computed"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Dövlət rüsumu (state duty on property transfers)",
+   "statute": "Dövlət rüsumu haqqında Qanun 223-IIQ (2001) art. 3.1 (payers: the persons for whom the act is done / who acquire the right), art. 10.1.1-10.1.2 (certification of contracts alienating immovable property: 25 manat close relatives, 280 manat other persons; Law 415-VIQD of 03/12/2021), art. 26.1.1 (registration extract 50 manat)",
+   "dated": "e-qanun framework 2860, Wayback capture 2024-12-02 of e-qanun.az/frameworks/2/f_2860.html (windows-1251); law/eqanun_2860_art3_10_26.txt; gap-closing pass: re-cited for 2025 from lexifina/azerbaijan-law (git history of e-qanun.az texts, act 2860, official source https://e-qanun.az/framework/2860): art. 3 and 10 identical in the versions in force 1/1/2025 and 29/12/2025 (last change to 10.1.1-10.1.2: Law 415-VIQD of 2021); the 2025 amending acts 121, 77, 124, 161, 172, 177, 179, 192, 240, 297, 313-VIIQD read: none touches art. 3, 10.1 or 26; art. 26 (not a file in the repo) from the 02/12/2024 capture, still referred to by Law 329-VIIQD of 30/12/2025; law/az_gitlaw_2860_2025.txt",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (fixed 280 + 50 manat per real-estate purchase, buyer)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "purchases taken as contracts with other persons (relatives 25 manat not applied: Purchase has no relation)",
+    "the law does not split the notarial duty between the parties; charged to the buyer"
+   ],
+   "pass": "gap",
+   "status": "modelled"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Əlavə dəyər vergisi (VAT)",
+   "statute": "Tax Code art. 155.1, 164.1.2, 164.1.8, 173.1, 175.4",
+   "dated": "2025-07-01 (Global law; art. 164 last changed Qanun 192-VIIQD in force 2025-06-17); pass 3q year-in-force audit: confirmed: art. 164.1.2 and 164.1.8 identical in the e-qanun captures of 04/12/2024 and 24/08/2026 (the 2026 note on 164.1.2 is Law 413-VIIQD of 26/05/2026); art. 173.1 18 % read as in force 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "partial exemptions (bread, pre-school, metro, teaching hospitals) not applied to whole basket classes",
+    "insurance not exempted (art. 13 definition of financial services not read)"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Aksiz (excise)",
+   "statute": "Tax Code art. 190.3.1-190.3.8, 190.3-1",
+   "dated": "2025-07-01 (art. 190 last changed Qanun 1033-VIQD in force 2024-01-01)",
+   "grade": "A",
+   "kernel_parts": [
+    "Excise",
+    "ExciseRate"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "petroleum products: rates not in the code (executive)",
+    "cigars, e-liquids, heated tobacco",
+    "vehicles, yachts, jewellery on import (art. 190.4)"
+   ]
+  },
+  {
+   "package": "P8",
+   "oecd": "5200",
+   "tax": "Yol vergisi (road tax); no recurrent tax on vehicles registered in Azerbaijan",
+   "statute": "Tax Code art. 197.1.1 (cars removed by Law 792-IIQD of 03/12/2004), 198.1 (Law 406-VIQD of 2021: individuals' rates for buildings, water and air vehicles only), 209-211 (road tax: foreign-registered vehicles, art. 211.1.1; motor fuel 0,02 manat per litre, art. 211.1.2 as worded by Law 98-VIIQD of 16/12/2024; 0,07 only by Law 297-VIIQD of 09/12/2025 (2026))",
+   "dated": "e-qanun.az framework 46948, Wayback captures 04/12/2024 and 24/08/2026 with amendment footnotes; 2025 rate 0,02 (the 2026 capture's footnote dates the 0,07 to Law 297-VIIQD of 09/12/2025, taken from 1/1/2026)",
+   "grade": "B",
+   "kernel_parts": [
+    "Excise (perUnit on petrol and diesel litres; charges under 5121, borne by the consumer)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "road tax on foreign-registered vehicles (art. 211.1.1, USD by engine, seats, axles, days) not an input",
+    "LPG (art. 211.1.2) has no basket good",
+    "fuel road tax charged under 5121 (tax per litre on producers and importers, borne through the price)",
+    "e-qanun consolidation still prints the car words in art. 197.1.1 although its footnote records their removal in 2004: read as removed"
+   ],
+   "pass": "3o; 3p year-in-force fix (0,07 -> 0,02)"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "3000",
+   "why": "3000: no payroll or workforce tax: Tax Code art. 4.6 ('Bu Məcəllə ilə nəzərdə tutulmayan vergilərin müəyyən edilməsinə yol verilmir': no tax not provided for by the Code may be set) with the closed lists of art. 6.1 (state taxes: income, profit, VAT, excises, property, land, road, mining, simplified tax) and art. 8.1 (local: land and property tax of individuals, local mining tax, profit tax of municipal enterprises); e-qanun.az framework 46948, Wayback 2026-08-24 (lists identical in the 2024-12-04 capture), law/eqanun_46948_art4-8.txt; grade A",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Tax Code art. 4.6 ('Bu Məcəllə ilə nəzərdə tutulmayan vergilərin müəyyən edilməsinə yol verilmir': no tax not provided for by the Code may be set) with the closed lists of art. 6.1 (state taxes: income, profit, VAT, excises, property, land, road, mining, simplified tax) and art. 8.1 (local: land and property tax of individuals, local mining tax, profit tax of municipal enterprises); e-qanun.az framework 46948, Wayback 2026-08-24 (lists identical in the 2024-12-04 capture), law/eqanun_46948_art4-8.txt; grade A",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Tax Code art. 4.6 ('Bu Məcəllə ilə nəzərdə tutulmayan vergilərin müəyyən edilməsinə yol verilmir': no tax not provided for by the Code may be set) with the closed lists of art. 6.1 (state taxes: income, profit, VAT, excises, property, land, road, mining, simplified tax) and art. 8.1 (local: land and property tax of individuals, local mining tax, profit tax of municipal enterprises); e-qanun.az framework 46948, Wayback 2026-08-24 (lists identical in the 2024-12-04 capture), law/eqanun_46948_art4-8.txt; grade A",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "az-h1",
+   "total": 75069,
+   "byOecd": {
+    "1100": 31760,
+    "2100": 14472,
+    "2200": 20808,
+    "5111": 7930,
+    "5121": 99
+   },
+   "borne": {
+    "consumer": 8029,
+    "employer": 20808,
+    "entity": 46232,
+    "withheld": 0
+   },
+   "net": 283768,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "partial VAT exemptions not applied to whole basket classes: bread and wheat flour (164.1.27), pre-school education (164.1.13), metro (164.1.12), teaching-hospital care (164.1.51-1)",
+    "exemptions by holding period and of the main home (art. 102) not read (GL)",
+    "property and land tax need asset areaM2 (assets without it not computed); Baku coefficient (0.7-1.5) taken as 1.0; region default baku; 30-manat reduction (art. 199.3) and agricultural land not applied",
+    "4400 state duty on property transfers grade C (year-in-force audit, pass 3q): Law 223-IIQ on State Duty, e-qanun capture of 02/12/2024 (no later capture; the live page answers 403) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "state duty: purchases taken as contracts with other persons (art. 10.1.2, 280 manat; 25 manat between close relatives) and charged in full to the buyer (the law does not split the notarial duty)"
+   ]
+  },
+  {
+   "id": "az-h2",
+   "total": 3600,
+   "byOecd": {
+    "1100": 0,
+    "2100": 1332,
+    "2200": 2268
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 2268,
+    "entity": 1332,
+    "withheld": 0
+   },
+   "net": 10668,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "az-c1",
+   "total": 120000,
+   "byOecd": {
+    "1200": 120000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 120000,
+    "withheld": 0
+   },
+   "net": 880000,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "enterprise property tax (art. 198.2: 1 % of fixed assets) and enterprise land tax not computed"
+   ]
+  },
+  {
+   "id": "az-p1",
+   "total": 3628,
+   "byOecd": {
+    "1100": 0,
+    "2100": 1332,
+    "2200": 2268,
+    "4100": 28
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 2268,
+    "entity": 1360,
+    "withheld": 0
+   },
+   "net": 10640,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "property and land tax need asset areaM2 (assets without it not computed); Baku coefficient (0.7-1.5) taken as 1.0; region default baku; 30-manat reduction (art. 199.3) and agricultural land not applied"
+   ]
+  },
+  {
+   "id": "az-w1",
+   "total": 98000,
+   "byOecd": {
+    "1100": 39000,
+    "1200": 59000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 20000,
+    "withheld": 78000
+   },
+   "net": 80000,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "withholding on services: art. 125.1.5 10 % taken; international transport/telecom (125.1.4, 6 %) and insurance (125.1.3, 4 %) not distinguished",
+    "enterprise property tax (art. 198.2: 1 % of fixed assets) and enterprise land tax not computed"
+   ]
+  },
+  {
+   "id": "az-t1",
+   "total": 9006,
+   "byOecd": {
+    "1100": 0,
+    "2100": 3588,
+    "2200": 5418
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 5418,
+    "entity": 3588,
+    "withheld": 0
+   },
+   "net": 26412,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "4400 state duty on property transfers grade C (year-in-force audit, pass 3q): Law 223-IIQ on State Duty, e-qanun capture of 02/12/2024 (no later capture; the live page answers 403) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "state duty: purchases taken as contracts with other persons (art. 10.1.2, 280 manat; 25 manat between close relatives) and charged in full to the buyer (the law does not split the notarial duty)"
+   ]
+  },
+  {
+   "id": "az-v1",
+   "total": 9355,
+   "byOecd": {
+    "1100": 0,
+    "2100": 3588,
+    "2200": 5418,
+    "5111": 319,
+    "5121": 30
+   },
+   "borne": {
+    "consumer": 349,
+    "employer": 5418,
+    "entity": 3588,
+    "withheld": 0
+   },
+   "net": 26412,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "excise on petroleum products (art. 190.1.6): rates not printed in art. 190.3 (set by the executive); not computed",
+    "vehicles registered in Azerbaijan: no recurrent tax (art. 197.1.1 car words removed by Law 792-IIQD of 2004; art. 198.1 rates for buildings, water and air vehicles only; art. 209 since Law 1167-IVQD of 2014); road tax on foreign-registered vehicles (art. 211.1.1) not an input"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 21,
+ "theorems": 1
+}

@@ -1,0 +1,153 @@
+{
+ "cc": "BF",
+ "name": "Burkina Faso",
+ "dated": "CGI à jour LF 2023 (DGI); LF 2024 OCR held; LF 2025 not held: grade B",
+ "sources": "Sources: CGI updated to the LF 2023 (`cmp20/world/B07-west-africa-fr-pt/bf/src/CGI-LF2023-b.txt`), LF 2024 and LFR 2024 OCR.",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée",
+  "standard": 1800,
+  "reduced": 1000,
+  "classes": {
+   "hotels": "reduced",
+   "restaurants": "reduced"
+  },
+  "grade": "B",
+  "statute": "CGI art. 317 (18 %; 10 % hotel and restaurant services)",
+  "doc": "art. 317: \"Le taux de la TVA est fixé à 18 %. Ce taux est réduit à 10% pour les prestations d'hébergement et de restauration fournies par les hôtels, les restaurants et organismes assimilés\". Exemptions not read; LF 2025 not held.",
+  "notes": [
+   "Burkina Faso: CGI as of LF 2023/2024 (LF 2025 not held); VAT exemptions not read"
+  ],
+  "unsupported": [
+   "exemptions",
+   "LF 2025"
+  ]
+ },
+ "excise": {
+  "name": "Taxe sur les boissons et taxe sur les tabacs",
+  "grade": "B",
+  "statute": "CGI 2023 art. 359 as substituted by LF 2024 art. 29 (beverages, from 1 Jan 2024); art. 365 (loi n° 029-2022/ALT art. 53: tobacco 55 %); art. 358 and 364 (base); LFR 2024 does not amend them; LF 2025 not held",
+  "doc": "LF 2024 art. 29, art. 359: \"Il est fait application des taux suivants quelle que soit l'origine des produits : I. Boissons alcoolisées 1. Bières titrant moins de 8° d'alcool : 30% 2. Bières titrant 8° d'alcool et plus : 40% 3. Vins : 70% 4. Autres boissons alcoolisées titrant moins de 35° d'alcool : 50% 5. Autres boissons alcoolisées titrant 35° d'alcool et plus : 70% Le reste sans changement\" (CGI 2023: \"II. Boissons non alcoolisées 1. Boissons non alcoolisées énergisantes : 50% 2. Autres boissons non alcoolisées : 15%\"). Art. 358: local products taxed on turnover excluding VAT; imports on customs value plus duties except VAT. Art. 365: \"Le taux de la taxe est fixé à 55 %\"; art. 364: ex-factory price excluding VAT, at least 300 FCFA per 20 cigarettes. Grade B: LF 2025 not held.",
+  "items": [
+   {
+    "good": "beer",
+    "name": "TSB bières < 8°",
+    "maxAbvBp": 799,
+    "advBp": 3000,
+    "vatBp": 1800,
+    "statute": "CGI art. 359 I 1 (LF 2024 art. 29): 30 %"
+   },
+   {
+    "good": "beer",
+    "name": "TSB bières >= 8°",
+    "minAbvBp": 799,
+    "advBp": 4000,
+    "vatBp": 1800,
+    "statute": "CGI art. 359 I 2 (LF 2024 art. 29): 40 %"
+   },
+   {
+    "good": "wine",
+    "name": "TSB vins",
+    "advBp": 7000,
+    "vatBp": 1800,
+    "statute": "CGI art. 359 I 3 (LF 2024 art. 29): 70 %"
+   },
+   {
+    "good": "spirits",
+    "name": "TSB autres boissons alcoolisées < 35°",
+    "maxAbvBp": 3499,
+    "advBp": 5000,
+    "vatBp": 1800,
+    "statute": "CGI art. 359 I 4 (LF 2024 art. 29): 50 %"
+   },
+   {
+    "good": "spirits",
+    "name": "TSB autres boissons alcoolisées >= 35°",
+    "minAbvBp": 3499,
+    "advBp": 7000,
+    "vatBp": 1800,
+    "statute": "CGI art. 359 I 5 (LF 2024 art. 29): 70 %"
+   },
+   {
+    "good": "nonAlcoholic",
+    "name": "TSB autres boissons non alcoolisées",
+    "advBp": 1500,
+    "vatBp": 1800,
+    "statute": "CGI art. 359 II 2: 15 %"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Taxe sur les tabacs, cigares et cigarettes",
+    "advBp": 5500,
+    "vatBp": 1800,
+    "statute": "CGI art. 365 (loi n° 029-2022/ALT art. 53): 55 %"
+   }
+  ],
+  "notes": [
+   "CGI art. 356: water without sugar or flavouring, local fruit juices from local raw materials and traditional local drinks are exempt (not separable from the basket line); energy drinks 50 % (art. 359 II 1) not separable",
+   "art. 364: the minimum base of 300 FCFA per 20 cigarettes is not applied",
+   "taxe sur les produits pétroliers, café/thé, colas and cosmetics (15 %) not modelled"
+  ],
+  "unsupported": [
+   "energy drinks 50 %",
+   "minimum tobacco base",
+   "petroleum products tax (TPP)",
+   "LF 2025 (not held)"
+  ]
+ },
+ "cit": {
+  "name": "Impôt sur les sociétés",
+  "rate": 2750,
+  "step": 1000,
+  "min": {
+   "bp": 50,
+   "floor": 1000000
+  },
+  "grade": "B",
+  "statute": "CGI art. 87 (27,5 %, fraction below 1 000 F dropped), art. 23-24 (minimum forfaitaire 0,5 % of turnover, at least 1 000 000 F under the régime du réel normal)",
+  "doc": "art. 87: \"Le taux de l'impôt sur les sociétés est de 27,5 %. … Toute fraction du bénéfice imposable inférieure à mille …\"; art. 24 (loi n° 051-2019): \"Le minimum forfaitaire est égal à 0,5 % du chiffre d'affaires … En aucun cas le montant ne peut être inférieur à : un million (1.000.000) de francs CFA pour les contribuables relevant du régime du bénéfice réel normal\" (300 000 F under the simplified regime).",
+  "notes": [
+   "CGI art. 24: 300 000 F floor for the régime du réel simplifié not applied",
+   "LF 2025 not held"
+  ],
+  "unsupported": [
+   "simplified-regime floor",
+   "loss rules"
+  ]
+ },
+ "wht": {
+  "name": "IRVM / retenues non-résidents",
+  "grade": "B",
+  "statute": "CGI 2023 art. 210-212 (loi n° 029-2022/ALT art. 36: 20 % on services and royalties paid to non-residents); art. 140 (IRCM: 12,5 % on income from securities, 25 % on claims); LF 2024 and LFR 2024 do not amend them; LF 2025 not held",
+  "doc": "art. 210: \"une retenue à la source est opérée sur les sommes que les personnes physiques ou morales non résidentes au Burkina Faso perçoivent en rémunération de prestations de toute nature fournies ou utilisées au Burkina Faso\"; art. 211 lists studies, consulting, technical assistance, head-office costs and the use of patents, trademarks, designs and copyrights; art. 212: \"Le taux de la retenue à la source est fixé à 20 % du montant net des sommes versées aux personnes non établies au Burkina Faso\". Art. 140: income from securities 12,5 %; income from claims 25 % (halved for deposit accounts). A loan from a foreign lender is a claim: 25 %.",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 2000,
+    "statute": "CGI art. 210-212 (20 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 2000,
+    "statute": "CGI art. 211-212 (use of patents, trademarks, copyrights: 20 %)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 1250,
+    "statute": "CGI art. 140 2) (IRVM 12,5 %)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 2500,
+    "statute": "CGI art. 140 1) (income from claims 25 %)"
+   }
+  ],
+  "notes": [
+   "art. 212: 10 % for road transport by ECOWAS providers without proof of residence, not modelled; interest on deposit accounts is halved (12,5 %), a loan from abroad is taken at 25 %"
+  ],
+  "unsupported": [
+   "ECOWAS road transport 10 %",
+   "bonds issued in Burkina Faso 6 %",
+   "LF 2025 (not held)"
+  ]
+ }
+}

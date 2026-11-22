@@ -1,0 +1,44 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 10: daň silniční: cars, vans, motorcycles and buses cited as not taxable; N2/N3 lorries and O3/O4 trailers not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 10: daň silniční: cars, vans, motorcycles and buses cited as not taxable; N2/N3 lorries and O3/O4 trailers not modelled",
+  "unsupported": [
+   "would unlock: zákon 16/1993 Sb. § 6 (rates for N2, N3 by axles and weight)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Daň silniční",
+  "statute": "Zákon o dani silniční 16/1993 Sb. § 2 odst. 2",
+  "dated": "zákony pro lidi, znění od 1. 1. 2025 (`cz/law/silnicni_zneni-20250101.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "lorries N2/N3 and trailers O3/O4 (taxable, rates not modelled), other kinds"
+  ]
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000)",
+  "statute": "European Commission TEDB, CZ: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 86, 108, 4463, 90, 96, 97, 104, 106, 110, 1281) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "unsupported": [
+   "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+  ],
+  "gap": 2,
+  "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVCZE v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/CZE.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6200 other taxes, fees and related payments 509,4 million CZK (2024; 219 to 633 in 2021-2024); the national taxes behind it not read",
+  "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVCZE v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/CZE.csv`, SHA256SUMS; general government S13; 2025 not yet published)"
+ }
+]

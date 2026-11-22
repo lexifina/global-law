@@ -1,0 +1,64 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Imposto sobre o Rendimento das Pessoas Coletivas",
+  "statute": "CIRC art. 87.º n.º 1 (20 %), n.º 2 (16 % sobre os primeiros 50 000 €, PME), na redação da Lei n.º 45-A/2024 (OE 2025)",
+  "dated": "Lei 45-A/2024 (in force 1.1.2025)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "SME status (DL 372/2007 annex: < 250 employees and turnover ≤ 50 M€ or balance ≤ 43 M€) approximated by turnover ≤ 50 M€",
+   "derrama municipal (Lei 73/2013 art. 18, up to 1,5 %) not modelled",
+   "tributação autónoma not modelled",
+   "withholding (art. 94.º) not read"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Derrama estadual",
+  "statute": "CIRC art. 87.º-A n.º 1, 2 (Lei n.º 114/2017)",
+  "dated": "Portal das Finanças CIRC, Wayback 2025-04-19",
+  "grade": "A",
+  "kernel_parts": [
+   "charge",
+   "Schedule"
+  ],
+  "unsupported": [
+   "the principal-activity condition (commercial, industrial or agricultural) is taken as met"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Retenção na fonte de IRC (não residentes) (dividend, interest, royalty, services)",
+  "statute": "CIRC art. 4.º n.º 3 c) 7), art. 87.º n.º 4, art. 94.º n.º 1 a), c), g), n.º 3 b) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/irc87.txt: n.º 4 (25 %) carries no redação note (Lei 2/2014 republication); Lei 64/2025 changes n.º 1, 2, 5 for periods from 2026 (norma transitória art. 3.º); irc94.txt n.º 4 (25 %) in the Lei 2/2014 redação]",
+  "dated": "Portal das Finanças, código consolidado fetched 2026-11-21 (`pt/law/irc87.txt`, `irc94.txt`, `irc4.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services are taken as performed or used in Portugal and not transport, communications or financial",
+   "35 % to listed tax havens and the EU directive exemptions not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Retenção na fonte de IRS (não residentes) (dividend, interest, royalty, services)",
+  "statute": "CIRS art. 71.º n.º 1 a), n.º 4 a) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/cirs71.txt: last redação Lei 45-A/2024 (OE 2025, from 1.1.2025); no later law]",
+  "dated": "Portal das Finanças, código consolidado fetched 2026-11-21 (`pt/law/cirs71.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "royalties are taken as received by a holder other than the original author (capital income); an author's royalties are professional income at 25 % (n.º 4 a))",
+   "services are taken as performed or used in Portugal (CIRS art. 18.º)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

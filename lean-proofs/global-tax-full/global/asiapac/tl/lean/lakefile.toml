@@ -1,0 +1,18 @@
+name = "TlGlobal"
+version = "0.1.0"
+defaultTargets = ["TlGlobal", "tlglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); TlTax = the 1.x model, vendored from cmp20/world/B03-asia-east-se/tl/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TlTax"
+
+[[lean_lib]]
+name = "TlGlobal"
+
+[[lean_exe]]
+name = "tlglobal"
+root = "TlGlobal.Main"

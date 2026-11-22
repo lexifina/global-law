@@ -1,0 +1,249 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Value Added Tax",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Value Added Tax Act Cap. 331 (standard rate 16 %), per the Zambia Revenue Authority guide (official secondary; the same sentence in the Wayback capture of 2025-05-16 and the live page)",
+  "dated": "ZRA tax information pages (official secondary: live 2026-11-21 and Wayback 2025-05-16); Income Tax (Amendment) Acts 2023-2025 held",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "zero-rated and exempt schedules (not read)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duty (Customs and Excise Act, Second Schedule)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Customs and Excise Act Cap. 322 s. 76 and Second Schedule as amended to 1 Jan 2025: heading 4 subheading 2203.00.90 (clear beer) 60 %, heading 5 (22.04, 22.05 wine) 60 %, heading 6 (2207.10.00, 2207.20.10, 2207.20.90, Ex.22.08 spirits) 60 % (figures quoted as the ones replaced by Act No. 11 of 2025), heading 9 (3) (a) petroleum spirit 2710.12.10 K2.34/ltr (Act No. 24 of 2024 App. II (e))",
+  "dated": "ZRA tax information pages (official secondary: live 2026-11-21 and Wayback 2025-05-16); Income Tax (Amendment) Acts 2023-2025 held",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc"
+  ],
+  "unsupported": [
+   "cigarettes K452 (unit not read)",
+   "non-alcoholic K1.00 (unit not read)",
+   "diesel K0.75 (unit not read)",
+   "19 Aug 2025 rate changes (Act No. 11 of 2025)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Corporate income tax",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Income Tax Act Cap. 323 Charging Schedule (company rate 30 %), per the Zambia Revenue Authority guide (official secondary, live page 2026-11-21); the Income Tax (Amendment) Acts 2023 and 2024 amend only sector items of the Charging Schedule",
+  "dated": "ZRA tax information pages (official secondary: live 2026-11-21 and Wayback 2025-05-16); Income Tax (Amendment) Acts 2023-2025 held",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "sector rates of the Charging Schedule",
+   "loss carry-forward limits",
+   "minimum alternative tax (s. 14A, from 19 Aug 2025)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Withholding tax on payments to non-residents",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Income Tax Act Cap. 323 Charging Schedule para 6 (1) (b) as substituted by Act No. 17 of 2018 (20 % on dividends payable to non-residents and payments to non-resident contractors); para 7 proviso item on interest to a non-resident 20 % (Act No. 17 of 2018, Act No. 15 of 2019 item (x), renumbered (ix) by Act No. 43 of 2021, substituted by Act No. 10 of 2025: 20 %); thirteenth pass: ITA Cap. 323 Charging Schedule para 7 (royalties to non-residents 20 %, final), per the ZRA leaflet 'Withholding Taxes' (2023, Wayback capture 2023-08-04, `R4/fetch/p13/zm_wht_leaflet_2023.pdf`: royalties 15 % for residents, 20 % for non-residents, final for non-residents); amending Acts 2023-2025 held do not touch the item (official secondary, B)",
+  "dated": "ZRA tax information pages (official secondary: live 2026-11-21 and Wayback 2025-05-16); Income Tax (Amendment) Acts 2023-2025 held",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "management/consultancy fees (s. 82A)"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (mineral royalty (Mines and Minerals Development Act); insurance premium levy; provision not located by keyword in the reachable text)",
+  "statute": "Income Tax Act Cap. 323 as amended (Income Tax (Amendment) Acts to No. 17 of 2025)",
+  "dated": "-",
+  "unsupported": [
+   "triage outOfScope: mineral royalty: mining sector, not households. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.parliament.gov.zm/acts-of-parliament (laptop))",
+  "triage": "outOfScope"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "NAPSA employer contribution (5 % up to the 2025 ceiling K34 164 a month)",
+  "statute": "National Pension Scheme Act 1996 (Cap. 256); NAPSA public notice 'Revision in Contribution Ceiling for the Year 2025' (7 Jan 2025, held zm/law/w5/napsa_ceiling_2025_notice.html) [text version: NAPSA notice of 7 January 2025 (2025 ceiling)]",
+  "dated": "-",
+  "unsupported": [
+   "the employee's 5 %",
+   "Act text not read (Fund notices)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Skills Development Levy (0,5 % of gross emoluments)",
+  "statute": "Skills Development Levy Act No. 46 of 2016 s. 4 (1) (from 1 Jan 2017; policyvault.africa copy via Wayback, R4/fetch/zm11); s. 4 (3) replaced by Act No. 24 of 2020 (employer bears the levy; not read) [text version: Act No. 46 of 2016 as enacted (policyvault.africa copy via Wayback); Act No. 24 of 2020 not read (flag)]",
+  "dated": "-",
+  "unsupported": [
+   "exempt employers (Government, diplomatic missions, etc.)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Property Transfer Tax on land and buildings (5 % of the realised value, charged on the transferor)",
+  "statute": "Property Transfer Tax Act Cap. 340 (tax on the transferor's realised value); ZRA leaflet 'Property Transfer Tax' (2022, Wayback 2023-03-30, R4/fetch/zm11/ptt_guide_2022.pdf). Liability: the seller; charged on each disposal of the entity's land or buildings (event 'disposal i'), not on its purchases",
+  "dated": "-",
+  "unsupported": [
+   "realised value = the open market value of land; the model uses the disposal's proceeds (no market value on a disposal record)",
+   "transfers of shares (5 %), intellectual property (5 %) and mining rights (10 %)",
+   "exempt transfers (spouses and immediate family at the price received, group reorganisations)",
+   "Act text not read"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.disposalDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "ZRA 'Tax Information' page (fetched 2026-11-21, R4/fetch/zm8/zra_taxinfo_live_20261121.html)",
+  "dated": "-",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "ZM: no net wealth tax. ZRA's list of the taxes it administers (turnover tax, PAYE, VAT, income tax, withholding tax, presumptive tax, property transfer tax, excise duty, base tax, insurance premium levy, mineral royalty) has none"
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Withholding tax on dividends received by resident individuals (15 %, final)",
+  "statute": "Income Tax Act Cap. 323 s. 81 and Charging Schedule (rate), per the ZRA leaflet 'Withholding Taxes' (2023, Wayback 2023-08-04, R4/fetch/p13/zm_wht_leaflet_2023.pdf: 'The rate of WHT on dividends is 15% for residents and 20% for non-residents and it is the final tax'); official secondary",
+  "dated": "-",
+  "unsupported": [
+   "dividends from LuSE-listed companies to individuals are exempt: the model cannot tell listed from unlisted (15 % applied)",
+   "mining companies' dividends 0 %",
+   "individuals' interest on savings and deposits: no withholding (ZRA leaflet); not modelled as a cited zero (exemption provision not read)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "National Health Insurance contribution, employer share (1 % of basic salary)",
+  "statute": "National Health Insurance Act No. 2 of 2018; National Health Insurance (General) Regulations, S.I. No. 63 of 2019, reg. 9 (read: contribution 'at the rates set out in the Third Schedule'; the Third Schedule page is missing from the only copies reached, both truncated at 1 MiB); rate from NHIMA 'Registration steps' quoting the Third Schedule (Wayback 2021-09-18, R4/fetch/p14/zm_nhima_reg.txt: 'Basic Pay 1% Employee Contribution 1% Employer Contribution'); official secondary",
+  "dated": "-",
+  "unsupported": [
+   "the base is the basic salary: the model uses the whole payroll (flag)",
+   "the employee's 1 %",
+   "non-citizens who are not established residents are outside the scheme: not distinguished"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Motor vehicle licence tax ('road tax': private motor cars by net weight, motor-cycles; in fee units)",
+  "statute": "Road Traffic Act, 2002 (No. 11 of 2002) s. 42 (1)-(2) and Second Schedule 'Taxes payable on annual licences' items 3 and 6 (commons.laws.africa publication PDF via Wayback 20240802081936, R4/fetch/p17/zm_rta2002_act11_commons.pdf, Schedule pp. 251-252 re-read at 400 dpi psm 6); fee unit 40 ngwee from 19 April 2024: Fees and Fines (Fee and Penalty Unit Value) (Amendment) Regulations, 2024 (SI 25 of 2024) reg. 2 amending SI 8 of 2014 reg. 2 (R4/fetch/p17/zm_si2024_25_fee_unit.pdf). The Road Traffic (Fees) Regulations, 2021 (SI 112 of 2021) prescribe registration and document fees only. B: the Road Traffic (Amendment) Acts 2006, 2008 and No. 49 of 2021 were not read (no copy reached), so an amendment of the Second Schedule is not excluded (flag) [text version: Act No. 11 of 2002 as published (commons.laws.africa PDF, Wayback 20240802081936); later amending Acts not read (flag)]",
+  "dated": "-",
+  "unsupported": [
+   "half-yearly (55 %) and quarterly (30 %) licences and the Note (licence for 1 July - 31 December at half the tax): an annual licence for the whole year assumed",
+   "other motor vehicles by net weight (item 7: vans, trucks; 200-800 fee units), public service vehicles (item 4), taxis and hire cars (item 5), trailers (item 8): not modelled",
+   "the vehicle's mass is read as its net weight; a car without massKg: grade C line",
+   "the carbon emission surtax (Customs and Excise Act, annual by engine capacity) is a separate entry (grade C)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "vehicleTaxFamily (kernel Global2.Vehicle)"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Carbon emission surtax on motor vehicles (annual, by engine capacity)",
+  "statute": "Customs and Excise Act (Cap. 322) carbon emission surtax as amended by the Customs and Excise (Amendment) Act, 2022 (No. 25 of 2022; ZambiaLII search hit on the surtax by engine capacity, text not reached)",
+  "dated": "-",
+  "unsupported": [
+   "the 2025 rates by engine capacity are not held: the Customs and Excise (Amendment) Acts of 2022 and 2024 are not on commons.laws.africa via Wayback; Act No. 25 of 2023 (held, R4/fetch/p17) changes only Part I import surtaxes; Act No. 18 of 2025 (30 December 2025) applies from 2026"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "ZambiaLII search API (titles); commons.laws.africa Wayback CDX (act/2023/23-25, act/2024/25 = Mobile Money Transaction Levy Act 2024); zra.org.zm CDX (no carbon surtax page captured)",
+  "triage": "moderate"
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Zambia as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Zambia for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C894&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/zm.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "lines left out (grade C): 22021010 (MFN duty '25% or KR0.65 per litre whichever is the greater': specific or compound duty, un); 22021020 (MFN duty '25% or KR0.65 per litre whichever is the greater': specific or compound duty, un); 22030090 (MFN duty '25% or KR0.8 per litre whichever is the greater': specific or compound duty, uni); 24022000 (MFN duty '25% or KR15 per mille/Kg whichever is greater': specific or compound duty, unit/); 87032390 (MFN duty '30% or KR6,000 per vehicle, whichever is the greater': specific or compound duty)",
+   "SADC free trade area (origin AO, BW, KM, CD, SZ, LS, MG, MW, MU, MZ, NA, SC, ZA, TZ, ZW): internal preference not in the member's 2025 IDB notification, rate not read (grade C)",
+   "COMESA free trade area (origin BI, KM, CD, DJ, EG, ER, ET, KE, LY, MG, MW, MU, RW, SC, SO, SD, TN, UG, ZW): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+  ]
+ }
+]

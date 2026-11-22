@@ -1,0 +1,323 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 369 (18 %; 10 % approved tourist accommodation), art. 361 (exemptions)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "unprocessed staple foods exempt (art. 361 3)) not separable from the food line",
+   "social tranche of water/electricity"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Taxe sur les boissons (art. 413), taxe sur les tabacs (art. 434), taxe sur les produits pétroliers (art. 444)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 408, 413 (LFI 2025 additional tax per litre of alcohol), 434 (70 %, LFI 2025), 444",
+  "dated": "CGI annoté janvier 2025",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "ExciseRule (kernel 2.1, valueBase .beforeTax)",
+   "exciseRuleFamily"
+  ],
+  "unsupported": [
+   "local alcoholic drinks 25 % (origin not an input)",
+   "coffee, tea, fats, cosmetics, bouillon and plastic-bag taxes (no basket line)",
+   "minimum ex-factory price for tobacco (arrêté)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés + impôt minimum forfaitaire",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 16-1, 36, 38-40",
+  "dated": "CGI annoté janvier 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRule (kernel 2.1)",
+   "MinimumTax (OHADA floor/cap)",
+   "step 1 000"
+  ],
+  "unsupported": [
+   "loss age (3-year limit)",
+   "IMF on the previous year's turnover"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenues à la source sur paiements à l'étranger (IRCM, BNC non-résidents)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 173 (10 / 13 / 16 %), 202-3 (25 % of 80 %), 203, 208",
+  "dated": "CGI annoté janvier 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "treaty rates (out of scope)",
+   "bond interest 13 % / 6 % (loans taken as créances, 16 %)"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Retenue à la source sur les produits des actions (IRVM)",
+  "statute": "CGI art. 173-2 (10 %), art. 203-2 a) (libératoire)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Retenue à la source sur les intérêts de comptes de dépôt",
+  "statute": "CGI art. 173-2 (8 % on bank deposit accounts; 16 % other claims; 13 % bonds)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "16 % / 13 % / 20 % cases need the instrument type"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Plus-values (valeurs mobilières, immeubles)",
+  "statute": "CGI art. 173-2 (25 % via a Senegalese intermediary), art. 156, 259",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "gains are taxed at 25 % only when realised through a Senegalese intermediary, otherwise declared in the progressive IR (stacking through the 1.x model not done); real-estate gains art. 156 not read"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "CGI-2025.txt"
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Contribution forfaitaire à la charge de l'employeur",
+  "statute": "CGI art. 267 (3 %)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CSS family benefits 7 % and work accidents 1 % (employer, up to 63 000 F a month)",
+  "statute": "CLEISS 'Les cotisations au Sénégal' (1 Jan 2026, R4/fetch/cleiss11/senegal.html); Code de la sécurité sociale not read; dating for 2025: the CLEISS page 'Cotisations au 1er janvier 2023' (Wayback 20231119193713, R4/fetch/p16/cleiss_senegal_wb20231119.html) shows the same rates and ceilings as the 2026 page, so they held through 2025",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "work-accident rate by risk class (1/3/5 %): the lowest applied",
+   "SMIG floor"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière",
+  "statute": "CGI art. 290, 294 (5 % of rental value), art. 302 (5 % of land value)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "exemptions art. 291-293",
+   "surtaxe on unbuilt land"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Droit d'enregistrement (ventes d'immeubles)",
+  "statute": "CGI art. 472 II 1° (5 %)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "1 % social-housing sales",
+   "conservation foncière fees"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation à titre gratuit (successions, donations)",
+  "statute": "CGI art. 472 I (10 % gifts), II 7° (5 % successions), IV 5° (2 % between spouses and in the direct line)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "abatements and exemptions not read"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateFlatFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI annoté janvier 2025 (whole code)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "SN CGI annoté janvier 2025 (complete code, Livres I-III): no tax on net wealth; the full text has no 'fortune' or 'patrimoine net' charging provision"
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts (loi n° 2012-31 du 31 décembre 2012), DGID edition mise à jour janvier 2025 (incl. LFI 2025)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.dgid.sn/storage/docs/CGI-2025.pdf)",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Contribution économique locale (CEL: rental value of premises + value added; replaced the patente in 2019)",
+  "statute": "CGI art. 320-321, 329-330, 336-337 (loi n° 2018-10 du 30 mars 2018; CGI annoté janvier 2025)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "0,075 % minimum for low-margin / regulated-price sectors (art. 337-3, arrêté 011492 of 24 May 2018), telecoms 0,30 % and joint hydrocarbon fields 0,02 % of turnover (art. 337-8/9), port operators 1,5 % (art. 340), simplified-regime limitation to the minimum (art. 337-7), exemptions (art. 322-324), first-year VA exemption (art. 338)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "IPRES general pension scheme, employer share (8,4 % up to 432 000 F a month)",
+  "statute": "CLEISS 'Les cotisations au Sénégal' (2026); dating for 2025: the CLEISS page 'Cotisations au 1er janvier 2023' (Wayback 20231119193713, R4/fetch/p16/cleiss_senegal_wb20231119.html) shows the same rates and ceilings as the 2026 page, so they held through 2025",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "managers' supplementary scheme (cadres) 3,6 %",
+   "IPM health insurance 2-7,5 % employer (rate set per inter-company body; includes the 2 % AMO levy)",
+   "the employee's 5,6 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Taxe spéciale sur les voitures particulières des personnes morales (annual, by fiscal horsepower; companies only)",
+  "statute": "CGI 2025 (CGI annoté, janvier 2025), world/B07-west-africa-fr-pt/sn/src/CGI-2025.txt art. 550-554 (l. 13683-13800). Liability: the company or public establishment that held, used or maintained the car (art. 552)",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "quarterly liquidation (a quarter of the annual rate per quarter held, art. 552): a car held all year assumed",
+   "hired cars (per 90-day period of hire)",
+   "exemptions of art. 550 (dealers, taxis and public transport, driving schools, competition cars, cars for hire without driver): fleet taken as taxable"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.vehicleFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Droit de timbre on the registration certificate (carte grise) of a motor vehicle (2 000 F per fiscal horsepower)",
+  "statute": "CGI 2025 (CGI annoté, janvier 2025), world/B07-west-africa-fr-pt/sn/src/CGI-2025.txt art. 524 (Loi n° 2015-06 du 23 mars 2015), l. 13227-13235: 'Sont soumis à un droit de timbre de 2 000 francs : par cheval vapeur, les récépissés de déclaration de mise en circulation de véhicules automobiles ...'; public transport vehicles 1 000 F per CV",
+  "dated": "CGI annoté janvier 2025 (LFI 2025)",
+  "unsupported": [
+   "the duty on a new récépissé after a change of owner (not a first registration) is not modelled",
+   "public transport vehicles at 1 000 F per CV; motorcycles above 125 cm3, vans and trucks (kinds other than car): not modelled",
+   "art. 535 reception fees (37 000 / 7 000 F) and the 10 % tax on passenger cars of 13 CV and more (art. 439-440, on the supply/import) not modelled",
+   "a car without fiscalHp: grade C line"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "vehicleTaxFamily (kernel Global2.Vehicle)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Senegal as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Senegal for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C686&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/sn.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "WAEMU (UEMOA) customs union (origin BF, ML, NE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+  ]
+ }
+]

@@ -1,0 +1,138 @@
+{
+ "country": "GW",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Imposto sobre o Valor Acrescentado (IVA)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Código do IVA (Lei n.º 4/2022) art. 18.º n.º 1 (taxas: 10 % for the Anexo I goods and services, 19 % otherwise, 0 % exports) and art. 15.º n.º 1 (isenções); Lei n.º 4/2022 art. 7.º repeals the Código do IGV",
+   "dated": "Lei n.º 4/2022 (Código do IVA, 4.º Suplemento ao Boletim Oficial n.º 8, 25 Feb 2022), which repeals the Código do IGV (Lei n.º 16/97); the date from which the IVA is actually applied is not stated in the texts held; OGE laws 2023-2025 not read: grade B",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "IVA application date not established",
+    "Anexo I reduced-rate list not read",
+    "registration threshold"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excises",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried world/B07-west-africa-fr-pt/gw/law/rescue3 (MEF_OGE*.pdf, DGCI_DECIRF)",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "only budget documents (OGE 2023-2026 proposals) and a 2021 DGCI instruction are held; the IGV, contribuição industrial and excise texts are not"
+   ],
+   "tried": "world/B07-west-africa-fr-pt/gw/law/rescue3 (MEF_OGE*.pdf, DGCI_DECIRF)",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried world/B07-west-africa-fr-pt/gw/law/rescue3 (MEF_OGE*.pdf, DGCI_DECIRF)",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "only budget documents (OGE 2023-2026 proposals) and a 2021 DGCI instruction are held; the IGV, contribuição industrial and excise texts are not"
+   ],
+   "tried": "world/B07-west-africa-fr-pt/gw/law/rescue3 (MEF_OGE*.pdf, DGCI_DECIRF)",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding on payments abroad",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried R4/fetch/gw10 (Lei 2/2018 OGE, RGIT, IGV/LGT); world/B07 gw rescue3",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "Código do Imposto de Capitais (Decreto 8/84) art. 1 c) as amended by Lei 2/2018 art. 11 taxes dividends and repatriated profits, but the code's rates are not held; no withholding text for interest, royalties or services"
+   ],
+   "tried": "R4/fetch/gw10 (Lei 2/2018 OGE, RGIT, IGV/LGT); world/B07 gw rescue3",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Regulamento do Imposto de Selo (Decreto n.º 20/80, de 10 de maio) Tabela geral, as amended by Lei n.º 2/2018 art. 16",
+   "dated": "-",
+   "unsupported": [
+    "only the articles replaced in 2018 are held (Lei 2/2018 art. 16, R4/fetch/gw10: aval 0,2 %, tickets 5-6 %, contracts before public offices 1 %, receipts 0,3 %, company capital 3 %, land-transfer declarations 150 F per m² of rural land and 200 F per m² of urban land ...); the article charging deeds of sale of buildings is not among them and the 1980 Tabela is not held, so the household conveyance charge cannot be stated"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copies R4/fetch/gw10 (Lei 2/2018, OGE 2022 OCR), no copy of Decreto 20/80 located (seventeenth pass)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "INSS employer contributions",
+   "statute": "not reached: tried live inss.gw (home page only), world/gw law folder search",
+   "dated": "-",
+   "unsupported": [
+    "the INSS contribution decree is not held; the INSS site (inss.gw) home page gives no rates"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "live inss.gw (home page only), world/gw law folder search",
+   "guards": 0
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of Guinea-Bissau as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Guinea-Bissau for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C624&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/gw.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "WAEMU (UEMOA) customs union (origin BF, ML, NE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "guards": 4
+  }
+ ],
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

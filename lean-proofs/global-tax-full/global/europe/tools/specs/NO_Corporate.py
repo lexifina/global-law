@@ -1,0 +1,15 @@
+S = {'cc': 'NO', 'fam': 'Corporate', 'doc': '# NO 2025: Inntektsskatt for selskaper (skatt til staten) (1200) and withholding on payments abroad\n\nSource: Stortingsvedtak om skatt av inntekt og formue mv. for inntektsåret 2025 (lovdata `STV/forskrift/2024-12-13-3203`, `no/law/stv_skatt2025.html`); sha256 in `law/SHA256SUMS`.\n* § 3-3: "Selskaper og innretninger som nevnt i skatteloven § 2-36 annet ledd , svarer skatt til staten med 22 pst. av inntekten."\n* § 3-3 annet ledd: 25 pst. for companies paying finansskatt på lønn\n', 'lean': 'def cit : CorpRegime :=\n  { name := "Inntektsskatt for selskaper (skatt til staten)",\n    sched := Schedule.flat 2200 }\n\ndef citStatute : String := "Stortingets skattevedtak for inntektsåret 2025 (FOR-2024-12-13-3203) § 3-3 første ledd (22 pst.)"\n', 'families': [('1200 Inntektsskatt for selskaper (skatt til staten)', ['.cit'], '(if g.entity == .company then [cit.citCharge g.company citStatute] else [])')], 'notes': ['NO 1200: Stortingets skattevedtak, ikrafttredelse inntektsåret 2025'], 'unsupported': [('g.entity == .company && g.company.interestExpense > 0', 'interest limitation (ATAD art. 4 transposition) not modelled'), ('g.entity == .company', 'group regimes, CFC, transfer pricing and treaties out of scope')], 'guards': ['cit.citTax { profit := 100000, turnover := 10000000 } == 22000', 'cit.citTax { profit := 1000000, turnover := 10000000 } == 220000'], 'taxes': [{'oecd': '1200', 'tax': 'Inntektsskatt for selskaper (skatt til staten)', 'statute': 'Stortingets skattevedtak for inntektsåret 2025 (FOR-2024-12-13-3203) § 3-3 første ledd (22 pst.)', 'dated': 'Stortingets skattevedtak, ikrafttredelse inntektsåret 2025', 'grade': 'A', 'kernel_parts': ['CorpRegime'], 'unsupported': ['fritaksmetoden (skatteloven § 2-38: dividends exempt with 3 % sjablong) not modelled', 'financial-sector rate 25 % (§ 3-3 annet ledd) not modelled']}, {'oecd': '1200', 'tax': 'Withholding on payments abroad', 'statute': 'statutory withholding on dividends, interest, royalties', 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'tried': 'lovdata current act fetched for VAT only; the rate is in the annual Stortingsvedtak (not fetched)', 'unsupported': ['would unlock: Stortingets vedtak om skatt av inntekt og formue for 2025']}]}
+
+# ---- pass 8 (R1 Europe, 2026-11-21): withholding under kernel 2.3.0, P5/P6 gaps, P7 surcharges, carry-overs (tools/p8_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+p8_rows(S)
+p6_finish(S)
+
+# ---- pass 10 (R1 Europe, 2026-11-21): vehicle taxes, conditional withholding, remaining withholding (tools/p10_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+p10_rows(S)
+p6_finish(S)

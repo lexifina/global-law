@@ -1,0 +1,22 @@
+name = "TnGlobal"
+version = "0.1.0"
+defaultTargets = ["TnGlobal", "tnglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); TnTax = the 1.x model, vendored from cmp20/world/B06-mena/tn/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TnTax"
+
+[[lean_lib]]
+name = "TnGlobal"
+
+[[lean_exe]]
+name = "tnglobal"
+root = "TnGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

@@ -1,0 +1,22 @@
+name = "PsGlobal"
+version = "0.1.0"
+defaultTargets = ["PsGlobal", "psglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); PsTax = the 1.x model, vendored from cmp20/world/B06-mena/ps/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PsTax"
+
+[[lean_lib]]
+name = "PsGlobal"
+
+[[lean_exe]]
+name = "psglobal"
+root = "PsGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

@@ -1,0 +1,88 @@
+{
+ "cc": "BI",
+ "dated": "Loi n°1/14 du 24 décembre 2020 (impôts sur les revenus)",
+ "entries": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "income": "dividend",
+   "rateBp": 1500,
+   "grade": "B",
+   "name": "Impôt sur les revenus du capital (dividendes)",
+   "statute": "Loi IR 2020 art. 23 (15 %), art. 122 1° (retenue 15 %) [text version: Loi n°1/14 du 24 décembre 2020 as promulgated (obr.bi scan, Wayback; world/B08-central-africa-fr/bi/law/loi_ir_2020.pdf); art. 122 restated with the same 15 % by LF 2025/2026 art. 139 (from 1 July 2025); LF 2021/22-2023/24 and the tax articles of the revised LF 2024/25 not read (flag)]",
+   "doc": "art. 23: \"Le montant des revenus du capital et des plus-values est imposable au taux proportionnel de quinze pour cent (15%). Le produit de toute vente d'actif prévu à l'article 37 alinéa 2 est également imposé à ce taux.\"; art. 122: \"Une retenue de quinze pour cent (15%) est pratiquée sur les paiements ci-après ... 1° les dividendes ... 2° les paiements d'intérêts de toute nature\". Loi of 2020 with the LF 2025/26 derogations read; LF 2021-2025 not held: grade B.",
+   "unsupported": []
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "intWht",
+   "income": "interest",
+   "rateBp": 1500,
+   "grade": "B",
+   "name": "Impôt sur les revenus du capital (intérêts)",
+   "statute": "Loi IR 2020 art. 23, art. 122 2° (15 %) [text version: Loi n°1/14 du 24 décembre 2020 as promulgated (obr.bi scan, Wayback; world/B08-central-africa-fr/bi/law/loi_ir_2020.pdf); art. 122 2° restated with the same 15 % by LF 2025/2026 art. 139 (from 1 July 2025); LF 2021/22-2023/24 and the tax articles of the revised LF 2024/25 not read (flag)]",
+   "unsupported": []
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "gains",
+   "rateBp": 1500,
+   "kinds": [
+    "realEstate",
+    "land",
+    "listedShares",
+    "unlistedShares",
+    "home"
+   ],
+   "grade": "B",
+   "name": "Impôt sur les plus-values",
+   "statute": "Loi IR 2020 art. 23 (15 %) [text version: Loi n°1/14 du 24 décembre 2020 as promulgated (obr.bi scan, Wayback; world/B08-central-africa-fr/bi/law/loi_ir_2020.pdf); the LF 2025/2026 derogations read (art. 137-149) do not touch art. 23; LF 2021/22-2023/24 and the tax articles of the revised LF 2024/25 not read (flag)]",
+   "notes": [
+    "Loi IR 2020 art. 23: gains taxed at 15 % (gain = proceeds - cost - costs; the computation and exemption articles not read)"
+   ],
+   "unsupported": [
+    "gain computation and exemptions not read"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "inssPension",
+   "rateBp": 600,
+   "cap": 5400000,
+   "level": "social",
+   "grade": "B",
+   "name": "INSS pensions, employer contribution (6 % up to 450 000 BIF a month)",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019, Burundi (Wayback 2020-08-02, R4/fetch/p14/ssptw_burundi.txt; facts restated): employer 6 % of covered monthly pay (8,8 % for arduous work), on monthly earnings up to 450 000 BIF; official secondary, edition 2019 (flagged)",
+   "doc": "Burundi INSS pension branch. Fourteenth pass (FT reviewer 4: family not modelled).",
+   "unsupported": [
+    "arduous work 8,8 % not distinguished",
+    "edition 2019 (no later rate text reached)",
+    "the minimum base (legal minimum wage)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "inssRisks",
+   "rateBp": 300,
+   "cap": 960000,
+   "level": "social",
+   "grade": "B",
+   "name": "INSS occupational risks, employer contribution (3 % up to 80 000 BIF a month)",
+   "statute": "SSPTW Africa 2019, Burundi, Work Injury (facts restated): employer 3 % of covered monthly pay, on monthly earnings up to 80 000 BIF; edition 2019 (flagged)",
+   "doc": "Sickness, maternity and family allowances are employer-liability systems (no contribution) per SSPTW. Fourteenth pass.",
+   "unsupported": [
+    "edition 2019"
+   ]
+  }
+ ]
+}

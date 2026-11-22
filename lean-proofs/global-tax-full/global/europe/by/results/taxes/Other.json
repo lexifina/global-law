@@ -1,0 +1,44 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes",
+  "statute": "none recorded by the registry",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "registry row: no other notable tax; no provision read",
+  "unsupported": [
+   "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+  ],
+  "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes"
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: транспортный налог on passenger cars modelled; lorries, buses, trailers, motorcycles and the high-comfort list (ст. 307-7 п. 11) not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: транспортный налог on passenger cars modelled; lorries, buses, trailers, motorcycles and the high-comfort list (ст. 307-7 п. 11) not modelled",
+  "unsupported": [
+   "would unlock: приложение 27 п. 1.2-1.8, 2.2-2.8 (other kinds); the Council of Ministers' list of high-comfort vehicles"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Транспортный налог",
+  "statute": "Налоговый кодекс, Особенная часть, гл. 31-1: ст. 307-1, 307-2, 307-4, 307-5, 307-7, приложение 27",
+  "dated": "pravo.by via the Internet Archive 2025-06-14 (`by/law/pravo_tc_sp_wb20250614.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "motorcycles, lorries, buses, trailers (приложение 27 other points)",
+   "5200 транспортный налог: massKg is read as the permitted maximum mass (разрешенная максимальная масса); the 50 % / 75 % rates for veterans and disabled persons (ст. 307-5 п. 2, 3) are not applied",
+   "5200 транспортный налог: a vehicle on the Council of Ministers' high-comfort list (ст. 307-7 п. 11) is taxed at the plain rate (grade C for the increase)"
+  ]
+ }
+]

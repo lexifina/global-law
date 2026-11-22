@@ -1,0 +1,22 @@
+name = "EgGlobal"
+version = "0.1.0"
+defaultTargets = ["EgGlobal", "egglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); EgTax = the 1.x model, vendored from cmp20/world/B02-g20/eg/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "EgTax"
+
+[[lean_lib]]
+name = "EgGlobal"
+
+[[lean_exe]]
+name = "egglobal"
+root = "EgGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

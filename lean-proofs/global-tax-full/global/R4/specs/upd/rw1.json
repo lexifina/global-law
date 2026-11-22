@@ -1,0 +1,14 @@
+{"RW": [
+ {"package": "P3", "oecd": "1100", "kind": "finalWht", "fam": "whtDiv", "grade": "B", "income": "dividend", "rateBp": 1500,
+  "name": "Withholding tax on dividends (15 %)",
+  "statute": "Law n° 027/2022 of 20/10/2022 on income tax, art. 60 1° (not amended by laws 051/2023 and 014/2025)",
+  "doc": "art. 60: a withholding tax of 15 % of the total amount is levied on payments by resident persons, including dividends (1°) and financial interests (2°).",
+  "unsupported": ["finality for individuals not stated in law 027/2022 (treated as the final tax on the payment)", "dividends under art. 47 (2) and collective investment distributions"]},
+ {"package": "P3", "oecd": "1100", "kind": "finalWht", "fam": "whtInt", "grade": "B", "income": "interest", "rateBp": 1500,
+  "name": "Withholding tax on interest (15 %)", "statute": "Law n° 027/2022 art. 60 2°",
+  "unsupported": ["interest on deposits of at least one year is exempt (art. 60 2° a): not distinguished", "finality not stated"]},
+ {"package": "P4", "oecd": "2200", "kind": "payroll", "fam": "pension", "grade": "A", "rateBp": 600, "level": "social",
+  "name": "Mandatory pension scheme, employer share (6 % = half of 12 %)",
+  "statute": "Prime Minister's Order n° 086/2024 art. 1 (a) (12 % from 1 January 2025; repeals PMO 009/2016) and Law n° 05/2015 art. 8 (employer and employee contribute equally)",
+  "doc": "PMO 086/2024 art. 1: contribution rate 12 % of the remuneration subject to contribution from 1 January 2025 (14 % from 2027, rising to 20 % in 2030); Law 05/2015 art. 8: shared equally between employer and employee.",
+  "unsupported": ["occupational hazards and maternity leave contributions (not modelled)", "employee share 6 % (2100, outside this package)"]}]}

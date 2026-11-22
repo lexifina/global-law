@@ -1,0 +1,78 @@
+{
+ "cc": "BW",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "absent",
+   "name": "Employer social security contributions",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019 — Botswana (Wayback copy, R4/fetch/ssptw11/botswana.txt)",
+   "why": "BW has no contributory social insurance: old-age pension is universal ('Employer Universal: None ... Government Universal: The total cost'), sickness/maternity and work injury are employer-liability systems (benefits paid directly or insured with private carriers), not contributions to a public fund. Secondary source (2019), no later statute creating a contribution found. Human Resource Development Levy is on turnover (not payroll), noted under P7."
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transferBands",
+   "fam": "transferDuty",
+   "entity": "household",
+   "grade": "B",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     1500000,
+     0
+    ]
+   ],
+   "top": 500,
+   "marginal": true,
+   "nilUpTo": 0,
+   "testValues": [
+    1000000,
+    2500000
+   ],
+   "expect": [
+    0,
+    50000
+   ],
+   "name": "Transfer duty on acquisitions of immovable property by citizens (5 % of the value above P1 500 000)",
+   "statute": "Transfer Duty Act Cap. 53:01 as amended by the Transfer Duty (Amendment) Act 2023 (in force 3 May 2023), per the BURS public notice (Wayback 2023-05-09, R4/fetch/p13/bw_tda2023.pdf: citizen exemption threshold raised from P1 000 000 to P1 500 000) and the BURS declaration form 'Transfer of immovable property' (computation 'Citizen @ 5% ((value less P1M)*5%)', R4/fetch/p13/bw_tip.pdf). Act text not read (official secondary). Liability: the transferee",
+   "doc": "BURS notice 2023: 'Increase in the exemption threshold on transfer of immovable property by citizens from P1,000,000 to P1,500,000'; 'Reduction on the rate of transfer duty by non-citizens from 30 per cent to a progressive rate of 10 per cent for the first P2,000,000 and 15 per cent on the excess'. Thirteenth pass.",
+   "unsupported": [
+    "non-citizen acquirers (10 % to P2 000 000, 15 % above): citizenship is not an input, the citizen rate is applied",
+    "company acquirers (rate by citizen ownership) not modelled",
+    "transactions chargeable to VAT are waived (2023)",
+    "the citizen rate of 5 % is read from the pre-2023 form (flag)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1500,
+   "name": "Withholding tax on dividends received by residents (15 %, final)",
+   "statute": "Income Tax Act Cap. 52:01 s. 58 and Seventh Schedule, per the BURS page 'Withholding Taxes' (fetched 2025-09-17, R4/fetch/bw10/wht_20250917.html: 'Withholding tax on dividends applies to both residents and non-residents at the rate of 15% and it is a final tax'); official secondary",
+   "doc": "BURS: dividends, section 58 and the 7th Schedule: 15 % for residents and non-residents, final. Thirteenth pass.",
+   "unsupported": [
+    "residents' interest (withholding above P1 500 a quarter; rate table not read)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "unsupported",
+   "name": "Motor vehicle licence fees (annual)",
+   "statute": "Road Traffic Act (Cap. 69:01) and its vehicle registration and licensing regulations (fee schedule not identified)",
+   "why": "no text of the 2025 licence fee schedule reached: BotswanaLII answers with a bot check (not used) and no Wayback copy of the regulations was located; the only Department of Transport fee PDF on Wayback is of 2008",
+   "tried": "botswanalii.org (403 check), Wayback CDX transport.gov.bw",
+   "triage": "moderate"
+  }
+ ]
+}

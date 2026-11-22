@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto a la renta (tercera categoría)",
+  "statute": "TUO LIR art. 55 (29,5 %)",
+  "dated": "SUNAT text (1.x builder copy, 2026)",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "RMT and RER regimes for small companies not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "TUO LIR art. 56 a), d), e), f); art. 76",
+  "dated": "SUNAT TUO LIR capítulos VII, X (world/B12-latin-america/pe/src); pass 8, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "TUO LIR: services are taken as technical assistance used in Peru (art. 56 f), 15 %); services performed in Peru and digital services used in Peru (art. 56 j), 30 %) and services performed abroad that are not Peruvian-source (art. 9) not distinguished"
+  ],
+  "status": "modelled"
+ }
+]

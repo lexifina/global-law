@@ -1,0 +1,22 @@
+name = "DoGlobal"
+version = "0.1.0"
+defaultTargets = ["DoGlobal", "doglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); DoTax = the 1.x model, vendored from cmp20/world/B13-caribbean/do/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "DoTax"
+
+[[lean_lib]]
+name = "DoGlobal"
+
+[[lean_exe]]
+name = "doglobal"
+root = "DoGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

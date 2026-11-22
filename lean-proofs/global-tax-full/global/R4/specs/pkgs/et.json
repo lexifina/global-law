@@ -1,0 +1,119 @@
+{
+ "cc": "ET",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stampTitle",
+   "grade": "B",
+   "rateBp": 200,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Stamp duty on the registration of title to property (2 % of the value, on the transferee)",
+   "statute": "Stamp Duty Proclamation No. 110/1998 (Federal Negarit Gazeta No. 36, 12 May 1998) art. 5 (1), 6 (5) and Schedule item 13 'Register title to property: on value 2 %' (R4 registry copy global/registry/afm_data/fetch/ET/et_stamp_110.pdf.txt l. 511-512); Stamp Duty (Amendment) Proclamation No. 612/2008 (et_stamp_612.pdf.txt) amends only the authority's name and art. 9-12 (appeals), not the Schedule. B: no later amendment located; the 2 % for 2025 is confirmed by a secondary summary (PwC Ethiopia 'Other taxes', reviewed 18 December 2025; facts only)",
+   "doc": "Schedule item 13: 'Register title to property - on value - 2 %'; art. 6 (5): 'The transferee shall, unless otherwise agreed, be liable for the payment of stamp duty chargeable on documents transferring title to property.' et-p1: Birr 5 000 000 -> 100 000. Sixteenth pass.",
+   "unsupported": [
+    "regional stamp duty proclamations (e.g. Addis Ababa) for instruments under regional competence not checked",
+    "valuation by the committee where the value cannot be determined (art. 5 (2)-(4))",
+    "other items (leases 0,5 %, bonds and security deeds 1 %, contracts Birr 5, memoranda of association) not modelled",
+    "the annual property tax of Proclamation No. 1365/2025 (urban land and buildings) is a P5 recurrent item, not reached"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "reclassified",
+   "name": "Other notable taxes (federal vs regional income-tax powers (regional proclamations mirror the federal one); provision not located by keyword in the reachable text)",
+   "statute": "Federal Income Tax Proclamation No. 979/2016 as amended by Proclamation No. 1395/2025",
+   "classification": "duplicate (not a separate tax)",
+   "oecdGuide": "OECD Interpretative Guide (Revenue Statistics 2026, Annex A; R4/fetch/gap/oecd_guide.txt) §28 (receipts classified by base: income taxes under 1000), §97 and §104 (a State's tax is attributed to the State that imposes it and sets its rate; the heading does not change)",
+   "why": "The registry row is a note on the division of income-tax powers, not a levy: the States levy the same income taxes on employees of the State and of private enterprises, on individual traders, on rental income from private houses and on farmers (FDRE Constitution 1995 art. 97 (1), (3), (4), (6); lexifina/ethiopia-law, constitution/art-097.md), under regional proclamations that reproduce the federal schedules of Proclamation 979/2016 (as amended by 1395/2025). Those payments are the 1100/1200 taxes already modelled (P2 CIT, P3 Schedules B-D, 1.x PIT); only their attribution to the State level differs. No separate payment remains to model.",
+   "unsupported": [],
+   "was": "grade C (triage notATax: registry note on federal vs regional income-tax powers, not a separate tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass)"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divTax",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1500,
+   "name": "Schedule D dividend income tax (10 % to 6 August 2025, 15 % from 7 August)",
+   "statute": "Federal Income Tax Proclamation 979/2016 art. 57 as replaced by Income Tax (Amendment) Proclamation 1395/2025 (Negarit Gazette No. 64, 1 September 2025), Schedule D effective 7 August 2025 (art. 4(2)) [text version: Proclamation No. 1395/2025 as published (Federal Negarit Gazette No. 64, 1 September 2025); to 6 August 2025 the Proclamation No. 979/2016 rate (10 %); split by the income record's date (twentieth pass)]",
+   "doc": "art. 57(1) (new): a resident deriving a dividend is liable at 15 % of the gross dividend, for Schedule D tax collected from 7 August 2025 (art. 4 (2)); before, the Proclamation 979/2016 rate of 10 %. The rate is read from the dividend's date; an undated dividend is not computed (grade C).",
+   "unsupported": [
+    "undated dividends (rate changed on 7 August 2025): grade C",
+    "group-company distributions outside art. 57 (art. 57(3))"
+   ],
+   "periods": [
+    {
+     "rateBp": 1000,
+     "validTo": "2025-08-07",
+     "statute": "Proclamation 979/2016 (dividends 10 %), to 6 August 2025"
+    },
+    {
+     "rateBp": 1500,
+     "validFrom": "2025-08-07",
+     "statute": "Proclamation 979/2016 art. 57 as replaced by Proclamation 1395/2025 (15 %), Schedule D tax collected from 7 August 2025 (art. 4 (2))"
+    }
+   ],
+   "periodWhy": "no date given and the rate changed on 7 August 2025 (10 -> 15 %, Proclamation 1395/2025 art. 4 (2))"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "intTax",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 1000,
+   "name": "Schedule D interest income tax (10 % from 7 August 2025)",
+   "statute": "Proclamation 979/2016 art. 56, renumbered art. 58 and replaced by Proclamation 1395/2025, effective 7 August 2025 [text version: Proclamation No. 1395/2025 as published (Federal Negarit Gazette No. 64, 1 September 2025); interest dated before 7 August 2025 (Proclamation No. 979/2016 art. 56) not computed (twentieth pass)]",
+   "doc": "art. 58(1) (new): a resident deriving interest is liable at 10 % of the gross interest.",
+   "unsupported": [
+    "interest dated before 7 August 2025 or undated (Proclamation 979/2016 art. 56: 5 % on savings deposits; deposit type not an input): grade C"
+   ],
+   "periods": [
+    {
+     "rateBp": 1000,
+     "validFrom": "2025-08-07",
+     "statute": "Proclamation 979/2016 art. 58 (renumbered) as replaced by Proclamation 1395/2025 (10 %), Schedule D tax collected from 7 August 2025 (art. 4 (2))"
+    }
+   ],
+   "periodWhy": "dated before 7 August 2025 or undated: Proclamation 979/2016 art. 56 then applied (5 % on savings deposits; the kind of deposit is not an input and the other art. 56 rates were not re-read)"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "fam": "rental",
+   "name": "Schedule B rental income tax of individuals (0-35 % bands on annual taxable rental income)",
+   "kind": "unsupported",
+   "statute": "Proclamation 979/2016 art. 14(2) as replaced by Proclamation 1395/2025 (applicable to income derived from 8 July 2025, art. 4(3)) [text version: Proclamation No. 1395/2025 as published (Federal Negarit Gazette No. 64, 1 September 2025)]",
+   "why": "the bands of art. 14 (2) as replaced apply to income derived from 8 July 2025 (art. 4 (3)), i.e. to the tax year EFY 2018 (8 July 2025-7 July 2026); income derived from 1 January to 7 July 2025 belongs to EFY 2017, taxed on that year's whole rental income under the Proclamation 979/2016 bands (not re-read): a calendar-2025 rent cannot be split between the two tax years' band schedules (twentieth pass: B -> C)",
+   "tried": "Proclamation 1395/2025 art. 4 (3) and art. 14 (2) (new bands 0-35 %); the household's rent is one annual amount"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "poessa",
+   "level": "social",
+   "rateBp": 1100,
+   "grade": "A",
+   "name": "Private Organization Employees' Pension Fund, employer contribution (11 %)",
+   "statute": "Private Organization Employees' Pension Proclamation No. 1268/2022 art. 10 (Federal Negarit Gazette No. 16, 18 March 2022; metaappz.com copy, R4/fetch/et11) [text version: Proclamation No. 1268/2022 as published (Federal Negarit Gazette No. 16, 18 March 2022)]",
+   "doc": "art. 10: 'The contributions payable to the Private Organizations employees' service Pension Fund shall, based on the salary of the employee of the private organization, be: 1/ by the employer, 11 %; 2/ by the employee, 7 %.' The Fund is public (POESSA).",
+   "unsupported": [
+    "base is salary (basic pay per some guides): applied to wages",
+    "the employee's 7 %",
+    "sole proprietors' own staff excluded"
+   ]
+  }
+ ]
+}

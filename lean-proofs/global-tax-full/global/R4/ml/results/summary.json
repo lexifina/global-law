@@ -1,0 +1,387 @@
+{
+ "country": "ML",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI (consolidation 2017) art. 229 (Loi n°11-078): 5 % for the products of point D, 18 % for other products and non-exempt services — edition of 2017, flagged",
+   "dated": "Code général des impôts, DGI consolidation 'CGI_VF_MaJ_20170802' (published at www.dgi.gouv.ml/CGI/, updated to the LF 2017 / LFR 2017); no later finance law held — flagged",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "art. 195 exemptions",
+    "5 % rate (point D)",
+    "2018-2025 finance laws not held"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Impôt spécial sur certains produits (ISCP)",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried CGI.txt",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "rates set by decree n° 2015-0548 within art. 240 ranges; 2025 rates not available"
+   ],
+   "tried": "CGI.txt",
+   "guards": 0
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les sociétés",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI (consolidation 2017) art. 85 (Loi n°11-078: 30 %, base rounded down to 1 000 F) and art. 86 (L.F.2014, L.F.2015: minimum 1 % of turnover excluding tax, due even with a loss) — edition of 2017, flagged",
+   "dated": "Code général des impôts, DGI consolidation 'CGI_VF_MaJ_20170802' (published at www.dgi.gouv.ml/CGI/, updated to the LF 2017 / LFR 2017); no later finance law held — flagged",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "art. 86 floor linked to the impôt synthétique",
+    "2018-2025 finance laws not held"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Impôt sur les revenus des valeurs mobilières (payments abroad)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI (consolidation 2017) art. 42 (L.F.2012, L.F.2013): 1) dividends 10 %, 6) all other revenues 18 % (incl. interest on loans, art. 23 7°) — edition of 2017, flagged; thirteenth pass: CGI (consolidation 2017) art. 94 b) (use of copyrights, patents, trade marks, secret processes, know-how), 95, 96, 97 (L.F.2013): retenue 30 % on the sum less the 50 % flat deduction for services (art. 96): 15 % of the gross (reading: the art. 94 b) items are prestations de toute nature, flag); CGI (consolidation 2017) art. 94 b) last indent ('toutes sommes payées en rémunération des prestations de toute nature fournies ou utilisées au Mali'), 95, 96 (50 % flat deduction), 97 (L.F.2013, 30 %): 15 % of the gross",
+   "dated": "Code général des impôts, DGI consolidation 'CGI_VF_MaJ_20170802' (published at www.dgi.gouv.ml/CGI/, updated to the LF 2017 / LFR 2017); no later finance law held — flagged",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "listed-company dividends 7 %",
+    "2018-2025 finance laws not held"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Code général des impôts (DGI online code, 2017 consolidation incl. loi 2016-10)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://www.dgi.gouv.ml/CGI/)",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Contribution des patentes (traders, tableau A exceptional class, Bamako: fixed duty by turnover + 10 % of rental value)",
+   "statute": "CGI art. 144 and 144-A tableau A (L.F. 2014, L.F. 2015, L.F.R. 2017; DGI online consolidation of 2017, later finance laws not held)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "traders below 300 M of turnover (lower classes of tableau A) and the other professions and zones of the tariff"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.licenceFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (as a tax)",
+   "statute": "CGI.txt (whole code)",
+   "dated": "CGI.txt",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "ML: the general tax code held (CGI.txt, 1018k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')",
+   "guards": 0
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "CGI.txt (whole code)",
+   "dated": "CGI.txt",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "ML: the general tax code held (CGI.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked",
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Taxe sur les véhicules automobiles (vignette, cars by fiscal horsepower)",
+   "statute": "CGI art. 166, 170 1) (L.F. 2013; DGI consolidation of 2017, later finance laws not held)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "two- and three-wheelers by cylinder capacity (art. 170 2)",
+    "half rate for vehicles bought after 1 October (art. 171)",
+    "exemptions (art. 167)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.vehicleFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les revenus de valeurs mobilières, dividends (10 %)",
+   "statute": "CGI art. 41-42 1) (L.F. 2012, L.F. 2013; consolidation of August 2017 incl. L.F.R. 2017 — later finance laws not held, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "7 % on dividends of listed companies (art. 42 1)",
+    "exemptions of art. 31"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les revenus de valeurs mobilières, interest on deposits and current accounts (9 %)",
+   "statute": "CGI art. 42 4) (consolidation 2017; later finance laws not held, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "bonds 6 % / 3 % / 0 % and company bonds 13 % (art. 42 2-3)",
+    "other income 18 % (art. 42 6)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les revenus fonciers (12 % of gross rent)",
+   "statute": "CGI art. 17-19, 22 (L.F. 2012; consolidation 2017; later finance laws not held, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "8 % for banco (earth) buildings",
+    "rounding of the base down to the thousand francs"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Taxe sur les plus-values de cession réalisées par les particuliers, shares (7 %)",
+   "statute": "CGI art. 121-124, 129 (loi n° 11-078, L.F. 2013, L.F.R. 2017; consolidation 2017, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "immovable gains: within two years taxed as short-term at 15 %, after two years 5 % with a 5 %-a-year abatement from the second year up to 50 % (art. 126-127, 129): the reading of 'from the second year' is not settled",
+    "bonds 5 %",
+    "exemptions (art. 123)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.gainsFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Contribution forfaitaire à la charge des employeurs (3,5 %)",
+   "statute": "CGI art. 159-160 (consolidation 2017; later finance laws not held, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "exemption of young graduates hired under 40 (art. 161) and other recruits (art. 162)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Taxe de formation professionnelle (2 %)",
+   "statute": "CGI art. 183-184 (consolidation 2017, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "employers not liable to IS/BIC/BA are outside (art. 183)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Taxe-emploi jeunes (2 %)",
+   "statute": "CGI art. 185-A, 185-B (loi n° 2008-020; consolidation 2017, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Taxe foncière (3 % of annual rental value; owner-occupied home exempt)",
+   "statute": "CGI art. 185-E to 185-L (loi n° 2011-035; consolidation 2017, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "bare land used commercially or held over three years (art. 185-F)",
+    "other exemptions of art. 185-G"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyAnnualFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droit d'enregistrement sur les mutations d'immeubles à titre onéreux (15 %)",
+   "statute": "CGI art. 269-270 (loi n° 10-014; consolidation 2017, flagged)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "the consolidation prints art. 270 as applying to 'biens immeubles domaniaux'; it is read as the general rate (only tariff of the sub-section)",
+    "7 % for housing without a land title (titre foncier) and for business premises (art. 270-271)",
+    "halving for land bought to build housing (art. 276)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Droits de mutation à titre gratuit (successions, donations)",
+   "statute": "CGI art. 301-305, 323 (consolidation 2017)",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "art. 301 tariff by fraction of the net share depends on the number of children (direct line 3-25 %) and has an overall 'Maximum' rate per class (e.g. siblings 20/27/33/40 %, maximum 35 %); art. 304 abatement of 2,5 M + 1,5 M per child shared among heirs: the household input carries neither the number of children nor the shared abatement"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "CGI.txt lines 7148-7440 (Section 2 Mutations à titre gratuit)",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "INPS / AMO employer contributions (family 8 %, AMO 3,5 %, work accidents 1 %, old age 3,4 %, invalidity-death 2 %)",
+   "statute": "INPS Mali, 'Le guide du cotisant' (Code de prévoyance sociale art. 187; held copy ml/law/w5/ml_inps_guide_cotisant.pdf) [text version: INPS guide PDF of 10 August 2013 (file date); no later guide reached (flag)]",
+   "dated": "CGI.txt",
+   "unsupported": [
+    "work-accident rate by activity (1-4 %): the lowest applied",
+    "guide undated (flag)",
+    "invalidity-death 2 % read as employer-only (the guide splits only AMO and old age)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of Mali as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Mali for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C466&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/ml.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "WAEMU (UEMOA) customs union (origin BJ, BF, CI, GW, NE, SN, TG): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "guards": 4
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

@@ -1,0 +1,40 @@
+{
+"ZA": {
+ "dated": "Rates and Monetary Amounts and Amendment of Revenue Laws Acts 21 of 2018, 19 of 2023, 45 of 2024 and 3 of 2026 (official PDFs from sars.gov.za, Government Gazette prints); SARS rate pages for the dividends tax",
+ "sources_add": "Amending acts fetched from sars.gov.za (redirects to wp-content/uploads/Legal/AmendActs/*.pdf), saved in `cmp20/global/R4/fetch/za8/` with SHA256SUMS and layout text.",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 1500,
+  "classes": {},
+  "grade": "A",
+  "statute": "Value-Added Tax Act 89 of 1991 s. 7 (1) as amended by the Rates and Monetary Amounts and Amendment of Revenue Laws Act 21 of 2018 s. 9 (15 % from 1 April 2018); the 2025 budget increase did not take effect (Act 3 of 2026 s. 13, deemed from 1 May 2025)",
+  "doc": "Act 21 of 2018 s. 9 (1) (a): section 7 (1) of the VAT Act is amended so that the tax is \"calculated at the rate of [14] 15 per cent on the value of the supply concerned or the importation\". Act 3 of 2026 s. 13 (1): \"Despite (a) section 7(4) of the Value-Added Tax Act, 1991; and (b) the announcement by the Minister of Finance on 12 March 2025 in the national annual budget ... the alteration of the VAT rate specified in section 7 of that Act, 1991, does not come into effect\"; (2) deemed in effect from 1 May 2025. So 15 % applied throughout 2025.",
+  "notes": ["VAT Act s. 11 zero-rating (basic foodstuffs, Schedule 2 Part B) and s. 12 exemptions (financial services, residential rent, passenger transport, education) are not applied: the consolidated VAT Act was not read"],
+  "unsupported": ["zero-rated foodstuffs (s. 11 (1) (j))", "exempt supplies (s. 12)"]
+ },
+ "excise": {
+  "name": "Specific excise duties (Schedule 1 Part 2A)",
+  "grade": "B",
+  "statute": "Customs and Excise Act 1964 Schedule No. 1 Part 2A as amended by the Rates and Monetary Amounts and Amendment of Revenue Laws Act 3 of 2026 s. 4 and Schedule II (2025/2026 rates, deemed in operation from 12 March 2025)",
+  "doc": "Act 3 of 2026 s. 4 (2): \"the amendments set out in Schedule II to this Act are deemed to have come into operation on 12 March 2025\". Schedule II (2025/2026 rate of excise duty): \"104.10.20 2203.00.90 [beer made from malt] Other R145.07/li aa\"; \"104.15.03 2204.21.41 [unfortified wine in containers of 2 li or less] With an alcoholic strength of at least 4.5 per cent by volume but not exceeding 16.5 per cent by vol. R5.95/li\"; \"104.23.05 2208.30.10 [whiskies] In containers holding 2 li or less R292.91/li aa\"; \"104.30.07 2402.20.90 [cigarettes containing tobacco] Other R11.40/10\". Grade B: the 1 Jan-11 Mar 2025 rates (Act 45 of 2024 schedule) are not applied.",
+  "items": [
+   {"good": "beer", "name": "Excise duty beer (malt)", "onPureAlcohol": true, "perUnitNum": 145070, "perUnitDen": 1000, "vatBp": 1500, "statute": "Sch. 1 Part 2A 104.10.20 (Act 3 of 2026 Sch. II): R145.07 per litre of absolute alcohol"},
+   {"good": "wine", "name": "Excise duty unfortified wine", "minAbvBp": 449, "maxAbvBp": 1650, "perUnitNum": 5950, "perUnitDen": 1000, "vatBp": 1500, "statute": "Sch. 1 Part 2A 104.15.03 (Act 3 of 2026 Sch. II): R5.95 per litre"},
+   {"good": "spirits", "name": "Excise duty spirits (whisky)", "onPureAlcohol": true, "perUnitNum": 292910, "perUnitDen": 1000, "vatBp": 1500, "statute": "Sch. 1 Part 2A 104.23.05 (Act 3 of 2026 Sch. II): R292.91 per litre of absolute alcohol"},
+   {"good": "cigarettes", "name": "Excise duty cigarettes", "perUnitNum": 1140, "perUnitDen": 1000, "vatBp": 1500, "statute": "Sch. 1 Part 2A 104.30.07 (Act 3 of 2026 Sch. II): R11.40 per 10 cigarettes"}
+  ],
+  "notes": ["the 2025/2026 rates apply from 12 March 2025; the 2024/2025 rates (Act 45 of 2024) for 1 January-11 March 2025 are not applied", "fuel levy (Part 5A), ad valorem duties (Part 2B) and the health promotion levy on sugary beverages are not modelled"],
+  "unsupported": ["2024/2025 rates before 12 March 2025", "fuel levy", "ad valorem excise (Part 2B)", "health promotion levy"]
+ },
+ "cit": {
+  "name": "Corporate income tax",
+  "rate": 2700,
+  "step": 1,
+  "grade": "A",
+  "statute": "Income Tax Act 1962 s. 5 (2); Rates and Monetary Amounts and Amendment of Revenue Laws Act 3 of 2026 Schedule I para 3 (a) (27 %, years of assessment ending on or after 1 April 2025); Act 19 of 2023 Schedule para 3 (a) (27 %, years ending on or after 1 April 2023)",
+  "doc": "Act 3 of 2026, Schedule I para 3: \"The rate of tax referred to in section 2(1) to be levied in respect of the taxable income of a company (other than a public benefit organization, recreational club or small business funding entity referred to in paragraph 4 or a small business corporation referred to in paragraph 5), in respect of any year of assessment ending on or after 1 April 2025 is, subject to the provisions of paragraph 12, as follows: (a) 27 per cent of the taxable income of any company\". Act 19 of 2023 para 3 (a) prints the same 27 % for years ending on or after 1 April 2023.",
+  "notes": ["small business corporations (para 5, 0-27 % bands), gold mining formula and long-term insurers' funds (para 3 (b)-(d)) not modelled; assessed losses are carried forward under s. 20 (80 % limit above R1 million from 2023, not modelled)"],
+  "unsupported": ["small business corporation bands", "gold mining formula", "assessed-loss limitation (s. 20 (1) (a))"]
+ }
+}
+}

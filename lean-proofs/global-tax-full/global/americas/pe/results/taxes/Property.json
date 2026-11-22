@@ -1,0 +1,50 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Inheritance, gift and wealth taxes",
+  "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Peru (DSD_REV_LAC@DF_REVPER v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PER.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. Peru has had no inheritance tax since its repeal in 1979 (no text held for the repeal itself). 2025 revenue statistics not yet published.",
+  "dated": "OECD Revenue Statistics detailed table for Peru (DSD_REV_LAC@DF_REVPER v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PER.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+  "evidence": [
+   "OECD Revenue Statistics detailed table for Peru (DSD_REV_LAC@DF_REVPER v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PER.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+  ],
+  "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)"
+ },
+ {
+  "oecd": "5200",
+  "tax": "Impuesto al Patrimonio Vehicular",
+  "statute": "D.Leg. 776 arts. 30-33; UIT 2025 D.S. 260-2024-EF",
+  "dated": "1993 text (Congreso scan); TUO D.S. 156-2004-EF not held; pass 12, 2026-11-21",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily"
+  ],
+  "unsupported": [
+   "value read as the original acquisition value",
+   "first three years read as registration 2022-2024",
+   "trucks and buses not computed"
+  ]
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "Constitución art. 74; Ley 28424 arts. 1-2, 4, 8; Ley 28929 art. 8; D.Leg. 976",
+  "dated": "constitution: lexifina repository text (pass 12); asset-tax texts fetched 2026-11-21 (pass 15)",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 15): Constitución art. 74: \"Los tributos se crean, modifican o derogan, o se establece una exoneración, exclusivamente por ley o decreto legislativo\" (`pe/law/const_art-074.md`). The Impuesto Temporal a los Activos Netos (Ley 28424, Congreso text `pe/law/congreso_ley28424_itan.*`, OCR) falls on the net assets of third-category (business) income earners in the general regime (arts. 1, 2, 4), and the amount paid is a credit against the income tax's monthly advance payments and the annual settlement, refundable on a loss (art. 8): an advance income tax on businesses (heading 1200), not a tax on net wealth. Its term was extended to 2007 by Ley 28929 art. 8 (`pe/law/congreso_ley28929.*`) and D.Leg. 976 (`pe/law/congreso_dleg976.*`) set 0.4 % above S/ 1,000,000 from 2009; the later law keeping it in force and any later wording of art. 8 were not read: whichever reading holds in 2025, no tax on net wealth is levied. No law read in this build levies a recurrent tax on net wealth (laws read include: TUO Ley del IGV e ISC art. 17, Apéndices I-II; TUO Ley del IGV e ISC Título II; TUO LIR art. 55 (29,5 %); TUO LIR art. 56 a), d), e), f); 1.x model (see its summary.json); LIR TUO arts. 2, 21.1, 36, 52-A)."
+ }
+]

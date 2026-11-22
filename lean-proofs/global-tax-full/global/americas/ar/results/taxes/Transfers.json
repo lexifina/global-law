@@ -1,0 +1,70 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Impuesto Inmobiliario (Ciudad Autónoma de Buenos Aires)",
+  "statute": "Ley Tarifaria 2025 de la Ciudad Autónoma de Buenos Aires (Ley 6.806, Anexo) art. 43: II = CF + (VFH - lm) x al x USC, segments A-J 0.60 % to 1.20 % of the Valuación Fiscal Homogénea (5 % of Ley 23.514 included); art. 45: USC = 1",
+  "dated": "Ley 6.806 (Ley Tarifaria 2025) Anexo, Boletín Oficial CABA (documentosboletinoficial.buenosaires.gob.ar PL-LEY-LCABA-LCBA-6806-24-ANX.pdf, archived ar/law/ley6806_tarifaria_2025_anexo.*); pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P5",
+  "kernel_parts": [
+   "PropertyTax",
+   "propertyFamily"
+  ],
+  "unsupported": [
+   "art. 46 instalment cap not applied (upper bound)",
+   "Código Fiscal art. 363 exemptions not applied",
+   "minimum $12,800 per partida not applied",
+   "all real estate taken as in CABA"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Tasa Retributiva por los Servicios de Alumbrado, Barrido y Limpieza (ABL, CABA)",
+  "statute": "Ley Tarifaria 2025 CABA (Ley 6.806, Anexo) art. 44: TRS = VFH x 0.80 % x [1 + (CG x 0.5)] x USC; CG by barrio 0 to 2.00 (taken as 0); art. 45: USC = 1",
+  "dated": "Ley 6.806 (Ley Tarifaria 2025) Anexo, Boletín Oficial CABA (documentosboletinoficial.buenosaires.gob.ar PL-LEY-LCABA-LCBA-6806-24-ANX.pdf, archived ar/law/ley6806_tarifaria_2025_anexo.*); pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P5",
+  "kernel_parts": [
+   "PropertyTax",
+   "propertyFamily"
+  ],
+  "unsupported": [
+   "barrio coefficient taken as 0 (lower bound)",
+   "art. 46 instalment cap not applied",
+   "all real estate taken as in CABA"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Impuesto de Sellos (CABA) on real-estate transfers",
+  "statute": "Código Fiscal CABA Título III; Ley Tarifaria 2025 arts. 31 (1 %), 35 (3.5 % for Código Fiscal arts. 323-325, 332)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P5",
+  "kernel_parts": [],
+  "tried": "Ley Tarifaria 2025 read; the Código Fiscal articles (which acts, home exemption) not read",
+  "unsupported": [
+   "would unlock: Código Fiscal CABA arts. 323-325, 332 and the vivienda única exemption"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Patentes sobre vehículos en general (CABA): automobiles and motorcycles",
+  "statute": "Ley Tarifaria 2025 CABA (Ley 6.806, Anexo) art. 51 a): automobiles, motorcycles and the like, on the valuación fiscal (Código Fiscal art. 414 table): to $4,909,680 1.60 %, CF 78,555 + 4.00 % to $11,292,480, ... CF 2,610,777 + 8.00 % above $48,116,160; f) + 10 %; effective rate at most 6 % of the valuation; minimum $8,750 a year",
+  "dated": "Ley 6.806 (Ley Tarifaria 2025) Anexo arts. 51-54 (ar/law/ley6806_tarifaria_2025_anexo.*); kernel 2.4.0 VehicleTax; pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily"
+  ],
+  "unsupported": [
+   "vehicles taken as radicados in CABA",
+   "value taken as the valuación fiscal",
+   "other vehicle classes (b-e) not computed"
+  ]
+ }
+]

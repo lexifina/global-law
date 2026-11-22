@@ -1,0 +1,69 @@
+import CrGlobal.Pit
+
+/-!
+# CR 2025: capital income and gains of households (1100), stacked on the 1.x model
+
+The 1.x model (vendored unchanged; its statute sources and grades are in its own `results/summary.json`) taxes the
+household's `interest`, `dividends`, `rentalIncome` and `capitalGains` (the contract: gains on long-held listed
+shares). A global line's **additional** items of exactly those kinds (income items `interest`, `dividend`, `rent`;
+disposals of listed shares held over 12 months) are routed into those fields and charged as the 1.x income tax with
+them less the 1.x income tax without them (kernel `stackedTax`, DESIGN §6). Gains on real estate, unlisted shares and
+short holdings, and other income kinds, need the country's own gains rules: listed as unsupported (not computed).
+
+## Pass 11 (2026-11-21): capital gains of individuals
+
+Ley 7092, SINALEVI version 83 (`world/B01-oecd5/cr/src/sinalevi/ley7092_v83.txt`): **art. 31 ter** 15 % (2,25 % of the price
+for assets acquired before the chapter, an option), **art. 30-30 bis** gain = transmission value less acquisition value
+updated by the CPI (`indexBp`), **art. 28 bis** num. 7 vivienda habitual and num. 8 occasional movables exempt.
+-/
+
+namespace CrGlobal.Capital
+open TaxKernel TaxKernel.Global AmerCommon CrGlobal
+
+def capF : Family := stackFamily pitOf "1.x model income tax on household interest, dividends, rentalIncome, capitalGains (stackedTax)"
+
+/-- One charge per taxable disposal: base = the price, relieved = the taxable gain, due = `tax d`. -/
+def cgtCharges (name statute : String) (taxable : Disposal → Bool) (gain tax : Disposal → Int) (g : CanonGlobal) : List Charge :=
+  if g.entity == .company then [] else
+  (g.disposals.zipIdx.filter fun (d, _) => taxable d).map fun (d, i) =>
+    charge .pit name d.proceeds (fun _ => gain d) (fun _ => tax d) (event := s!"disposal {i + 1}") (statute := statute)
+
+def other3 (d : Disposal) : Bool := d.kind == .deposits || d.kind == .pensionFund
+
+/-- Long-held listed shares stay in the 1.x model (15 %); art. 28 bis num. 7 (vivienda habitual) and num. 8 (occasional
+unregistered movables: `other`) exempt; business assets go to the profits tax. -/
+def taxable (_g : CanonGlobal) (d : Disposal) : Bool :=
+  !isLongListed d && !(d.kind == .home && d.mainHome) && d.kind != .other && d.kind != .business && !other3 d
+/-- Art. 30 bis: acquisition value updated by the CPI (`indexBp`). -/
+def gainOf (d : Disposal) : Int := pos (d.proceeds - divR .down (d.cost * d.indexBp) BP - d.costs)
+/-- Acquired before the chapter (taken as a year before 2019): the taxpayer may pay 2.25 % of the price instead. -/
+def preChapter (d : Disposal) : Bool := d.acquiredYear != 0 && decide (d.acquiredYear < 2019)
+def taxOf (d : Disposal) : Int :=
+  let t := divR .down (1500 * gainOf d) BP
+  if preChapter d then min t (divR .down (225 * d.proceeds) BP) else t
+
+def cgF : Family :=
+  { name := "1100 ganancias de capital (Ley 7092 arts. 28 bis, 30, 31 ter)", covers := [.pit],
+    run := fun _ g _ => cgtCharges "Impuesto sobre ganancias de capital (15 %)" "Ley 7092 (SINALEVI v. 83, Ley 9635 chapter) art. 31 ter: \"La tarifa aplicable ... a la de las ganancias de capital será del quince por ciento (15%)\"; transitional option \"aplicando al precio de enajenación una tarifa del impuesto del dos coma veinticinco por ciento (2,25%)\"; art. 30-30 bis (transmission value less acquisition value updated by the INEC CPI); art. 28 bis num. 7 (\"la transmisión de la vivienda habitual\"), num. 8 (occasional unregistered movables)" (taxable g) gainOf taxOf g }
+
+def families : List Family := [capF, cgF]
+
+def absent : List Absent :=
+  []
+
+def notes : List String := []
+
+def unsupported (_ : List String) (g : CanonGlobal) : List String := (if g.entity == .company then [] else
+  when (g.disposals.any fun d => taxable g d) "ganancias de capital: each disposal on its own (art. 31 bis loss offset and carry-forward not modelled); acquisition year 2019 (chapter in force mid-2019) read as after the chapter; the 2.25 % option taken when lower"
+  ++ when (g.disposals.any fun d => d.kind == .business) "business assets: profits tax (not this family): not modelled (grade C)")
+  ++ when (g.entity != .company && g.incomes.any fun i => i.kind != .interest && i.kind != .dividend && i.kind != .rent) "additional income items other than interest, dividends and rent: not taxed by this family"
+  ++ when (g.entity != .company && (g.disposals.any isLongListed || g.incomes.any fun i => i.kind == .interest || i.kind == .dividend || i.kind == .rent)) "additional capital income is routed into the 1.x household totals and taxed as the 1.x model taxes them (its conventions: split between adults, long-held listed shares)"
+
+example (args : List String) (c : Canon) : capF.run args (CanonGlobal.ofCanon c) [] = [] := stackFamily_legacy _ _ args c []
+#guard (capF.run [] { id := "g", household := { id := "g" } } []).length == 0
+-- 100,000,000 - 60,000,000 = 40,000,000; 15 % = 6,000,000; bought 2010: min(6,000,000, 2.25 % x 100,000,000)
+#guard taxOf { kind := .realEstate, proceeds := 100000000, cost := 60000000, acquiredYear := 2021 } == 6000000
+#guard taxOf { kind := .realEstate, proceeds := 100000000, cost := 60000000, acquiredYear := 2010 } == 2250000
+#guard taxable { id := "g", household := { id := "g" } } { kind := .home, proceeds := 1, cost := 0, mainHome := true } == false
+
+end CrGlobal.Capital

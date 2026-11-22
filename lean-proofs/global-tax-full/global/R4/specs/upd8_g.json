@@ -1,0 +1,39 @@
+{
+"SZ": {
+ "dated": "VAT Act 2011 with the VAT (Rates) Regulations (LN 52 of 2012 as amended by LN 112 of 2018) and LN 130 of 2025; ERS guide pages (live 2026-11-21) for the company rate and withholding taxes",
+ "sources_add": "Fetched from ers.org.sz (`cmp20/global/R4/fetch/sz8/`, SHA256SUMS): VAT Act 2011, VAT Regulations, VAT (Rates) (Amendment) Regulations 2018 (OCR), VAT (Amendment) Act 2022 (OCR), LN 130 of 2025 (OCR), ERS pages 'Rates and thresholds', 'Withholding', 'VAT'.",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 1500,
+  "classes": {"financial": "exempt", "insurance": "exempt", "education": "exempt", "health": "exempt", "transport": "exempt", "water": "exempt", "medicines": "zero"},
+  "grade": "A",
+  "statute": "Value Added Tax Act 2011 s. 24 (3) (rate set by the VAT Regulations); VAT (Rates) Regulations (LN 52 of 2012) reg. 3 (1) as replaced by the VAT (Rates) (Amendment) Regulations 2018 (LN 112 of 2018, from 1 August 2018): 15 %; First Schedule (exempt), Second Schedule (zero-rated)",
+  "doc": "VAT Act 2011 s. 24 (3): \"Subject to subsection (4), the rate of tax shall be as specified in the VAT Regulations\"; (4): zero-rated supplies are those of the Second Schedule. LN 112 of 2018 reg. 2: \"Legal Notice No. 52 of 2012 is amended in regulation 3 by deleting sub-regulation (1) and replacing it with ... (1) The rate of Value Added Tax shall be fifteen percent (15%)\"; in force 1 August 2018. ERS 'VAT' page (2026): \"levied on most goods and services at the rate of 15%\". First Schedule 1: exempt \"(b) the supply of financial services; (c) the supply of insurance services; ... (f) the supply of education services; (g) the supply of medical, dental, and nursing services; ... (m) the supply of passenger transportation services, other than services ...; (n) the supply of tap water and sewage\"; Second Schedule 1 (p): zero-rated \"the supply of prescription drugs and medicines\". LN 130 of 2025 (17 Dec 2025) restates tap water as exempt (Part B clause 1(1)(l)).",
+  "notes": ["the schedules were restructured into Parts A (services) and B (goods) by the VAT (Amendment) Act 2022 and LN 270 of 2022 (the schedule notice is not held: the ERS link answers 404); the 2011 schedule items are applied", "Second Schedule basic foods (maize meal, maize, beans, milk, brown bread, fresh fruit and vegetables, eggs, vegetable oil) are zero-rated: the basket food line is processed food (region convention), so not applied", "residential lettings exempt (First Schedule 1 (e)) not separable"],
+  "unsupported": ["LN 270 of 2022 schedule changes (not held)", "zero-rated basic foods (basket convention)", "exempt residential lettings"]
+ },
+ "cit": {
+  "name": "Corporate income tax",
+  "rate": 2750,
+  "step": 1,
+  "grade": "B",
+  "statute": "Income Tax Order 1975 (company rate 27,5 % since 1 July 2013), per the Eswatini Revenue Service guide (official secondary)",
+  "doc": "ERS 'Rates and thresholds' (live 2026-11-21): \"TAX RATE FOR COMPANIES The effective tax rate for companies (since the 1st July 2013) is 27.5% of taxable income.\" The Income Tax Order 1975 held prints only individual tables; the Income Tax (Amendment) Act 2023 (scanned) was not read. Grade B.",
+  "notes": ["the guide's sentence is undated beyond 'since 1 July 2013'; no later change found on the ERS pages"],
+  "unsupported": ["Income Tax (Amendment) Act 2023 (scanned, not read)"]
+ },
+ "wht": {
+  "name": "Withholding on payments to non-residents",
+  "grade": "B",
+  "statute": "Income Tax Order 1975 (non-resident withholding taxes), per the ERS 'Withholding' guide (official secondary): royalties and management fees 15 %, services contracts 15 %, interest 10 %",
+  "doc": "ERS 'Withholding' (live 2026-11-21): \"Every person who makes any payment of royalty or management fee or both to a person not ordinarily resident in Swaziland is required to withhold tax. The rate of tax is fifteen percent of the gross amount of any management charge. The tax is final\"; \"The non-resident person is liable to withholding tax at the rate of fifteen percent on the gross amount of any payment derived by the non-resident under a Swaziland source services contract\"; \"The debtor ... shall withhold and remit to ERS tax equal to ten per cent of the interest that accrues to or in favour of the non-resident.\"",
+  "rules": [
+   {"kind": "royalty", "rateBp": 1500, "statute": "ITO 1975 (ERS guide): royalties 15 %"},
+   {"kind": "services", "rateBp": 1500, "statute": "ITO 1975 (ERS guide): management fees and services contracts 15 %"},
+   {"kind": "interest", "rateBp": 1000, "statute": "ITO 1975 (ERS guide): non-resident interest 10 %"}
+  ],
+  "notes": ["non-resident shareholders tax on dividends: the guide's rate table is garbled (SACU / outside SACU rows) and the prose gives no rate: not applied"],
+  "unsupported": ["non-resident shareholders tax on dividends"]
+ }
+}
+}

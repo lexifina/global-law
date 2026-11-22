@@ -1,0 +1,449 @@
+{
+ "country": "IL",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains (routed through the 1.x PIT)",
+   "statute": "the 1.x model provisions (see Capital.lean)",
+   "dated": "1.x model (2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "stackedTax",
+    "R5Common.stackedCapital"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "the routing rule is not read from the code: exemptions by holding period / main home not applied (GL for AM AZ GE)"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "מס חברות (companies tax)",
+   "statute": "Income Tax Ordinance s. 126(a), (b)",
+   "dated": "Hebrew Wikisource; pass 3q year-in-force audit: re-cited: he.wikisource revisions 2901949 (26/01/2025) and 2971756 (31/12/2025): s. 126 identical (23 %)",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime (participation)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "losses not read",
+    "withholding: interest to individuals abroad grade C (reg. 5(a): 25 % or 15 % by index linkage, not an input); treaty certificates not applied"
+   ],
+   "withholding": {
+    "grade": "B",
+    "rules": "royalty and services: 23 % to companies, 25 % to individuals (Ordinance s. 170(a), 126(a)); dividends 30 % to a substantial shareholder (s. 88: 10 %), else 25 % (Income Tax (Deduction from Interest, Dividend and Certain Profits) Regulations 2005 reg. 2(b)); interest to a body of persons 23 % (reg. 7(a), 1(2)); interest to individuals grade C (reg. 5(a) 25/15 % by index linkage)",
+    "dated": "Hebrew Wikisource (Ordinance law/il_ito.txt; Regulations 2005 as amended law/il_wht_regs2005.txt)",
+    "pass": "3k (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "דמי ביטוח לאומי – חלק המעסיק (employer national insurance)",
+   "statute": "NI Law s. 334(a) (7,522/month), 337, 340, לוח י׳ temporary 2025-2026 (employer = column ג − column ד: 4.51 % / 7.60 %), לוח י״א (5 × 10,139/month)",
+   "dated": "Hebrew Wikisource revision 2946268 of 2025-06-29",
+   "grade": "A",
+   "kernel_parts": [
+    "two wage bands (custom charge)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "wages taken as earned evenly over the year",
+    "special categories (pension age, minors, non-residents) not distinguished"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "ארנונה כללית (municipal property tax on dwellings, at the municipality's declared rate)",
+   "statute": "חוק הסדרים במשק המדינה (תיקוני חקיקה להשגת יעדי התקציב), התשנ״ג–1992, s. 8(א) (yearly general arnona per unit of area by type, use and location, paid by the holder), s. 8(ב1)(1)-(2) (m² × amount per m²), s. 9 (previous year's amount + update rate, within the ministers' minimum and maximum)",
+   "dated": "gap-closing pass: he.wikisource revision 2869205 (18/07/2024) is the text in force through 2025; revisions 2965115 (26/11/2025, amendment 20) and 2969718 (24/12/2025) leave ss. 7-9 unchanged (amendment 20 adds s. 12(ז) only); law/il_arn_ws_rev2869205_s7_9.txt; the rate per m² is the entity's declared localRates.propertyTax (kernel 2.8 LocalRate)",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "LocalTax (area × declared NIS per m², kernel 2.8)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "the amount per m² is the municipality's: entity input localRates.propertyTax (with source and date); no default city (Tel Aviv-Yafo 2025 order not reached); without it grade C",
+    "2025 national minimum and maximum (regulations under s. 9) not read: the declared rate is not range-checked",
+    "discounts (s. 12, regulations) not modelled",
+    "a tenant household without a home record is not charged (the holder pays: s. 8(א))",
+    "non-residential property types not modelled (household homes only)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "מס רכישה (purchase tax on dwellings)",
+   "statute": "Real Estate Taxation Law art. 9(ג1ג)(3), 9(ג1ו), 9(ג2)",
+   "dated": "Wikisource consolidation, amounts nominal for 2025; pass 3q year-in-force audit: re-cited: he.wikisource revisions 2901933 (26/01/2025, 2025 amounts) and 2970944 (29/12/2025): s. 9 brackets identical; only the two-year temporary order of 1.6.2023 on replacement dwellings lapsed in 2025 (not modelled)",
+   "grade": "B",
+   "kernel_parts": [
+    "Schedule",
+    "charge"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "land and non-residential purchases (regulations) not computed"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "מס ערך מוסף (VAT)",
+   "statute": "VAT Law 5736-1975 s. 1, 2 (rate order 5765-2005: 18 %), 4, 31(1)",
+   "dated": "Hebrew Wikisource consolidation, notes dated for 2025; pass 3q year-in-force audit: re-cited: he.wikisource revisions 2901939 (26/01/2025) and 2965529 (30/11/2025): s. 2 and 4 identical; s. 1 and 31 differ only in the amendment list",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "fruit and vegetables zero rate not applied",
+    "non-profit education and health taxed"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "מס קנייה / בלו על דלק (purchase tax, fuel excise)",
+   "statute": "Purchase Tax Law 5712-1952; Fuel Excise Law 5718-1958",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "amounts are in orders (צווים) not in the texts read"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Israel as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Israel for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C376&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/il.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, customsFamily)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 2204210000 (MFN duty '12% + 1.41 NIS per Litre but no less than - 5.08 NIS per Litre': specific or com); 271600 (no national line in the notification)"
+   ],
+   "module": "Customs.lean"
+  },
+  {
+   "package": "P8",
+   "oecd": "5200",
+   "tax": "אגרת רישיון רכב (vehicle licence fee) and s. 84 broadcasting addition",
+   "statute": "Transport Regulations 5721-1961 reg. 15א(ב) (fees change 1 April with the CPI), First Schedule part ג item 2(א) (private cars by price group x age), item 5 (motorcycles), Appendix א tables 1טז-1יט (price groups); Transport Ordinance s. 84 (addition for the Israeli Public Broadcasting Corporation)",
+   "dated": "Kovetz HaTakanot 11161 (19/02/2024, fees from 1/4/2024, s. 84 NIS 141) and 11753 (17/02/2025, fees from 1/4/2025, s. 84 NIS 139); price-group notices KT 11017 (2024) and 11594 (2025); PDFs from olaw.org.il (Reshumot mirror) linked by he.wikisource; tables 1טז/1יז from the Wikisource consolidation (unofficial)",
+   "grade": "B",
+   "kernel_parts": [
+    "custom Family on g.vehicles (price group by listPrice and firstRegYear, age column, tariff window by firstRegMonth (kernel 2.6.0) or weighted 3/12 + 9/12)"
+   ],
+   "guards": 11,
+   "unsupported": [
+    "renewal taken in the month of first registration (kernel 2.6.0 firstRegMonth: January-March at the April 2024 amounts, April-December at the April 2025 amounts; the regulations fix no month: anniversary assumed); without firstRegMonth the 2025 amount is 3/12 of the April 2024 tariff + 9/12 of the April 2025 tariff",
+    "cars first registered before 2017: price-group tables not read (grade C)",
+    "commercial vehicles (item 2(א1), item 3), buses, taxis, tractors, trailers not modelled",
+    "flexible-fuel and safety-system reductions, reg. 290א exemptions not applied",
+    "age = 2025 - firstRegYear (statute: year of manufacture or month put on the road)"
+   ],
+   "pass": "3o"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Basic Law: The State Economy (1975) s. 1(a): taxes, compulsory loans and other compulsory payments shall not be imposed, and their amounts shall not be varied, save by or under Law (Constitute Project English text, law/cp_Israel_2013.txt); no law levies it; tax laws read: Income Tax Ordinance, Real Estate Taxation Law, VAT Law 5736-1975, National Insurance Law, Income Tax (Deduction from Interest, Dividend and Certain Profits) Regulations 2005. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Basic Law: The State Economy (1975) s. 1(a): taxes, compulsory loans and other compulsory payments shall not be imposed, and their amounts shall not be varied, save by or under Law (Constitute Project English text, law/cp_Israel_2013.txt); no law levies it; tax laws read: Income Tax Ordinance, Real Estate Taxation Law, VAT Law 5736-1975, National Insurance Law, Income Tax (Deduction from Interest, Dividend and Certain Profits) Regulations 2005. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "il-h1",
+   "total": 77472,
+   "byOecd": {
+    "1100": 59401,
+    "2100": 7473,
+    "2200": 6329,
+    "4400": 0,
+    "5111": 4269
+   },
+   "borne": {
+    "consumer": 4269,
+    "employer": 6329,
+    "entity": 66874,
+    "withheld": 0
+   },
+   "net": 263126,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT: zero rate on unprocessed fruit and vegetables (s. 30(a)(13)) not applied to food",
+    "purchase tax and fuel excise: amounts in orders not read; not computed",
+    "real-estate gains fall under the Real Estate Taxation Law (betterment tax), not modelled; s. 91 indexation not read",
+    "employer NI: wages taken as earned evenly over 12 months; rates for employees past pension age, under 18, or non-residents (maternity and injury only, s. 335) not distinguished; no employer health tax exists (the health tax is the insured's)",
+    "4100 ארנונה כללית (מגורים): asset 1 (home: areaM2 not given) (grade C)",
+    "4100 arnona: the declared amount per m² is not checked against the 2025 national minimum and maximum (s. 9; regulations not read); discounts (s. 12 and its regulations) not modelled; a tenant household without a home record is not charged"
+   ]
+  },
+  {
+   "id": "il-c1",
+   "total": 562100,
+   "byOecd": {
+    "1200": 202100,
+    "5111": 360000
+   },
+   "borne": {
+    "consumer": 360000,
+    "employer": 0,
+    "entity": 161000,
+    "withheld": 41100
+   },
+   "net": 639000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "losses brought forward: carry-forward rule not read; not offset",
+    "withholding (s. 170(a)): taken at the full rate; an assessing officer's reduced-rate certificate and Israeli-source test not applied",
+    "dividend withholding (reg. 2(b)): stake at the payment taken for the 12-month substantial-shareholder test; treaty rates need a certificate (not applied)"
+   ]
+  },
+  {
+   "id": "il-h2",
+   "total": 252890,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "4400": 252890
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 252890,
+    "withheld": 0
+   },
+   "net": -252890,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "il-w1",
+   "total": 192000,
+   "byOecd": {
+    "1100": 75000,
+    "1200": 117000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 23000,
+    "withheld": 169000
+   },
+   "net": 77000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "withholding (s. 170(a)): taken at the full rate; an assessing officer's reduced-rate certificate and Israeli-source test not applied",
+    "dividend withholding (reg. 2(b)): stake at the payment taken for the 12-month substantial-shareholder test; treaty rates need a certificate (not applied)",
+    "interest to an individual abroad: reg. 5(a) 25 % or 15 % by index linkage, reg. 6 maximum rate for a substantial shareholder; linkage not an input (grade C)",
+    "1100 withholding on payment 6 (interest) abroad: no rule read (grade C)"
+   ]
+  },
+  {
+   "id": "il-w2",
+   "total": 78000,
+   "byOecd": {
+    "1100": 25000,
+    "1200": 53000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 23000,
+    "withheld": 55000
+   },
+   "net": 77000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "dividend withholding (reg. 2(b)): stake at the payment taken for the 12-month substantial-shareholder test; treaty rates need a certificate (not applied)"
+   ]
+  },
+  {
+   "id": "il-v1",
+   "total": 77646,
+   "byOecd": {
+    "1100": 35940,
+    "2100": 22076,
+    "2200": 15449,
+    "5200": 4181
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 15449,
+    "entity": 62197,
+    "withheld": 0
+   },
+   "net": 177803,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "employer NI: wages taken as earned evenly over 12 months; rates for employees past pension age, under 18, or non-residents (maternity and injury only, s. 335) not distinguished; no employer health tax exists (the health tax is the insured's)",
+    "5200 licence fee: vehicle 5 (asset 5): needs listPrice and a first registration 2017-2025 (older price-group tables not read) (grade C)",
+    "licence fee: renewal taken in the month of first registration (firstRegMonth: January-March April-2024 amounts, else April-2025); without it 3/12 + 9/12 of the two; age = 2025 − firstRegYear"
+   ]
+  },
+  {
+   "id": "il-v2",
+   "total": 109419,
+   "byOecd": {
+    "1100": 55769,
+    "2100": 29377,
+    "2200": 20009,
+    "5200": 4264
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 20009,
+    "entity": 89410,
+    "withheld": 0
+   },
+   "net": 210590,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "employer NI: wages taken as earned evenly over 12 months; rates for employees past pension age, under 18, or non-residents (maternity and injury only, s. 335) not distinguished; no employer health tax exists (the health tax is the insured's)",
+    "licence fee: renewal taken in the month of first registration (firstRegMonth: January-March April-2024 amounts, else April-2025); without it 3/12 + 9/12 of the two; age = 2025 − firstRegYear"
+   ]
+  },
+  {
+   "id": "il-a1",
+   "total": 8280,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "4100": 8280
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 8280,
+    "withheld": 0
+   },
+   "net": -8280,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "4100 arnona: the declared amount per m² is not checked against the 2025 national minimum and maximum (s. 9; regulations not read); discounts (s. 12 and its regulations) not modelled; a tenant household without a home record is not charged"
+   ]
+  },
+  {
+   "id": "il-a2",
+   "total": 0,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4500",
+    "5112",
+    "5121",
+    "6000"
+   ],
+   "unsupported": [
+    "4100 ארנונה כללית (מגורים): asset 1: localRates.propertyTax not given (the municipality's rate) (grade C)",
+    "4100 arnona: the declared amount per m² is not checked against the 2025 national minimum and maximum (s. 9; regulations not read); discounts (s. 12 and its regulations) not modelled; a tenant household without a home record is not charged"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 29,
+ "theorems": 1
+}

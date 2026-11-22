@@ -1,0 +1,18 @@
+name = "RoGlobal"
+version = "0.1.0"
+defaultTargets = ["RoGlobal", "roglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); RoTax = the 1.x model, vendored from cmp20/southeast/ro/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "RoTax"
+
+[[lean_lib]]
+name = "RoGlobal"
+
+[[lean_exe]]
+name = "roglobal"
+root = "RoGlobal.Main"

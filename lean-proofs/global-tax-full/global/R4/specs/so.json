@@ -1,0 +1,67 @@
+{
+ "cc": "SO",
+ "name": "Somalia",
+ "dated": "Income Tax Law (Sharciga Canshuurta Dakhliga), Law No. 37 of 11 May 2025, in force on the President's signature (art. 106); the previous law applies only to tax years ending before that date (art. 105 (3) (b)), so the 2025 tax year falls under Law 37",
+ "sources": "No usable 2025 text for these headings: Law 37 and the 2020 Inland Revenue law OCR held; not mapped in this pass. Pass 10 (CIT/WHT): Law No. 37 of 11 May 2025 (Income Tax Law, Somali text, OCR `world/B10-anglophone-africa/so/law/law37_ocr.txt` of sharciga_cashuurta_dakhliga_37.pdf): First Schedule art. 3 and 5, art. 91-92, 105-106. The 2020 'Xeerarka Maaliyadda' held is the public financial management regulation (no tax rates).",
+ "vat": {
+  "status": "unsupported",
+  "name": "Sales tax",
+  "why": "no sales-tax law is held: Law No. 37 of 2025 is the Income Tax Law (modelled under 1200) and the 2020 'Xeerarka Maaliyadda' is the public financial management regulation; the archived mof.gov.so PDFs hold only the 2020 customs tariff and valuation book",
+  "tried": "world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so",
+  "statute": "not reached: tried world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so"
+ },
+ "excise": {
+  "status": "unsupported",
+  "name": "Excises",
+  "why": "no excise text for 2025 is held (only the 2020 customs tariff schedule on mof.gov.so, not read)",
+  "tried": "world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so",
+  "statute": "not reached: tried world/B10-anglophone-africa/so/law; Wayback CDX mof.gov.so"
+ },
+ "cit": {
+  "name": "Income tax on corporations",
+  "rate": 1500,
+  "grade": "A",
+  "statute": "Law No. 37 of 2025 (Income Tax Law) First Schedule art. 3 (rate of income tax for corporations: 15 % flat); art. 4 (1): Somali permanent establishments at the same rate",
+  "doc": "Law 37/2025 First Schedule, Qodobka 3-aad \"Boqolleeyda Canshuurta Dakhliga ee Lagu Dabaqaayo Shirkadaha (Rate of Income Tax for Corporations): Dakhliga canshuur-galka ah ee Shirkaddaha ee sanad canshuureedka waxa lagu canshuuraayaa boqolkiiba shan iyo toban (15%) oo ah boqolleey siman.\" (the taxable income of corporations for the tax year is taxed at fifteen percent, a flat rate). Art. 106: the Law enters into force when approved by Parliament and signed by the President (signed 11 May 2025); art. 105 (3) (b): the former law continues to apply to tax obligations for tax years ending before that date.",
+  "notes": [
+   "Law 37 took effect on 11 May 2025; the former law governs only tax years ending before then, so the 15 % rate applies to the whole 2025 tax year",
+   "the OCR prints 'boqolkiiba' as 'bogolkiiba' and 'oo' as '00'"
+  ],
+  "unsupported": []
+ },
+ "wht": {
+  "name": "Withholding tax on Somali-source payments (Law 37/2025 art. 91-92)",
+  "grade": "A",
+  "statute": "Law No. 37 of 2025 art. 91 (investment returns) and 92 (1) (t) (service fees paid to non-residents), rates in First Schedule art. 5 (1) (t) and (j): dividends 5 %, interest 10 %, royalties 15 %, service fees 10 %",
+  "doc": "First Schedule Qodobka 5-aad (Rates of Withholding Tax) (1) \"t) lacag-bixinnada lagu dabaqaayo Qodobka 91-aad (investment returns): i. haddii ay tahay faa'idada saamiga (dividend), waxaa lagu canshuurayaa boqolkiiba shan (5%); ii. haddii ay tahay faa'idada ka dhalata qaamaha (returns on debt claims), waxaa lagu canshuurayaa boqolkiiba toban (10%); ... v. hadii ay tahay khidmadda kheyraadka dabiiciga ah ama khidmadda xuquuqda milkiyadda (royalty), waxaa lagu canshuurayaa boqolkiiba shan iyo toban (15%); j) lacag-bixinnada lagu dabaqaayo Qodobka 92-aad (service fees): ... ii. haddii ay tahay khidmadaha adeegga ee lagu sheegay Qodobka 92(1) (t), waxaa lagu canshuurayaa boqolkiiba toban (10%)\". Art. 91 (1): a resident (including a Somali permanent establishment) paying a dividend, natural-resource fee, rent, return on a debt claim or royalty sourced in Somalia withholds at the art. 5 rate; art. 92 (1) (t): a service fee or insurance premium sourced in Somalia paid to a non-resident.",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 500,
+    "statute": "First Schedule art. 5 (1) (t) (i): dividends 5 %"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1000,
+    "statute": "First Schedule art. 5 (1) (t) (ii): returns on debt claims 10 %"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "First Schedule art. 5 (1) (t) (v): royalties and natural-resource fees 15 %"
+   },
+   {
+    "kind": "services",
+    "rateBp": 1000,
+    "statute": "First Schedule art. 5 (1) (j) (ii): service fees under art. 92 (1) (t) (paid to a non-resident) 10 %"
+   }
+  ],
+  "notes": [
+   "whether the withholding is the non-resident's final tax was not established from the OCR (art. 94 not read); it is applied as the statutory withholding on the payment",
+   "insurance premiums paid to non-residents (5 %) and rents (5 % / 10 %) are not modelled lines"
+  ],
+  "unsupported": [
+   "finality of the withholding for non-residents (art. 94 not read)"
+  ]
+ }
+}

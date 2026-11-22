@@ -1,0 +1,293 @@
+{
+ "cc": "NA",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transferBands",
+   "fam": "stampTransferNat",
+   "entity": "household",
+   "grade": "A",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     600000,
+     0
+    ]
+   ],
+   "top": 100,
+   "marginal": true,
+   "nilUpTo": 0,
+   "testValues": [
+    500000,
+    1000000
+   ],
+   "expect": [
+    0,
+    4000
+   ],
+   "name": "Stamp duty on transfer deeds of immovable property purchased by natural persons (N$10 per N$1 000 above N$600 000)",
+   "statute": "Stamp Duties Act 15 of 1993 Schedule 1 item 16 (substituted by Act 12 of 2011, amended by Act 7 of 2013; NamRA annotated copy, Wayback capture 2025-12-10, R4/fetch/p13/na_sda.pdf). Liability: the purchaser",
+   "doc": "Item 16, transfer deed relating to immovable property purchased by natural persons: exempt where the value or consideration does not exceed N$600 000; N$10 for every N$1 000 or part thereof of the value or consideration that exceeds N$600 000; persons other than natural persons: N$12 for every N$1 000 or part thereof. Thirteenth pass.",
+   "unsupported": [
+    "'or part thereof': the rounding up to whole thousands is not applied (at most N$10)",
+    "other instruments of Schedule 1 (bonds, leases, share transfers, policies)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (land tax on commercial agricultural land)",
+   "statute": "Agricultural (Commercial) Land Reform Act 6 of 1995 (land tax)",
+   "why": "triage minor: land tax on commercial agricultural land: not in the household grid. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "not reached",
+   "triage": "minor"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "msd",
+   "level": "social",
+   "rateBp": 90,
+   "cap": 132000,
+   "grade": "B",
+   "name": "Maternity Leave, Sick Leave and Death Benefit Fund, employer contribution (0,9 % up to N$11 000 a month)",
+   "statute": "Social Security Act 34 of 1994 s. 21; Regulations GN 198 of 1995 (GG 1181) reg. 8 (a)-(b) (rate, read); earnings band N$500-11 000 a month: Social Security Commission MSD page as captured on 9 August 2025 (Wayback 20250809174558, R4/fetch/p19/na_ssc_msd_wb20250809.html: msdContributionPercentage 1.8, msdMinContributionWages 500, msdMaxContributionWages 11000), which replaces the 2026 copy (na/law/ssc_msd.html) as the source [text version: regulations as gazetted 1995; SSC page as served in August 2025]",
+   "doc": "reg. 8: the contributions to the MSD Fund shall '(a) in the case of an employee, be equal to 0,9 per cent of his or her remuneration; (b) in the case of the employer of such employee, be equal to the contribution contemplated in paragraph (a)'. SSC: 1,8 % combined on monthly remuneration between N$500 and N$11 000 (from 1 March 2025).",
+   "unsupported": [
+    "the N$500 floor",
+    "the earlier 2025 ceiling for January-February (not held): N$11 000 applied to the whole year",
+    "Employees' Compensation Fund (employer assessment by industry class, not held)",
+    "VET levy 1 % (Vocational Education and Training Act 1 of 2008 s. 35, employers with payroll over N$1 m): the NamibLII copy is behind a JavaScript check, not reached"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transferBands",
+   "fam": "transferDutyNat",
+   "entity": "household",
+   "grade": "A",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     600000,
+     0
+    ],
+    [
+     1000000,
+     100
+    ],
+    [
+     2000000,
+     500
+    ]
+   ],
+   "top": 800,
+   "marginal": true,
+   "nilUpTo": 0,
+   "testValues": [
+    500000,
+    800000,
+    1500000,
+    3000000
+   ],
+   "expect": [
+    0,
+    2000,
+    29000,
+    134000
+   ],
+   "name": "Transfer duty on acquisitions by natural persons (marginal bands, nil to N$600 000)",
+   "statute": "Transfer Duty Act 14 of 1993 s. 2 (1) (a) as amended by Act 6 of 2013 (NamRA annotated copy, Wayback capture 2025-12-10, R4/fetch/p13/na_tda.pdf); NamRA brochure 'Stamp and Transfer Duties' (14 July 2024, R4/fetch/p13/na_std_2024.pdf) gives the same table. Liability: the acquirer",
+   "doc": "s. 2 (1) (a): nil to N$600 000; 1 % of the value above N$600 000 to N$1 000 000; N$4 000 plus 5 % above N$1 000 000 to N$2 000 000; N$54 000 plus 8 % above N$2 000 000, where the acquirer is a natural person. Thirteenth pass.",
+   "unsupported": [
+    "agricultural land acquired with an Agribank advance (s. 2 (1) (b): nil to N$1 500 000, 1 %, N$10 000 plus 3 %)",
+    "exemptions of s. 9 (state, surviving or divorced spouse, public-character institutions)",
+    "value under s. 5-8 (higher of consideration and declared value): the model uses max(price, assessed)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "transferDutyCo",
+   "entity": "company",
+   "grade": "A",
+   "rateBp": 1200,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Transfer duty on acquisitions by persons other than natural persons (12 %)",
+   "statute": "Transfer Duty Act 14 of 1993 s. 2 (1) (c) (substituted by Act 6 of 2013; NamRA annotated copy, R4/fetch/p13/na_tda.pdf). Liability: the acquirer [text version: Transfer Duty Act 14 of 1993 as amended to Act 6 of 2013 (NamRA annotated copy listing the amending Acts to 2013)]",
+   "doc": "s. 2 (1) (c): '12 per cent of the said value ... if the person by whom the property is acquired ... is a person other than a natural person'. Thirteenth pass.",
+   "unsupported": [
+    "exemptions of s. 9",
+    "deemed acquisitions through shares or member's interests in property-holding companies"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stampTransferCo",
+   "entity": "company",
+   "grade": "A",
+   "rateBp": 120,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Stamp duty on transfer deeds of immovable property purchased by persons other than natural persons (N$12 per N$1 000)",
+   "statute": "Stamp Duties Act 15 of 1993 Schedule 1 item 16 (persons other than natural persons, trusts included; R4/fetch/p13/na_sda.pdf). Liability: the purchaser [text version: Stamp Duties Act 15 of 1993 as amended to Act 7 of 2013 (annotated copy listing the amending Acts)]",
+   "unsupported": [
+    "'or part thereof' rounding not applied"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payrollMin",
+   "fam": "vetLevy",
+   "rateBp": 100,
+   "minPayroll": 1000000,
+   "level": "central",
+   "grade": "A",
+   "name": "Vocational Education and Training levy (1 % of the annual payroll of employers with a payroll of N$1 000 000 or more)",
+   "statute": "Vocational Education and Training Act 1 of 2008 s. 35 (1), (4), 41; Imposition of Vocational Education and Training Levy on Employers, GN 67 of 2021 (GG 7498, 1 April 2021) paras 2, 3, 5 (LAC annotated text and the Gazette, R4/fetch/p14/na_vetlevy_regs_anno.txt, na_gg7498_vetlevy2021.pdf) [text version: Act 1 of 2008 as annotated (LAC); GN 67 of 2021 as gazetted (GG 7498, 1 April 2021)]",
+   "doc": "Para. 3: 'An employer with an annual payroll of N$1 000 000 or more must pay the levy.' Para. 5: 'The rate of the levy is 1% of the amount of the annual payroll of the employer concerned.' 'payroll' = total annual remuneration (Income Tax Act Schedule 2 Part I). Applied as worded: the whole payroll at 1 % from N$1 000 000 inclusive; below it nothing. Fourteenth pass (FT reviewer 4 gap; the app's levy on smaller payrolls is NA FTS-1).",
+   "notes": [
+    "VET levy: on households the levy on each adult's wages is booked by the separate entry 'Vocational Education and Training levy on household wages' when the line gives the employer's payroll (kernel 2.6.0 employer facts, seventeenth pass); this entry charges companies on their payroll"
+   ],
+   "unsupported": [
+    "exempt employers (State, regional councils, local authorities, educational, faith-based, charitable, NGO, diplomatic: para. 4) not distinguished"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "unsupported",
+   "name": "Employees' Compensation Fund assessment (employer)",
+   "statute": "Employees' Compensation Act 30 of 1941 s. 68-69 (LAC annotated statute, R4/fetch/p14/na_eca1941.txt)",
+   "why": "s. 69 (1)-(2): each employer is assessed on 'such percentage of the annual wages of his employees as the Commission deems necessary', the rates 'fixed by the Commission from time to time in his discretion according to the estimated risk and cost of accidents': the rate depends on the employer's risk class, which is not an input",
+   "tried": "LAC annotated Act read; SSC pages (JavaScript-only) give no table"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "unsupported",
+   "name": "Annual motor vehicle licence fees (road user charge, by tare)",
+   "statute": "Road Fund Administration Act, 1999 s. 18 (1) (c) 'registration and annual licence fees in respect of motor vehicles registered in Namibia' (NamibLII consolidation at 22 August 2025); amounts by Road Fund Administration notice",
+   "why": "the tariff in force in 2025 is not established: the RFA page 'Annual registration & licence fees (Effective 1 July 2020)' (Wayback 20201130040103, R4/fetch/p17/na_rfa_fees_wb20201130.html: motorcars 0-750 kg N$480, 751-1000 N$672, 1001-1250 N$732, 1251-1500 N$780, 1501-2000 N$900, 2001-3000 N$1 488 ...) and the current page 'Effective 1 August 2026' (N$576 / 816 / 876 / 936 / 1 092 / 1 812 ...) are held, but no notice or capture dated 2021-2025 shows whether the 2020 table was still in force throughout 2025 (an intermediate change is not excluded). Worked case under the 2020 table (hand): a car of 1 100 kg tare -> N$732 a year",
+   "tried": "NamibLII search (no fee notice found among gazettes 2018-2026; GN 205 of 2025 concerns waivers only); RFA site Wayback CDX (no fee page captured 2021-2025)",
+   "triage": "moderate"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "employerLevy",
+   "fam": "vetLevyHh",
+   "grade": "A",
+   "unknown": true,
+   "name": "Vocational Education and Training levy on household wages (1 % where the employer's annual payroll is N$1 000 000 or more)",
+   "statute": "Vocational Education and Training Act 1 of 2008 s. 35 (1), (4), 41; Imposition of Vocational Education and Training Levy on Employers, GN 67 of 2021 (GG 7498, 1 April 2021) paras 2, 3, 5 (R4/fetch/p14/na_vetlevy_regs_anno.txt, na_gg7498_vetlevy2021.pdf); household side through the employer facts of kernel 2.6.0 (Global2.Employer, R4-14-1) [text version: Act 1 of 2008 as annotated (LAC); GN 67 of 2021 as gazetted (GG 7498, 1 April 2021)]",
+   "levy": "{ name := \"VET levy (employer of household wages)\", rules := [{ rateBp := 100, tests := [.payrollAtLeast 1000000], ifUnknown := .gradeC, statute := \"VET Act 2008 s. 35; GN 67 of 2021 paras 3, 5: 1 % of the annual payroll of an employer whose annual payroll is N$1 000 000 or more\" }] }",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 300000,
+         "employerPayroll": 5000000
+        }
+       ]
+      }
+     },
+     "expect": [
+      3000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 300000,
+         "employerPayroll": 800000
+        }
+       ]
+      }
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 300000,
+         "employerPayroll": 1000000
+        }
+       ]
+      }
+     },
+     "expect": [
+      3000
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 300000
+        }
+       ]
+      }
+     },
+     "expect": []
+    }
+   ],
+   "doc": "Para. 3: 'An employer with an annual payroll of N$1 000 000 or more must pay the levy.' Para. 5: 'The rate of the levy is 1% of the amount of the annual payroll of the employer concerned.' On a household line the levy borne by the employer on the adult's wages is booked when the line gives the employer's payroll (\"employerPayroll\"): the adult's wages are part of that payroll, so 1 % of them. Worked case (hand): wages N$300 000 with an employer whose payroll is N$5 000 000 -> N$3 000; payroll N$800 000 -> nothing; payroll exactly N$1 000 000 -> N$3 000 (the threshold is inclusive). Companies keep the payroll-level entry. Seventeenth pass (kernel 2.6.0).",
+   "unsupported": [
+    "an adult whose employer's payroll is not given: grade C line (no presumption)",
+    "the employer's payroll is taken as given (annual remuneration as in the Income Tax Act Schedule 2 Part I)"
+   ]
+  }
+ ]
+}

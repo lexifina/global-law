@@ -1,0 +1,1 @@
+import MaGlobal.Model

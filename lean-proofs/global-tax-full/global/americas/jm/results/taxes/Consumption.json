@@ -1,0 +1,51 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "General Consumption Tax",
+  "statute": "General Consumption Tax Act: standard rate, First Schedule Part II, Third Schedule (via TAJ guide, rate history and 12/2020 list)",
+  "dated": "TAJ rate history (15 % from April 2020), Form 4A amended 3 June 2025, threshold from 1 April 2025",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "150 kWh residential zero rate",
+   "processed food taxable"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Special consumption tax",
+  "statute": "GCT Act Schedule; Customs",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "kernel_parts": [],
+  "tried": "TAJ GCT pages read; SCT rate schedule not fetched",
+  "unsupported": [
+   "would unlock: the SCT schedule in force 2025"
+  ]
+ },
+ {
+  "oecd": "5120",
+  "tax": "Import duty (CET) and environmental levy",
+  "statute": "Customs Tariff (JCA integrated tariff, HS 2022, effective 25 Sep 2024 and 6 Oct 2025): import duty 1006.30 25 %, 2202.10 20 %, 2402.20 40 %, 4901.99 0, 6109.10 20 %, 6203.42 20 %, 8471.30 0, 8517.13 20 %, 8528.72 20 %; environmental levy 0.5 % on each; CARICOM-origin goods free of import duty",
+  "dated": "jm/law/jm_tariff_eff2024-09-25.pdf (Wayback 20250405105733 of jca.gov.jm, in force 1 Jan 2025) and jm_tariff_eff2025-10-06.pdf (Wayback 20260122190520); every line used identical in both (script gapAM/jmx.py); gap pass 2026-11-21",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P7",
+  "kernel_parts": [
+   "TariffRule",
+   "customsFamily",
+   "consumptionC"
+  ],
+  "unsupported": [
+   "only the listed HS lines are modelled (beer, wine, spirits, fuel and motor vehicles carry mixed duties, additional stamp duty and age/engine/importer splits: no tariff line, grade C)",
+   "the standard compliance fee (0.3 %) and the customs administrative fee are not booked (fees for a service, OECD Interpretative Guide §12)",
+   "additional stamp duty (ASD) is nil on the lines modelled",
+   "CARICOM bilateral agreements (DO, CR, CU, CO, VE) not modelled"
+  ],
+  "gap_pass": "2026-11-21 approach 1 (customs, kernel 2.8.0)"
+ }
+]

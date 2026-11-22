@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Podatek dochodowy od osób prawnych",
+  "statute": "ustawa o CIT art. 19 ust. 1 pkt 1 (19 %)",
+  "dated": "t.j. Dz.U. 2025 poz. 278",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "9 % for small taxpayers (revenue ≤ 2 000 000 euro converted at the NBP rate: the zloty limit is not in the act) not applied",
+   "estoński CIT, minimum tax (art. 24ca) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Zryczałtowany podatek dochodowy (dywidendy)",
+  "statute": "ustawa o CIT art. 22 ust. 1: 19 %",
+  "dated": "t.j. Dz.U. 2025 poz. 278",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "art. 21 ust. 1 (interest, royalties) rate not read in this pass",
+   "parent-subsidiary exemption (art. 22 ust. 4)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Zryczałtowany podatek (odsetki, należności licencyjne, usługi) (interest, royalty, services)",
+  "statute": "ustawa o CIT art. 21 ust. 1 pkt 1, 2a; ustawa o PIT art. 29 ust. 1 pkt 1, 5, art. 30a ust. 1 pkt 1-2",
+  "dated": "teksty jednolite 2025 (`pl/law/cit_tj2025.txt`, `pl/law/pit_tj2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services are taken as the intangible services listed in CIT art. 21 ust. 1 pkt 2a / PIT art. 29 ust. 1 pkt 5; other services bear none",
+   "the art. 21 ust. 3 exemption for EU associated companies and the 2 000 000 zł pay-and-refund threshold (art. 26 ust. 2e) not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

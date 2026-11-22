@@ -1,0 +1,18 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Grundsteuer B (Berlin)",
+  "statute": "GrStG §§ 13, 25, 37 (1); BlnGrStMG vom 27.6.2024 § 1 (1); Haushaltsgesetz 2024/2025 § 4 (2) (2. NHG 24/25 Art. 1 Nr. 3)",
+  "dated": "GrStG in the 2025 version (§ 37 (1): erstmals 2025); BlnGrStMG GVBl. 2024, 422; Hebesatz 470 % 'für das Jahr 2025' (GVBl. 2024 S. 433)",
+  "grade": "A",
+  "kernel_parts": [
+   "charge (two-stage: Grundsteuerwert x Messzahl x Hebesatz)"
+  ],
+  "unsupported": [
+   "Grundsteuerwert valuation (BewG §§ 243 ff.) is an input (asset.assessed)",
+   "Geschäftsgrundstücke 0,45 ‰ need the use; realEstate taken as residential",
+   "GrStG § 15 (2)-(5) reductions",
+   "Grundsteuer A (0 % in 2025)"
+  ]
+ }
+]

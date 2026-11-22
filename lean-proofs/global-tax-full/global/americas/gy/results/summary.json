@@ -1,0 +1,342 @@
+{
+ "country": "GY",
+ "name": "Guyana",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 17:07:36"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GyGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value-Added Tax",
+   "statute": "VAT Act Cap. 81:05 Scheds. I, II; VAT (Amendment) Acts 2017-2019; Fiscal Enactments (Amendment) Acts 2022, 2024",
+   "dated": "L.R.O. 1/2012 + amending Acts; rate per GRA page (2025 rate in force since 2017)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "2017 rate Act not reached",
+    "2018 schedule restructuring not consolidated"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GyGlobal/Consumption.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "statute": "Excise Tax Act Cap. 80:02 (orders)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "gra.gov.gy excise pages not fetched",
+   "unsupported": [
+    "would unlock: the 2025 excise tax orders"
+   ],
+   "family_file": "lean/GyGlobal/Consumption.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / consumption tax",
+   "statute": "none: Consumption Tax Act Cap. 80:02 repealed (VAT Act Cap. 81:05, L.R.O. 1/2012, refund provisions: 'the repealed Consumption Tax Act')",
+   "dated": "VAT Act L.R.O. 1/2012",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "family_file": "lean/GyGlobal/Consumption.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporation tax",
+   "statute": "Corporation Tax Act Cap. 81:03 (L.R.O. 1/2012) s. 10 (1): (a) telephone company 45 %, (b) commercial company 40 %, (c) any other company 25 % (30 % -> 27.5 % by Act No. 5 of 2017 s. 2, -> 25 % by Act No. 10 of 2019 s. 3, from the year of income 2019); s. 10 (2) (Act 5/2017, 10/2019): companies with commercial and non-commercial activities: 40 % / 25 %; s. 10A (Act 5/2017 s. 3): minimum tax 2 % of turnover for a commercial company",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P2",
+   "kernel_parts": [
+    "SectorCorp",
+    "CorpRule",
+    "Wht"
+   ],
+   "unsupported": [
+    "mixed-activity split, small-business rate",
+    "loss carry-forward rule not read",
+    "company type from company.sector (absent: 25 %)"
+   ],
+   "dated": "MOLA Cap. 81:03 L.R.O. 1/2012 (gy/law/corporation_tax_act_cap81-03_mola.*); Acts 5 of 2017, 10 of 2019, 3 of 2020 (s. 7 only) from parliament.gov.gy (gy/law/corporation_tax_amendment_act_*); Fiscal Enactments 2022-2026 change s. 7 only; pass 9, 2026-11-21",
+   "family_file": "lean/GyGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "ITA Cap. 81:01 s. 39 (1) (a), (b), Third Sched. Part I para 1 (4 of 2003): 20 % on gross distributions and payments to non-residents",
+   "dated": "L.R.O. 1/2012 consolidation held by the 1.x builder; Fiscal Enactments Acts 2012-2026 searched; pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "SectorCorp",
+    "CorpRule",
+    "Wht"
+   ],
+   "unsupported": [
+    "treaty rates (s. 39 (3)) not modelled",
+    "company type from company.sector (absent: 25 %)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GyGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "National Insurance and Social Security Act Cap. 36:01",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed: NIS 12.5 % ... not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed: NIS 12.5 % ... not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Rates and taxes of the municipalities (Municipal and District Councils Act) — Guyana's recurrent 4100 revenue",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Rates and taxes of the municipalities (Municipal and District Councils Act) — Guyana's recurrent 4100 revenue; not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Rates and taxes of the municipalities (Municipal and District Councils Act) — Guyana's recurrent 4100 revenue; not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 4100 = 2021:4906.7 2022:5853.3 2023:7064.7 2024:8238.5"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "Non-recurrent taxes on property",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+   "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/GyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "Motor Vehicles and Road Traffic Act licences (OECD GY 5200 14,679 in 2024)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Motor Vehicles and Road Traffic Act licences (OECD GY 5200 14,679 in 2024). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Motor Vehicles and Road Traffic Act licences (OECD GY 5200 14,679 in 2024). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 5200 = 2021:1182.9 2022:1230.2 2023:7226.2 2024:14678.7; named lines: 5213 Other licenses (2024: 68.6)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD GY 6200 2,842 (2024; central 2,778), unnamed"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD GY 6200 2,842 (2024; central 2,778), unnamed",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGUY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GUY.csv): general government heading 6000 = 2021:1967.5 2022:2037.2 2023:2103.1 2024:2841.9"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Property tax on net property (individuals)",
+   "statute": "Property Tax Act Cap. 81:21 s. 6 (1) (y) inserted by the Fiscal Enactments (Amendment) Act 2026 s. 5, in operation from the year of income 2025 (s. 1 (4))",
+   "dated": "Act No. 3 of 2026, Official Gazette 17 Feb 2026",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "family_file": "lean/GyGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Property tax on net property (companies)",
+   "statute": "Property Tax Act Cap. 81:21 First Schedule",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "the GRA rate page read gives the individual rates only",
+   "unsupported": [
+    "would unlock: the First Schedule company rates as in force 2025"
+   ],
+   "family_file": "lean/GyGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift taxes",
+   "statute": "registry: none levied (not cited from a text)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "no statute read",
+   "unsupported": [
+    "would unlock: a text showing the abolition or absence"
+   ],
+   "family_file": "lean/GyGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "NIS (employer)",
+   "statute": "National Insurance and Social Security Act Cap. 36:01 (via nis.org.gy)",
+   "dated": "nis.org.gy contribution page (ceiling since January 2020)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GyGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Stamp Duty Act; Property Tax Act (net property)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/GyGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 5,
+  "C": 9
+ },
+ "guards": 11,
+ "sorry": 0,
+ "cases": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

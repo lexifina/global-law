@@ -1,0 +1,138 @@
+{
+ "cc": "GQ",
+ "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+ "entries": [
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "itp",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "A",
+   "name": "Impuesto sobre Transmisiones Patrimoniales (inmuebles)",
+   "statute": "Ley 1/2024 art. 233 2) a) (5 % between residents; 10 % with non-residents)",
+   "doc": "art. 233: \"Para la liquidación del Impuesto sobre Transmisiones Patrimoniales, se aplicará los tipos de gravámenes siguientes: 1) En la transmisión a título oneroso de fondos de comercio o derechos de arrendamiento: 2% 2) En la transmisión a título oneroso de bienes muebles, inmuebles y derechos reales, el tipo de gravamen será: a) Entre residentes: 5% b) Entre residentes y no residentes y entre no residentes: 10%\".",
+   "notes": [
+    "Ley 1/2024 art. 233: 5 % between residents applied; 10 % when a party is non-resident (purchase nonResident flag not mapped)"
+   ],
+   "unsupported": [
+    "10 % with non-residents"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyValue",
+   "fam": "ibi",
+   "grade": "A",
+   "rateBp": 15,
+   "den": 100000,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Impuesto sobre Bienes Inmuebles, urban property (0,05 % of 30 % of land and building value)",
+   "statute": "Ley n° 1/2024 (tax code) art. 208-214",
+   "doc": "art. 213 1): for urban property the taxable base is 30 % of the sum of the values of land and building (30 % of the price of a transfer in the previous year); art. 214 1): rate 0,05 % of that base, i.e. 0,015 % of the value, applied in one step (15 / 100 000). The household's holdings are taken as urban property in Malabo or Bata (no regional rebate).",
+   "unsupported": [
+    "rural property: 250 FCFA per hectare (art. 214 2)",
+    "rebates of 40 % / 60 % / 100 % outside Malabo and Bata (art. 211)",
+    "exemptions (art. 210)",
+    "rounding of the two-step computation"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "unsupported",
+   "name": "Impuesto sobre Sucesiones y Donaciones",
+   "statute": "Ley n° 1/2024 art. 248-256",
+   "why": "art. 256 1) rates are illegible in the OCR ('),5%' for the direct line above 5 000 000 FCFA, spouses and collaterals): the leading digit is lost",
+   "tried": "rescue3/Ley1-2024_ocr_spa.txt offsets 315076-323000 (Capítulo V, Sección 5)"
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "wealthBands",
+   "fam": "patrimonio",
+   "grade": "A",
+   "bands": [
+    [
+     300000000,
+     0
+    ],
+    [
+     500000000,
+     15
+    ],
+    [
+     700000000,
+     30
+    ],
+    [
+     900000000,
+     45
+    ],
+    [
+     1100000000,
+     60
+    ],
+    [
+     1500000000,
+     75
+    ]
+   ],
+   "top": 90,
+   "den": 100000,
+   "name": "Impuesto sobre el Patrimonio",
+   "statute": "Ley 1/2024 art. 179 (charge), mínimo exento 300 000 000 F (base liquidable), baremo of the cuota (0,015 % … 0,090 %)",
+   "doc": "art. 179: \"El Impuesto sobre el Patrimonio, es un tributo de carácter directo y de naturaleza personal\"; base liquidable: \"deduciendo del patrimonio neto el mínimo exento equivalente a Trescientos Millones (300.000.000) de F.CFA\"; \"la cuota tributaria del Impuesto sobre el Patrimonio, se determinará conforme el baremo siguiente: 300.000.001-500.000.000 0,015% 30.000; 500.000.001-700.000.000 0,030% 90.000; 700.000.001-900.000.000 0,045% 180.000; 900.000.001-1.100.000.000 0,060% 300.000; 1.100.000.001-1.500.000.000 0,075% 600.000; Más de 1.500.000.000 0,090%\". The cumulative column (30 000 = 0,015 % of 200 000 000; 90 000 = 30 000 + 0,030 % of 200 000 000; …) shows a marginal scale on net wealth above 300 000 000. Devengo 31 December (art. 202).",
+   "notes": [
+    "Impuesto sobre el Patrimonio: net wealth = statutory value less debt of the household's assets; the valuation rules (shares, art. 190 ff.) and exemptions not applied"
+   ],
+   "unsupported": [
+    "valuation rules",
+    "exempt assets",
+    "foreign-tax limit (art. 203)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "notLevied",
+   "name": "Stamp duty (IAJD) on conveyances of property: no tariff for notarial deeds",
+   "statute": "Ley n.º 1/2024 Tributaria (19 November 2024, in force on publication; OCR world/B08-central-africa-fr/gq/law/rescue3/Ley1-2024_ocr_spa.txt) art. 240-247 Impuesto sobre Actos Jurídicos Documentados",
+   "why": "art. 241 7) lists 'las escrituras, actas y testimonios notariales' as taxable operations and art. 243 1) e) gives the base of first copies of notarial deeds, but the tariff of art. 245 has only three items: preventive annotations in notarial and property / commercial registers 0,15 %, bills of exchange and similar titles 0,5 %, BVMAC listing authorisations 1 %. No rate applies to the deed of a home purchase, so a household's conveyance bears no IAJD; the transfer itself is taxed by the ITP (P5, art. 233). A preventive annotation (0,15 %) is not part of an ordinary purchase and is not modelled"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "Ley1-2024_ocr_spa.txt (whole code)",
+   "why": "GQ: the general tax code held (Ley1-2024_ocr_spa.txt, 521k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "inseso",
+   "rateBp": 2150,
+   "level": "social",
+   "grade": "B",
+   "name": "INSESO employer contribution (21,5 % of wages, all branches, no ceiling)",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019, Equatorial Guinea (Wayback 2020-08-02, R4/fetch/p14/ssptw_equatorial-guinea.txt; facts restated): employer 21,5 % of gross covered monthly pay, with no earnings ceiling; the contribution also finances sickness, maternity, work injury and family allowances; official secondary, edition 2019 (flagged)",
+   "doc": "One employer rate for all branches. Fourteenth pass (FT reviewer 4: family not modelled).",
+   "unsupported": [
+    "edition 2019",
+    "minimum base (sector minimum wage)"
+   ]
+  }
+ ]
+}

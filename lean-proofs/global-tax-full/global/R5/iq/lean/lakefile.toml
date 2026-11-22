@@ -1,0 +1,22 @@
+name = "IqGlobal"
+version = "0.1.0"
+defaultTargets = ["IqGlobal", "iqglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); IqTax = the 1.x model, vendored from cmp20/world/B06-mena/iq/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "IqTax"
+
+[[lean_lib]]
+name = "IqGlobal"
+
+[[lean_exe]]
+name = "iqglobal"
+root = "IqGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

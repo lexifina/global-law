@@ -1,0 +1,60 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "ITBIS",
+  "statute": "Código Tributario (Ley 11-92) Título III arts. 335, 343, 344, 345 (Ley 253-12)",
+  "dated": "DGII consolidated Título III (modified 18/06/2019)",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "art. 345 Párrafo I condition (18 % administered)",
+   "Párrafo II reduced food rates"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Selectivo al Consumo (alcohol, cerveza, cigarrillos)",
+  "statute": "Código Tributario (Ley 11-92) art. 375 (Ley 253-12) Párrafos I, II, VII, VIII",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "indexation not applied (lower bound)",
+   "precio al por menor read as before ISC and ITBIS",
+   "fuels, telecom, insurance ISC not modelled"
+  ],
+  "dated": "DGII consolidated Título IV; amounts of the 2017/2015 columns, 2025 indexation not held"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Selectivo al Consumo (combustibles, telecomunicaciones, seguros)",
+  "statute": "Ley 112-00; Código Tributario arts. 381, 382",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "kernel_parts": [],
+  "tried": "pass 12: Título IV held; fuel amounts (Ley 112-00, indexed) and the 2025 DGII notices not held",
+  "unsupported": [
+   "would unlock: Ley 112-00 and the 2025 DGII fuel and alcohol indexation notices"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 93 num. 1 a)",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 93 num. 1 a): \"Establecer los impuestos, tributos o contribuciones generales\" (`do/law/const_articulo-093.md`); Constitución art. 243: \"El régimen tributario está basado en los principios de legalidad\" (`do/law/const_articulo-243.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Código Tributario (Ley 11-92) Título III arts. 335, 343, 344, 345 (Ley 253-12); Código Tributario (Ley 11-92) art. 375 (Ley 253-12) Párrafos I, II, VII, VIII; Código Tributario art. 297 (27 %); Código Tributario arts. 305, 306, 308 (Ley 253-12); 1.x model (see its summary.json); Código Tributario arts. 283, 289, 296, 299 m))."
+ }
+]

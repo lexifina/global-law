@@ -1,0 +1,22 @@
+name = "AeGlobal"
+version = "0.1.0"
+defaultTargets = ["AeGlobal", "aeglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); AeTax = the 1.x model, vendored from cmp20/world/B15-no-pit/ae/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AeTax"
+
+[[lean_lib]]
+name = "AeGlobal"
+
+[[lean_exe]]
+name = "aeglobal"
+root = "AeGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

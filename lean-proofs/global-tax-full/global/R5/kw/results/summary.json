@@ -1,0 +1,338 @@
+{
+ "country": "KW",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Individuals capital income and gains",
+   "statute": "no personal income tax on residents (1.x no-PIT stub, with its citation)",
+   "dated": "2025",
+   "grade": "B",
+   "status": "not levied",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "non-resident or business income of individuals (e.g. SA non-Saudi individuals in business, art. 7(a)(2)) not modelled"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Income tax on foreign corporate bodies",
+   "statute": "Income Tax Decree 3/1955 art. 1, 3, 7 as replaced by Law 2/2008 (15 % of net taxable income; KSE trading profits exempt; losses carried up to three years); Decree-Law 157/2024 art. 1 (groups with revenue of EUR 750 m leave it from 1/1/2025)",
+   "dated": "Kuwait Al-Youm No 856 of 3/2/2008 (MoF scan Q2-2008.pdf, Wayback 2011-10-16, page image read); pass 3r re-cite: Decree-Law 157/2024 (MoF scan of 30/12/2024, Wayback 30/01/2025, Arabic OCR; law/kw_dl157_2024_*) cites Decree 3/1955 'and the laws amending it' as in force, takes MNE groups out of it from tax periods starting 1/1/2025, in force 1/1/2025; MoF form for non-Kuwaiti taxpayers served 06/02/2025 still applies Law 2/2008 (law/kw_mof_taxform_nk_2025.html)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime flat 15 % for companies flagged foreign, not mneGroup750"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "Kuwaiti/GCC-owned companies taken as outside (Executive Regulations scope article not read)",
+    "three-year loss limit not tracked",
+    "members of groups with revenue of EUR 750 m (flag mneGroup750): DL 157/2024 tax not computed",
+    "zakat, NLST, KFAS not computed"
+   ],
+   "withholding": {
+    "grade": "C",
+    "rules": "no rule (kernel 2.3.0 lists each payment abroad as grade C)",
+    "why": "Law 2/2008 and Executive Regulations (OCR, law/kw_law2_2008_regs.ocr.txt) hold no withholding tax: foreign bodies corporate are assessed by return and payers retain 5 % of contract payments until clearance (a security, not a tax); no cited zero written because the recipient's income stays taxable by assessment",
+    "pass": "3i"
+   }
+  },
+  {
+   "package": "P7",
+   "oecd": "1200",
+   "tax": "الزكاة ومساهمة الشركات (Law 46/2006: 1 % of net profits of Kuwaiti public and closed shareholding companies)",
+   "statute": "Law 46/2006 art. 1 (1 % a year of net profits of Kuwaiti public and closed shareholding companies), art. 2 (collected by the MoF for the public treasury), art. 4 (state companies under special laws and Decree 3/1955 companies outside it); DL 157/2024 art. 1 (EUR 750 m groups outside it from 1/1/2025)",
+   "dated": "gap-closing pass: MoF copy Q46-2006.pdf (Wayback 22/04/2026), law/kw_law46_2006_mof.pdf, Arabic OCR checked on the page image; in force in 2025: cited without amending law in the preamble of DL 157/2024 (read, KW 1200), which removes only EUR 750 m groups from it from 1/1/2025",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "CorpRegime flat 1 % on company profit (flag shareholding)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "reclassified from 6000 to 1200: a compulsory payment to the treasury on company profits (OECD Guide §85: classed by base)",
+    "base taken as the company's profit: the executive regulation (deductions) not read",
+    "the company must be flagged `shareholding` (Kuwaiti public or closed shareholding company); state companies under special laws (art. 4) not told apart"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "1200/NLST",
+   "tax": "ضريبة دعم العمالة الوطنية (NLST, Law 19/2000: Kuwaiti listed companies)",
+   "statute": "Law 19/2000 art. 12(1), 14(2) (cited by DL 157/2024)",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "pass": "gap",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "reclassified from 6000 to 1200 (a tax on company profits, Guide §85)",
+    "Law 19/2000 text not reached: MoF path Desicions/Decree/PDF/Q19-2000.pdf has no Wayback capture (404, 2025 and 2026); only its citation in DL 157/2024 read"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "PIFSS employer contributions (basic, supplementary, unemployment)",
+   "statute": "Law 61/1976 art. 11(b) 10 % to KD 1,500/month; DL 128/1992 art. 4(b) 10 % on the next KD 1,250; Law 101/2013 art. 3 0.5 %",
+   "dated": "PIFSS consolidated laws book 1, 2021 edition (pages read as images); pass 3q year-in-force audit: downgraded: PIFSS book 2021 edition; no 2025 version",
+   "grade": "C",
+   "kernel_parts": [
+    "employerOn (10.5 %, KD 33,000 a year)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "pass 3q year-in-force audit: downgraded to C: PIFSS book 2021 edition; no 2025 version",
+    "2021 edition: later ceiling decisions not seen",
+    "work-injury insurance (2 %) not in force (DL 126/1977)",
+    "Kuwaiti nationals only; government employers not distinguished"
+   ],
+   "status": "unsupported"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Per-worker fees on employers (PAM work-permit fees)",
+   "statute": "PAM fee decisions: MD 38-A/2016 (from 1/6/2016), MD 57-A/2016, MD 18/2017, MD 2017 (distinguished lists), MD 31/12/2020",
+   "dated": "manpower.gov.kw fee decisions, Internet Archive 2022-07-23 and 2024-05-24 (read 2026-11-21)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "3000 per-worker fees: PAM fee decisions read (MD 38-A/2016 from 1/6/2016: first work permit KWD 50, transfer KWD 50, renewal KWD 10; MD 57-A/2016 transfer add-ons; MD 18/2017 KWD 250 per permit above 25 % of a second-category employer's authorised workforce; MD 2017 KWD 150 per extra new permit of distinguished-list companies; MD 31/12/2020 GCC nationals and illegal residents). All are charges per permit issued, transferred or renewed, with no permit term in the decisions: no yearly per-worker amount can be booked and permit counts are not inputs (pass-3l rule: one-off permit charges are notes). Grade C (pass 3p)."
+   ],
+   "pass": "3p"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Transfer and registration taxes on immovable property",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "registration fee: MoJ procedure page garbled (pass 3j); no fee law or decision text reached (pass 3m)"
+   ],
+   "pass": "3m (split from the combined 4400/4100 entry)"
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Kuwait, the State of as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Kuwait, the State of for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C414&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/kw.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, customsFamily)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "GCC customs union (origin BH, OM, QA, SA, AE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)",
+    "Pan-Arab free trade area (GAFTA) (origin BH, EG, IQ, JO, LB, LY, MA, OM, PS, QA, SA, SD, SY, TN, AE, YE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "module": "Customs.lean"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "5111",
+   "why": "No VAT law enacted",
+   "grade": "B",
+   "source": "statute"
+  },
+  {
+   "oecd": "5121",
+   "why": "No excise law enacted",
+   "grade": "B",
+   "source": "statute"
+  },
+  {
+   "oecd": "4100",
+   "why": "4100: no recurrent property tax: Constitution of the State of Kuwait (1962) art. 134: public levies are imposed, amended and abolished only by law (Constitute Project English text, law/cp_Kuwait_1992.txt); no law levies it; tax laws read: Income Tax Decree 3/1955 as replaced by Law 2/2008 (foreign corporate bodies), Zakat Law 46/2006, National Labour Support Law 19/2000, Decree-Law 157/2024 (DMTT). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Constitution of the State of Kuwait (1962) art. 134: public levies are imposed, amended and abolished only by law (Constitute Project English text, law/cp_Kuwait_1992.txt); no law levies it; tax laws read: Income Tax Decree 3/1955 as replaced by Law 2/2008 (foreign corporate bodies), Zakat Law 46/2006, National Labour Support Law 19/2000, Decree-Law 157/2024 (DMTT). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Constitution of the State of Kuwait (1962) art. 134: public levies are imposed, amended and abolished only by law (Constitute Project English text, law/cp_Kuwait_1992.txt); no law levies it; tax laws read: Income Tax Decree 3/1955 as replaced by Law 2/2008 (foreign corporate bodies), Zakat Law 46/2006, National Labour Support Law 19/2000, Decree-Law 157/2024 (DMTT). convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "kw-h1",
+   "total": 2715,
+   "byOecd": {
+    "1100": 0,
+    "2100": 2715
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 2715,
+    "withheld": 0
+   },
+   "net": 327285,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "2200 PIFSS employer contributions grade C (year-in-force audit, pass 3q): the PIFSS consolidated laws book 1, 2021 edition, is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "employer: PIFSS book 2021 edition (later ceiling decisions not seen); government employers (no unemployment share) and the minimum salary not applied; non-Kuwaitis are outside PIFSS"
+   ]
+  },
+  {
+   "id": "kw-c1",
+   "total": 0,
+   "byOecd": {},
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 800000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "income tax: a company not flagged `foreign` taken as Kuwaiti/GCC-owned and outside Law 2/2008 (Executive Regulations scope not read)",
+    "losses: offset in full; art. 7 limits the carry-forward to three years",
+    "3000 per-worker fees: PAM fee decisions read (MD 38-A/2016 from 1/6/2016: first work permit KWD 50, transfer KWD 50, renewal KWD 10; MD 57-A/2016 transfer add-ons; MD 18/2017 KWD 250 per permit above 25 % of a second-category employer's authorised workforce; MD 2017 KWD 150 per extra new permit of distinguished-list companies; MD 31/12/2020 GCC nationals and illegal residents). All are charges per permit issued, transferred or renewed, with no permit term in the decisions: no yearly per-worker amount can be booked and permit counts are not inputs (pass-3l rule: one-off permit charges are notes). Grade C (pass 3p).",
+    "zakat (Law 46/2006, 1 %): applies to Kuwaiti public and closed shareholding companies: flag `shareholding` not given, not charged",
+    "NLST (Law 19/2000, Kuwaiti listed companies): text not reached, not computed (grade C)",
+    "1200 withholding on payment 1 (dividend) abroad: no rule read (grade C)",
+    "1200 withholding on payment 2 (royalty) abroad: no rule read (grade C)",
+    "1200 withholding on payment 3 (interest) abroad: no rule read (grade C)"
+   ]
+  },
+  {
+   "id": "kw-c2",
+   "total": 150000,
+   "byOecd": {
+    "1200": 150000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 150000,
+    "withheld": 0
+   },
+   "net": 850000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "3000 per-worker fees: PAM fee decisions read (MD 38-A/2016 from 1/6/2016: first work permit KWD 50, transfer KWD 50, renewal KWD 10; MD 57-A/2016 transfer add-ons; MD 18/2017 KWD 250 per permit above 25 % of a second-category employer's authorised workforce; MD 2017 KWD 150 per extra new permit of distinguished-list companies; MD 31/12/2020 GCC nationals and illegal residents). All are charges per permit issued, transferred or renewed, with no permit term in the decisions: no yearly per-worker amount can be booked and permit counts are not inputs (pass-3l rule: one-off permit charges are notes). Grade C (pass 3p)."
+   ]
+  },
+  {
+   "id": "kw-c3",
+   "total": 0,
+   "byOecd": {},
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 1000000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "1200: member of a multinational group with revenue of EUR 750 m: from 1/1/2025 the tax of Decree-Law 157/2024 (15 % top-up) replaces Decree 3/1955, NLST and zakat (DL 157/2024 art. 1): not computed",
+    "3000 per-worker fees: PAM fee decisions read (MD 38-A/2016 from 1/6/2016: first work permit KWD 50, transfer KWD 50, renewal KWD 10; MD 57-A/2016 transfer add-ons; MD 18/2017 KWD 250 per permit above 25 % of a second-category employer's authorised workforce; MD 2017 KWD 150 per extra new permit of distinguished-list companies; MD 31/12/2020 GCC nationals and illegal residents). All are charges per permit issued, transferred or renewed, with no permit term in the decisions: no yearly per-worker amount can be booked and permit counts are not inputs (pass-3l rule: one-off permit charges are notes). Grade C (pass 3p)."
+   ]
+  },
+  {
+   "id": "kw-z1",
+   "total": 30000,
+   "byOecd": {
+    "1200": 30000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 30000,
+    "withheld": 0
+   },
+   "net": 2970000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "income tax: a company not flagged `foreign` taken as Kuwaiti/GCC-owned and outside Law 2/2008 (Executive Regulations scope not read)",
+    "3000 per-worker fees: PAM fee decisions read (MD 38-A/2016 from 1/6/2016: first work permit KWD 50, transfer KWD 50, renewal KWD 10; MD 57-A/2016 transfer add-ons; MD 18/2017 KWD 250 per permit above 25 % of a second-category employer's authorised workforce; MD 2017 KWD 150 per extra new permit of distinguished-list companies; MD 31/12/2020 GCC nationals and illegal residents). All are charges per permit issued, transferred or renewed, with no permit term in the decisions: no yearly per-worker amount can be booked and permit counts are not inputs (pass-3l rule: one-off permit charges are notes). Grade C (pass 3p).",
+    "zakat (Law 46/2006): base taken as the company's profit (the executive regulation's base and deductions not read); state-owned companies set up by special laws (art. 4) not told apart",
+    "NLST (Law 19/2000, Kuwaiti listed companies): text not reached, not computed (grade C)"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 8,
+ "theorems": 1
+}

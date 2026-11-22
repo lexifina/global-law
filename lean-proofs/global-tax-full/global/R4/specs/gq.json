@@ -1,0 +1,136 @@
+{
+ "cc": "GQ",
+ "name": "Equatorial Guinea",
+ "dated": "Ley Tributaria Núm. 1/2024 (in force for 2025)",
+ "sources": "Source: Ley Núm. 1/2024 (Ley Tributaria), OCR of the BOE-style edition (`cmp20/world/B08-central-africa-fr/gq/law/rescue3/Ley1-2024_ocr_spa.txt`).",
+ "vat": {
+  "name": "Impuesto sobre el Valor Añadido",
+  "standard": 1500,
+  "reduced": 500,
+  "classes": {},
+  "grade": "A",
+  "statute": "Ley 1/2024 art. 155 (15 %; 5 %; 0 %)",
+  "doc": "art. 155: \"2) Tipo general de 15%: aplicable a todas las operaciones imponibles, con exclusión de las sujetas al tipo reducido de 5% y 0%. 3) Tipo reducido de 5% aplicable a los productos recogidos en el cuadro siguiente: Productos de alimentación de los niños; Productos de higiene personal e infantil; Leche …\". Exemptions not read.",
+  "notes": [
+   "Ley 1/2024 art. 155: the 5 % list (children's food, hygiene, milk …) sits inside the food and other lines, taxed at 15 %; exemptions not read"
+  ],
+  "unsupported": [
+   "5 % list not separable",
+   "exemptions not read"
+  ]
+ },
+ "excise": {
+  "name": "Impuestos especiales al consumo",
+  "grade": "A",
+  "statute": "Ley 1/2024 art. 175 (base: customs value plus duties), art. 176 (rates)",
+  "doc": "art. 176: \"1) Para las bebidas alcohólicas: un impuesto proporcional del 30%, incrementado de 75 FCFA por grado de alcohol y por litro; 2) Para la cerveza, esta tarifa está incrementada en 200 FCFA por litro. 3) Para las bebidas no-alcohólicas: un impuesto proporcional del 30%, incrementado de: a) para bebidas con azúcar … 50 FCFA por litro …; 4) Tabaco: un impuesto proporcional del 30%, incrementado de … b) 15.000 FCFA por cada 1.000 unidades de cigarrillos\". 75 FCFA per degree and litre = 7 500 FCFA per litre of pure alcohol. The beer surcharge of 200 FCFA per litre is a second line (its amount is not netted out of the ad valorem base: small overstatement of the base).",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Impuesto especial (bebidas alcohólicas)",
+    "advBp": 3000,
+    "perUnitNum": 7500,
+    "onPureAlcohol": true,
+    "vatBp": 1500,
+    "statute": "Ley 1/2024 art. 176 1) (30 % + 75 FCFA per degree and litre)"
+   },
+   {
+    "good": "beer",
+    "name": "Impuesto especial (cerveza, recargo)",
+    "perUnitNum": 200,
+    "statute": "Ley 1/2024 art. 176 2) (+200 FCFA per litre)"
+   },
+   {
+    "good": "wine",
+    "name": "Impuesto especial (bebidas alcohólicas)",
+    "advBp": 3000,
+    "perUnitNum": 7500,
+    "onPureAlcohol": true,
+    "vatBp": 1500,
+    "statute": "Ley 1/2024 art. 176 1)"
+   },
+   {
+    "good": "spirits",
+    "name": "Impuesto especial (bebidas alcohólicas)",
+    "advBp": 3000,
+    "perUnitNum": 7500,
+    "onPureAlcohol": true,
+    "vatBp": 1500,
+    "statute": "Ley 1/2024 art. 176 1)"
+   },
+   {
+    "good": "nonAlcoholic",
+    "name": "Impuesto especial (bebidas no alcohólicas)",
+    "advBp": 3000,
+    "perUnitNum": 50,
+    "vatBp": 1500,
+    "statute": "Ley 1/2024 art. 176 3) a) (30 % + 50 FCFA/l, sugared)"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Impuesto especial (tabaco)",
+    "advBp": 3000,
+    "perUnitNum": 15000,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Ley 1/2024 art. 176 4) b) (30 % + 15.000 FCFA per 1.000)"
+   }
+  ],
+  "notes": [
+   "Ley 1/2024 art. 176 3): energy drinks (+100 FCFA/l) and other soft drinks (+30 FCFA/l) not separated from sugared drinks (+50)",
+   "fuel: no impuesto especial line read for petrol and diesel"
+  ],
+  "unsupported": [
+   "beer surcharge not netted from the base",
+   "fuel"
+  ]
+ },
+ "cit": {
+  "name": "Impuesto sobre Sociedades",
+  "rate": 2500,
+  "step": 1000,
+  "min": {
+   "bp": 150
+  },
+  "grade": "A",
+  "statute": "Ley 1/2024 art. 75 (25 %; Cuota Mínima Fiscal 1,5 % of revenue)",
+  "doc": "art. 75: \"… fracción del beneficio imponible inferior a 1.000 FCFA será despreciable. 2) El tipo de gravamen del Impuesto sobre Sociedades se fija en 25%. 3) El importe mínimo del impuesto sobre sociedades … no podrá ser inferior al que resulte de la aplicación del 1,5% sobre el volumen de ingresos obtenido por la entidad en el ejercicio fiscal en curso y, se denominará Cuota Mínima Fiscal.\"",
+  "notes": [
+   "Ley 1/2024 art. 75: revenue (volumen de ingresos) taken as the turnover"
+  ],
+  "unsupported": [
+   "loss rules not read"
+  ]
+ },
+ "wht": {
+  "name": "Retenciones a no residentes",
+  "grade": "B",
+  "statute": "Ley 1/2024 art. 76 (10 % of gross turnover of non-residents); IRCM 15 % for non-residents (exposición de motivos)",
+  "doc": "art. 76: \"Los obligados tributarios no residentes, pagarán en concepto del Impuesto sobre Sociedades o en Impuesto sobre Beneficios de Negocios, un tipo de gravamen equivalente al 10% sobre la facturación bruta obtenida en Guinea Ecuatorial\". The preamble: IRCM \"del 25% al 15% para las personas físicas y jurídicas no residentes\" (the IRCM article itself not located: grade B).",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1000,
+    "statute": "Ley 1/2024 art. 76 (10 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1000,
+    "statute": "Ley 1/2024 art. 76 (10 %)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "Ley 1/2024 IRCM (15 % non-residents, per the preamble)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "Ley 1/2024 IRCM (15 % non-residents, per the preamble)"
+   }
+  ],
+  "unsupported": [
+   "IRCM article not located (rate from the preamble)"
+  ]
+ }
+}

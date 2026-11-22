@@ -1,0 +1,102 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed with wages; no contribution computed (Ley 87-01 contributivo subsidiado regime)\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed with wages; no contribution computed (Ley 87-01 contributivo subsidiado regime)\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Impuesto al Patrimonio Inmobiliario (IPI, Ley 18-88 as amended by Ley 288-04): 1 % above the exempt amount, indexed yearly",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto al Patrimonio Inmobiliario (IPI, Ley 18-88 as amended by Ley 288-04): 1 % above the exempt amount, indexed yearly; text and 2025 exempt amount not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto al Patrimonio Inmobiliario (IPI, Ley 18-88 as amended by Ley 288-04): 1 % above the exempt amount, indexed yearly; text and 2025 exempt amount not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 4100 = 2021:4170.6 2022:4437.5 2023:5105.1 2024:5348.8"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "OECD DO 4510 1,490.7 in 2024: not identified",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD DO 4510 1,490.7 in 2024: not identified. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD DO 4510 1,490.7 in 2024: not identified. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 4500 = 2021:1641.5 2022:1929.0 2023:2745.6 2024:1490.7"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "Arancel de Aduanas de la República Dominicana with DR-CAFTA preferences",
+  "customs_note": "customs import duties (5123): Arancel de Aduanas de la República Dominicana with DR-CAFTA preferences; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "5200",
+  "tax": "use of goods (vehicles) (5200)",
+  "statute": "marbete / derecho de circulación (Ley 241, Ley 63-17",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): marbete / derecho de circulación (Ley 241, Ley 63-17; OECD DO 5220 'Vehicle property registration'). 2025 schedule not read; needs a VehicleTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): marbete / derecho de circulación (Ley 241, Ley 63-17; OECD DO 5220 'Vehicle property registration'). 2025 schedule not read; needs a VehicleTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 5200 = 2021:20823.9 2022:22992.9 2023:25378.9 2024:28867.4; named lines: 5213 Licenses to carry firearms (2024: 384.3); 5213 Licenses to operate gambling houses (2024: 1636.0); 5220 Ecological taxes (2024: 1616.5); 5220 Vehicle property registration (2024: 21916.6)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD DO 6200 2.6 (2024), unnamed"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD DO 6200 2.6 (2024), unnamed",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVDOM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/DOM.csv): general government heading 6000 = 2021:1.7 2022:3.0 2023:2.9 2024:2.6"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

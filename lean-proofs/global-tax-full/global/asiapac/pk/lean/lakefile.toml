@@ -1,0 +1,18 @@
+name = "PkGlobal"
+version = "0.1.0"
+defaultTargets = ["PkGlobal", "pkglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); PkTax = the 1.x model, vendored from cmp20/world/B11-south-asia/pk/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PkTax"
+
+[[lean_lib]]
+name = "PkGlobal"
+
+[[lean_exe]]
+name = "pkglobal"
+root = "PkGlobal.Main"

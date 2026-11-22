@@ -1,0 +1,19 @@
+S = {'cc': 'TH', 'doc': '# Thailand 2025: corporate income tax and withholding on foreign companies (1200)\n\nRevenue Code: the official text on rd.go.th was not read for this package (B, rates from the RD tables).\n* **s. 67 + Royal Decree No. 530 (B.E. 2554, extended)**: 20 % of net profit; SMEs (paid-up ≤ 5 m baht, revenue ≤ 30 m;\n  flag `sme`): 0 % to 300,000, 15 % to 3 m, 20 % above (`citSme`).\n* **s. 70**: foreign juristic companies not carrying on business in Thailand: 15 % on s. 40 (2)-(6) income (interest,\n  royalties, services), 10 % on dividends (Royal Decree).', 'regimeName': 'Corporate income tax', 'unsupported': [['company', 'SME schedule only through `citSme` (flag not routed); the top-up tax (Emergency Decree B.E. 2567) not modelled']], 'taxes': [{'oecd': '1200', 'tax': 'Corporate income tax', 'statute': 'Revenue Code s. 67; Royal Decree No. 530', 'dated': 'accounting periods 2025', 'grade': 'B', 'kernel_parts': ['CorpRegime'], 'unsupported': []}, {'oecd': '1200/1100', 'tax': 'Withholding tax on payments to non-residents', 'statute': 'Revenue Code s. 70', 'dated': 'accounting periods 2025', 'grade': 'B', 'kernel_parts': ['Wht'], 'unsupported': []}], 'sched': [(0, 2000)], 'citStatute': 'Revenue Code s. 67; Royal Decree No. 530', 'wht': [{'kind': 'dividend', 'rate': 1000, 'statute': 'Revenue Code s. 70'}, {'kind': 'interest', 'rate': 1500, 'statute': 's. 70'}, {'kind': 'royalty', 'rate': 1500, 'statute': 's. 70'}, {'kind': 'services', 'rate': 1500, 'statute': 's. 70'}], 'whtName': 'Withholding tax on payments to non-residents', 'guards': ['cit.citTax { profit := 1000000 } == 200000', 'citSme.citTax { profit := 1000000 } == 105000', 'wht.amount { kind := .dividend, amount := 1000 } == 100', 'wht.amount { kind := .interest, amount := 1000 } == 150', 'wht.amount { kind := .royalty, amount := 1000 } == 150', 'wht.amount { kind := .services, amount := 1000 } == 150'], 'extra_lean': 'def citSme : CorpRegime := { name := "Corporate income tax (SME)", sched := Schedule.ofList [(0, 0), (300000, 1500), (3000000, 2000)] }'}
+
+# --- R3 session 7 (2026-11-21): CIT and s. 70 withholding B -> A (Revenue Code, Thai text on rd.go.th: /5939.html ss. 65-76,
+# /5938.html the rate schedule; th/law/rd_*.html). Pre-change copy: tools/bak7/TH_corp.py ---
+S['citStatute'] = 'ประมวลรัษฎากร มาตรา 67; บัญชีอัตราภาษีเงินได้ (2) (ก) ร้อยละ 20 (พ.ร.บ. แก้ไขเพิ่มเติมประมวลรัษฎากร (ฉบับที่ 42) พ.ศ. 2559)'
+_th70 = {'dividend': ('ประมวลรัษฎากร มาตรา 70; บัญชีอัตราภาษีเงินได้ (2) (ค): เงินได้ตามมาตรา 40 (4) (ข) ร้อยละ 10'),
+         'interest': ('ประมวลรัษฎากร มาตรา 70; บัญชีอัตราภาษีเงินได้ (2) (ข): ร้อยละ 15 (มาตรา 40 (4) (ก))'),
+         'royalty': ('ประมวลรัษฎากร มาตรา 70; บัญชีอัตราภาษีเงินได้ (2) (ข): ร้อยละ 15 (มาตรา 40 (3))'),
+         'services': ('ประมวลรัษฎากร มาตรา 70; บัญชีอัตราภาษีเงินได้ (2) (ข): ร้อยละ 15 (มาตรา 40 (2), paid from or in Thailand)')}
+S['wht'] = [dict(w, statute=_th70.get(w['kind'], w['statute'])) for w in S['wht']]
+for _t in S['taxes']:
+    if _t['oecd'] == '1200':
+        _t.update(statute='Revenue Code (ประมวลรัษฎากร) s. 65, s. 67; rate schedule (2) (a) 20 % (Revenue Code Amendment Act No. 42, B.E. 2559)', grade='A',
+                  dated='rd.go.th consolidated Thai text (schedule page updated 07-02-2024); accounting periods 2025')
+        _t['unsupported'] = list(_t.get('unsupported', [])) + ['SME reduced rates (Royal Decree No. 530) not modelled']
+    if _t['oecd'] == '1200/1100':
+        _t.update(statute='Revenue Code s. 70; rate schedule (2) (b) 15 %, (c) 10 % on s. 40 (4) (b) dividends', grade='A',
+                  dated='rd.go.th consolidated Thai text (accessed 2026-11-21); 2025')
+        _t['unsupported'] = list(_t.get('unsupported', [])) + ['non-resident individuals are taxed under s. 50, not s. 70: the s. 70 rates are applied to them (not read)']

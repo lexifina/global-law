@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 10: motor tax on M1 cars registered from July 2008 modelled; VRT, older cars and other classes not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 10: motor tax on M1 cars registered from July 2008 modelled; VRT, older cars and other classes not modelled",
+  "unsupported": [
+   "would unlock: Finance Act 1992 s. 132-133 (VRT on OMSP by CO2 and NOx); Sch. Part I para. 3 (e) (engine cc for cars before July 2008)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Motor tax",
+  "statute": "Finance (Excise Duties) (Vehicles) Act 1952 s. 1, Schedule Part I para. 3 (d), (o) [year in force 2025 (pass 16), unchanged-confirmed: ie/law/fedva1952_rev.txt annotations: (d) F35 and (o) F39 substituted/inserted 19.12.2020 by Finance Act 2020 s. 35(3); the only 2026 change (F40, 1.6.2026) is in para. 3 (public service vehicles), not used]",
+  "dated": "Revised Acts, updated to 1 June 2026 (`ie/law/fedva1952_rev.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "cars registered before July 2008 (engine-size rates, para. 3 (e)), goods vehicles, motorcycles and other classes",
+   "5200 motor tax: a car of 2008 is taken as registered from 1 July 2008 (para. 3 (d)); earlier ones pay by engine size (para. 3 (e), not modelled)",
+   "5200 motor tax: CO2 of a car registered before 2021 is read as the NEDC value of para. 3 (d)"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000)",
+  "statute": "European Commission TEDB, IE: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 634, 860, 3342, 6522, 329, 642, 644-646, 855, 857-862, 2301) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "unsupported": [
+   "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+  ],
+  "gap": 2,
+  "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVIRL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/IRL.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6200 total 10,0, 13,2, 14,4, 31,3 million EUR in 2021-2024 (unnamed); the national taxes behind it not read",
+  "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVIRL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/IRL.csv`, SHA256SUMS; general government S13; 2025 not yet published)"
+ }
+]

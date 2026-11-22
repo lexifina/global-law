@@ -1,0 +1,333 @@
+{
+ "country": "MR",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI art. 230 (16 %; 0 % exports)",
+   "dated": "CGI 2023 (French text, DGI); LF 2025 held in Arabic only (not read): grade B",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "exemptions",
+    "LF 2025"
+   ],
+   "guards": 7
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Taxe de consommation",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI version officielle janvier 2023 art. 258 (LFI 2020), 262 (base), 263 (LFI 2020, LFR 2020: tariffs); LF 2024-2025 held only in Arabic, not checked",
+   "dated": "CGI 2023 (French text, DGI); LF 2025 held in Arabic only (not read): grade B",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "sparkling wine 229 %",
+    "imported mineral water 80 %",
+    "dairy, cement, steel, plastics, phone cards",
+    "LF 2024-2025 (Arabic) not checked"
+   ],
+   "guards": 7
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les sociétés",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI version officielle janvier 2023 art. 51 1) (LFI 2022): régime du bénéfice réel normal",
+   "dated": "CGI 2023 (French text, DGI); LF 2025 held in Arabic only (not read): grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "2,5 % minimum under the intermediate regime (art. 51 2)",
+    "Mauritania Airlines 1 %, art. 225 commission-based minimum, fishing regimes (art. 51 3)"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenues (non-résidents)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI version officielle janvier 2023 art. 132-133 (15 % on services paid to non-residents without a permanent establishment); art. 126 (IRCM 10 %; 20 % to privileged tax regimes); thirteenth pass: CGI version officielle janvier 2023 art. 132 1) ('prestations de toute nature fournies ou utilisées en Mauritanie') read with art. 210 4) j) (TVA: 'les cessions et concessions d'exploitation de brevet, de droits ou de marque' are prestations de services) and art. 214 1° (non-residents' services 'soumises à la retenue à la source prévue à l'article 132'); art. 133 1): 15 %",
+   "dated": "CGI 2023 (French text, DGI); LF 2025 held in Arabic only (not read): grade B",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "20 % IRCM to privileged tax regimes",
+    "LF 2024-2025 (Arabic) not checked"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "CGI 2023 (whole code)",
+   "dated": "CGI 2023",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "MR CGI 2023 (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net' finds no charging provision",
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Code général des impôts (loi n° 2019-018, CGI of 10 March 2020; DGI consolidation 17/2/2023), amended by LF 2024, LF 2025, LFR 2025",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (http://impots.gov.mr/DGI/files/CGI-Fr-2023.pdf)",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Patente (general tariff by the previous year's turnover)",
+   "statute": "CGI version officielle janvier 2023 art. 187-188 (art. 188 nouveau LFI 2021); LF 2025 held only in Arabic, not checked",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "retail petroleum sales counted at 25 % (art. 187-2)",
+    "transporters' per-vehicle tariff (art. 190)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.licenceFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (as a tax)",
+   "statute": "cgi2020fr.txt (whole code)",
+   "dated": "CGI 2023",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "MR: the general tax code held (cgi2020fr.txt, 473k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Taxe sur les véhicules à moteur (personal-use vehicles by fiscal horsepower)",
+   "statute": "CGI version officielle janvier 2023 art. 138, 140 1); LF 2025 held only in Arabic, not checked; dating for 2025 (seventeenth pass): the LF 2025 (Loi n° 2025-001 of 14 January 2025, Arabic text world/B06-mena/mr/law/lf2025ar.nfkc.txt art. 3.1) amends CGI art. 297, 309, 312, 313, 323, 329, 331, 334, 337, 362, 384, 386, 391, 405 and L159, L160, L168, L175 only, and the LFR 2025 (lfr2025ar.nfkc.txt art. 3.2.x) amends no CGI article on vehicles: art. 138 and 140 unchanged in 2025 (LF 2024 not held: flag)",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "public transport vehicles 1 140-3 600 MRU (art. 140 2)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.vehicleFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur le revenu des capitaux mobiliers, dividends (10 %)",
+   "statute": "CGI 2023 (French edition) art. 119-120, 126 (LFI 2024/2025 held in Arabic only, not read)",
+   "dated": "CGI 2023",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur le revenu des capitaux mobiliers, interest on claims and deposits (10 %)",
+   "statute": "CGI 2023 art. 119, 121, 122, 126",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "exemption of savings-bank interest and of household bank-account interest up to 100 000 MRU a year (art. 122 1°-2°): the household's interest is taken to be taxable"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Impôt sur les revenus fonciers (10 % of rents due)",
+   "statute": "CGI 2023 art. 102, 105",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "exemption of rent-only landlords up to 6 000 MRU (art. 102 4)",
+    "real-estate gains taxed under the IRF with a 5 %-a-year abatement after two years (art. 103, 107)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Taxe d'apprentissage (0,60 % of wages)",
+   "statute": "CGI 2023 art. 152-153",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "reduction of 40 MRU per apprentice, at most 50 % (art. 151)",
+    "rounding of the base to 10 MRU"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Contribution foncière sur les propriétés bâties (commune rate, 3 %-10 %, a declared input)",
+   "statute": "CGI art. 159, 161, 162 (rental value at 1 January less 20 %), 165 ('un taux voté par le Conseil Municipal qui doit être compris entre 3 % et 10 %') [text version: CGI version officielle janvier 2023; the LF 2025 is held in Arabic only and was not read: grade B]",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "the commune's rate is an input (localRates.contributionFonciere): no Nouakchott 2025 deliberation reached, no default declared (no rate: grade C)",
+    "art. 160 exemptions",
+    "art. 163 (1) fallback rental value of 14 % of cost or price (an asset without annualValue: grade C)",
+    "art. 137 (2) 8 % withholding on rents paid by corporate tenants (collection of the same tax)",
+    "art. 164 rounding of the base to the ten ouguiya"
+   ],
+   "status": "framework (local rate input)",
+   "grade": "B",
+   "module": "Local.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.LocalRate (LocalTax, withLocalTaxes)"
+   ],
+   "guards": 6
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Droit d'enregistrement, mutations d'immeubles à titre onéreux (2 %)",
+   "statute": "CGI 2023 art. 312, 313 (LFI 2021)",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "exchanges 5 % (art. 314)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Droits d'enregistrement sur les donations entre vifs (2 % as for sales of immovables; free in the direct line and between spouses)",
+   "statute": "CGI 2023 art. 313, 325",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "the gift is taken to be immovable property; gifts of a business, lease or shares bear their own sale rates",
+    "inheritances: no duty in the code (rate 0)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Transfers.lean",
+   "kernel_parts": [
+    "R4.estateFlatFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNSS employer contributions 13 % and occupational medicine (ONMT) 2 % (up to 70 000 MRU a month)",
+   "statute": "CNSS Mauritanie pages 'Cotisation' (2016) and 'Recouvrement' (2021) (held mr/law/w5); CLEISS 'Les cotisations en Mauritanie' (1 Jan 2025, ceiling in MRU)",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "the worker's 1 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNAM health insurance, employer contribution (5 %, whole wage)",
+   "statute": "CLEISS 'Les cotisations en Mauritanie' (1 Jan 2025)",
+   "dated": "CGI 2023",
+   "unsupported": [
+    "the CNAM ordinance not read",
+    "the worker's 4 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 3
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

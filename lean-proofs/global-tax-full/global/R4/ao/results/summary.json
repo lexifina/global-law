@@ -1,0 +1,258 @@
+{
+ "country": "AO",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Imposto do Selo on the acquisition of immovable property (Tabela verba 1: 0,3 % of the value, on the acquirer)",
+   "statute": "Código do Imposto do Selo approved by Decreto Legislativo Presidencial n.º 3/14 (Diário da República I série n.º 191 of 21 October 2014; MINFIN copy minfin052863.pdf, scanned: R4/fetch/p16/ao_cis_minfin052863.pdf, OCR .ocr.txt) art. 3.º n.º 1 a) (charge on the acquirer) and Tabela anexa verba 1 (0,3 %, figure re-read on the page image, p. 4498). Lei n.º 20/20 (Código do Imposto Predial) keeps it alongside the 2 % Imposto Predial on transfers (its exemption clause names 'Imposto de Selo e ... Imposto Predial sobre as Transmissões'); the OGE 2025 law (Lei n.º 18/24) refers to verbas 7.3 and 16 of the same Tabela. B: the 2014 text with later amending laws only partly checked (flag)",
+   "dated": "-",
+   "unsupported": [
+    "the value of immovable property is fixed by the Imposto Predial Urbano valuation tables (Código, article on the taxable value, OCR l. 703-706): the price is used",
+    "gratuitous acquisitions (gifts, inheritance) of immovable property under the same verba: not modelled",
+    "other verbas (credit use 0,1-0,5 %, receipts, leases 0,1 / 0,4 %, company acts) not modelled",
+    "amendments to the Tabela after 2014 by the annual budget laws not fully checked"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "INSS employer contribution (8 %)",
+   "statute": "Decreto Presidencial n.º 227/18 de 27 de Setembro art. 12.º n.º 1 (files.lex.ao gazette scan, OCR por, R4/fetch/ao11) [text version: Decreto Presidencial n.º 227/18 as published in the Diário da República, I Série, 27 September 2018 (files.lex.ao gazette scan, R4/fetch/ao11/dp227_18.pdf); no later rate decree located (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "the worker's 3 %",
+    "retired workers still employed (8 % worker rate, n.º 2)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Imposto Predial on let buildings (25 % of rent less 40 %)",
+   "statute": "Código do Imposto Predial, Lei n.º 20/20 de 9 de Julho art. 9 n.º 4, 16.º n.º 4 (files.lex.ao scan, OCR por, table read on the page image; R4/fetch/ao11) [text version: Lei n.º 20/20 de 9 de Julho as published in the Diário da República, I Série n.º 101 (9 July 2020; files.lex.ao gazette scan, R4/fetch/ao11/lei20_20.pdf); no later amendment of these articles located (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "the holding tax on non-let urban buildings (art. 16.º 1: 0,1 % up to Kz 5 000 000, Kz 5 000 fixed to 6 000 000, 0,5 % on the excess over 5 000 000) needs a per-holding banded value family: not modelled (the home is not taxed in the model)",
+    "land for building 0,6 % (art. 16.º 2) and rustic land per hectare",
+    "50 % surcharge on vacant property (art. 17.º)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyAnnualFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Imposto Predial on the transfer of immovable property (2 %)",
+   "statute": "Código do Imposto Predial, Lei n.º 20/20 art. 15.º, 18.º [text version: Lei n.º 20/20 de 9 de Julho as published in the Diário da República, I Série n.º 101 (9 July 2020; files.lex.ao gazette scan, R4/fetch/ao11/lei20_20.pdf); no later amendment of these articles located (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "exemption of a first purchase up to Kz 3 000 000 for the buyer's own permanent home (exemptions article, al. e))",
+    "gratuitous transfers (P6)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Imposto Predial on holding a non-let urban building (0,1 % to Kz 5 m; Kz 5 000 to 6 m; 0,5 % of the excess over 5 m)",
+   "statute": "Código do Imposto Predial, Lei n.º 20/20 de 9 de Julho art. 16.º n.º 1 (table read on the page image, I Série n.º 101, R4/fetch/ao11) [text version: Lei n.º 20/20 de 9 de Julho as published in the Diário da República, I Série n.º 101 (9 July 2020; files.lex.ao gazette scan, R4/fetch/ao11/lei20_20.pdf); no later amendment of these articles located (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "registered (matriz) value: the household's statutory value is used",
+    "let buildings are taxed on rent instead (separate family)",
+    "vacant-property surcharge (art. 17.º)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyBandFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Imposto sobre a Aplicação de Capitais on dividends (10 %)",
+   "statute": "Código do IAC (Decreto Legislativo Presidencial 2/14) art. 9.º n.º 1 a), 27.º n.º 2 (ucm.minfin.gov.ao copy, OCR, R4/fetch/ao9); later amendments not checked [text version: Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro as published in the Diário da República, I Série (2014 gazette copy on ucm.minfin.gov.ao, R4/fetch/ao9/ucm_ciac_minfin052583.pdf: the republished Código of 2014); later amendments not checked (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "5 % for shares admitted to a regulated market (art. 27.º 3 b), five years only)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Imposto sobre a Aplicação de Capitais on bank deposit interest (10 %)",
+   "statute": "Código do IAC art. 9.º n.º 1 j), 27.º n.º 2 [text version: Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro as published in the Diário da República, I Série (2014 gazette copy on ucm.minfin.gov.ao, R4/fetch/ao9/ucm_ciac_minfin052583.pdf: the republished Código of 2014); later amendments not checked (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "current-account interest balances (alínea e)) 15 %",
+    "Treasury bills/bonds (alínea k)) 5 % when listed with 3+ years maturity"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Imposto sobre a Aplicação de Capitais on gains from shares (10 %)",
+   "statute": "Código do IAC art. 9.º n.º 1 n), 27.º n.º 2 [text version: Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro as published in the Diário da República, I Série (2014 gazette copy on ucm.minfin.gov.ao, R4/fetch/ao9/ucm_ciac_minfin052583.pdf: the republished Código of 2014); later amendments not checked (flag)]",
+   "dated": "-",
+   "unsupported": [
+    "netting of gains and losses within the year (each disposal taxed on its own gain)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.gainsFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Imposto sobre o Valor Acrescentado",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Código do IVA (Lei n.º 7/19, republished by Lei n.º 14/23 de 28 de Dezembro) art. 19 n.º 1 (14 % general; 7 % simplified regime and hotel/restaurant services; 5 % Anexo I basic foods and Anexo II farm inputs; 1 % Cabinda special regime) and art. 12 n.º 1 (exemptions)",
+   "dated": "Código do IVA as republished by Lei n.º 14/23 de 28 de Dezembro (in force on publication), Lei n.º 16/21 de 19 de Julho (Imposto Especial de Consumo), Código do Imposto Industrial (Lei n.º 19/14) as amended by Lei n.º 26/20 de 20 de Julho and Lei n.º 27/22, Código do Imposto sobre a Aplicação de Capitais (Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro); OGE 2025 (Lei n.º 18/24, in force 1 Jan 2025) art. 20-24 change none of the rates used",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "5 % basic foods (basket convention)",
+    "simplified regime",
+    "Cabinda 1 %"
+   ],
+   "guards": 9
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Imposto Especial de Consumo",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Lei n.º 16/21 de 19 de Julho (Imposto Especial de Consumo) art. 7 n.º 1 (base: transaction value for local goods, customs value for imports), art. 11 and Anexo I (2202.10 sweetened waters 3 %, 2202.91/2202.99 4 %, 2203 beer 4 %, 22.04-22.06 wine 8 %, 22.08 spirits 8 %, 24.02 cigarettes 25 %)",
+   "dated": "Código do IVA as republished by Lei n.º 14/23 de 28 de Dezembro (in force on publication), Lei n.º 16/21 de 19 de Julho (Imposto Especial de Consumo), Código do Imposto Industrial (Lei n.º 19/14) as amended by Lei n.º 26/20 de 20 de Julho and Lei n.º 27/22, Código do Imposto sobre a Aplicação de Capitais (Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro); OGE 2025 (Lei n.º 18/24, in force 1 Jan 2025) art. 20-24 change none of the rates used",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "Anexo II petroleum products (cost-of-production base)",
+    "2202.99 other non-alcoholic drinks at 4 %"
+   ],
+   "guards": 9
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Imposto Industrial",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Código do Imposto Industrial (Lei n.º 19/14) art. 64 n.º 1 as amended by Lei n.º 26/20 de 20 de Julho (25 %); n.º 2 farming 10 %, n.º 3 banking, insurance, telecoms and Angolan oil companies 35 %",
+   "dated": "Código do IVA as republished by Lei n.º 14/23 de 28 de Dezembro (in force on publication), Lei n.º 16/21 de 19 de Julho (Imposto Especial de Consumo), Código do Imposto Industrial (Lei n.º 19/14) as amended by Lei n.º 26/20 de 20 de Julho and Lei n.º 27/22, Código do Imposto sobre a Aplicação de Capitais (Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro); OGE 2025 (Lei n.º 18/24, in force 1 Jan 2025) art. 20-24 change none of the rates used",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax",
+    "SectorCorp (company.sector)"
+   ],
+   "unsupported": [
+    "art. 67 provisional withholding"
+   ],
+   "guards": 20
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenções sobre pagamentos a não residentes (Imposto Industrial e IAC)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CII art. 64 n.º 6 as amended by Lei n.º 26/20 (15 % liberatory on services of entities without seat, PE or place of management in Angola); Código do IAC (DLP n.º 2/14) art. 27 n.º 1 (Secção A loan interest 15 %) and n.º 2 (Secção B: dividends art. 9 n.º 1 a) and royalties art. 9 n.º 1 i) 10 %)",
+   "dated": "Código do IVA as republished by Lei n.º 14/23 de 28 de Dezembro (in force on publication), Lei n.º 16/21 de 19 de Julho (Imposto Especial de Consumo), Código do Imposto Industrial (Lei n.º 19/14) as amended by Lei n.º 26/20 de 20 de Julho and Lei n.º 27/22, Código do Imposto sobre a Aplicação de Capitais (Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro); OGE 2025 (Lei n.º 18/24, in force 1 Jan 2025) art. 20-24 change none of the rates used",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "deposit-interest 10 %",
+    "listed-share 5 %"
+   ],
+   "guards": 20
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of Angola as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Angola for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C024&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/ao.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "SADC free trade area (origin BW, KM, CD, SZ, LS, MG, MW, MU, MZ, NA, SC, ZA, TZ, ZM, ZW): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "guards": 4
+  }
+ ],
+ "cases": 10,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

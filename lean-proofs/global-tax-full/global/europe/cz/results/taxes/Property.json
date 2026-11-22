@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Real estate acquisition tax (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Czech Republic, Individual - Other taxes, accessed 2025-04-20 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-04-20 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4100",
+  "tax": "Daň ze staveb a jednotek (obytné budovy, Praha)",
+  "statute": "zákon č. 338/1992 Sb. o dani z nemovitých věcí § 10, § 11 odst. 1 písm. a), odst. 4-5, § 11f, § 12 (znění 1.1.-30.9.2025); rate: Praha 1, OZV hl. m. Prahy č. 11/2024 (Sbírka právních předpisů ÚSC 24.6.2024) § 2 a příloha č. 1 (koeficient 5 pro Prahu 1), § 4 odst. 1 (místní koeficient 1,5); zákon 338/1992 Sb. § 11 odst. 1 (3,50 Kč/m²): 3,50 x 5 x 1,5 = 26,25 Kč/m² (2025-01-01)",
+  "dated": "zákon 338/1992 Sb. in its wording from 1.1.2025 (e-Sbírka via lexifina/czechia-law, commit ebf98a4b694); OZV hl. m. Prahy 11/2024 in force 1.1.2025 to 31.12.2025 (amended by OZV 12/2025 from 2026; commit eda8c9b29de)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "inflation coefficient (§ 11f) taken as 1,0: no 2025 Ministry announcement found",
+   "further floors (1,40 Kč, § 11 odst. 2) and flats (jednotky: floor area basis) not modelled",
+   "other Prague districts: coefficient 4,5 or 5 and local coefficient 1,5, 1,7 or 2 by district (give localRates.propertyTax in Kč per m²)",
+   "land under the building (daň z pozemků) not modelled"
+  ],
+  "gap": 3
+ }
+]

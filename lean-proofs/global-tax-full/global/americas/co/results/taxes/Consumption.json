@@ -1,0 +1,108 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto sobre las Ventas (IVA)",
+  "statute": "Estatuto Tributario arts. 424, 468, 476, 477",
+  "dated": "Secretaría del Senado consolidation (amendment notes through Ley 2277 de 2022)",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "5 % goods of art. 468-1",
+   "stratum limits for utilities"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuestos al consumo de cigarrillos y licores (departamentales); productos comestibles ultraprocesados; sobretasa a la gasolina y ACPM",
+  "statute": "Ley 1816/2016; Ley 1819/2016 art. 347; ET arts. 513-6 to 513-9; Ley 488/1998 (sobretasa)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "unsupported": [
+   "amounts indexed every year by resolution; would unlock: the 2025 DIAN/MinHacienda resolutions"
+  ],
+  "tried": "pass 12: Ley 1819/2016 arts. 219, 222 read (lexifina/colombia-law): 2016 amounts ($490/gal corriente, $469/gal ACPM; $20.500/t CO2) indexed every 1 February; the 2025 DIAN resolution not reached; pass 13: national gasolina/ACPM and carbon taxes now modelled (DIAN Res. 000007/2024, 000008/2025); departmental 2025 amounts not reached"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto al consumo de cervezas, sifones, refajos y mezclas",
+  "statute": "Ley 223 de 1995 arts. 189, 190",
+  "dated": "Secretaría del Senado text (lexifina/colombia-law act/1995/reforma-tributaria); pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "retail margin in the base (upper bound)",
+   "refajos 20 % not distinguished"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto nacional al consumo (restaurantes)",
+  "statute": "ET arts. 426, 512-1 num. 3, 512-9",
+  "dated": "Secretaría del Senado ET consolidation (notes through Ley 2277 de 2022); pass 10, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "art. 512-13 non-responsible small establishments",
+   "OECD 5126 booked as 5121"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto a las bebidas ultraprocesadas azucaradas",
+  "statute": "ET arts. 513-1 to 513-5 (Ley 2277 de 2022 art. 54)",
+  "dated": "Secretaría del Senado ET consolidation; 2025 tariff row; pass 10, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "ExciseRule (sugarBands)"
+  ],
+  "unsupported": [
+   "sugar read as added sugar",
+   "exempt drink kinds not distinguished"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto nacional a la gasolina y al ACPM",
+  "statute": "Ley 1607 de 2012 art. 168 as replaced by Ley 1819 de 2016 art. 219 (par. 1: indexed each 1 Feb); DIAN Resolución 000007 de 2024 art. 1, Resolución 000008 de 2025 art. 1",
+  "dated": "normograma.dian.gov.co (fetched 2026-11-21, co/law/dian_res_0007_2024.*, dian_res_0008_2025.*); split at 1 Feb 2025; pass 13",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "ExciseRule (perUnit, validFrom/validTo)"
+  ],
+  "unsupported": [
+   "biofuel blend shares not distinguished (upper bound)",
+   "San Andrés, frontier zones"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto nacional al carbono (gasolina, ACPM)",
+  "statute": "Ley 1819 de 2016 art. 222 as replaced by Ley 2277 de 2022 art. 48 (par. 1: CPI + 1 point each 1 Feb); DIAN Resolución 000007 de 2024 art. 2, Resolución 000008 de 2025 art. 2",
+  "dated": "normograma.dian.gov.co (fetched 2026-11-21); split at 1 Feb 2025; pass 13",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "ExciseRule (perUnit, validFrom/validTo)"
+  ],
+  "unsupported": [
+   "gas, LPG, kerosene, coal lines not charged; carbon-neutrality non-causation (art. 221 par. 3) not modelled"
+  ]
+ }
+]

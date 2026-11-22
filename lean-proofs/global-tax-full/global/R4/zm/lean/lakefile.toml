@@ -1,0 +1,22 @@
+name = "ZmGlobal"
+version = "0.1.0"
+defaultTargets = ["ZmGlobal", "zmglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); ZmTax = the 1.x model, vendored from cmp20/world/B09-southern-africa/zm/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "ZmTax"
+
+[[lean_lib]]
+name = "ZmGlobal"
+
+[[lean_exe]]
+name = "zmglobal"
+root = "ZmGlobal.Main"

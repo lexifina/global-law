@@ -1,0 +1,22 @@
+name = "CvGlobal"
+version = "0.1.0"
+defaultTargets = ["CvGlobal", "cvglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); CvTax = the 1.x model, vendored from cmp20/world/B07-west-africa-fr-pt/cv/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "CvTax"
+
+[[lean_lib]]
+name = "CvGlobal"
+
+[[lean_exe]]
+name = "cvglobal"
+root = "CvGlobal.Main"

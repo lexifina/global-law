@@ -1,0 +1,198 @@
+{
+ "cc": "MU",
+ "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+ "entries": [
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payrollNotch",
+   "fam": "csg",
+   "lowBp": 300,
+   "highBp": 600,
+   "monthlyLimit": 50000,
+   "grade": "A",
+   "name": "Contribution Sociale Généralisée (employer)",
+   "statute": "Social Contribution and Social Benefits Act 2021 s. 4 (1) (a) (ii), (b) (ii); First Schedule Part II (Rs 50 000)",
+   "doc": "s. 4 (1): \"(a) where a participant, other than a self-employed, earns, in a month, remuneration not exceeding the amount specified in Part II of the First Schedule - ... (ii) the participant's employer shall ... pay ... social contribution at the rate of 3 per cent of that remuneration; (b) where a participant ... earns, in a month, remuneration exceeding the amount specified in Part II of the First Schedule - ... (ii) the participant's employer shall ... pay ... social contribution at the rate of 6 per cent of that remuneration\"; First Schedule \"PART II 50,000 rupees\". The rate applies to the whole remuneration (a notch).",
+   "notes": [
+    "CSG employer: 3 % / 6 % by monthly remuneration (Rs 50 000 notch); for a company the average monthly wage decides; domestic-service rates (Part III) not applied"
+   ],
+   "unsupported": [
+    "domestic employees",
+    "end-of-year bonus as a separate month"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "nsf",
+   "level": "social",
+   "rateBp": 250,
+   "cap": 224880,
+   "grade": "A",
+   "name": "National Savings Fund, employer contribution (2,5 % of the basic wage up to Rs 18 740 a month)",
+   "statute": "National Savings Fund Act 1995 s. 5 (1) and First Schedule item 2 (c) (employer 2,5 %; as replaced by Act 37 of 2011, amended by Act 7 of 2020), s. 2 'basic wage or salary' capped at the maximum of the National Pensions Act 1976 Fifth Schedule (a) (Rs 18 740 a month, last replaced w.e.f. 1 July 2019); MRA/AG consolidations held (world/B09-southern-africa/mu/law/w5/mu_nsf_act1995.txt, mu_npa1976.txt)",
+   "doc": "First Schedule: '(c) Any other employee: 2.5% (by employer), 1% (by employee)'; NPA Fifth Schedule: '(a) in respect of a monthly pay period, the insurable wage or salary of the insured person not exceeding 18,740 rupees'. Thirteenth pass.",
+   "unsupported": [
+    "the ceiling applies monthly; the model applies 12 × Rs 18 740 to the annual payroll",
+    "public officers and local-authority staff (item 1) not distinguished",
+    "basic wage excludes allowances, bonus and overtime: the model uses the whole payroll (flag)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "regDuty",
+   "grade": "A",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Registration duty on the transfer of immovable property (5 %)",
+   "statute": "Registration Duty Act (consolidated to Act 14 of 2026) s. 3, First Schedule Part I paras I and J (last amended by Act 37 of 2011, cio 15/12/11); Finance Act 2025 (Act 18 of 2025) and Finance Act 2026 checked: they do not amend paras I-J",
+   "doc": "First Schedule Part I: the adjudication, sale, resale, return and any other deed or judgment transferring an immovable property or its usufruct, with or without consideration, 5 % (para I where the price does not exceed 100 000 rupees, para J above). FA 2025 amended only s. 2, 2B, 3 (new s. 3(1G) for non-citizens from 1 July 2026), 14A, 17, 36, para K and Parts II and IV; FA 2026 repealed para K. The duty is borne by the buyer on the value.",
+   "unsupported": [
+    "first-time buyer and other exemptions of s. 3",
+    "non-citizen schemes (para K)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Stamp Duty Act 1990",
+   "why": "triage minor: stamp duty under the Stamp Duty Act is per instrument; land transfers are carried by the registration duty (P5, modelled 5 %). listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "https://www.mra.mu/download/TheStampDutyAct1990.pdf (not fetched) (not fetched)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "triage": "moderate",
+   "name": "Other notable taxes (individual fair share contribution (ITA s. 16C), solidarity levy, CCR levy)",
+   "statute": "Income Tax Act s. 16B-16C (Finance (Miscellaneous Provisions) Act 2025); ITA Part IV Sub-parts AC, AE",
+   "why": "individual fair share contribution 15 % of leviable income above Rs 12 m (stacks on the 1.x PIT), solidarity levy and Corporate Climate Responsibility levy: not modelled (company fair share contribution modelled separately, twelfth pass)",
+   "tried": "mu/law/FinanceAct2025.txt"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "disposalBands",
+   "fam": "ltt",
+   "grade": "A",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [],
+   "top": 500,
+   "marginal": false,
+   "nilUpTo": 0,
+   "testValues": [
+    1000000,
+    30000000
+   ],
+   "expect": [
+    50000,
+    1500000
+   ],
+   "name": "Land transfer tax on the transfer of immovable property (5 %, paid by the transferor)",
+   "statute": "Land (Duties and Taxes) Act 1984 s. 4 (1), (4) (a)-(b) and Second Schedule Part A (2), MRA consolidation with amendments to Act 14 of 2026 (registry/afm_data/fetch/MU/TheLandAct.pdf.txt). 2025 wording: s. 4 (4) carries no amendment note (the paragraphs amended since 2012 all carry one) and the Second Schedule was last replaced by Act 26 of 2013 (1 January 2014) and amended by Act 15 of 2018 (15 April 2019, para (1) only), so the 5 % on the transferor holds all 2025. Split at 9 August 2025: s. 29 of Act 18 of 2025 added s. 4 (9) (repealed by Act 14 of 2026 from 13 August 2026; its text is not printed in the consolidation) and s. 4 (10) (a document transferring immovable with movable property without valuing each movable item: the tax on the aggregate value), both at the 10 % of Seventh Schedule Part III; s. 4 (11) (additional 10 % duty on non-citizen transfers) runs from 13 August 2026 only. Liability: the transferor (seller); charged on each disposal of the entity's land or buildings (event 'disposal i')",
+   "doc": "s. 4 (4): 'The tax shall be (a) paid by the transferor; (b) at the rate specified in the Second Schedule.' Second Schedule Part A, Transfer of immovable property: '(2) Transfer other than under paragraph (a) 5 per cent'. Twelfth pass (R4.disposalDutyFamily).",
+   "unsupported": [
+    "base = the disposal's proceeds (the Act's value of the property, s. 4 (1), not an input)",
+    "reliefs and exemptions (transfers between ascendants and descendants, first-time buyers' schemes, s. 4 (4A) re-sales within 3 years)",
+    "from 9 August 2025: s. 4 (9) at 10 % (Seventh Schedule Part III; text not held: the 2026 consolidation prints only its repeal) and s. 4 (10) at 10 % on immovable property sold with unvalued movables: not modelled (the disposal record carries neither fact)",
+    "Seventh Schedule Part IV additional duty on non-citizen transfers (s. 4 (11), from 13 August 2026: not in force in 2025)"
+   ],
+   "notes": [
+    "nineteenth pass (year in force, FT reviewer 7): s. 4 (4) (a)-(b) is the 2025 wording (no annotation); the 9 August 2025 additions (s. 4 (9), (10), 10 %) concern cases the model cannot see and are listed as unsupported; the 5 % rule computed applies on either side of that date"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "1200",
+   "kind": "profitLevy",
+   "fam": "fsc",
+   "grade": "A",
+   "rateBp": 500,
+   "minTurnover": 24000000,
+   "minProfit": 24000000,
+   "tests": [
+    [
+     30000000,
+     25000000
+    ],
+    [
+     30000000,
+     24000000
+    ],
+    [
+     20000000,
+     30000000
+    ]
+   ],
+   "expect": [
+    [
+     1250000
+    ],
+    [],
+    []
+   ],
+   "name": "Fair share contribution on companies (5 % of chargeable income where supplies and chargeable income exceed Rs 24 million)",
+   "statute": "Value Added Tax Act Part XC s. 53M-53N, inserted by the Finance (Miscellaneous Provisions) Act 2025 (held mu/law/FinanceAct2025.txt)",
+   "doc": "s. 53N (1): 'every company having (a) supplies exceeding 24 million rupees in an accounting year or is required to be registered under this Act; and (b) chargeable income exceeding 24 million rupees in an accounting year, shall be liable to pay ... a fair share contribution'; (2): 'in the case of a company other than a bank ... (a) 5 per cent of its chargeable income, where it is subject to income tax at the rate specified under Part IV of the First Schedule ... (b) 2 per cent ... under Part II'; (5): not reduced by any income tax credit.",
+   "unsupported": [
+    "the 2 % rate for Part II companies, banks (5 % + 2,5 % additional) and the 35 % caps for telecoms and banks",
+    "VAT registration as an alternative to the supplies test",
+    "chargeable income read as the line's profit",
+    "the individual fair share contribution (ITA s. 16C: 15 % of leviable income above Rs 12 m) is not modelled (PIT stacking)",
+    "accounting years covered (s. 53N (8)) not read"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "hrdLevy",
+   "rateBp": 150,
+   "level": "central",
+   "grade": "A",
+   "name": "Training levy (Human Resource Development Act, 1,5 % of the basic wage)",
+   "statute": "Human Resource Development Act 2003 (Act 27 of 2003) s. 18 (1)-(2), (5C) and First Schedule ('One and a half per cent'); MRA consolidation to Act 12 of 2023 (R4/fetch/p14/mu_hrd2003.txt); Finance Acts 2024-2026 held: no change to the rate",
+   "doc": "S. 18 (1): 'every employer shall, in respect of every employee, other than a household worker pay a training levy'; (2): 'payable on the employee's total basic wage or salary, excluding overtime, bonuses and allowances ... at the rate specified in the First Schedule'; (5C) (1 July 2023 - 30 June 2025): 1,5 % (0,75 % National Training Fund + 0,75 % Workfare Programme Fund). Fourteenth pass.",
+   "unsupported": [
+    "basic wage excludes overtime, bonuses and allowances: the model uses the whole payroll (flag)",
+    "household workers, private secondary schools, charitable institutions (unless they elect), non-resident non-citizens and premium-visa holders are excluded (s. 18 (6)): not distinguished"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payrollNotch",
+   "fam": "prgf",
+   "lowBp": 450,
+   "highBp": 0,
+   "monthlyLimit": 200000,
+   "grade": "A",
+   "name": "Portable Retirement Gratuity Fund, employer contribution (4,5 % of monthly remuneration; workers above Rs 200 000 a month not covered)",
+   "statute": "Workers' Rights Act 2019 s. 87, 90 (1) (e), 94 (1) (MRA consolidation to Act 13 of 2026, R4/fetch/p14/mu_wra2019.txt); Workers' Rights (Portable Retirement Gratuity Fund) Regulations 2020, GN 39 of 2020, reg. 3 (1) (a) and First Schedule Parts I-III ('4.5% of monthly remuneration', SMEs from 1 January 2023) (MRA download, R4/fetch/p14/mu_prgf_gn39.txt)",
+   "doc": "WRA s. 94 (1): every employer other than one with a private pension scheme pays 'the contributions ... in respect of each worker in his employment, at such rate as may be prescribed'; s. 90 (1) (e) excludes 'a worker drawing a monthly basic wage or salary of more than 200,000 rupees'; GN 39/2020 First Schedule Part III: 'Rate of contribution by employer 4.5% of monthly remuneration'. Read as an employer social contribution (2200) to a public fund (Ministry of social security, collected by the MRA). Fourteenth pass (FT reviewer 4 gap).",
+   "notes": [
+    "PRGF: a company line without an employee count gets no PRGF charge (the Rs 200 000 test needs the monthly wage per worker)"
+   ],
+   "unsupported": [
+    "employers with a private pension scheme meeting the PRGF level, statutory bodies, public officers, job contractors, migrant workers and non-citizens are outside (s. 90, 94): not distinguished",
+    "the Rs 200 000 test is on the basic wage; the model tests the whole monthly wage (company: payroll / 12 / employees)",
+    "later amendments of GN 39/2020 not checked"
+   ]
+  }
+ ]
+}

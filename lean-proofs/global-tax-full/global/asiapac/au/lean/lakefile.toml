@@ -1,0 +1,18 @@
+name = "AuGlobal"
+version = "0.1.0"
+defaultTargets = ["AuGlobal", "auglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); AuTax = the 1.x model, vendored from cmp20/anglo/au/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AuTax"
+
+[[lean_lib]]
+name = "AuGlobal"
+
+[[lean_exe]]
+name = "auglobal"
+root = "AuGlobal.Main"

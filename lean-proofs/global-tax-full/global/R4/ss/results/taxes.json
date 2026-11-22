@@ -1,0 +1,137 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Sales tax",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Financial Act 2024/2025 Schedule 1 (A) item 6 (replacing Schedule 1 (1, 2 & 4) of the Taxation Act 2009): sales tax 18 % on imported goods, locally manufactured goods, hotel, bar and restaurant services, telecommunication services and financial-service / money-transfer / travel-agency charges; Taxation Amendment Act 2016 Schedules 4-6 (18 %) [text version: Financial Act 2024/2025 as enacted (FY 1 July 2024-30 June 2025), applied to 30 June 2025 only; the Financial Act 2025/2026 (FY 1 July 2025-30 June 2026) was not found: NRA uploads (cms.nra.gov.ss) and MoFEP (mofep-grss.org) document pages on the Internet Archive (CDX, 21 Nov 2026) hold the Acts for 2014/15-2024/25 only]",
+  "dated": "Financial Act 2024/2025 (FY July 2024 - June 2025), applied to 30 June 2025; the 2025/26 Act not found",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatKnownToFamily (R4Common.Dated)"
+  ],
+  "unsupported": [
+   "July-December 2025 (Financial Act 2025/2026 not found): not computed (C)",
+   "20 % wording of chapters 5-7"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duty",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Financial Act 2024/2025 chapter 8 (charge, value, rates) and Schedule 1 (A) item 7 (replacing Schedule 1 (3) of the Taxation Act 2009): beer 50 %, wine 50 %, spirits 100 %, cigarettes 100 %, sweetened waters 5 %, petroleum oils 5 % (FY 2024/25 column) [text version: Financial Act 2024/2025 as enacted, applied to 30 June 2025 only; the Financial Act 2025/2026 (FY 1 July 2025-30 June 2026) was not found: NRA uploads (cms.nra.gov.ss) and MoFEP (mofep-grss.org) document pages on the Internet Archive (CDX, 21 Nov 2026) hold the Acts for 2014/15-2024/25 only]",
+  "dated": "Financial Act 2024/2025 (FY July 2024 - June 2025), applied to 30 June 2025; the 2025/26 Act not found",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc",
+   "ExciseRule (2.1, date windows: R4.Exc.toRule)",
+   "exciseRuleFamily"
+  ],
+  "unsupported": [
+   "July-December 2025 (Financial Act 2025/2026 not found): not computed (C)",
+   "unsweetened waters and juices"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Business Profit Tax",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "Financial Act 2024/2025 s. 8 (2) and Schedule 1 (3) replacing Taxation Act 2009 Schedule 1 (30 %) [text version: Financial Act 2024/2025 as enacted (FY 1 July 2024-30 June 2025)]",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "BPT 30 % is set by the Financial Act 2024/2025 for FY 2024/25 (to 30 June 2025); the Financial Act 2025/2026 (FY 1 July 2025-30 June 2026) was not found: NRA uploads (cms.nra.gov.ss) and MoFEP (mofep-grss.org) document pages on the Internet Archive (CDX, 21 Nov 2026) hold the Acts for 2014/15-2024/25 only, so the rate for July-December 2025 is not known and a 2025 profit cannot be taxed (twentieth pass: B -> C)"
+  ],
+  "tried": "Financial Act 2024/2025 s. 8 (2), Schedule 1 (3) (30 %); Internet Archive CDX of cms.nra.gov.ss/uploads, nra.gov.ss, mofep-grss.org (docs and uploads)"
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Withholding tax (Schedule 1 (2))",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Financial Act 2024/2025 Schedule 1 (2) 'Other Withholding Tax Rates' (dividends, interest, royalties 10 %; technical/consultancy fees 20 %) [text version: Financial Act 2024/2025 as enacted, applied to payments dated to 30 June 2025 only; the Financial Act 2025/2026 (FY 1 July 2025-30 June 2026) was not found: NRA uploads (cms.nra.gov.ss) and MoFEP (mofep-grss.org) document pages on the Internet Archive (CDX, 21 Nov 2026) hold the Acts for 2014/15-2024/25 only]",
+  "dated": "Financial Act 2024/2025 (FY July 2024 - June 2025), applied to 30 June 2025; the 2025/26 Act not found",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht",
+   "R4.DatedWhtRule (payment date; undated with a changed rate: grade C)"
+  ],
+  "unsupported": [
+   "payments from 1 July 2025 (Financial Act 2025/2026 not found)"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Taxation Act 2009 (amended 2016); Financial Act 2023/2024 and 2024/2025",
+  "dated": "-",
+  "unsupported": [
+   "no ad valorem stamp duty on conveyances found: the Financial Act 2023/2024 lists 'Stamp Duty Fee' items of 1-2 SSP on documents in ministry fee schedules and a 'Stamp Duty' revenue line, the Taxation Act text holds excise stamps only; whether a land-transfer duty exists under the Land Act or state laws is not established, so neither a rate nor a cited absence is given"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copies (taxation_act_2016, financial_act_2023_2024, fa2425 OCR; full-text search 'stamp', 'conveyance', 'transfer of land'), seventeenth pass",
+  "triage": "moderate"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (personal income tax schedules in the annual Financial Act; provision not located by keyword in the reachable text)",
+  "statute": "Taxation Act 2009 (amended 2016) + Financial Act 2023/2024 and 2024/2025",
+  "dated": "-",
+  "unsupported": [],
+  "status": "reclassified",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "classification": "duplicate (covered elsewhere)",
+  "oecdGuide": "OECD Interpretative Guide (Revenue Statistics 2026, Annex A; R4/fetch/gap/oecd_guide.txt) §28 (classification by base: one personal income tax, heading 1100)",
+  "why": "The registry row names the personal income tax schedules printed in the annual Financial Act (Taxation Act 2009 as amended 2016; Financial Act 2024/2025 Schedule 1 rates). That is the personal income tax computed by the vendored 1.x model (heading 1100); the row is not a second tax. (The 1.x model's July-December 2025 rates depend on the Financial Act 2025/2026, not held: a PIT matter, recorded in the twentieth pass.)",
+  "was": "grade C (triage notATax: registry note on PIT schedules in the Financial Act (covered by the 1.x PIT), not a separate tax. listed by the registry (background (unverified)); charging provision not read/modelled)"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Employer pension / social security contributions",
+  "statute": "not reached: tried Financial Act 2024/25 search, live sss.gov.ss (no answer), SSPTW (no page answered)",
+  "dated": "-",
+  "unsupported": [
+   "pension contributions for private employers (if any) not found in the Financial Act 2024/25 or texts held"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "Financial Act 2024/25 search, live sss.gov.ss (no answer), SSPTW (no page answered)"
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (EAC Common External Tariff)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "East African Community Customs Management Act 2004 (charging provisions not read) and the EAC CET (South Sudan, a Partner State since 2016); EAC Common External Tariff 2022 Version (Annex 1 to the Protocol on the Establishment of the East African Community Customs Union), edition 'CET 2022 VERSION updated June 2025' (eac.int, Wayback 20260303052110, R4/fetch/gap/eac_cet2022_upd_jun2025_wb20260303052110.pdf): Legal Notice No. EAC/117/2022 para 1 (four bands 0, 10, 25 and 35 per centum) and 2 (in force 1 July 2022); the amending Legal Notices printed at its end (EAC/129/2023, 81/2024, 147/2024, 298/2024, 32/2025, 171/2025) touch none of the lines below",
+  "dated": "CET 2022 version as updated to June 2025 (lines unchanged by the 2023-2025 amending notices): the whole of 2025",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "stays of application and duty remissions by partner state (EAC Gazette notices for 2024/25 and 2025/26) not read",
+   "COMESA / AfCFTA / EPA preferences not applied (CET charged)",
+   "national import levies (KE Import Declaration Fee and Railway Development Levy, UG/TZ/RW/BI equivalents) not modelled",
+   "lines of other HS headings (grade C)"
+  ]
+ }
+]

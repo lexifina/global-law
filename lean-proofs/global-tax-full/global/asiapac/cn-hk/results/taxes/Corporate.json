@@ -1,0 +1,29 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Profits tax (corporations)",
+  "statute": "IRO (Cap. 112) s. 14 (1), (3) (b), s. 14AAC, Sch. 8B s. 2 (a)",
+  "dated": "HKLII consolidation version of 25 Jul 2025 (hklii.hk api getcapversiontoc id 51521; cn-hk/law/hk_cap112_hklii_v51521_20250725.json): year of assessment 2025/26",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "s. 14AAC: of connected entities only the one nominated gets the two-tiered rates (taken as nominated); offshore (non-Hong Kong-sourced) profits and the global minimum tax not modelled"
+  ]
+ },
+ {
+  "oecd": "1200/1100",
+  "tax": "Withholding tax on payments to non-residents",
+  "statute": "IRO (Cap. 112) ss. 14, 15 (1), 20B, 21A, 26, Sch. 8A, 8B",
+  "dated": "HKLII consolidation version of 25 Jul 2025 (hklii.hk api getcapversiontoc id 51521; cn-hk/law/hk_cap112_hklii_v51521_20250725.json): year of assessment 2025/26",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "royalties: an associate (s. 21A (3)) is read as a recipient holding more than 50 % of the payer; the two-tiered rates are applied to the payment alone (s. 14AAC connected entities and the recipient's other Hong Kong profits not known)",
+   "interest and services: cited zeros assume the recipient carries on no business in Hong Kong"
+  ]
+ }
+]

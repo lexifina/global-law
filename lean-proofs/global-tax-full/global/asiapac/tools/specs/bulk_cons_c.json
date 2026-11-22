@@ -1,0 +1,249 @@
+{
+ "BD": {
+  "name": "Bangladesh",
+  "doc": "First pass (R3, 2026-11-21): Value added tax and supplementary duty (grade C); Supplementary duty (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Bangladesh not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax and supplementary duty",
+    "statute": "VAT and SD Act 2012 (15 %), Finance Ordinance 2025",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): nbr.gov.bd regulations/acts/vat (table loaded by script: empty in the HTML), VAT Instruction PDFs (only 2026-27 published), bdlaws.minlaw.gov.bd (no answer), Wayback (offline 2026-11-21); would unlock: the VAT and SD Act 2012 as amended to 2025 (First Schedule exemptions, Third Schedule reduced rates) and the 2024-25/2025-26 VAT Instructions",
+     "session 6: read (bdlaws act-1106 full text, Wayback 20230611183741, bd/law/bd_vatsd2012_bdlaws_wb20230611.html; table of contents of 2025): s. 15 (3) 15 % (substituted by Finance Act 2019), s. 2 (57) registration threshold Tk 3 crore, s. 2 (48) enlistment threshold Tk 50 lakh, s. 63 (1) turnover tax 4 %. Not modelled: the First Schedule (exempt goods and services) and Third Schedule (reduced rates) are not in the bdlaws text; the NBR gazettes (Finance Act 2024, Finance Ordinance No. 28 of 2 June 2025) are Bijoy-encoded and only amend those schedules (2025 OCR of the Ordinance by the 1.x builder: ss. 26-28 amend entries). Would unlock: a Unicode or OCR copy of the First and Third Schedules as in force 2024-25"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Supplementary duty",
+    "statute": "VAT and SD Act 2012 schedules",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): as above; would unlock: the Third Schedule supplementary duty rates",
+     "session 6: s. 55 (supplementary duty on Second Schedule goods and services) read; the Second Schedule itself not reached (as for 5111)"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "BT": {
+  "name": "Bhutan",
+  "doc": "First pass (R3, 2026-11-21): Sales tax (to 31 Dec 2025) (grade C); Excise and green tax (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Bhutan not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5112",
+    "tax": "Sales tax (to 31 Dec 2025)",
+    "statute": "Sales Tax, Customs and Excise Act of the Kingdom of Bhutan 2000 and its schedules (the GST Act 2020 applies from 1 January 2026, not to 2025)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): drc.gov.bt WordPress media API (searches 'sales tax', 'tariff', 'Act', 'rules'): the Sales Tax, Customs and Excise Act 2000 is not published there (only the GST Act 2020 consolidation, Excise Tax Act 2025 and the 2026 tariff schedule, for 2026); Tax-Act-of-Bhutan-2022.pdf is damaged; Wayback offline; would unlock: the 2000 Act with the 2025 sales tax schedule (BTCTS 2022 sales tax column)",
+     "session 6: read Sales Tax, Customs and Excise Act 2000 (nab.gov.bt, Wayback 20160705; bt/law/bt_sales_tax_act2000_nab_wb20160705.pdf) and the Amendment Act 2012 (oag.gov.bt, Wayback 20140515): Part I s. 4.1 sales tax 'as per the Bhutan Sales Tax Schedule', s. 4.2 rates fixed by the Government: the rates are in the Bhutan Trade Classification and Tariff Schedule (BTCTS), not reached (no Wayback capture on drc.gov.bt)"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise and green tax",
+    "statute": "Sales Tax, Customs and Excise Act 2000",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): as above (Excise Tax Act of Bhutan 2025 applies with the GST from 2026); would unlock: the 2025 excise/green tax schedule",
+     "session 6: Act 2000 Part III s. 4.1 (excise rates fixed by the Government): rate schedule not reached"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "IR": {
+  "name": "Iran",
+  "doc": "First pass (R3, 2026-11-21): Value added tax (10 % in 1404) (grade C); Taxes on cigarettes, fuel and soft drinks under the VAT Law (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Iran not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax (10 % in 1404)",
+    "statute": "VAT Law 1400; Budget Law 1404",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): qavanin.ir answers with a bot-check page (not bypassed); rc.majlis.ir and intamedia.ir no answer; Wayback offline; would unlock: the permanent VAT Law (1400) and the Budget Law 1404 rate",
+     "session 6: faolex.fao.org ira167686 is the VAT Law of 1387 (dastour.ir print of 2016), not the VAT Law 1400; rc.majlis.ir and intamedia.ir no answer, dotic.ir 403 (not bypassed); qavanin.ir not tried (bot check). Would unlock: an official copy of the VAT Law 1400 (art. 7 rate) and the Budget Law 1404 rate clause"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Taxes on cigarettes, fuel and soft drinks under the VAT Law",
+    "statute": "VAT Law 1400",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "TV": {
+  "name": "Tuvalu",
+  "doc": "First pass (R3, 2026-11-21): Tuvalu consumption tax (grade C); Import levies and excise (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Tuvalu not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Tuvalu consumption tax",
+    "statute": "Tuvalu Consumption Tax Act 2008",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: not on the build server (income tax acts and regulations); would unlock: the TCT Act from tuvalu-legislation.tv"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Import levies and excise",
+    "statute": "Customs Revenue and Border Protection Act; Import Levy Act",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "BN": {
+  "name": "Brunei",
+  "doc": "First pass (R3, 2026-11-21): VAT/GST (not levied) (grade B); Excise duties (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [
+   [
+    "vat",
+    "no GST or VAT Act in the Laws of Brunei (AGC laws index, cmp20/world/B15-no-pit/bn/law/agc_brulaw.html)"
+   ]
+  ],
+  "unsupported": "consumption taxes of Brunei not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "VAT/GST (not levied)",
+    "statute": "no GST or VAT Act in the Laws of Brunei (AGC laws index on the build server: agc_brulaw.html)",
+    "grade": "B",
+    "kernel_parts": [
+     "Absent"
+    ],
+    "unsupported": [
+     "absence inferred from the AGC laws index, not from a provision"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise duties",
+    "statute": "Excise Duties Order and Customs Import Duties Order as amended",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: not on the build server (Income Tax Act Cap. 35 and Employee Trust Act); would unlock: the Excise Duties Order schedule from agc.gov.bn"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "KP": {
+  "name": "North Korea (DPRK)",
+  "doc": "First pass (R3, 2026-11-21): Taxes on goods and services (not levied) (grade B); Excises (not levied) (grade B). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [
+   [
+    "vat",
+    "taxes abolished from 1 April 1974 (Supreme People Assembly decision of 21 March 1974 on the complete abolition of taxes)"
+   ],
+   [
+    "excise",
+    "no taxes on goods are levied (1974 abolition)"
+   ],
+   [
+    "salesTax",
+    "no taxes on goods are levied (1974 abolition)"
+   ]
+  ],
+  "unsupported": "consumption taxes of North Korea (DPRK) not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Taxes on goods and services (not levied)",
+    "statute": "taxes abolished by the decision of the Supreme People Assembly of 21 March 1974 (complete abolition of taxes, from 1 April 1974); turnover levies of state enterprises are not taxes in DPRK law",
+    "grade": "B",
+    "kernel_parts": [
+     "Absent"
+    ],
+    "unsupported": [
+     "the 1974 text is not on the build server"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excises (not levied)",
+    "statute": "as above",
+    "grade": "B",
+    "kernel_parts": [
+     "Absent"
+    ],
+    "unsupported": []
+   }
+  ],
+  "note": null
+ },
+ "CN-MO": {
+  "name": "Macao SAR",
+  "doc": "First pass (R3, 2026-11-21): VAT/GST/sales tax (not levied) (grade B); Imposto de consumo (tobacco, alcohol above 30 %) (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [
+   [
+    "vat",
+    "no VAT or general sales tax in Macao; the Regulamento do Imposto de Consumo taxes tobacco and alcohol only"
+   ]
+  ],
+  "unsupported": "consumption taxes of Macao SAR not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "VAT/GST/sales tax (not levied)",
+    "statute": "no VAT or general sales tax in Macao; the consumption tax regulation (Lei n.o 4/99/M) taxes tobacco and alcohol only",
+    "grade": "B",
+    "kernel_parts": [
+     "Absent"
+    ],
+    "unsupported": [
+     "Imprensa Oficial bo.io.gov.mo did not answer"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Imposto de consumo (tobacco, alcohol above 30 %)",
+    "statute": "Regulamento do Imposto de Consumo (Lei n.o 4/99/M) and its tables",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: bo.io.gov.mo gave no answer from the build server or a second machine; would unlock: the table of the Regulamento from bo.io.gov.mo"
+    ]
+   }
+  ],
+  "note": null
+ }
+}

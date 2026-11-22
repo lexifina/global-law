@@ -1,0 +1,346 @@
+{
+ "country": "HN",
+ "name": "Honduras",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 22:15:22"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "see the pass 11 entry below for disposals",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/HnGlobal/Capital.lean",
+   "guards": 2
+  },
+  {
+   "tax": "Impuesto único sobre ganancias de capital (10 %)",
+   "statute": "LISR art. 10",
+   "dated": "LISR consolidated to Acuerdo SAR 07-2025",
+   "grade": "B",
+   "unsupported": [
+    "base rules and exemptions not in the held text"
+   ],
+   "oecd": "1100",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/HnGlobal/Capital.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto Sobre Ventas",
+   "statute": "Decreto-Ley 24 de 1963 arts. 6, 15 (texto consolidado al Decreto 59-2022)",
+   "dated": "SAR consolidation (to Decreto 59-2022), fetched 2026-11-21",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "Anexo I food list",
+    "750 kWh electricity cap"
+   ],
+   "status": "modelled",
+   "family_file": "lean/HnGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto selectivo al consumo / producción y consumo",
+   "statute": "Ley del Impuesto Selectivo al Consumo; Ley de Impuesto sobre Producción y Consumo",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "sar.gob.hn law list (not fetched)",
+   "unsupported": [
+    "would unlock: the 2025 ISC and producción-y-consumo schedules"
+   ],
+   "family_file": "lean/HnGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 205 num. 35",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 205 num. 35: \"Establecer impuestos y contribuciones así como las cargas públicas\" (`hn/law/const_art-205.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Decreto-Ley 24 de 1963 arts. 6, 15 (texto consolidado al Decreto 59-2022); LISR art. 22 (25 %); LISR (Decreto-Ley 25, SAR consolidation to Acuerdo SAR 07-2025) art. 5 num. 3), 5), 6), 7); 1.x model (see its summary.json); LISR art. 10; Reglamento de Aplicación de la Ley del Seguro Social (Acuerdo 193/1971) art. 28).",
+   "family_file": "lean/HnGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la renta (personas jurídicas)",
+   "statute": "LISR art. 22 (25 %)",
+   "dated": "SAR consolidation 07-2025",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "aportación solidaria (5 % above L1 million) and the 1.5 % minimum on gross income not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/HnGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "LISR (Decreto-Ley 25, SAR consolidation to Acuerdo SAR 07-2025) art. 5 num. 3), 5), 6), 7); art. 50 (retention)",
+   "dated": "SAR consolidated LISR to Acuerdo SAR 07-2025 (world/B12-latin-america/hn/src/lisr.txt); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "LISR art. 5: interest paid to a related party is taxed as a dividend (also 10 %); num. 9 (10 % software and telecoms) and num. 13 (10 % other operating income) not distinguished from services"
+   ],
+   "status": "modelled",
+   "family_file": "lean/HnGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross taxed; IHSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: gross taxed; IHSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVHND, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/HND.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/HnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "impuesto sobre bienes inmuebles (Ley de Municipalidades art. 76, up to 3.5 per mil urban)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre bienes inmuebles (Ley de Municipalidades art. 76, up to 3.5 per mil urban); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre bienes inmuebles (Ley de Municipalidades art. 76, up to 3.5 per mil urban); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVHND, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/HND.csv): general government heading 4100 = 2021:585.6 2022:720.4 2023:910.5 2024:911.4"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/HnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución por mejoras (Ley de Municipalidades art. 84)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución por mejoras (Ley de Municipalidades art. 84). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución por mejoras (Ley de Municipalidades art. 84). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVHND, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/HND.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/HnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+   "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/HnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "tasa vehicular / matrícula (Decreto 17-2010 etc.)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): tasa vehicular / matrícula (Decreto 17-2010 etc.); OECD HN 5200 = 0 (booked elsewhere). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): tasa vehicular / matrícula (Decreto 17-2010 etc.); OECD HN 5200 = 0 (booked elsewhere). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVHND, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/HND.csv): general government heading 5200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/HnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD HN 6200 6,666 (2024), almost all local government: municipal taxes (Ley de Municipalidades) not identified"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD HN 6200 6,666 (2024), almost all local government: municipal taxes (Ley de Municipalidades) not identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVHND, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/HND.csv): general government heading 6000 = 2021:4846.7 2022:5931.0 2023:5782.7 2024:6666.2"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/HnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read in this pass",
+   "unsupported": [
+    "would unlock: the act's 2025 text"
+   ],
+   "family_file": "lean/HnGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 205 num. 35; Ley de Equidad Tributaria (Decreto 51-2003) arts. 5-15; Decreto 17-2010 art. 86 num. 6",
+   "dated": "constitution: lexifina repository text (pass 12); asset-tax texts fetched 2026-11-21 (pass 15)",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 15): Constitución art. 205 num. 35: \"Establecer impuestos y contribuciones así como las cargas públicas\" (`hn/law/const_art-205.md`). The Impuesto al Activo Total Neto (Ley de Equidad Tributaria, Decreto 51-2003, La Gaceta 30,059, arts. 5-16; SAR copy `hn/law/sar_decreto51-2003_equidad.*`, OCR) is 1 % of the balance-sheet assets of merchant companies less reserves, depreciation and fixed-asset financing, above L 3,000,000 (arts. 5-7, 14 num. 1); art. 15 makes the amount paid a credit against the income tax, the obligation being met when the income tax paid is equal or higher: a minimum income tax on companies (heading 1200), not a tax on net wealth. Decreto 17-2010 (La Gaceta 32,193) art. 86 num. 6 derogates 'el capitulo II del Impuesto del Activo Neto' of Decreto 51-2003 (`hn/law/sar_decreto17-2010.*`), while Decreto 278-2013 art. 9 (new LISR art. 22-A, `hn/law/sar_decreto278-2013.*`) still refers to declaring the 'Impuesto Sobre el Activo Neto': whichever reading holds in 2025, no tax on net wealth is levied. No law read in this build levies a recurrent tax on net wealth (laws read include: Decreto-Ley 24 de 1963 arts. 6, 15 (texto consolidado al Decreto 59-2022); LISR art. 22 (25 %); LISR (Decreto-Ley 25, SAR consolidation to Acuerdo SAR 07-2025) art. 5 num. 3), 5), 6), 7); 1.x model (see its summary.json); LISR art. 10; Reglamento de Aplicación de la Ley del Seguro Social (Acuerdo 193/1971) art. 28).",
+   "family_file": "lean/HnGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "IHSS contributions (employer: Enfermedad y Maternidad 5 %, IVM 3.5 %)",
+   "statute": "Reglamento de Aplicación de la Ley del Seguro Social (Acuerdo 193/1971) art. 28; Decreto 48-2024 arts. 1, 2",
+   "dated": "Decreto 48-2024, La Gaceta 36,545 of 28 May 2024 (2025 ceilings); Reglamento 1971 text (rate unchanged by later agreements found)",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "13th/14th month salaries not split from the base",
+    "Junta Directiva rate agreements after 1971 for EM not searched"
+   ],
+   "status": "modelled",
+   "family_file": "lean/HnGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "3000",
+   "tax": "INFOP 1 % (employer)",
+   "statute": "Ley del Instituto Nacional de Formación Profesional (Decreto 10 of 28 Dec 1972) art. 23 (original: firms with 5 or more workers; text as reformed by Decreto 194-2002 art. 11, La Gaceta 29,799 of 5 Jun 2002) and art. 24 (capital above L. 20,000): 1 % of wages earned, monthly",
+   "dated": "Ley del INFOP y sus reformas (IAIP portal copy, Wayback 2025-12-02); pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "employer size not an input: taken as within arts. 23-24"
+   ],
+   "family_file": "lean/HnGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Ley de Municipalidades (bienes inmuebles)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/HnGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 6,
+  "B": 3,
+  "C": 9
+ },
+ "guards": 15,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

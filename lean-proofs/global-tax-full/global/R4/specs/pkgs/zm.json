@@ -1,0 +1,262 @@
+{
+ "cc": "ZM",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (mineral royalty (Mines and Minerals Development Act); insurance premium levy; provision not located by keyword in the reachable text)",
+   "statute": "Income Tax Act Cap. 323 as amended (Income Tax (Amendment) Acts to No. 17 of 2025)",
+   "why": "triage outOfScope: mineral royalty: mining sector, not households. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.parliament.gov.zm/acts-of-parliament (laptop))",
+   "triage": "outOfScope"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "napsa",
+   "level": "social",
+   "rateBp": 500,
+   "cap": 409968,
+   "grade": "B",
+   "name": "NAPSA employer contribution (5 % up to the 2025 ceiling K34 164 a month)",
+   "statute": "National Pension Scheme Act 1996 (Cap. 256); NAPSA public notice 'Revision in Contribution Ceiling for the Year 2025' (7 Jan 2025, held zm/law/w5/napsa_ceiling_2025_notice.html) [text version: NAPSA notice of 7 January 2025 (2025 ceiling)]",
+   "doc": "NAPSA 2025 notice: maximum monthly employee contribution K1 708.20 at 5 % (ceiling 34 164 = 4 x NAE 8 541); NAPSA contributions page: 'Employee: 5 % of gross earnings Employer: 5 % of gross earnings'.",
+   "unsupported": [
+    "the employee's 5 %",
+    "Act text not read (Fund notices)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "sdl",
+   "level": "central",
+   "rateBp": 50,
+   "grade": "A",
+   "name": "Skills Development Levy (0,5 % of gross emoluments)",
+   "statute": "Skills Development Levy Act No. 46 of 2016 s. 4 (1) (from 1 Jan 2017; policyvault.africa copy via Wayback, R4/fetch/zm11); s. 4 (3) replaced by Act No. 24 of 2020 (employer bears the levy; not read) [text version: Act No. 46 of 2016 as enacted (policyvault.africa copy via Wayback); Act No. 24 of 2020 not read (flag)]",
+   "doc": "s. 4 (1): 'A skills development levy at the rate of 0.5 percent shall be charged' on the gross emoluments paid by an employer to its employees, including casual employees.",
+   "unsupported": [
+    "exempt employers (Government, diplomatic missions, etc.)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "disposalBands",
+   "fam": "ptt",
+   "grade": "B",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [],
+   "top": 500,
+   "marginal": false,
+   "nilUpTo": 0,
+   "testValues": [
+    1000000,
+    250000000
+   ],
+   "expect": [
+    50000,
+    12500000
+   ],
+   "name": "Property Transfer Tax on land and buildings (5 % of the realised value, charged on the transferor)",
+   "statute": "Property Transfer Tax Act Cap. 340 (tax on the transferor's realised value); ZRA leaflet 'Property Transfer Tax' (2022, Wayback 2023-03-30, R4/fetch/zm11/ptt_guide_2022.pdf). Liability: the seller; charged on each disposal of the entity's land or buildings (event 'disposal i'), not on its purchases",
+   "doc": "ZRA: 'The rate of tax applicable on the transfer of Land, Intellectual property, or Shares is 5 % and for Mining rights and Mining processing license is 10 %.' 'Note: The PTT on land, shares, mining rights, mining processing license and Intellectual property is paid by the seller.' Realised value of land: 'the open market value'. Twelfth pass: moved from the purchase to the seller's disposal (R4.disposalDutyFamily).",
+   "unsupported": [
+    "realised value = the open market value of land; the model uses the disposal's proceeds (no market value on a disposal record)",
+    "transfers of shares (5 %), intellectual property (5 %) and mining rights (10 %)",
+    "exempt transfers (spouses and immediate family at the price received, group reorganisations)",
+    "Act text not read"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "ZRA 'Tax Information' page (fetched 2026-11-21, R4/fetch/zm8/zra_taxinfo_live_20261121.html)",
+   "why": "ZM: no net wealth tax. ZRA's list of the taxes it administers (turnover tax, PAYE, VAT, income tax, withholding tax, presumptive tax, property transfer tax, excise duty, base tax, insurance premium levy, mineral royalty) has none"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1500,
+   "name": "Withholding tax on dividends received by resident individuals (15 %, final)",
+   "statute": "Income Tax Act Cap. 323 s. 81 and Charging Schedule (rate), per the ZRA leaflet 'Withholding Taxes' (2023, Wayback 2023-08-04, R4/fetch/p13/zm_wht_leaflet_2023.pdf: 'The rate of WHT on dividends is 15% for residents and 20% for non-residents and it is the final tax'); official secondary",
+   "doc": "ZRA: companies registered in Zambia deduct WHT from dividends 'other than dividends paid to the Government ... or dividends paid to individuals by a company listed on the Lusaka Securities Exchange'. Thirteenth pass.",
+   "unsupported": [
+    "dividends from LuSE-listed companies to individuals are exempt: the model cannot tell listed from unlisted (15 % applied)",
+    "mining companies' dividends 0 %",
+    "individuals' interest on savings and deposits: no withholding (ZRA leaflet); not modelled as a cited zero (exemption provision not read)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "nhima",
+   "rateBp": 100,
+   "level": "social",
+   "grade": "B",
+   "name": "National Health Insurance contribution, employer share (1 % of basic salary)",
+   "statute": "National Health Insurance Act No. 2 of 2018; National Health Insurance (General) Regulations, S.I. No. 63 of 2019, reg. 9 (read: contribution 'at the rates set out in the Third Schedule'; the Third Schedule page is missing from the only copies reached, both truncated at 1 MiB); rate from NHIMA 'Registration steps' quoting the Third Schedule (Wayback 2021-09-18, R4/fetch/p14/zm_nhima_reg.txt: 'Basic Pay 1% Employee Contribution 1% Employer Contribution'); official secondary",
+   "doc": "Reg. 9: 'An employer ... shall pay to the Scheme a contribution consisting of the employer's contribution and the employee's contribution at the rates set out in the Third Schedule.' NHIMA: 'The third schedule of the regulations sets out the contribution rates ... Payroll Based 1% of Basic Salary'. Fourteenth pass (FT reviewer 4 gap).",
+   "unsupported": [
+    "the base is the basic salary: the model uses the whole payroll (flag)",
+    "the employee's 1 %",
+    "non-citizens who are not established residents are outside the scheme: not distinguished"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicleTax",
+   "fam": "roadTax",
+   "grade": "B",
+   "unknown": true,
+   "name": "Motor vehicle licence tax ('road tax': private motor cars by net weight, motor-cycles; in fee units)",
+   "statute": "Road Traffic Act, 2002 (No. 11 of 2002) s. 42 (1)-(2) and Second Schedule 'Taxes payable on annual licences' items 3 and 6 (commons.laws.africa publication PDF via Wayback 20240802081936, R4/fetch/p17/zm_rta2002_act11_commons.pdf, Schedule pp. 251-252 re-read at 400 dpi psm 6); fee unit 40 ngwee from 19 April 2024: Fees and Fines (Fee and Penalty Unit Value) (Amendment) Regulations, 2024 (SI 25 of 2024) reg. 2 amending SI 8 of 2014 reg. 2 (R4/fetch/p17/zm_si2024_25_fee_unit.pdf). The Road Traffic (Fees) Regulations, 2021 (SI 112 of 2021) prescribe registration and document fees only. B: the Road Traffic (Amendment) Acts 2006, 2008 and No. 49 of 2021 were not read (no copy reached), so an amendment of the Second Schedule is not excluded (flag) [text version: Act No. 11 of 2002 as published (commons.laws.africa PDF, Wayback 20240802081936); later amending Acts not read (flag)]",
+   "taxes": "[{ name := \"Motor vehicle licence tax (private motor car, by net weight)\", kinds := [\"car\"], parts := [(.massKg, QtyTable.ofCeilings [(800, 80), (1000, 100), (1200, 120), (1400, 140), (1600, 160)] 200)], proRata := false, statute := \"Road Traffic Act 2002 s. 42 and Second Schedule item 6: 200 / 250 / 300 / 350 / 400 / 500 fee units by net weight (bands to 800, 1000, 1200, 1400, 1600 kg; above), fee unit K0.40 (SI 25 of 2024)\" }, { name := \"Motor vehicle licence tax (motor-cycle)\", kinds := [\"motorcycle\"], fixed := 20, proRata := false, statute := \"Road Traffic Act 2002 s. 42 and Second Schedule item 3: 50 fee units, fee unit K0.40\" }]",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 120000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 150000,
+        "massKg": 1100,
+        "fuel": "petrol",
+        "firstRegYear": 2018
+       }
+      ]
+     },
+     "expect": [
+      120
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 120000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 400000,
+        "massKg": 1700,
+        "fuel": "diesel",
+        "firstRegYear": 2021
+       }
+      ]
+     },
+     "expect": [
+      200
+     ]
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 120000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "vehicleKind": "motorcycle",
+        "value": 30000,
+        "fuel": "petrol",
+        "firstRegYear": 2022
+       }
+      ]
+     },
+     "expect": [
+      20
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 120000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 150000,
+        "fuel": "petrol",
+        "firstRegYear": 2018
+       }
+      ]
+     },
+     "expect": []
+    }
+   ],
+   "doc": "s. 42 (1): 'the taxes specified in the Second Schedule shall be payable in respect of vehicle, motor vehicle and trailer licences'; (2): annual licence = the Schedule tax, half-yearly 55 %, quarterly 30 %. Second Schedule item 6 'For every private motor car, if the net weight- (a) does not exceed 800kg 200; (b) exceeds 800kg but does not exceed 1000kg 250; (c) ... 1200kg 300; (d) ... 1400kg 350; (e) ... 1600kg 400; (f) exceeds 1600kg 500' fee units; item 3 motor-cycle 50. SI 25 of 2024: fee unit 'forty ngwee' (was thirty, SI 41 of 2015; twenty, SI 8 of 2014). Worked case (hand): private car of net weight 1 100 kg -> 300 fee units x K0.40 = K120 a year; 1 700 kg -> 500 x 0.40 = K200; motor-cycle 50 x 0.40 = K20. Seventeenth pass.",
+   "unsupported": [
+    "half-yearly (55 %) and quarterly (30 %) licences and the Note (licence for 1 July - 31 December at half the tax): an annual licence for the whole year assumed",
+    "other motor vehicles by net weight (item 7: vans, trucks; 200-800 fee units), public service vehicles (item 4), taxis and hire cars (item 5), trailers (item 8): not modelled",
+    "the vehicle's mass is read as its net weight; a car without massKg: grade C line",
+    "the carbon emission surtax (Customs and Excise Act, annual by engine capacity) is a separate entry (grade C)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "unsupported",
+   "name": "Carbon emission surtax on motor vehicles (annual, by engine capacity)",
+   "statute": "Customs and Excise Act (Cap. 322) carbon emission surtax as amended by the Customs and Excise (Amendment) Act, 2022 (No. 25 of 2022; ZambiaLII search hit on the surtax by engine capacity, text not reached)",
+   "why": "the 2025 rates by engine capacity are not held: the Customs and Excise (Amendment) Acts of 2022 and 2024 are not on commons.laws.africa via Wayback; Act No. 25 of 2023 (held, R4/fetch/p17) changes only Part I import surtaxes; Act No. 18 of 2025 (30 December 2025) applies from 2026",
+   "tried": "ZambiaLII search API (titles); commons.laws.africa Wayback CDX (act/2023/23-25, act/2024/25 = Mobile Money Transaction Levy Act 2024); zra.org.zm CDX (no carbon surtax page captured)",
+   "triage": "moderate"
+  }
+ ]
+}

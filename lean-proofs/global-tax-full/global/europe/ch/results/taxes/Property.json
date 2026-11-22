@@ -1,0 +1,39 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Recurrent property tax",
+  "statute": "kantonale Liegenschaftssteuer",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "not read in the P5 pass",
+  "unsupported": [
+   "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Handänderungssteuer (Kanton Zürich) (not levied)",
+  "statute": "StG ZH (LS 631.1) § 1, § 205 (Fassung vom 30.11.2003, in Kraft seit 1.1.2005), Nachtrag 127 (1.1.2025)",
+  "dated": "zhlex Nachtrag 127 (in force 1.1.2025, `ch/law/stgzh_127.pdf`)",
+  "grade": "A",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4400",
+  "tax": "Eidgenössische Umsatzabgabe (securities)",
+  "grade": "C",
+  "status": "unsupported",
+  "statute": "not reached: StG (SR 641.10) Art. 13-16 (version 2024-01-01 held, its 2025 version not checked)",
+  "dated": "",
+  "kernel_parts": [],
+  "tried": "pass 18: the cantonal real-estate transfer tax is a cited absence; the federal turnover duty on securities dealt through a Swiss securities dealer is not modelled",
+  "unsupported": [
+   "a purchase of shares through a Swiss securities dealer bears the Umsatzabgabe (not modelled)"
+  ]
+ }
+]

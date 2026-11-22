@@ -1,0 +1,22 @@
+name = "SdGlobal"
+version = "0.1.0"
+defaultTargets = ["SdGlobal", "sdglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); SdTax = the 1.x model, vendored from cmp20/world/B10-anglophone-africa/sd/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SdTax"
+
+[[lean_lib]]
+name = "SdGlobal"
+
+[[lean_exe]]
+name = "sdglobal"
+root = "SdGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

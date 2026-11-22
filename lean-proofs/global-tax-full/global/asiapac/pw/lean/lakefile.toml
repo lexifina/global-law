@@ -1,0 +1,18 @@
+name = "PwGlobal"
+version = "0.1.0"
+defaultTargets = ["PwGlobal", "pwglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); PwTax = the 1.x model, vendored from cmp20/world/B14-pacific/pw/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PwTax"
+
+[[lean_lib]]
+name = "PwGlobal"
+
+[[lean_exe]]
+name = "pwglobal"
+root = "PwGlobal.Main"

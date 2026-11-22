@@ -1,0 +1,304 @@
+{
+ "country": "FI",
+ "name": "Finland",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (its Country built from the options, as its main does)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:05:19"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Luovutusvoittovero (pääomatulo)",
+   "statute": "Tuloverolaki 45-50 § (capital income 30 % to EUR 30 000, 34 % above; home used two years exempt)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-07-18 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "the 30 000 band is shared with other capital income (dividends, interest) in the 1.x model: applied to the disposals alone; the EUR 1 000 de-minimis and the deemed acquisition cost (20 %/40 %) not applied; securities and real estate gains each run through the scale separately"
+   ],
+   "family_file": "lean/FiGlobal/Capital.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5111",
+   "tax": "Arvonlisävero",
+   "statute": "Arvonlisäverolaki (1501/1993) 84 § (25,5 %, L 462/2024), 85 § (14 %, items 1-2 and L 691/2024 items 4-12), 85 a § (10 %, L 691/2024), 3 § (20 000 euroa, L 448/2024)",
+   "dated": "wording in force 1.1.2025 (acts 462/2024, 691/2024, 448/2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+    "alcoholic drinks and tobacco excluded from the 14 % food item: the household's alcohol is in the excise goods, taken at 25,5 %"
+   ],
+   "family_file": "lean/FiGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Laki alkoholijuomaverosta (1471/1994) liite; laki tupakkaverosta (1470/1994) liite, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "beer taken above 3.5 % vol and wine at 8-18 % vol (the TEDB standard rows)",
+    "motor and heating fuel: the TEDB gives only a volume-weighted average of the fuel-quality rates, not a statutory rate (not modelled)",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/FiGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Tupakkavero, savukkeet (kaksi verotaulukkoa 2025)",
+   "statute": "Laki tupakkaverosta (1470/1994) liite, as amended by laki 565/2024",
+   "dated": "table A to 30.6.2025, table B from 1.7.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule (validFrom/validTo, kernel 2.1)"
+   ],
+   "unsupported": [],
+   "gap": 1,
+   "family_file": "lean/FiGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Yhteisön tulovero",
+   "statute": "Tuloverolaki (1535/1992) 124 § 2 mom. (yhteisön tuloveroprosentti 20), 21.12.2016/1323",
+   "dated": "Finlex capture 2025-07-03 (124 § in the wording of 21.12.2016/1323)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "dividends received (EVL 6 a §) not modelled",
+    "losses carried forward 10 years (TVL 119 §), ownership-change rule (122 §) not modelled"
+   ],
+   "family_file": "lean/FiGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Lähdevero rajoitetusti verovelvolliselle (dividend, interest, royalty, services)",
+   "statute": "lähdeverolaki 627/1978 3 §, 7 § 1 mom.; tuloverolaki 1535/1992 9 §",
+   "dated": "Finlex, Wayback captures 2025-05-21 / 2025-07-03 (`fi/law/lahdeverolaki_wb2025.txt`, `fi/law/tvl_wb20250703.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "services are taken as work done in Finland; the 10 f § release (prepayment register, tax card) is not applied; the 510 €/month deduction on 35 % income not applied",
+    "dividends exempt for EU/treaty parent companies (3 § 4 mom.) not separated",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/FiGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/FiGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "European Commission TEDB, FI: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 241, 242, 262, 623, 625, 2901, 246, 251, 252, 253, 264, 621, 2001, 5066) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+   ],
+   "gap": 2,
+   "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVFIN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/FIN.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6200 total 108, 87, 79, 103 million EUR in 2021-2024 (unnamed); the national taxes behind it not read",
+   "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVFIN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/FIN.csv`, SHA256SUMS; general government S13; 2025 not yet published)",
+   "family_file": "lean/FiGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Kirkollisvero (evankelis-luterilainen ja ortodoksinen kirkko)",
+   "statute": "Tuloverolaki (1535/1992) 124 § (deductions shared among municipal tax, health-care contribution and church tax, `fi/law/tvl_wb20250703.txt`); Statistics Finland, Taxes and tax-like payments: documentation of statistics (stat.fi/en/statistics/documentation/vermak, fetched 2026-11-22, `fi/law/statfi_vermak_doc.html`)",
+   "dated": "2025 (texts as cited)",
+   "grade": "R",
+   "status": "reclassified",
+   "reclass": "not a tax (OECD guide § 6, as decided for the Nordic church taxes): levied by the parishes, collected by Verohallinto with the municipal tax; the 1.x model charges it only with `churchRateBp` (default 0). The OECD Revenue Statistics table for Finland (DSD_REV_OECD@DF_REVFIN, `tools/in_gap2/oecd/FIN.csv`) has one church line, 1210 Church tax, at 0 in 2021-2024, and its 1100 lines (communal tax, tax on income, final withholding tax on interest) name no church tax: the individuals' church tax is outside the general-government figures",
+   "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+   "law": "Tuloverolaki (1535/1992) 124 § (deductions shared among municipal tax, health-care contribution and church tax, `fi/law/tvl_wb20250703.txt`); Statistics Finland, Taxes and tax-like payments: documentation of statistics (stat.fi/en/statistics/documentation/vermak, fetched 2026-11-22, `fi/law/statfi_vermak_doc.html`)",
+   "evidence_grade": "B",
+   "kernel_parts": [],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/FiGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Varainsiirtovero (kiinteistö)",
+   "statute": "Varainsiirtoverolaki 931/1996 6 § 1 mom. (3 % of the price, L 1185/2023 from 1.1.2024); 20 § 1 mom. (1,5 % on securities)",
+   "dated": "Finlex ajantasa, Wayback capture 2025-06-25 (`fi/law/vvl_wb2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "a home bought as housing-company shares (asunto-osake) bears 1,5 % (20 §), a detached house 3 % (6 §): the input does not say which; 3 % applied",
+    "no first-home exemption: 11 § repealed from 1.1.2024 (L 1185/2023)"
+   ],
+   "family_file": "lean/FiGlobal/Property.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4100",
+   "tax": "Kiinteistövero",
+   "statute": "Kiinteistöverolaki (654/1992): the municipal council sets the rates each year within the statutory limits: permanent residences 0,41-1,00 %, general rate for buildings 0,93-2,00 % (also other residential buildings), general rate for land 1,30-2,00 %, of the taxable value",
+   "dated": "Act on Real Property Tax 654/1992 as applicable 2025; EC Taxes in Europe Database (TEDB), tax 262, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "LocalTax (2.8.0)"
+   ],
+   "unsupported": [
+    "no capital-city rates declared: Helsinki's 2025 decision was not reached",
+    "the land under a home is part of the home asset here: give it as a land asset to tax it at the land rate",
+    "power plants (up to 3,1 %), vacant building sites (2,00-6,00 %) and non-profit buildings: not modelled"
+   ],
+   "lfw": 1,
+   "status": "framework (local rate input)",
+   "local_rate": "the municipality's rates are inputs: localRates.propertyTax (permanent residence), propertyTaxOtherBuildings, propertyTaxLand",
+   "family_file": "lean/FiGlobal/Property.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "2200",
+   "tax": "Työeläkevakuutusmaksu (työnantajan osuus, keskimäärin)",
+   "statute": "TyEL; Eläketurvakeskus 2025: työnantajan osuus keskimäärin 17,38 %",
+   "dated": "ETK leaflet for 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FiGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Työnantajan sairausvakuutusmaksu",
+   "statute": "Sairausvakuutuslaki 18 luku; Eläketurvakeskus 2025: 1,87 % palkasta",
+   "dated": "ETK leaflet for 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FiGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Työttömyysvakuutusmaksu (työnantaja)",
+   "statute": "Laki työttömyysetuuksien rahoituksesta; Eläketurvakeskus 2025: 0,20 % (pienempi palkkasumma)",
+   "dated": "ETK leaflet for 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FiGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4200",
+   "tax": "Varallisuusvero (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Finland, Individual - Other taxes, accessed 2025-06-13 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FiGlobal/Wealth.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "4300",
+   "tax": "Perintövero (veroluokka I)",
+   "statute": "Perintö- ja lahjaverolaki 14 § (veroluokka I scale)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "veroluokka II (other relatives and unrelated persons: higher scale) is not in the B source: the class I scale is applied (understates)",
+    "the spouse's EUR 90 000 and minor child's EUR 60 000 deductions (PerVL 26 §) are not in the B source"
+   ],
+   "family_file": "lean/FiGlobal/Wealth.lean",
+   "family_guards": 18
+  },
+  {
+   "oecd": "4300",
+   "tax": "Lahjavero (veroluokka I)",
+   "statute": "Perintö- ja lahjaverolaki 14 § (veroluokka I gift scale)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "gift tax class II not in the B source: the class I scale is applied (understates)"
+   ],
+   "family_file": "lean/FiGlobal/Wealth.lean",
+   "family_guards": 18
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 9,
+  "C": 2
+ },
+ "guards": 57,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

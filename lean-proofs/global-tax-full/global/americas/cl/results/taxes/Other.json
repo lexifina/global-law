@@ -1,0 +1,100 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "DL 3.500 arts. 89-92 (Ley 21.133); MAP: chile-law dl-3500",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: the independent worker's contributions (DL 3.500 art. 89-92) are not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: the independent worker's contributions (DL 3.500 art. 89-92) are not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 2300 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "3000",
+  "tax": "Taxes on payroll and workforce",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Ley 17.235 impuesto territorial (lexifina/chile-law ley-17235, read): art. 7 nominal rates 1.2 % / 1.4 % (habitacional, tramo of $37.526.739 of 2003) and 1.4 %, 'se rebajarán proporcionalmente' after each reavalúo and 'se fijarán por Decreto Supremo'",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 17.235 impuesto territorial (lexifina/chile-law ley-17235, read): art. 7 nominal rates 1.2 % / 1.4 % (habitacional, tramo of $37.526.739 of 2003) and 1.4 %, 'se rebajarán proporcionalmente' after each reavalúo and 'se fijarán por Decreto Supremo'; art. 2 exempt avalúo reajusted: the 2025 decree rates and amounts (SII) not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 17.235 impuesto territorial (lexifina/chile-law ley-17235, read): art. 7 nominal rates 1.2 % / 1.4 % (habitacional, tramo of $37.526.739 of 2003) and 1.4 %, 'se rebajarán proporcionalmente' after each reavalúo and 'se fijarán por Decreto Supremo'; art. 2 exempt avalúo reajusted: the 2025 decree rates and amounts (SII) not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 4100 = 2021:2002413.3 2022:2284252.8 2023:2807381.3 2024:2992934.6"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "aportes al espacio público (Ley 20.958) on development permits",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: aportes al espacio público (Ley 20.958) on development permits. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: aportes al espacio público (Ley 20.958) on development permits. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales tax (single stage)",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 5112 = ?",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 5112 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: the OECD CL table shows only negative unallocated amounts under 6200 (refund and adjustment items), no named 6000 tax; a cited absence needs a text"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: the OECD CL table shows only negative unallocated amounts under 6200 (refund and adjustment items), no named 6000 tax; a cited absence needs a text",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCHL, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CHL.csv): general government heading 6000 = 2021:-1062352.4 2022:-722554.6 2023:-854527.3 2024:-1269680.4"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

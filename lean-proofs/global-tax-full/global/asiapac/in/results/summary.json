@@ -1,0 +1,234 @@
+{
+ "country": "IN",
+ "name": "India",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:15:20"
+ },
+ "taxes": [
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax",
+   "statute": "Finance (No. 2) Act 2004 s. 98",
+   "dated": "FY 2025-26; session 11 year-in-force audit: re-cited: Finance (No. 2) Bill 2024: STT amendment only on options/futures (from 1 Oct 2024); Finance Bill 2025: no STT clause: delivery rate the same in FY 2024-25 and 2025-26",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "buyer's 0.1 %",
+    "derivatives"
+   ],
+   "family_file": "lean/InGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1100",
+   "tax": "Capital gains tax on listed equity",
+   "statute": "ITA 1961 ss. 111A, 112A",
+   "dated": "FY 2025-26; session 11 year-in-force audit: re-cited: Finance (No. 2) Bill 2024 cl. 29, 31 (20 % / 12.5 % above Rs 1.25 lakh from 23 July 2024); Finance Bill 2025 cl. 22 amends s. 112A only from 1 April 2026",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "surcharge",
+    "other assets"
+   ],
+   "family_file": "lean/InGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Goods and services tax (CGST + SGST), two periods",
+   "statute": "CGST/SGST Acts 2017 s. 9; Notifications 1/2017, 11/2017, 12/2017-CT(Rate) as amended (to 21 Sep 2025); 9/2025, 10/2025, 15/2025, 16/2025-CT(Rate) of 17 Sep 2025 (from 22 Sep 2025)",
+   "grade": "A",
+   "status": "modelled",
+   "kernel_parts": [
+    "DatedVat (kernel 2.1)"
+   ],
+   "unsupported": [
+    "goods rates from 22 Sep 2025 checked against the official e-Gazette text of G.S.R. 641(E) (9/2025-CT(Rate), egazette.gov.in WriteReadData/2025/266209.pdf): Sch. I apparel <= Rs 2,500 (S. Nos. near 1163-1166 of the text), 3004 medicaments S. No. 234, domestic LPG; Sch. III 2202 sweetened/flavoured beverages; Sch. VII 2402/2403 tobacco; services from 22 Sep 2025 read in the e-Gazette: 15/2025-CT(Rate) G.S.R. 663(E) and 16/2025-CT(Rate) G.S.R. 666(E) (egazette.gov.in WriteReadData/2025/266220.pdf); 10/2025-CT(Rate) G.S.R. 660(E) (266210.pdf); period-1 rates taken from the entries these notifications replace",
+    "HSN-level rates within a good",
+    "compensation cess"
+   ],
+   "dated": "2025 (date-split at 2025-09-22)",
+   "family_file": "lean/InGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Central excise on petrol and diesel (BED, SAED, AIDC, Road and Infrastructure Cess)",
+   "statute": "Central Excise Act 1944 s. 3; Finance Act 2002 s. 147, Notification 05/2019-Central Excise as amended by 02/2025-Central Excise (G.S.R. 220(E) of 7 April 2025, in force 8 April 2025); AIDC; Road and Infrastructure Cess",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "ExciseRule (periods)"
+   ],
+   "unsupported": [
+    "BED, AIDC and RIC rates and the SAED before 8 April from the official PPAC table (petrol 19.90 -> 21.90, HSD 15.80 -> 17.80 Rs/l; branded 21.10 -> 23.10, 18.20 -> 20.20), not from their notifications: B",
+    "Maharashtra VAT on fuel (Mumbai: petrol 25 % + Rs 5.12/l additional tax, HSD 21 %; PPAC VAT table, Wayback 2025-04-24, 2025-07-11, 2025-10-11) not computed: MVAT Act schedule and base not read",
+    "state excise on alcohol, central excise / NCCD and compensation cess on tobacco not modelled"
+   ],
+   "dated": "2025, split at 2025-04-08 (e-Gazette ID 262327 read; PPAC tables captured 2025-02-14, 2025-05-13, 2025-11-19)",
+   "family_file": "lean/InGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Income-tax Act 1961 s. 115A, s. 195; Finance Act 2025 (cess)",
+   "dated": "AY 2026-27 (FY 2025-26); session 11 year-in-force audit: re-cited: First Schedule Part II of Finance (No. 2) Bill 2024 (FY 2024-25) and Finance Bill 2025 (FY 2025-26): foreign company interest, royalty, FTS, dividends 20 % in both (texts held)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "s. 115A (1) applies to non-residents (not being a company) and foreign companies alike; surcharge on non-corporate payees above Rs 50 lakh / 1 crore not applied"
+   ],
+   "family_file": "lean/InGlobal/Corporate.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income-tax on domestic companies (s. 115BAA, surcharge, cess)",
+   "statute": "ITA 1961 s. 115BAA; Finance Act 2025",
+   "dated": "AY 2026-27; session 11 year-in-force audit: re-cited: Finance (No. 2) Bill 2024 cl. 2 and Finance Bill 2025 cl. 2: s. 115BAA surcharge 10 %, cess 4 % in both; Part III Paragraph E identical except the turnover year",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "normal-rate companies",
+    "MAT"
+   ],
+   "family_file": "lean/InGlobal/Corporate.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of India as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by India for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C356&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/in.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 27160000 (MFN duty 'Rs. 2000 per 1000 KWh': specific or compound duty, unit/currency not mapped); 61091000 (MFN duty '20.0% or Rs. 45 per piece, whichever is higher': specific or compound duty, unit); 62034210 (MFN duty '20.0% or Rs. 135 per piece, whichever is higher': specific or compound duty, uni); 62034290 (MFN duty '20.0% or Rs. 135 per piece, whichever is higher': specific or compound duty, uni); 87032310 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032310 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032310 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032310 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032310 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032310 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032320 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032320 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032320 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032320 (several MFN rows (MFN statutory (legal/autonomous) duty 73.5%; MFN statutory (legal/autono); 87032320 (several MFN rows (MFN statutory (legal/autonomous) du",
+    "SAFTA (origin AF, BD, BT, MV, NP, PK, LK): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "family_file": "lean/InGlobal/Customs.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on conveyances (Mumbai)",
+   "statute": "Maharashtra Stamp Act Sch. I art. 25",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "women buyers' 1 % concession"
+   ],
+   "family_file": "lean/InGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Property tax (Mumbai, capital value system)",
+   "statute": "Mumbai Municipal Corporation Act 1888 s. 154",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [],
+   "family_file": "lean/InGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer EPS and ESI contributions",
+   "statute": "EPF and MP Act 1952; ESI Act 1948",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "EPF 3.67 % (non-tax)",
+    "Code on Social Security 2020 from 2025-11-21"
+   ],
+   "family_file": "lean/InGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "3000",
+   "tax": "Professional tax (Maharashtra, Rs 2,500 a year, employee-borne)",
+   "statute": "Maharashtra State Tax on Professions Act 1975",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "OECD class 1100 (borne by the employee)"
+   ],
+   "family_file": "lean/InGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "Estate duty and gift tax: abolished",
+   "statute": "Estate Duty (Amendment) Act 1985; Gift-tax Act 1958 (from 1998-10-01)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/InGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Wealth tax: abolished (Finance Act 2015)",
+   "statute": "Finance Act 2015",
+   "dated": "from AY 2016-17",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/InGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 10,
+  "C": 2
+ },
+ "guards": 25,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

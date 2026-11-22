@@ -1,0 +1,166 @@
+{
+ "country": "MZ",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Imposto sobre o Valor Acrescentado",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Código do IVA (Lei n.º 32/2007, republicado pela Lei n.º 13/2016) art. 17 (1) as amended by Lei n.º 22/2022: 16 %",
+   "dated": "Código do IVA as amended by Lei n.º 22/2022 (from 2023) and Código do ICE approved by Lei n.º 19/2022 (rate table 2023-2025), both from the AT legislation library (at.gov.mz /api/documents); Código do IRPC (Lei n.º 34/2007) art. 61 n.º 1 and art. 62 n.º 2 as amended by Lei n.º 4/2012 (n.º 2 restated at 20 %), Lei n.º 19/2013 (n.º 1-2 unchanged) and Lei n.º 20/2022 (sector measures to 31 Dec 2025 only); Lei n.º 12/2025 applies from 1 Jan 2026",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "art. 9 exemptions",
+    "reduced-rate regimes"
+   ],
+   "guards": 5
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Imposto sobre Consumos Específicos",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Código do ICE (Lei n.º 19/2022) art. 27 and the annexed rate table, column 'Taxa 2025 (MT)': beer 475 MT, wine 619 MT, spirits 460 MT per litre of pure alcohol; cigarettes 540 MT per 1 000",
+   "dated": "Código do IVA as amended by Lei n.º 22/2022 (from 2023) and Código do ICE approved by Lei n.º 19/2022 (rate table 2023-2025), both from the AT legislation library (at.gov.mz /api/documents); Código do IRPC (Lei n.º 34/2007) art. 61 n.º 1 and art. 62 n.º 2 as amended by Lei n.º 4/2012 (n.º 2 restated at 20 %), Lei n.º 19/2013 (n.º 1-2 unchanged) and Lei n.º 20/2022 (sector measures to 31 Dec 2025 only); Lei n.º 12/2025 applies from 1 Jan 2026",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "sugar-based soft-drink duty",
+    "local and opaque beers",
+    "fuel"
+   ],
+   "guards": 5
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Imposto sobre o Rendimento das Pessoas Colectivas (IRPC)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Código do IRPC (Lei n.º 34/2007 de 31 de Dezembro) art. 61 n.º 1 (32 %); not amended by Lei n.º 4/2012 or 19/2013 (n.º 1 '...'); Lei n.º 20/2022 adds 10 % for agriculture, aquaculture and urban transport to 31 Dec 2025",
+   "dated": "Código do IVA as amended by Lei n.º 22/2022 (from 2023) and Código do ICE approved by Lei n.º 19/2022 (rate table 2023-2025), both from the AT legislation library (at.gov.mz /api/documents); Código do IRPC (Lei n.º 34/2007) art. 61 n.º 1 and art. 62 n.º 2 as amended by Lei n.º 4/2012 (n.º 2 restated at 20 %), Lei n.º 19/2013 (n.º 1-2 unchanged) and Lei n.º 20/2022 (sector measures to 31 Dec 2025 only); Lei n.º 12/2025 applies from 1 Jan 2026",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax",
+    "SectorCorp (company.sector)"
+   ],
+   "unsupported": [
+    "autonomous taxation art. 61 n.º 4"
+   ],
+   "guards": 14
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenção na fonte de IRPC sobre rendimentos de não residentes",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Código do IRPC art. 62 n.º 2 as restated by Lei n.º 4/2012 (non-residents without a PE: 20 % liberatory) and n.º 3-4 (10 % for telecoms and international transport, rural electrification works, vessel charters, listed securities; Lei 19/2013 n.º 3-4)",
+   "dated": "Código do IVA as amended by Lei n.º 22/2022 (from 2023) and Código do ICE approved by Lei n.º 19/2022 (rate table 2023-2025), both from the AT legislation library (at.gov.mz /api/documents); Código do IRPC (Lei n.º 34/2007) art. 61 n.º 1 and art. 62 n.º 2 as amended by Lei n.º 4/2012 (n.º 2 restated at 20 %), Lei n.º 19/2013 (n.º 1-2 unchanged) and Lei n.º 20/2022 (sector measures to 31 Dec 2025 only); Lei n.º 12/2025 applies from 1 Jan 2026",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "10 % sector rates",
+    "Lei 20/2022 agricultural measures"
+   ],
+   "guards": 14
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Código do Imposto do Selo (Decreto n.º 6/2004) Tabela",
+   "dated": "-",
+   "unsupported": [
+    "the Tabela (acquisition of immovable property, credit, insurance) is not held; the AT Mozambique list of tax decrees as captured on 21 May 2025 (Wayback 20250521152016) offers the Sisa code (Decreto 46/2004), the ISV (Decreto 19/2002) and the RGIT, but not the Selo code"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "AT site Wayback (Legislação Fiscal / Decretos 2025 capture), held CDX lists of at.gov.mz (seventeenth pass)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "INSS employer contribution (4 %)",
+   "statute": "INSS Moçambique, page 'Taxa contributiva TCO' (fetched 2026-11-20); Regulamento de Segurança Social Obrigatória (Decreto 51/2017, republished by Decreto 56/2024) art. 15 leaves the rate to a joint ministerial diploma (not held)",
+   "dated": "-",
+   "unsupported": [
+    "the ministerial diploma fixing the rate is not held",
+    "the worker's 3 %"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Sisa on onerous transfers of urban buildings (2 %, paid by the acquirer)",
+   "statute": "Código da Sisa (Decreto n.º 46/2004, in force 1 November 2004) art. 1 (1), 3 (devida pelas pessoas a quem se transmitem os direitos sobre prédios urbanos), 10 (1) (2 %); held registry/afm_data/fetch/MZ/mz_sisa_d46_2004.pdf.txt. Edition of 2004, later amendments not checked (flag)",
+   "dated": "-",
+   "unsupported": [
+    "the value of Chapter III (higher of the price and the matrix value) read as the purchase price or assessed value",
+    "10 % for acquirers resident in privileged tax territories (art. 10 (2))",
+    "rural land (prédios rústicos) not charged",
+    "amendments after 2004 not checked"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Imposto sobre Veículos (ISV): light cars by fuel, cylinder capacity and age",
+   "statute": "Regulamento do Imposto sobre Veículos approved by Decreto n.º 19/2002 de 23 de Julho (in force 1 Jan 2003), art. 1-2, 4, 7 and Tabela I (AT Moçambique download via Wayback 20170804185026, R4/fetch/p18/mz_isv_dec19_2002_wb20170804.pdf); amounts in old meticais divided by 1 000 for the 2006 redenomination of the metical; later revision by ministerial diploma (art. 7 n.º 5, at most double) not located: the AT legislation list of May 2025 (R4/fetch/p17/mz_at_decretos_wb20250521.html) gives Decreto n.º 19/2002 as the ISV text (B, flagged)",
+   "dated": "-",
+   "unsupported": [
+    "ministerial revisions of the rates after 2002 (art. 7 n.º 5) not located: 2002 amounts used (flag)",
+    "electric cars (by voltage), hybrids and hydrogen cars: not matched (no charge here; grade C)",
+    "heavy goods vehicles (by load capacity), buses (by seats), motor-cycles (Tabela II), aircraft and pleasure boats (Tabelas III-IV) not modelled",
+    "vehicles of exempt owners (art. 5) not distinguished"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "vehicleTaxFamily (kernel Global2.Vehicle)"
+   ],
+   "guards": 7
+  }
+ ],
+ "cases": 8,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

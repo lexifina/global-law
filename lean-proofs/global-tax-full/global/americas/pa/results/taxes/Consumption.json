@@ -1,0 +1,58 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "ITBMS",
+  "statute": "Código Fiscal art. 1057-V Parágrafos 6, 8, 9 (Ley 8 de 2010 arts. 76, 79-81, 84)",
+  "dated": "Ley 8 of 15 March 2010, rates from 1 July 2010",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "Parágrafo 8 exemptions not reprinted by Ley 8 (food, health, education, financial, rent, utilities)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Selectivo al Consumo (tabaco, bebidas gaseosas, combustibles)",
+  "statute": "Ley 45 de 1995; Ley 69 de 2009; Código Fiscal (combustibles)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "kernel_parts": [],
+  "tried": "pass 12: alcohol rows modelled from Ley 15 de 2013; tobacco and fuel texts not held",
+  "unsupported": [
+   "would unlock: Ley 69 de 2009 and the fuel consumption tax article as in force 2025"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Selectivo al Consumo (bebidas alcohólicas)",
+  "statute": "Ley 45 de 1995 arts. 7-A, 11, 20, 25 (Ley 15 de 2013 arts. 1, 2, 5, 6)",
+  "dated": "Ley 15 de 2013 (Legispan via lexifina/panama-law); later amendments not checked",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "ExciseRule (strength bands)"
+  ],
+  "unsupported": [
+   "wholesale price above B/. 18.00 a litre",
+   "strength needed"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 52",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 52: \"Nadie está obligado a pagar contribución ni impuesto que no estuvieren legalmente establecidos\" (`pa/law/const_art-052.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Código Fiscal art. 1057-V Parágrafos 6, 8, 9 (Ley 8 de 2010 arts. 76, 79-81, 84); Ley 45 de 1995 arts. 7-A, 11, 20, 25 (Ley 15 de 2013 arts. 1, 2, 5, 6); Código Fiscal art. 699 (Ley 8/2010): 25 %; Código Fiscal art. 733 (dividends 10 %); 1.x model (see its summary.json); Ley 51 de 2005 art. 101 as replaced by Ley 462 de 2025 art. 84)."
+ }
+]

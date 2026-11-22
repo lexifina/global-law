@@ -1,0 +1,53 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Impuesto predial unificado (Bogotá, residential urban)",
+  "statute": "Acuerdo Distrital 648 de 2016 art. 1 (tarifas por rangos de avalúo catastral; rangos ajustados cada año por el IPVN) with the residential urban tariffs of Acuerdo 780 de 2020 art. 3; Resolución SDH-000301 de 2024 art. 1: 2025 ranges, 5.5 per mil up to $176,611,000 ... 12.3 per mil above $2,276,985,001, the range's rate on the whole avalúo",
+  "dated": "Régimen Legal de Bogotá (Secretaría Jurídica Distrital): Acuerdo 648 de 2016 consolidated (Wayback 20250515, archived co/law/sisjur_acuerdo648_2016_wb20250515.*); Acuerdo 780 de 2020 (bogota.gov.co PDF, co/law/acuerdo780_2020_bogota.*); Resolución SDH-000301 de 26 Dec 2024, in force 1 Jan 2025 (sisjur Norma1.jsp?i=172560, co/law/sisjur_res_sdh301_2024.*); pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P5",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "estratos 1-3 preferential tariffs not applied (stratum not an input)",
+   "non-residential tariffs",
+   "all real estate taken as residential urban in Bogotá",
+   "rounding to the thousand"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Impuesto de registro and stamp duties on real-estate transfers",
+  "statute": "Ley 223 de 1995 (registro); Ley 2277 de 2022 (timbre on real estate)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P5",
+  "kernel_parts": [],
+  "tried": "not read in pass 9 (Bogotá predial done first)",
+  "unsupported": [
+   "would unlock: the departmental registro ordinance for Cundinamarca/Bogotá and Ley 223 arts. 226-236"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Impuesto sobre vehículos automotores (Bogotá D.C.; Ley 488 de 1998)",
+  "statute": "Ley 488 de 1998 arts. 141, 143, 144, 145 (2025 values: Decreto 1493 de 2024 art. 1: to $55.679.000 1,5 %, to $125.274.000 2,5 %, above 3,5 %; motorcycles over 125 cc 1,5 %), par. 2 (first entry into circulation: months left), par. 6 (gas: at most 1 %)",
+  "dated": "DIAN normograma Ley 488/1998, Wayback 2025-07-09 (values in force from 1 Jan 2025), co/law/ley_0488_1998_normograma_wb20250709.*; pass 14, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily",
+   "firstRegMonth"
+  ],
+  "unsupported": [
+   "electric and hybrid vehicles not computed (Bogotá Acuerdo 780/2020 art. 25 discounts)",
+   "every vehicle taken as private and registered in Bogotá",
+   "value taken as the Ministry's commercial value",
+   "pronto-pago discount not applied"
+  ]
+ }
+]

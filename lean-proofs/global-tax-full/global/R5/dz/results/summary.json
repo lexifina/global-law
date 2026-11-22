@@ -1,0 +1,404 @@
+{
+ "country": "DZ",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail): IRG on gains from real property and company shares",
+   "statute": "CIDTA art. 77, 77 bis, 78, 79 (5 % a year from the 3rd year, at most 50 %), 79 bis, 80 bis 1, 104-5 (property 15 % final, 50 % less for the only home and main residence; shares 15 % final, 5 % if reinvested); interest, dividends and rents: the 1.x model",
+   "dated": "gap-closing pass: DGI CIDTA 2025 Arabic edition pp. 23-24, 32 (law/dgi_cidta_2025_ar.pdf; OCR law/dz_cidta25_ar_gains_ocr.txt, p. 32 checked on the image): art. 104 as changed by LF 2025 art. 8 (the 50 % reduction now also for individual buildings), art. 80 bis 1 by LF 2025 art. 5",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "charge per disposal (immovables, unlisted shares)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "listed shares not charged: the listed-securities exemption was not read",
+    "acquisition/upkeep costs: the record's costs taken within 30 % of the cost",
+    "'from the third year' read as 5 % per full year held beyond two",
+    "the 50 % reduction needs mainHome and no other home or real estate in the record (only property)",
+    "the 5 % reinvestment rate and the art. 80 bis 1 exemptions not applied",
+    "non-residents' 20 % withholding on share gains not modelled"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "الضريبة على أرباح الشركات (IBS)",
+   "statute": "CIDTA art. 150-1: 19 % production of goods, 23 % construction, public works, hydraulics, tourism and spas, 26 % other",
+   "dated": "DGI CIDTA 2025 Arabic edition (cat. 776 id 2523, Wayback 2025-02-22, p. 46 page image; footnote: last amended LF 2022 art. 46) and 2023 French edition (Wayback 2023-02-02)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge .cit at 19/23/26 % by company flag (production / construction, tourism)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "losses (art. 147) not offset",
+    "mixed activities split by turnover share not computed",
+    "withholding: management contracts 20 % not distinguished (pass 3i)"
+   ],
+   "withholding": {
+    "grade": "A",
+    "rules": "to companies: dividend 15 %, interest 10 %, royalty 30 %, services 30 % (CIDTA art. 150-2, 155, 156); to individuals: dividend 15 %, interest 10 %, royalty and services 24 % (art. 33, 104)",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Cotisation de sécurité sociale (employeur)",
+   "statute": "Décret exécutif 06-339 art. 1 (décret 94-187 art. 1-2): 25 % employer + 0,5 % FOS",
+   "dated": "JORADP n° 60, 27 Sep 2006 (in force from 2006-10-01); later amendments not checked; pass 3q year-in-force audit: downgraded: JORADP 2006 decree; later amendments not checked",
+   "grade": "C",
+   "kernel_parts": [
+    "employerOn (25.5 %, no ceiling)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "pass 3q year-in-force audit: downgraded to C: JORADP 2006 decree; later amendments not checked",
+    "later amendments of décret 94-187 not checked",
+    "rate reductions for employment support not applied"
+   ],
+   "status": "unsupported"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "الرسم العقاري على الملكيات المبنية (taxe foncière sur les propriétés bâties)",
+   "statute": "CIDTA art. 248, 254, 256, 257 (520 DA/m² dwellings, 1 038 DA/m² commercial), 261-b (3 %; 10 % unoccupied secondary homes by LF 2025 art. 20)",
+   "dated": "DGI CIDTA 2025 Arabic edition pp. 72-73 (page images), 2023 French edition (law/dgi_cidta_2025_ar.pdf, dgi_cidta_2023_fr.pdf)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge per asset on areaM2 (raw JSON), level local"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "zone coefficient (joint order) taken as 1; age abatement, art. 252 exemptions, secondary-home 10 %, land dependencies and unbuilt land not applied"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "الضريبة على الثروة (impôt sur la fortune)",
+   "statute": "CIDTA art. 274-276, 278 bis (main home up to 450 000 000 DA, rented property and estates in liquidation outside), 280-281 (professional property and shares outside), 281 bis (market value by reference prices), 281 bis 4-6 (debts), 281 bis 8 (marginal 0 / 0,15 / 0,25 / 0,35 / 0,5 / 1 % at 100, 150, 250, 350, 450 m DA)",
+   "dated": "gap-closing pass: DGI CIDTA 2025 Arabic edition pp. 80-82 (law/dgi_cidta_2025_ar.pdf, already the DZ 4100 source; OCR law/dz_cidta25_ar_p80_82_ocr.txt): scale last changed by LFC 2020, art. 281 bis 10 changed by LF 2025 (2025 declaration by 30/6/2025); 2023 French edition for the wording",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "WealthTax per person (immovables)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "movables of art. 276 (large cars, yachts, aircraft, racehorses, art) not identifiable in the record: not counted",
+    "deposits and securities not counted (not elements of art. 276; shares are professional property, art. 280)",
+    "first home of each person taken as the main home; an asset with annualValue taken as rented",
+    "band limits at x 000 000 (the text starts the bands at x 000 001)"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "رسوم الهبة والتركة (droits de donation et de succession)",
+   "statute": "CENR art. 231 (gifts 5 %; first-degree ascendants/descendants, spouses, kafala exempt; shares at art. 218), art. 236 (inheritance 5 % of each heir's net share, 3 % ascendants, descendants and spouse; the deceased's home exempt for them), art. 37 (50 000 DA allowance), art. 238 (10 % less per dependent child)",
+   "dated": "gap-closing pass: DGI CENR 2025 Arabic edition pp. 10, 38 (law/dgi_cenr_2025_ar.pdf, the DZ 4400 source; OCR law/dz_cenr25_ar_ocr.txt, p. 38 checked on the image): art. 231 as changed by LF 2024 art. 30 and LF 2025 art. 37; art. 236 last changed LF 2004; art. 37 last changed LF 2000",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "charge per gift and inheritance (TransferX assetKind for shares)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "gifts of shares: art. 218 rate not read, not charged (grade C)",
+    "art. 37 allowance (per estate) applied to each inheritance record",
+    "art. 238 dependent-child reduction and art. 236 bis CNEP savings exemption not applied",
+    "the deceased's home: exempt only through the record's homeValue",
+    "kafala relation not in the record"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "droit de mutation à titre onéreux d'immeubles (5 %)",
+   "statute": "Code de l'enregistrement art. 252 (5 %), 255, 258",
+   "dated": "DGI CENR 2023 French edition (Wayback 2023-02-02), 2025 Arabic edition (Wayback 2025-02-24); law/dgi_cenr_2023_fr.pdf, dgi_cenr_2025_ar.pdf",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty flat 5 % on purchases of home/realEstate/land"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "art. 258 exemptions and the taxe de publicité foncière not applied"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "الرسم على القيمة المضافة (TVA)",
+   "statute": "CTCA art. 21 (19 %), art. 23 (9 %: listed goods, electricity to 250 kWh and natural gas to 2,500 thermies a quarter, water, newspapers, books, medical professions, education, rail, heavy fuel oil/LPG), art. 9 (exempt: bread, flour, semolina, milk, medicines, personal insurance)",
+   "dated": "DGI Code des TCA, 2025 Arabic edition (mfdgi dropfiles cat. 776 id 2521, Wayback 2025-02-22; law/dgi_ctca_2025_ar.pdf); footnotes: art. 21 last LF 2017, art. 23 last LF 2024 art. 35, art. 9 last LF 2024 art. 34; pp. 7-9, 13-16 read as page images",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat 19 % / 9 % / exempt classes",
+    "electricity split at 1,000 kWh a year (9 % / 19 %) when a quantity is given"
+   ],
+   "guards": 5,
+   "unsupported": [
+    "food all at 9 % (bread, flour, milk exempt; other foods 19 %)",
+    "natural gas above 2,500 thermies a quarter taken at 9 %",
+    "private residential rent taken as outside VAT",
+    "transport at 19 % (rail 9 %)"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Droits de consommation / TPP",
+   "statute": "Code des impôts indirects; CTCA",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "codes not reached"
+   ]
+  },
+  {
+   "package": "P8",
+   "oecd": "5200",
+   "tax": "قسيمة السيارات (vignette automobile)",
+   "statute": "Code du timbre art. 299, 300 (re-enacted LF 1997 art. 46; amended LF 2004 art. 16, LF 2016 art. 9, LF 2025 art. 55), 302 (LPG/natural gas exempt), 303-304 (annual; full tariff on registration in the year)",
+   "dated": "DGI Code du timbre 2025 Arabic edition (mfdgi.gov.dz files/776/2025/2522, Wayback 2025-02-22), pp. 42-43 by Arabic OCR (text layer digits mis-mapped)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax x3 (fiscalHp bands, age table 0-2 / 3-6 / 7-10 / 11+, no pro rata)",
+    "VehicleTax LPG/CNG exemption (firstOnly)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "utility vehicles (by laden weight) and buses (by seats) of art. 300 first table not modelled",
+    "age read as 2025 - firstRegYear",
+    "exempt official/diplomatic/ambulance/fire/disabled vehicles not distinguished"
+   ],
+   "pass": "3n"
+  }
+ ],
+ "notLevied": [],
+ "cases": [
+  {
+   "id": "dz-h1",
+   "total": 53727,
+   "byOecd": {
+    "1100": 0,
+    "2100": 10800,
+    "4400": 40000,
+    "5111": 2927
+   },
+   "borne": {
+    "consumer": 2927,
+    "employer": 0,
+    "entity": 50800,
+    "withheld": 0
+   },
+   "net": 279200,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4200",
+    "4300",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "TVA: food taken at 9 % (art. 23 list); bread, flour, semolina and milk are exempt (art. 9), foods outside the list 19 %",
+    "TVA on rent: a private dwelling let taken as outside VAT; social-housing rents are 9 % (art. 23-8)",
+    "2200 CNAS employer contribution grade C (year-in-force audit, pass 3q): Décret exécutif 06-339 (JORADP 2006) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "employer CNAS: base rules (ordonnance 95-01) and later amendments of décret 94-187 not read; employment-support rate reductions not applied",
+    "taxe foncière: needs asset areaM2; zone coefficient taken as 1, age abatement (2 %/year, max 25 %), art. 252 exemptions, the 10 % rate on unoccupied secondary homes, land dependencies and unbuilt land not applied",
+    "registration duty: art. 258 exemptions and the taxe de publicité foncière not applied"
+   ]
+  },
+  {
+   "id": "dz-c1",
+   "total": 620000,
+   "byOecd": {
+    "1200": 240000,
+    "5111": 380000
+   },
+   "borne": {
+    "consumer": 380000,
+    "employer": 0,
+    "entity": 208000,
+    "withheld": 32000
+   },
+   "net": 592000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4200",
+    "4300",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "losses brought forward: carry-forward rule not read; not offset",
+    "IBS: one rate from the company flags (production / construction / tourism); mixed activities are split by turnover share (art. 150-1)"
+   ]
+  },
+  {
+   "id": "dz-c2",
+   "total": 190000,
+   "byOecd": {
+    "1200": 190000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 190000,
+    "withheld": 0
+   },
+   "net": 810000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4200",
+    "4300",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "IBS: one rate from the company flags (production / construction / tourism); mixed activities are split by turnover share (art. 150-1)"
+   ]
+  },
+  {
+   "id": "dz-p1",
+   "total": 501560,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "4100": 1560,
+    "4400": 500000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 501560,
+    "withheld": 0
+   },
+   "net": -501560,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4200",
+    "4300",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "taxe foncière: needs asset areaM2; zone coefficient taken as 1, age abatement (2 %/year, max 25 %), art. 252 exemptions, the 10 % rate on unoccupied secondary homes, land dependencies and unbuilt land not applied",
+    "registration duty: art. 258 exemptions and the taxe de publicité foncière not applied"
+   ]
+  },
+  {
+   "id": "dz-w1",
+   "total": 184000,
+   "byOecd": {
+    "1100": 73000,
+    "1200": 111000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 26000,
+    "withheld": 158000
+   },
+   "net": 74000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4200",
+    "4300",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "withholding: management contracts (20 %, art. 150-2) not distinguished from other services (30 %)",
+    "IBS: one rate from the company flags (production / construction / tourism); mixed activities are split by turnover share (art. 150-1)"
+   ]
+  },
+  {
+   "id": "dz-v1",
+   "total": 246600,
+   "byOecd": {
+    "1100": 150600,
+    "2100": 81000,
+    "5200": 15000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 246600,
+    "withheld": 0
+   },
+   "net": 653400,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4200",
+    "4300",
+    "4500",
+    "5112",
+    "5121",
+    "5120",
+    "6000"
+   ],
+   "unsupported": [
+    "2200 CNAS employer contribution grade C (year-in-force audit, pass 3q): Décret exécutif 06-339 (JORADP 2006) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "employer CNAS: base rules (ordonnance 95-01) and later amendments of décret 94-187 not read; employment-support rate reductions not applied",
+    "vignette: age taken as 2025 − firstRegYear; exempt official, diplomatic, ambulance, fire and disabled persons' vehicles not distinguished"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 18,
+ "theorems": 1
+}

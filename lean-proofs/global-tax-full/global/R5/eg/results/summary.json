@@ -1,0 +1,423 @@
+{
+ "country": "EG",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail)",
+   "statute": "PIT law of the country",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "the 1.x model does not tax capital gains and the gain provisions were not read this round; interest/dividend/rent treatment is the 1.x model s"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "الضريبة على أرباح الأشخاص الاعتبارية",
+   "statute": "Income Tax Law 91/2005 art. 49 para. 1 as replaced by Decree-Law 96/2015 (22.5 %, base rounded down to EGP 10)",
+   "dated": "OG 34 (cont.) of 20/8/2015 (ETA scan, Wayback 2024-05-22; page image read); Law 30/2023 and Law 7/2024 checked: art. 49 not replaced",
+   "grade": "A",
+   "kernel_parts": [
+    "charge .cit 22.5 % on profit + add-backs - exempt income, stepped down to EGP 10"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "losses brought forward (art. 29) not read: not offset",
+    "art. 49 special rates 40 % / 40.55 % (flag art49Special) not computed",
+    "dividend tax art. 56 bis not computed",
+    "Law 6/2025 simplified small-enterprise regime not modelled",
+    "withholding: 5 % on EGX-listed shares, industrial know-how and long-term-loan exemptions not distinguished (pass 3i)"
+   ],
+   "withholding": {
+    "grade": "A",
+    "rules": "interest, royalty, services 20 % (ITL 91/2005 art. 56); dividend 10 % (art. 56 bis, Law 30/2023)",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Social insurance employer contributions (18.75 %)",
+   "statute": "Law 148/2019 art. 19(1)(a), 36(2), 46(1)-(2), 70(1)(a)(2), 86(1); 2025 ceiling EGP 14,500/month (NOSI notice)",
+   "dated": "NOSI copy of the law (1.x law/w5); limits per NOSI notice 2025-11-30",
+   "grade": "B",
+   "kernel_parts": [
+    "R5Common.employerOn"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "contribution-wage floor not applied",
+    "injury cash rate at the 0.5 % minimum",
+    "government employers not distinguished"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Per-worker fees on employers (work permits of foreign workers)",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "3000 taxes on payroll and workforce: work-permit fees for non-Egyptian workers (Labour Law 12/2003 and the ministerial fee decree under it; not read); no payroll tax in the laws read (Income Tax Law 91/2005, Social Insurance Law 148/2019, VAT Law 67/2016). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ],
+   "pass": "3l"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "الضريبة على العقارات المبنية (built real estate tax)",
+   "statute": "Law 196/2008 art. 12 (10 % of the annual rental value after excluding 30 % for dwellings, 32 % for other premises), art. 18(1)(د)-(هـ) as replaced by Decree-Law 117/2014 (main dwelling: net annual rental value up to EGP 24 000 exempt, excess taxed; other units EGP 1 200)",
+   "dated": "Law 196/2008 ETA PDF (Wayback 2025-09-16, OCR); Law 117/2014 text as published by the Real Estate Tax Authority (rta.gov.eg 2022-03); Law 3/2026 (exemption EGP 100 000) not applicable to 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "charge per building: 10 % x (70 % of annualValue - 24 000 for the main dwelling)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "buildings without annualValue not computed",
+    "non-residential premises (32 %, EGP 1 200) not distinguished from realEstate dwellings"
+   ],
+   "pass": "3m"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "رسوم التوثيق والشهر العقاري وضريبة الدمغة (registration fees, stamp tax on transfers)",
+   "statute": "Real estate registration fees Law 70/1964 (as amended) and Stamp Tax Law 111/1980: not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "registration (notarisation) fees and the stamp tax on deeds: texts not reached; the 2,5 % tax on disposals of built property (ITL 91/2005 art. 42) is an income tax heading (P2)",
+    "pass 3n: Law 83/2006 (OG 22 bis of 6/6/2006, in force 6/8/2006; manshurat.org copy, Arabic OCR `law/eg_law83_2006_ocr.txt`) read: art. 1 caps publicity fees at EGP 2 000 per transaction, subject or real-estate unit and leaves the amounts to a Minister of Justice decision (decision 5424/2006, not reached: manshurat search answers 403); amounts not computed"
+   ],
+   "pass": "3m"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "الضريبة على القيمة المضافة",
+   "statute": "Law 67/2016 art. 2, 3 (14 % from FY 2017/18), 12 (table tax in addition unless the Table says otherwise; Table section أولاً = table tax only), annexed exempt list as replaced by Law 3/2022 art. 3 and Law 157/2025 art. 4, items 18 and 48 cancelled by Law 157/2025 art. 6",
+   "dated": "Official Gazette scans from eta.gov.eg (Wayback 2024-10-15, 2025-12-12): Law 67/2016 OG 35 bis (ج) 7/9/2016; Law 13/2020; Law 3/2022 OG 3 bis (هـ) 27/1/2022; Law 177/2023 OG 44 bis (أ) 4/11/2023; Law 157/2025 OG 29 (cont.) 17/7/2025, in force 18/7/2025. Arabic OCR (law/eg_vat-law_no.*.ocr.txt), digits checked on page images",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat (14 %, exempt classes; petrol/diesel/heating oil/tobacco outside VAT: table tax only)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "food all taken exempt (exempt-list items 1-16)",
+    "restaurants at 14 % (non-tourist eateries exempt under item 16)",
+    "table tax (5121) not modelled",
+    "registration threshold not applied"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "ضريبة الجدول (table tax: cigarettes, soft drinks)",
+   "statute": "VAT Law 67/2016 art. 12 and Table: أولاً 1/ب/3 cigarettes as replaced by Law 177/2023 art. 1 (50 % of the consumer price + 450/700/750 pt a pack; limits EGP 31/45 +12 % a year from 4/11/2023) and Law 157/2025 art. 1 (from 18/7/2025: 50 % + 500/750/800 pt; limits EGP 48/69 +12 % a year from 5/11/2025); ثانياً item 1 soft drinks 8 % of the final consumer price",
+   "dated": "Law 177/2023 OG 44 bis (أ) of 4/11/2023; Law 157/2025 OG 29 (cont.) of 17/7/2025; Law 67/2016 OG 35 bis (ج) of 7/9/2016 p. 44; page images checked (law/eta_vat-law_no.177-2023.pdf pp. 2-3, eta_vat-law_no.157.of_.2025.pdf pp. 1-2, eta_vat-law_no.67-2016.pdf p. 43)",
+   "grade": "A",
+   "kernel_parts": [
+    "custom per-line charge for cigarettes (50 % + band amount per pack, three dated periods, undated lines split 198/110/57 days)",
+    "ExciseRule softDrinks 8 % retail (sub softDrinks)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "petroleum products, other tobacco, alcohol, cosmetics, appliances, cars and mobile services not modelled",
+    "declared/ministerial minimum base not applied",
+    "5/11/2025 band-limit step read as the next 12 % step"
+   ]
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Constitution of the Arab Republic of Egypt (2014, as amended 2019) art. 38: public taxes cannot be established, modified or cancelled except by law (Constitute Project English text, law/cp_Egypt_2019.txt); no law levies it; tax laws read: Income Tax Law 91/2005, VAT Law 67/2016, Social Insurance Law 148/2019. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Constitution of the Arab Republic of Egypt (2014, as amended 2019) art. 38: public taxes cannot be established, modified or cancelled except by law (Constitute Project English text, law/cp_Egypt_2019.txt); no law levies it; tax laws read: Income Tax Law 91/2005, VAT Law 67/2016, Social Insurance Law 148/2019. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "6000",
+   "why": "6000: no zakat or other tax outside the taxes listed: Constitution of the Arab Republic of Egypt (2014, as amended 2019) art. 38: public taxes cannot be established, modified or cancelled except by law (Constitute Project English text, law/cp_Egypt_2019.txt); no law levies it; tax laws read: Income Tax Law 91/2005, VAT Law 67/2016, Social Insurance Law 148/2019. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "eg-c1",
+   "total": 484000,
+   "byOecd": {
+    "1200": 204000,
+    "5111": 280000
+   },
+   "borne": {
+    "consumer": 280000,
+    "employer": 0,
+    "entity": 180000,
+    "withheld": 24000
+   },
+   "net": 620000,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 16) not applied",
+    "losses brought forward: carry-forward rule not read; not offset",
+    "withholding: 5 % for EGX-listed shares (art. 56 bis), industrial know-how royalties and long-term loans exempt (art. 56) not distinguished",
+    "3000 taxes on payroll and workforce: work-permit fees for non-Egyptian workers (Labour Law 12/2003 and the ministerial fee decree under it; not read); no payroll tax in the laws read (Income Tax Law 91/2005, Social Insurance Law 148/2019, VAT Law 67/2016). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "eg-c2",
+   "total": 225000,
+   "byOecd": {
+    "1200": 225000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 225000,
+    "withheld": 0
+   },
+   "net": 775009,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 16) not applied",
+    "3000 taxes on payroll and workforce: work-permit fees for non-Egyptian workers (Labour Law 12/2003 and the ministerial fee decree under it; not read); no payroll tax in the laws read (Income Tax Law 91/2005, Social Insurance Law 148/2019, VAT Law 67/2016). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "eg-h1",
+   "total": 44058,
+   "byOecd": {
+    "1100": 7350,
+    "2100": 12000,
+    "2200": 22500,
+    "5111": 736,
+    "5121": 1472
+   },
+   "borne": {
+    "consumer": 2208,
+    "employer": 22500,
+    "entity": 19350,
+    "withheld": 0
+   },
+   "net": 310650,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT: food taken as exempt (exempt-list items 1-16); other processed foods are 14 %, edible oils and pastry are table-tax-only",
+    "cigarette table tax: the declared or ministerial minimum base and the band-limit step on 5/11/2025 (read as the next yearly 12 % step) taken as stated",
+    "table tax (Table section ثانياً: alcohol, mobile telecoms) not modelled; VAT taken on the amount paid",
+    "employer social insurance: contribution-wage floor not applied; injury cash rate at the 0.5 % minimum; government employers (items 1-2) not distinguished",
+    "4100 built real estate tax: a building without `annualValue` (the committees' annual rental value) is not computed (grade C)"
+   ]
+  },
+  {
+   "id": "eg-h2",
+   "total": 80360,
+   "byOecd": {
+    "1100": 30335,
+    "2100": 17400,
+    "2200": 32625
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 32625,
+    "entity": 47735,
+    "withheld": 0
+   },
+   "net": 192265,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "employer social insurance: contribution-wage floor not applied; injury cash rate at the 0.5 % minimum; government employers (items 1-2) not distinguished"
+   ]
+  },
+  {
+   "id": "eg-h3",
+   "total": 1540,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 1540
+   },
+   "borne": {
+    "consumer": 1540,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT: food taken as exempt (exempt-list items 1-16); other processed foods are 14 %, edible oils and pastry are table-tax-only",
+    "table tax (5121) on petroleum products and tobacco other than cigarettes not modelled; those goods carry no VAT (Table section أولاً)",
+    "table tax (Table section ثانياً: alcohol, mobile telecoms) not modelled; VAT taken on the amount paid"
+   ]
+  },
+  {
+   "id": "eg-x1",
+   "total": 847,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 122,
+    "5121": 725
+   },
+   "borne": {
+    "consumer": 847,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "cigarette table tax: the declared or ministerial minimum base and the band-limit step on 5/11/2025 (read as the next yearly 12 % step) taken as stated",
+    "soft-drinks table tax (8 %) only on lines with sub softDrinks"
+   ]
+  },
+  {
+   "id": "eg-w1",
+   "total": 162500,
+   "byOecd": {
+    "1100": 70000,
+    "1200": 92500
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 22500,
+    "withheld": 140000
+   },
+   "net": 77500,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 16) not applied",
+    "withholding: 5 % for EGX-listed shares (art. 56 bis), industrial know-how royalties and long-term loans exempt (art. 56) not distinguished",
+    "3000 taxes on payroll and workforce: work-permit fees for non-Egyptian workers (Labour Law 12/2003 and the ministerial fee decree under it; not read); no payroll tax in the laws read (Income Tax Law 91/2005, Social Insurance Law 148/2019, VAT Law 67/2016). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "eg-p1",
+   "total": 35696,
+   "byOecd": {
+    "1100": 3750,
+    "2100": 9996,
+    "2200": 18750,
+    "4100": 3200
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 18750,
+    "entity": 16946,
+    "withheld": 0
+   },
+   "net": 83054,
+   "notModelled": [
+    "1300",
+    "2300",
+    "3000",
+    "4400",
+    "4500",
+    "5112",
+    "5120",
+    "5200"
+   ],
+   "unsupported": [
+    "employer social insurance: contribution-wage floor not applied; injury cash rate at the 0.5 % minimum; government employers (items 1-2) not distinguished",
+    "4100 built real estate tax: `realEstate` taken as a dwelling (30 % exclusion); premises for other uses (32 % exclusion, EGP 1 200 exemption per unit, art. 18(1)(هـ)) not distinguished"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 18,
+ "theorems": 1
+}

@@ -1,0 +1,432 @@
+{
+ "country": "AR",
+ "name": "Argentina",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 19:30:12"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "short-held listed shares",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1100",
+   "tax": "Impuesto cedular: inmuebles (desde 2018) y acciones que no cotizan (15 %)",
+   "statute": "LIG (t.o. 2019) arts. 98 c), 99",
+   "dated": "texto actualizado (argentina.gob.ar) held locally; rates unchanged in 2025",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "IPIM indexation of cost",
+    "pre-2018 property under Ley 23.905"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "Ley de IVA t.o. 1997 arts. 7, 28",
+   "dated": "Infoleg texto actualizado, latest amendment Ley 27.743 (2024)",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "medicines, transport, insurance treatment not read item by item"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Consumption.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuestos internos",
+   "statute": "Ley 24.674 arts. 4, 15, 16, 18, 23, 25, 26",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "unsupported": [
+    "base: manufacturer's net sale read from the consumer price net of IVA (upper bound, except cigarettes)",
+    "cigar minimum tax",
+    "reduced rates for SME craft beer, juice drinks, waters; caffeine drinks 10 %"
+   ],
+   "dated": "InfoLEG texto actualizado (id 38621) fetched 2026-11-21; art. 15 as substituted by Ley 27.742 (from 9 Jul 2024); pass 10, 2026-11-21",
+   "kernel_parts": [
+    "ExciseRule",
+    "exciseRuleFamily"
+   ],
+   "family_file": "lean/ArGlobal/Consumption.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto a los combustibles líquidos y al dióxido de carbono",
+   "statute": "Ley 23.966 Título III",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "amounts updated by decree in 2025; would unlock: Ley 23.966 text and the 2025 decrees"
+   ],
+   "family_file": "lean/ArGlobal/Consumption.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "5112",
+   "tax": "Impuesto sobre los Ingresos Brutos (Ciudad Autónoma de Buenos Aires)",
+   "statute": "Ley 6806 (Ley Tarifaria 2025) Anexo Título I arts. 1-11",
+   "dated": "Ley 6806 promulgated 23 Dec 2024 (Boletín Oficial CABA)",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "activity by good",
+    "other provinces",
+    "consumer incidence not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Consumption.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto a las ganancias (sociedades), escala art. 73",
+   "statute": "LIG art. 73 (Ley 27.630); ARCA Escala 2025",
+   "dated": "ARCA table for ejercicios iniciados desde el 1 Jan 2025 (fetched 2026-11-21)",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "art. 97 7 % on dividends not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Corporate.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "LIG T.O. 2019 arts. 97, 102-104",
+   "dated": "InfoLEG LIG actualizada (ar/law/lig_actualizado.txt); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "LIG art. 104 reduced presumptions not modelled: interest 43 % (financial-entity borrower or bank lender), royalties 80 % and technical assistance 60 % (contracts registered under Ley 22.426)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Corporate.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "Ley 24.241 art. 2 b); Ley 24.977 (monotributo)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed: deducción especial art. 30 (c) 1 and autonomous contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed: deducción especial art. 30 (c) 1 and autonomous contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 2300 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ArGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 3000 = ?",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 3000 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ArGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución de mejoras (provincial/municipal ordinances)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución de mejoras (provincial/municipal ordinances); OECD AR 4500: 0.008 in 2024, arrears of the one-off Aporte Solidario y Extraordinario (Ley 27.605, 2020-2021). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución de mejoras (provincial/municipal ordinances); OECD AR 4500: 0.008 in 2024, arrears of the one-off Aporte Solidario y Extraordinario (Ley 27.605, 2020-2021). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 4500 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ArGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "MERCOSUR Arancel Externo Común (NCM) with national exception lists",
+   "customs_note": "customs import duties (5123): MERCOSUR Arancel Externo Común (NCM) with national exception lists; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/ArGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "re-filed in part; kept at C: the bank debits and credits tax named in the earlier triage is a 4400 tax (Guide §53: 'taxes on cheques and other forms of payment'; the OECD AR table books 'Bank accounts' credits and debits' under 4400): re-filed as its own 4400 C row. What remains under 6000 is real: the Régimen Simplificado (monotributo impositivo, Ley 24.977 Anexo; OECD 6100 'Simplified system for small taxpayers'), 'Other provincial level' and tax-debt payments: kept at C (monotributo category amounts, revised each semester in 2025, and the taxpayer's category not inputs)"
+   ],
+   "triage": "(b) re-filed / covered",
+   "triage_note": "re-filed in part; kept at C: the bank debits and credits tax named in the earlier triage is a 4400 tax (Guide §53: 'taxes on cheques and other forms of payment'; the OECD AR table books 'Bank accounts' credits and debits' under 4400): re-filed as its own 4400 C row. What remains under 6000 is real: the Régimen Simplificado (monotributo impositivo, Ley 24.977 Anexo; OECD 6100 'Simplified system for small taxpayers'), 'Other provincial level' and tax-debt payments: kept at C (monotributo category amounts, revised each semester in 2025, and the taxpayer's category not inputs)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 6000 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ArGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Impuesto sobre los créditos y débitos en cuentas bancarias (Ley 25.413)",
+   "statute": "Ley 25.413 art. 1 (0.6 % on credits and on debits), not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)"
+   ],
+   "triage": "(b) re-filed / covered",
+   "triage_note": "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 4400 = ?"
+   ],
+   "refiled_from": "6000",
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/ArGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Impuesto sobre los Bienes Personales",
+   "statute": "Ley 23.966 Título VI as amended by Ley 27.743 (via ARCA tables)",
+   "dated": "ARCA pages 'Alícuotas' and '¿Qué es?' (período fiscal 2025), fetched 2026-11-21",
+   "grade": "B",
+   "package": "P6",
+   "kernel_parts": [
+    "charge",
+    "Schedule"
+   ],
+   "unsupported": [
+    "exempt kinds approximated",
+    "responsable sustituto on shares",
+    "cumplidor scale"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Property.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift taxes",
+   "statute": "none national; Provincia de Buenos Aires ITGB (Ley 14.044)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read",
+   "unsupported": [
+    "would unlock: the provincial ITGB law and 2025 tariff, or a text citing the national absence"
+   ],
+   "family_file": "lean/ArGlobal/Property.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contribuciones patronales (SIPA, INSSJP, FNE, asignaciones familiares)",
+   "statute": "Ley 27.541 arts. 19, 22",
+   "dated": "InfoLEG texto actualizado fetched 2026-11-21",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "20.40 % rate for large services/commerce employers"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Social.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "Obra social (contribución del empleador)",
+   "statute": "Ley 23.660 art. 16 a)",
+   "dated": "InfoLEG texto actualizado fetched 2026-11-21",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "ART premium (not a tax)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/ArGlobal/Social.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "4100",
+   "tax": "Impuesto Inmobiliario (Ciudad Autónoma de Buenos Aires)",
+   "statute": "Ley Tarifaria 2025 de la Ciudad Autónoma de Buenos Aires (Ley 6.806, Anexo) art. 43: II = CF + (VFH - lm) x al x USC, segments A-J 0.60 % to 1.20 % of the Valuación Fiscal Homogénea (5 % of Ley 23.514 included); art. 45: USC = 1",
+   "dated": "Ley 6.806 (Ley Tarifaria 2025) Anexo, Boletín Oficial CABA (documentosboletinoficial.buenosaires.gob.ar PL-LEY-LCABA-LCBA-6806-24-ANX.pdf, archived ar/law/ley6806_tarifaria_2025_anexo.*); pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P5",
+   "kernel_parts": [
+    "PropertyTax",
+    "propertyFamily"
+   ],
+   "unsupported": [
+    "art. 46 instalment cap not applied (upper bound)",
+    "Código Fiscal art. 363 exemptions not applied",
+    "minimum $12,800 per partida not applied",
+    "all real estate taken as in CABA"
+   ],
+   "family_file": "lean/ArGlobal/Transfers.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "4100",
+   "tax": "Tasa Retributiva por los Servicios de Alumbrado, Barrido y Limpieza (ABL, CABA)",
+   "statute": "Ley Tarifaria 2025 CABA (Ley 6.806, Anexo) art. 44: TRS = VFH x 0.80 % x [1 + (CG x 0.5)] x USC; CG by barrio 0 to 2.00 (taken as 0); art. 45: USC = 1",
+   "dated": "Ley 6.806 (Ley Tarifaria 2025) Anexo, Boletín Oficial CABA (documentosboletinoficial.buenosaires.gob.ar PL-LEY-LCABA-LCBA-6806-24-ANX.pdf, archived ar/law/ley6806_tarifaria_2025_anexo.*); pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P5",
+   "kernel_parts": [
+    "PropertyTax",
+    "propertyFamily"
+   ],
+   "unsupported": [
+    "barrio coefficient taken as 0 (lower bound)",
+    "art. 46 instalment cap not applied",
+    "all real estate taken as in CABA"
+   ],
+   "family_file": "lean/ArGlobal/Transfers.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "4400",
+   "tax": "Impuesto de Sellos (CABA) on real-estate transfers",
+   "statute": "Código Fiscal CABA Título III; Ley Tarifaria 2025 arts. 31 (1 %), 35 (3.5 % for Código Fiscal arts. 323-325, 332)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "Ley Tarifaria 2025 read; the Código Fiscal articles (which acts, home exemption) not read",
+   "unsupported": [
+    "would unlock: Código Fiscal CABA arts. 323-325, 332 and the vivienda única exemption"
+   ],
+   "family_file": "lean/ArGlobal/Transfers.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Patentes sobre vehículos en general (CABA): automobiles and motorcycles",
+   "statute": "Ley Tarifaria 2025 CABA (Ley 6.806, Anexo) art. 51 a): automobiles, motorcycles and the like, on the valuación fiscal (Código Fiscal art. 414 table): to $4,909,680 1.60 %, CF 78,555 + 4.00 % to $11,292,480, ... CF 2,610,777 + 8.00 % above $48,116,160; f) + 10 %; effective rate at most 6 % of the valuation; minimum $8,750 a year",
+   "dated": "Ley 6.806 (Ley Tarifaria 2025) Anexo arts. 51-54 (ar/law/ley6806_tarifaria_2025_anexo.*); kernel 2.4.0 VehicleTax; pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "VehicleTax",
+    "vehicleTaxFamily"
+   ],
+   "unsupported": [
+    "vehicles taken as radicados in CABA",
+    "value taken as the valuación fiscal",
+    "other vehicle classes (b-e) not computed"
+   ],
+   "family_file": "lean/ArGlobal/Transfers.lean",
+   "guards": 10
+  }
+ ],
+ "grades": {
+  "A": 9,
+  "B": 5,
+  "C": 8
+ },
+ "guards": 38,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

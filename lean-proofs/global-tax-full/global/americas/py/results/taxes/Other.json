@@ -1,0 +1,117 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed; IPS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed; IPS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "3000",
+  "tax": "Taxes on payroll and workforce",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "impuesto inmobiliario (Ley 125/91 / Ley 6380/2019: 1 % of the fiscal value",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto inmobiliario (Ley 125/91 / Ley 6380/2019: 1 % of the fiscal value; Ley 3966/2010 arts. 152-157 read in the gap pass): the rate article not in lexifina/paraguay-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto inmobiliario (Ley 125/91 / Ley 6380/2019: 1 % of the fiscal value; Ley 3966/2010 arts. 152-157 read in the gap pass): the rate article not in lexifina/paraguay-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 4100 = 2021:457758.6 2022:498239.1 2023:544983.3 2024:577144.0; named lines: 4110 Large estate and land tax (2024: 28093.6); 4110 Real estate tax (2024: 519216.6); 4110 Tax on vacant lots (2024: 29833.8)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribución especial de pavimentación (Ley 620/76)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribución especial de pavimentación (Ley 620/76). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribución especial de pavimentación (Ley 620/76). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "MERCOSUR Arancel Externo Común (NCM) with national exception lists",
+  "customs_note": "customs import duties (5123): MERCOSUR Arancel Externo Común (NCM) with national exception lists; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "5200",
+  "tax": "use of goods (vehicles) (5200)",
+  "statute": "patente de rodados (Ley 620/76",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): patente de rodados (Ley 620/76; OECD PY 5212 'Motor vehicle licenses'). 2025 schedule not read; needs a VehicleTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): patente de rodados (Ley 620/76; OECD PY 5212 'Motor vehicle licenses'). 2025 schedule not read; needs a VehicleTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 5200 = 2021:423106.7 2022:447151.2 2023:483311.8 2024:539664.0; named lines: 5212 Motor vehicle licenses (2024: 128429.0); 5213 Licencing fees (2024: 317368.2); 5213 Slaughter tax (2024: 8635.4); 5213 Tax to the owners of animals (2024: 10.8); 5220 Tax on construction (2024: 84694.0); 5220 Trademarks registration (2024: 526.5)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD PY 6200 'Other' 794.7 bn (2024), unnamed"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD PY 6200 'Other' 794.7 bn (2024), unnamed",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 6000 = 2021:262599.4 2022:252080.9 2023:288352.4 2024:794717.7; named lines: 6200 Other (2024: 794717.7)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

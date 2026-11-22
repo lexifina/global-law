@@ -1,0 +1,148 @@
+{
+ "country": "LS",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Stamp Duties Act, 1972 (s. 35: Minister amends the Schedule) and Schedule",
+   "dated": "-",
+   "unsupported": [
+    "the Schedule's conveyance / lease-transfer item is not held: only the Stamp Duties (Amendment of Schedule) Regulations, 2014 (L.N. 17 of 2014, R4/fetch/p14/ls_stamp_2014.pdf: item 19 (4) marketable securities) is held; LesothoLII search returns no copy of the 1972 Act"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "LesothoLII search API (seventeenth pass); LRA site (earlier passes)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employer social security contributions",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019 — Lesotho (Wayback copy, R4/fetch/ssptw11/lesotho.txt)",
+   "dated": "-",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "LS old-age pension is universal and tax-financed ('Employer: None. Government: The total cost'); sickness/maternity cash benefits are employer liability; work injury is an employer-liability system through a private carrier. No public-fund employer contribution. Secondary source (2019).",
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value added tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "VAT Regulations 2003 reg. 6 (1) (c) as amended by LN 27 of 2018 reg. 2 (b) (14 % → 15 % from 1 April 2018); reg. 6 (1) (b) electricity 10 % (LN 27/2018, LN 18/2020, LN 30/2021); reg. 6 (1) (d) telecommunications 15 % (LN 27/2018, LN 34/2019, LN 18/2020); VAT Act 2001 s. 6 (2) exempt supplies",
+   "dated": "Income Tax Act 1993 consolidated to 1 April 2012 (the copy the Revenue Services Lesotho site publishes as its current Act, uploaded 2024); later Finance Acts not held: grade B, flagged. VAT: Value Added Tax Act 2001 s. 6 (2) and Value Added Tax Regulations 2003 (LN 95 of 2003) reg. 6 as amended by LN 27 of 2018, LN 34 of 2019, LN 18 of 2020 and LN 30 of 2021",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "Schedule IV zero rating (basket convention)",
+    "LN 95 of 2003 original text not read"
+   ],
+   "guards": 36
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise duties (SACU common excise tariff, Schedule 1 Part 2A)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "SACU Agreement 2002 (as amended 12 April 2013) art. 21 (1): the Ministers responsible for Finance of all Member States 'meet and agree on the rates of specific excise and ad valorem excise duties ... to be applied to goods grown, produced or manufactured in or imported into the Common Customs Area'; art. 22: similar legislation [text version: sacu.int SACU-Agreement.pdf, Wayback 20210517172146, R4/fetch/gap/sacu_agreement_wb20210517.pdf]; Lesotho Customs and Excise Act 1982 (not held); rates: the SACU common rates as in SA Act 45 of 2024 Part I (to 11 March 2025) and Act 3 of 2026 Sch. II (from 12 March 2025); the loti is at par with the rand",
+   "dated": "Income Tax Act 1993 consolidated to 1 April 2012 (the copy the Revenue Services Lesotho site publishes as its current Act, uploaded 2024); later Finance Acts not held: grade B, flagged. VAT: Value Added Tax Act 2001 s. 6 (2) and Value Added Tax Regulations 2003 (LN 95 of 2003) reg. 6 as amended by LN 27 of 2018, LN 34 of 2019, LN 18 of 2020 and LN 30 of 2021",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc",
+    "ExciseRule (2.1, date windows: R4.Exc.toRule)",
+    "exciseRuleFamily"
+   ],
+   "unsupported": [
+    "Lesotho Customs and Excise Act 1982 and notices not read (dates assumed equal to SA's)",
+    "fuel levy",
+    "ad valorem excise"
+   ],
+   "guards": 36
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Company income tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Income Tax Act 1993 s. 10 and Third Schedule item 4 (other income 25 %; substituted by Act No. 2 of 2007), consolidation to 1 April 2012 as published by the RSL; amendments 2013-2025 not held (flagged)",
+   "dated": "Income Tax Act 1993 consolidated to 1 April 2012 (the copy the Revenue Services Lesotho site publishes as its current Act, uploaded 2024); later Finance Acts not held: grade B, flagged. VAT: Value Added Tax Act 2001 s. 6 (2) and Value Added Tax Regulations 2003 (LN 95 of 2003) reg. 6 as amended by LN 27 of 2018, LN 34 of 2019, LN 18 of 2020 and LN 30 of 2021",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax",
+    "SectorCorp (company.sector)"
+   ],
+   "unsupported": [
+    "split of manufacturing and other income; export rate (item 2)",
+    "advance corporation tax",
+    "Finance Acts 2013-2025 (not held)"
+   ],
+   "guards": 14
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding on payments to non-residents",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Income Tax Act 1993 s. 107 (1) (standard rate 25 % on dividends, interest, royalties, natural resource payments and management charges paid to non-residents) and s. 108 (1) (10 % on services contracts), consolidation to 1 April 2012; RSL withholding tax guide; later amendments not held (flagged)",
+   "dated": "Income Tax Act 1993 consolidated to 1 April 2012 (the copy the Revenue Services Lesotho site publishes as its current Act, uploaded 2024); later Finance Acts not held: grade B, flagged. VAT: Value Added Tax Act 2001 s. 6 (2) and Value Added Tax Regulations 2003 (LN 95 of 2003) reg. 6 as amended by LN 27 of 2018, LN 34 of 2019, LN 18 of 2020 and LN 30 of 2021",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "management charges at 25 %",
+    "manufacturing-related reliefs",
+    "amendments after 2012 (not held)"
+   ],
+   "guards": 14
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (SACU common external tariff, Schedule No. 1 Part 1)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Lesotho Customs and Excise Act 1982 (not held); rates: the SACU common external tariff; SACU Agreement 2002 (as amended 12 April 2013) art. 18 (1) (goods of the Common Customs Area free of customs duties between Member States) and art. 20 (1) (the Council approves the customs duties applied to goods imported into the Common Customs Area) [R4/fetch/gap/sacu_agreement_wb20210517.pdf]; common external tariff: Schedule No. 1 Part 1, 'Rate of Duty' columns General, EU/UK, EFTA, SADC, as printed in South Africa's consolidation dated 2025-04-04 (SARS Legal-LPrim-CE-Sch1P1Chpt1-to-99, Wayback 20250405095800, R4/fetch/gap/za_sch1p1_wb20250405095800.pdf) and Botswana's dated 01.07.2025 (BURS Tariff Volume I, R4/fetch/bw10/tariff_vol1_july2025.pdf): the same rates on every line below",
+   "dated": "SACU common external tariff as printed by South Africa (2025-04-04) and Botswana (01.07.2025); Lesotho's own tariff not held: grade B",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "SADC FTA, MERCOSUR and AfCFTA preference columns not applied (MFN charged for those origins)",
+    "rebates and suspensions (Schedules No. 3 and 4), anti-dumping and safeguard duties (Part 2B and Part 3)",
+    "lines of other HS headings (grade C)"
+   ],
+   "guards": 9
+  }
+ ],
+ "cases": 7,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

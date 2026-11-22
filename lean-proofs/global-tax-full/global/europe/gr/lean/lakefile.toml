@@ -1,0 +1,18 @@
+name = "GrGlobal"
+version = "0.1.0"
+defaultTargets = ["GrGlobal", "grglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); GRTax = the 1.x model, vendored from cmp20/southeast/gr/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "GRTax"
+
+[[lean_lib]]
+name = "GrGlobal"
+
+[[lean_exe]]
+name = "grglobal"
+root = "GrGlobal.Main"

@@ -1,0 +1,33 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "Algemeen Pensioen premium (employer half)",
+  "statute": "Wet Algemeen Pensioen 2014 (S.B. 2014 no. 113, 9 Sep 2014) art. 8: lid 1 3 % of the bijdragegrondslag; lid 2 +0.5 point yearly from 1 Jan 2016 up to 28 %; lid 3 maximum bijdragegrondslag SRD 5,000 a month; lid 5 none above it; lid 7 50/50 employer/worker",
+  "dated": "S.B. 2014 no. 113 (DNA copy); 2025 rate 8 % by the statutory steps; pass 9, 2026-11-21",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P4",
+  "kernel_parts": [
+   "employerFamily",
+   "Contribution"
+  ],
+  "unsupported": [
+   "staatsbesluiten changing the bijdragegrondslag (art. 8 lid 6) not read",
+   "yearly steps taken as applied",
+   "parties may shift the split (lid 8): 50/50 taken"
+  ]
+ },
+ {
+  "oecd": "2200",
+  "tax": "Other employer contributions (Wet Nationale Basiszorgverzekering premium)",
+  "statute": "Wet Nationale Basiszorgverzekering (premium decree not held); Wet AOV: the 4 % premium is the insured resident's, no employer share",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P4",
+  "kernel_parts": [],
+  "tried": "basiszorg premium decree not found",
+  "unsupported": [
+   "would unlock: the 2025 basiszorg premium decree"
+  ]
+ }
+]

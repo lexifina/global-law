@@ -1,0 +1,22 @@
+name = "EtGlobal"
+version = "0.1.0"
+defaultTargets = ["EtGlobal", "etglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); EtTax = the 1.x model, vendored from cmp20/world/B10-anglophone-africa/et/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "EtTax"
+
+[[lean_lib]]
+name = "EtGlobal"
+
+[[lean_exe]]
+name = "etglobal"
+root = "EtGlobal.Main"

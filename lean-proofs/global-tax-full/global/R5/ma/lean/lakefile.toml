@@ -1,0 +1,22 @@
+name = "MaGlobal"
+version = "0.1.0"
+defaultTargets = ["MaGlobal", "maglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); MaTax = the 1.x model, vendored from cmp20/world/B06-mena/ma/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MaTax"
+
+[[lean_lib]]
+name = "MaGlobal"
+
+[[lean_exe]]
+name = "maglobal"
+root = "MaGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

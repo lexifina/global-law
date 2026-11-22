@@ -1,0 +1,345 @@
+{
+ "country": "PY",
+ "name": "Paraguay",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:30"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "see the pass 11 entry below for disposals",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PyGlobal/Capital.lean",
+   "guards": 5
+  },
+  {
+   "tax": "IRP: rentas y ganancias del capital (8 %)",
+   "statute": "Ley 6380/2019 arts. 53, 56, 59, 60",
+   "dated": "Ley 6380/2019 (BACN page; DNIT IRP page confirms 8 %)",
+   "grade": "A",
+   "unsupported": [
+    "1.x 8 % on long-held listed shares (art. 56 num. 9 exempts them)"
+   ],
+   "oecd": "1100",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PyGlobal/Capital.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "Ley 6380/19 arts. 85-100",
+   "dated": "DNIT text of the act as enacted (2019); later amendments not checked",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "later amendments"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PyGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo",
+   "statute": "Ley 6380/19 arts. 112-120",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "rates in force by decree; would unlock: the 2025 ISC decrees"
+   ],
+   "family_file": "lean/PyGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 179",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 179: \"Todo tributo, cualquiera sea su naturaleza o denominación, será establecido exclusivamente por la ley\" (`py/law/const_art-179.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Ley 6380/19 arts. 85-100; Ley 6380/19 art. 21 (10 %); Ley 6380/19 art. 43 2 (IDU 15 %, non-resident); 1.x model (see its summary.json); Ley 6380/2019 arts. 53, 56, 59, 60; Ley 98/1992 (not read)).",
+   "family_file": "lean/PyGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto a la Renta Empresarial (IRE)",
+   "statute": "Ley 6380/19 art. 21 (10 %)",
+   "dated": "DNIT text of the act (2019)",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "IRE SIMPLE / RESIMPLE regimes and the INR presumed net income shares not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PyGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Ley 6380/19 art. 43 2 (IDU 15 %, non-resident); Ley 6380/19 art. 76 (INR 15 %; presumed base not applied); Ley 6380/19 art. 76 (INR 15 %; presumed base not applied); Ley 6380/19 art. 76 (INR 15 %; presumed base not applied)",
+   "dated": "DNIT text of the act (2019)",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "kinds without a rule read: no withholding computed"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PyGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed; IPS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed; IPS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "impuesto inmobiliario (Ley 125/91 / Ley 6380/2019: 1 % of the fiscal value",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto inmobiliario (Ley 125/91 / Ley 6380/2019: 1 % of the fiscal value; Ley 3966/2010 arts. 152-157 read in the gap pass): the rate article not in lexifina/paraguay-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto inmobiliario (Ley 125/91 / Ley 6380/2019: 1 % of the fiscal value; Ley 3966/2010 arts. 152-157 read in the gap pass): the rate article not in lexifina/paraguay-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 4100 = 2021:457758.6 2022:498239.1 2023:544983.3 2024:577144.0; named lines: 4110 Large estate and land tax (2024: 28093.6); 4110 Real estate tax (2024: 519216.6); 4110 Tax on vacant lots (2024: 29833.8)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución especial de pavimentación (Ley 620/76)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución especial de pavimentación (Ley 620/76). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución especial de pavimentación (Ley 620/76). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "MERCOSUR Arancel Externo Común (NCM) with national exception lists",
+   "customs_note": "customs import duties (5123): MERCOSUR Arancel Externo Común (NCM) with national exception lists; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/PyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "patente de rodados (Ley 620/76",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): patente de rodados (Ley 620/76; OECD PY 5212 'Motor vehicle licenses'). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): patente de rodados (Ley 620/76; OECD PY 5212 'Motor vehicle licenses'). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 5200 = 2021:423106.7 2022:447151.2 2023:483311.8 2024:539664.0; named lines: 5212 Motor vehicle licenses (2024: 128429.0); 5213 Licencing fees (2024: 317368.2); 5213 Slaughter tax (2024: 8635.4); 5213 Tax to the owners of animals (2024: 10.8); 5220 Tax on construction (2024: 84694.0); 5220 Trademarks registration (2024: 526.5)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD PY 6200 'Other' 794.7 bn (2024), unnamed"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD PY 6200 'Other' 794.7 bn (2024), unnamed",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPRY, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PRY.csv): general government heading 6000 = 2021:262599.4 2022:252080.9 2023:288352.4 2024:794717.7; named lines: 6200 Other (2024: 794717.7)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PyGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Paraguay (DSD_REV_LAC@DF_REVPRY v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PRY.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for Paraguay (DSD_REV_LAC@DF_REVPRY v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PRY.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for Paraguay (DSD_REV_LAC@DF_REVPRY v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PRY.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/PyGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 179",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 179: \"Todo tributo, cualquiera sea su naturaleza o denominación, será establecido exclusivamente por la ley\" (`py/law/const_art-179.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: Ley 6380/19 arts. 85-100; Ley 6380/19 art. 21 (10 %); Ley 6380/19 art. 43 2 (IDU 15 %, non-resident); 1.x model (see its summary.json); Ley 6380/2019 arts. 53, 56, 59, 60; Ley 98/1992 (not read)).",
+   "family_file": "lean/PyGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "IPS aporte patronal (employer)",
+   "statute": "Ley 98/1992 (not read); IPS Tabla N° 1 (Res. MTESS 670/2026)",
+   "dated": "IPS table read 2026-11-20",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "aguinaldo not split from the base"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PyGlobal/Social.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Ley 6380 (inmobiliario?); Ley 125/91",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/PyGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 7,
+  "C": 8
+ },
+ "guards": 14,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

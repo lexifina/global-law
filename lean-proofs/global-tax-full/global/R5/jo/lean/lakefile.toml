@@ -1,0 +1,22 @@
+name = "JoGlobal"
+version = "0.1.0"
+defaultTargets = ["JoGlobal", "joglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); JoTax = the 1.x model, vendored from cmp20/world/B06-mena/jo/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "JoTax"
+
+[[lean_lib]]
+name = "JoGlobal"
+
+[[lean_exe]]
+name = "joglobal"
+root = "JoGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

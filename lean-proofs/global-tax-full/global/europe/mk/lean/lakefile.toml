@@ -1,0 +1,18 @@
+name = "MkGlobal"
+version = "0.1.0"
+defaultTargets = ["MkGlobal", "mkglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); MkTax = the 1.x model, vendored from cmp20/world/B04-europe-rest/mk/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "MkTax"
+
+[[lean_lib]]
+name = "MkGlobal"
+
+[[lean_exe]]
+name = "mkglobal"
+root = "MkGlobal.Main"

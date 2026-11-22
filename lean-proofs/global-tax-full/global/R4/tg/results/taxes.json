@@ -1,0 +1,308 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 195 (18 %), art. 180 and Annexe TVA (exemptions)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "annex staple foods not separable from the food line",
+   "TPU passenger transport exemption",
+   "school books only"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Droits d'accises (boissons, tabacs) and DAPP (produits pétroliers)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 240-241, 243, 245",
+  "dated": "CGI-LPF édition 2025",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "ExciseRule (kernel 2.1, valueBase .beforeTax)",
+   "exciseRuleFamily"
+  ],
+  "unsupported": [
+   "unsweetened soft drinks 5 % (sweetened 10 % applied)",
+   "coffee, tea, flour, oils, cosmetics, bouillon, bags, vehicles ≥ 13 CV, precious metals: no basket line"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés + minimum forfaitaire de perception",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 101, 113, 120",
+  "dated": "CGI-LPF édition 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRule (kernel 2.1)",
+   "MinimumTax (OHADA floor/cap)",
+   "step 1 000"
+  ],
+  "unsupported": [
+   "minimum on the previous year's turnover",
+   "2 % for used-car importers"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenues à la source (IRCM, non-résidents)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 79-80; LPF art. 98",
+  "dated": "CGI-LPF édition 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "listed-company dividends 7 %",
+   "parent-subsidiary regime",
+   "bond interest 6/3/0 %",
+   "treaties"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Retenue sur les revenus de capitaux mobiliers (produits distribués)",
+  "statute": "CGI art. 79 (13 %, libératoire for individuals)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "3 % for listed companies"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Retenue sur les produits de placements à revenus fixes (intérêts), personnes physiques (13 %, libératoire)",
+  "statute": "CGI art. 80 ('Personne physique - 13% libératoire de l'impôt sur le revenu pour les produits auxquels la retenue est appliquée'), art. 47 (revenus des créances, dépôts, cautionnements et comptes courants) [text version: CGI 2025 (OTR edition 'CGI et LPF 2025', otr_cgi_lpf_2025.txt)]",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "exempt interest of art. 48 (livrets d'épargne) and art. 50-52 (cooperatives, public loans) not distinguished",
+   "interest taken into a business profit (not final) not distinguished"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Taxe sur les plus-values de cession d'immeubles et d'actions ou parts sociales (7 %, libératoire)",
+  "statute": "CGI art. 82 (gains on immovables and on shares of companies registered in Togo, 'à titre libératoire'), art. 84 (exemptions), art. 85 and 88 (base), art. 90 ('7% en ce qui concerne les cessions d'immeubles ou de droits immobiliers et d'actions ou de parts sociales') [text version: CGI 2025 (OTR edition 'CGI et LPF 2025', otr_cgi_lpf_2025.txt)]",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "art. 84: agricultural land exempt (land treated as taxable)",
+   "art. 87 c): 30 % flat uplift of the acquisition price for works not applied",
+   "shares of companies not registered in Togo are outside art. 82 (all shares taxed here)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.gainsFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNSS employer contributions",
+  "statute": "CNSS Togo (rates fixed by decree): family 3 %, occupational risks 2 %, pensions 12,5 %",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "decree not held"
+  ],
+  "source": "CNSS official page (secondary)",
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Assurance maladie obligatoire (employer share)",
+  "statute": "Décret n° 2023-096 art. 12 (10 %, at least half by the employer)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Taxes foncières",
+  "statute": "CGI art. 275-276 (7,5 % built, on the revenu net cadastral; 0,5 % unbuilt)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "revenu net cadastral taken from annualValue"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Droits d'enregistrement et d'immatriculation (ventes d'immeubles)",
+  "statute": "CGI art. 443 (0,6 % registration + 0,6 % land-title registration)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "morcellement 0,3 %",
+   "local additional tax 0,3 %"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation à titre gratuit (successions, donations)",
+  "statute": "CGI art. 419 (tariff by share), art. 420 (10 000 000 F abatement), art. 414 (gifts: same tariff without abatements)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "six-children limit of the abatement",
+   "25 % reduction for marriage-contract gifts and donations-partages"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateBandFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI-LPF 2025 (whole code)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "TG CGI-LPF édition 2025 (complete code): no tax on net wealth; 'fortune' occurs only incidentally (art. on declarations, LPF)"
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts et Livre des procédures fiscales, OTR edition 2025",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.otr.tg (CGI-LPF mis à jour))",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Patente (rate of the turnover bracket on the whole turnover; commerce column)",
+  "statute": "CGI 2025 (OTR, CGI et LPF 2025) Livre II art. 250, 252, 254",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "other sector columns: services/insurance/banks/BTP (0,75-1,20 %), telephony/IT (0,80-1,20 %), industries (0,70-1,00 %), used vehicles (0,85-1,00 %)",
+   "regulated-margin products taxed on the margin, 60 % reduction for pagne-cloth resellers (art. 254)",
+   "taxe professionnelle unique for small taxpayers (art. 129 ff.)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "otr_cgi_lpf_2025.txt (whole code)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "TG: the general tax code held (otr_cgi_lpf_2025.txt, 911k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Taxe sur les véhicules à moteur (TVM; passenger vehicles by fiscal horsepower)",
+  "statute": "CGI 2025 art. 154, 159, 162 2)",
+  "dated": "CGI-LPF édition 2025 (OTR)",
+  "unsupported": [
+   "goods vehicles 20 000-55 000 F and motorcycles (art. 162 1, 3)",
+   "50 % reduction for road hauliers under the TPU, prorata in the year of acquisition (art. 162-163)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.vehicleFamily"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Togo as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Togo for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C768&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/tg.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "WAEMU (UEMOA) customs union (origin BF, ML, NE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+  ]
+ }
+]

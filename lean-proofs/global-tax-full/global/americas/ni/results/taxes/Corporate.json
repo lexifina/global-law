@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto sobre la Renta (actividades económicas)",
+  "statute": "Ley 822 art. 52 (30 %)",
+  "dated": "La Gaceta 241 (2012)",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "pago mínimo definitivo (Ley 822 art. 61, % of gross income) not modelled: the regular tax only"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents (retenciones definitivas)",
+  "statute": "Ley 822 arts. 53, 87, 89 (Ley 891 of 2014, Ley 987 of 2019)",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P2",
+  "unsupported": [
+   "Ley 822 art. 87 num. 1 (10 % on financing from investment-grade international banks), art. 87 num. 3 and art. 49 (30 % for tax havens), and the 1.5 %/3 % rates of art. 53 num. 1-2 not modelled; Ley 1212 (La Gaceta 155, 22 Aug 2024) not checked"
+  ],
+  "dated": "Ley 822 (La Gaceta 241, 2012) and Ley 891 (world/B12-latin-america/ni/src); Ley 987 La Gaceta 41 of 28 Feb 2019 (copy from leybook.com, archived ni/law/ley987_leybook.*); pass 8, 2026-11-21",
+  "kernel_parts": [
+   "Wht"
+  ]
+ }
+]

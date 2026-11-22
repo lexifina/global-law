@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Valsts nodeva (zemesgrāmata)",
+  "statute": "Cabinet regulation on state fees for the Land Register (2 % of the deal or cadastral value, at most EUR 50 000)",
+  "dated": "PwC WWTS Corporate - Other taxes, 2025-08-29 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "TransferDuty",
+   "cap (min)"
+  ],
+  "unsupported": [
+   "the base is the higher of the deal and cadastral value (the price stands in); reduced fees for family transfers not modelled"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Nekustamā īpašuma nodoklis",
+  "statute": "Likums \"Par nekustamā īpašuma nodokli\" 3. pants: 0,2-3 % of the cadastral value, set in the municipality's binding regulations published by 1 November of the preceding year; above 1,5 % only for property not maintained",
+  "dated": "Law on Immovable Property Tax (in force from 1.1.1998, as applicable 2025); EC Taxes in Europe Database (TEDB), tax 4542, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rate declared: Riga's 2025 binding regulations were not reached (rate input localRates.propertyTax)",
+   "progressive municipal rates by value band: give the rate for the asset (asset localRates) or one rate per case",
+   "the statutory fallback bands (no regulations published) and the 1,5 % surcharge on unfarmed land: not modelled"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rate is an input: localRates.propertyTax"
+ }
+]

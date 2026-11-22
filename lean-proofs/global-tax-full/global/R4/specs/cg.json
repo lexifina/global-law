@@ -1,0 +1,203 @@
+{
+ "cc": "CG",
+ "name": "Congo",
+ "dated": "Loi n° 47-2024 du 30 décembre 2024 portant loi de finances pour l'année 2025 (JO édition spéciale n° 15-2024 du 31 décembre 2024) and the VAT text as rewritten by Loi n° 39-2023 du 29 décembre 2023 (LF 2024, JO édition spéciale n° 6-2023); CGI tome 1 (edition date not established) for the withholding",
+ "sources": "Code général des impôts tome 1 (local copy `cmp20/world/B08-central-africa-fr/cg/law/cgi_tome1.txt`, edition without post-2021 amendment notes); Journal officiel 2022-2025 issues held locally do not include the LF 2025. Pass 9: the Journal officiel special editions held under `world/B08-central-africa-fr/cg/law/jo/` were read for P1/P2: `jo-2024-15-sp.txt` = LF 2025 (Loi n° 47-2024: art. 122 IS 30 % restored, art. 8 of the excise text new rates, VAT art. 7 items 12 and 22 only), `congo-jo-2023-06-sp.raw.txt` = LF 2024 (Loi n° 39-2023, which modifies and completes loi n° 12-97 on VAT: art. 7 exemptions, art. 22 rates, art. 38 A centimes additionnels). Withholding from CGI tome 1 (`cgi_tome1.txt`) art. 185 ter. Thirteenth pass: CGI tome 2 (Wayback copy of finances.gouv.cg `CGI Tome II.pdf`, capture 2021-08-15, 171 pages), saved as `R4/fetch/p13/cg_cgi_tome2.pdf`.",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée (with centimes additionnels)",
+  "standard": 1890,
+  "classes": {
+   "financial": "exempt",
+   "insurance": "exempt",
+   "rent": "exempt",
+   "health": "exempt",
+   "newspapers": "exempt",
+   "education": "exempt",
+   "medicines": "exempt"
+  },
+  "grade": "A",
+  "statute": "Loi n° 12-97 (TVA) as modified by Loi n° 39-2023 (LF 2024) art. 22 2) a) (18 %) and art. 38 A 4) (centimes additionnels 5 % of the VAT: 18 % x 1,05 = 18,9 %); art. 7 exemptions (LF 2025 amends only items 12 and 22)",
+  "doc": "LF 2024, art. 22: \"2) Les taux de la TVA sont fixés de la manière suivante : a) Taux général : 18 % applicable à toutes les opérations taxables à l'exclusion des opérations soumises aux taux réduit et zéro ; ... c) Taux réduit : 5 % applicable : sur certains biens de consommations courantes, ci-après cités en Annexe V\"; art. 38 A: \"Les centimes additionnels sont applicables aux opérations soumises à la TVA. ... 3) La base d'imposition aux centimes additionnels est le montant de la TVA collectée. 4) Le taux applicable aux centimes additionnels est de 5 %.\" art. 7: \"Sont exonérés de la TVA : 1) ... Les opérations bancaires et financières ... et les prestations d'assurance et de réassurance ; ... 2) ... Les locations d'immeubles nus à usage d'habitation et de terrains nus ... 4) Les examens, consultations, soins, hospitalisation ... 5) ... journaux et périodiques ... 6) Les frais de scolarité ... 10) Les produits pharmaceutiques\". LF 2025 (Loi n° 47-2024): \"Article 7 (nouveau) Sont exonérés de la TVA : 1) à 11) : Sans changement ; 12) L'eau minérale produite au Congo et le gaz butane ... 13) à 21) : Sans changement ; 22) l'importation des panneaux photovoltaïques ...\".",
+  "notes": [
+   "the centimes additionnels (5 % of the VAT, non-deductible, for local authorities) are folded into one 18,9 % rate",
+   "the 5 % reduced rate (Annexe V staples, milk, bread, rice, flour) is not applied to the processed-food basket line; the art. 7 exemptions for water/butane produced in Congo (LF 2025) are not separated"
+  ],
+  "unsupported": [
+   "5 % reduced rate (basket convention)",
+   "local mineral water and butane exemption"
+  ]
+ },
+ "excise": {
+  "name": "Droits d'accises",
+  "grade": "A",
+  "statute": "Excise text art. 8 1) as substituted by Loi n° 47-2024 (LF 2025) point 23 (CEMAC directive 03/19): tobacco 30 %, alcoholic drinks 25 %, sugary drinks 12,5 %",
+  "doc": "LF 2025, point 23 \"Revalorisation des taux des droits d'accises conformément à la directive CEMAC n° 03/19-UEAC-010A-CM-33 du 8 avril 2019 ... Article 8 (nouveau) : 1) Les taux des droits d'accises sont fixés comme suit : a) Tabacs : 30% ; b) Boissons alcoolisées : 25% ; c) Boissons sucrées : 12,5% ; d) produits alimentaires de luxe, parfums et produits cosmétiques, armes et munitions, bijoux : 25% ; e) Véhicules automobiles de tourisme ... : 15% ; f) Appareils servant aux jeux de hasard et de divertissements : 25%. g) Autres produits soumis aux droits d'accises : 25% 2) Les droits d'accises appliqués sur les produits ci-dessus énumérés est exclusif à d'autres taxes assimilées aux droits d'accises.\"",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Droits d'accises boissons alcoolisées (bière)",
+    "advBp": 2500,
+    "vatBp": 1890,
+    "statute": "art. 8 1) b) (LF 2025): 25 %"
+   },
+   {
+    "good": "wine",
+    "name": "Droits d'accises boissons alcoolisées (vin)",
+    "advBp": 2500,
+    "vatBp": 1890,
+    "statute": "art. 8 1) b) (LF 2025): 25 %"
+   },
+   {
+    "good": "spirits",
+    "name": "Droits d'accises boissons alcoolisées (spiritueux)",
+    "advBp": 2500,
+    "vatBp": 1890,
+    "statute": "art. 8 1) b) (LF 2025): 25 %"
+   },
+   {
+    "good": "nonAlcoholic",
+    "name": "Droits d'accises boissons sucrées",
+    "advBp": 1250,
+    "vatBp": 1890,
+    "statute": "art. 8 1) c) (LF 2025): 12,5 %"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Droits d'accises tabacs",
+    "advBp": 3000,
+    "vatBp": 1890,
+    "statute": "art. 8 1) a) (LF 2025): 30 %"
+   }
+  ],
+  "notes": [
+   "the base article of the excise text was not read: the region convention (value before excise and VAT, i.e. ex-factory price or customs value plus duties under the CEMAC directive) is used",
+   "the non-alcoholic basket line is charged at the sugary-drinks rate (water is outside it); petroleum products are under the TSPP/TIPP regime (not modelled)"
+  ],
+  "unsupported": [
+   "excise base article not read (convention used)",
+   "petroleum products"
+  ]
+ },
+ "cit": {
+  "name": "Impôt sur les sociétés",
+  "rate": 3000,
+  "step": 1000,
+  "grade": "A",
+  "statute": "CGI tome 1 art. 122 as substituted by Loi n° 47-2024 (LF 2025) point 6 (30 %; fraction below 1 000 F disregarded); art. 122 A: 25 % microfinance and private education, 28 % mining/quarrying and property, 33 % foreign legal persons under art. 126 ter",
+  "doc": "LF 2025 (Loi n° 47-2024), point 6, restoring the rate in force before the 2020 (COVID) amending finance law: CGI tome 1 art. 122 (new) \"Le taux de l'impôt sur les sociétés est fixé à 30%\", fractions of profit below 1 000 FCFA disregarded; art. 122 A (new), by derogation: 25 % (microfinance, private education, ...), 28 % (mines and quarries, property), 33 % (foreign legal persons of art. 126 ter ff.).",
+  "notes": [
+   "art. 122 A by company.sector: 'microfinance', 'privateEducation' 25 %; 'mining' (also 'quarrying'), 'realEstate' 28 %; another sector or none given: 30 % (declared); the 33 % rate for foreign legal persons under art. 126 ter is not modelled (not a sector)",
+   "the minimum/turnover-based charges (taxe spéciale sur les sociétés of tome 1 art. 168-170, status in 2025 not established) are not modelled"
+  ],
+  "unsupported": [
+   "art. 122 A 33 % for foreign legal persons (art. 126 ter)",
+   "minimum tax (TSS) status in 2025 not established"
+  ],
+  "sectors": [
+   {
+    "sectors": [
+     "microfinance",
+     "privateEducation"
+    ],
+    "rate": 2500,
+    "statute": "CGI tome 1 art. 122 A (Loi n° 47-2024, LF 2025): 25 % for microfinance and private education run as a company"
+   },
+   {
+    "sectors": [
+     "mining",
+     "quarrying",
+     "realEstate"
+    ],
+    "rate": 2800,
+    "statute": "CGI tome 1 art. 122 A (Loi n° 47-2024, LF 2025): 28 % for mines and quarries and property letting"
+   }
+  ],
+  "ifAbsent": "general",
+  "sectorTests": [
+   {
+    "line": {
+     "id": "s18-cg-mf",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000999,
+      "lossesForward": 0,
+      "sector": "microfinance"
+     }
+    },
+    "expect": [
+     250000
+    ]
+   },
+   {
+    "line": {
+     "id": "s18-cg-min",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000999,
+      "lossesForward": 0,
+      "sector": "mining"
+     }
+    },
+    "expect": [
+     280000
+    ]
+   },
+   {
+    "line": {
+     "id": "s18-cg-none",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000999,
+      "lossesForward": 0
+     }
+    },
+    "expect": [
+     300000
+    ]
+   }
+  ]
+ },
+ "wht": {
+  "name": "Retenue à la source sur les non-résidents",
+  "grade": "B",
+  "statute": "CGI tome 1 art. 185 ter (Loi n°5/96, Loi n°17-2000): 20 % on income of non-residents from work or services of any kind performed, supplied or used in Congo, loan interest excluded — tome 1 edition date not established, flagged; thirteenth pass: CGI tome 2 (MinFin edition posted 2021) livre III (impôt sur le revenu des valeurs mobilières) art. 1er 1°, art. 3 1° (20 %); LF 2022-2025 held: no change to art. 3 found; CGI tome 1 art. 185 ter, 2nd sentence (the 20 % retenue 'n'est pas applicable aux intérêts d'emprunts payés à une personne physique ou morale étrangère'); CGI tome 2 livre III art. 1er 7° (IRVM on interest of negotiable bonds only); a foreign lender without an establishment is outside the IS: no tax on loan interest paid to a foreign company (cited 0)",
+  "doc": "art. 185 ter (Loi n°5/96 du 2 mars 1996; second sentence Loi n°17-2000 du 30 décembre 2000): persons with neither domicile nor tax residence in Congo \"font l'objet d'une retenue à la source dont le taux est fixé à 20%\" on income earned in or from Congo, including work or services of any kind performed, supplied or used there; not on loan interest paid to such a person by a borrowing company established in Congo. Thirteenth pass (kernel 2.3.0 grade-C withholding): dividend 20 %: CGI tome 2 (MinFin edition posted 2021) livre III (impôt sur le revenu des valeurs mobilières) art. 1er 1°, art. 3 1° (20 %); LF 2022-2025 held: no change to art. 3 found; interest 0 % to companies: CGI tome 1 art. 185 ter, 2nd sentence (the 20 % retenue 'n'est pas applicable aux intérêts d'emprunts payés à une personne physique ou morale étrangère'); CGI tome 2 livre III art. 1er 7° (IRVM on interest of negotiable bonds only); a foreign lender without an establishment is outside the IS: no tax on loan interest paid to a foreign company (cited 0)",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 2000,
+    "statute": "CGI art. 185 ter (20 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 2000,
+    "statute": "CGI art. 185 ter (20 %, revenus réalisés au Congo)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 2000,
+    "statute": "CGI tome 2 (MinFin edition posted 2021) livre III (impôt sur le revenu des valeurs mobilières) art. 1er 1°, art. 3 1° (20 %); LF 2022-2025 held: no change to art. 3 found"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 0,
+    "statute": "CGI tome 1 art. 185 ter, 2nd sentence (the 20 % retenue 'n'est pas applicable aux intérêts d'emprunts payés à une personne physique ou morale étrangère'); CGI tome 2 livre III art. 1er 7° (IRVM on interest of negotiable bonds only); a foreign lender without an establishment is outside the IS: no tax on loan interest paid to a foreign company (cited 0)",
+    "toCompany": true
+   }
+  ],
+  "notes": [
+   "CGI tome 1 edition date not established (flagged); LF 2025 point 7 amends the retenue article only for wholesalers' 10 % retenue on rebates",
+   "thirteenth pass: IRVM 20 % on dividends (tome 2 livre III art. 3 1°); loan interest to a foreign company cited 0 (art. 185 ter); to a foreign individual left C (IRPP by return)"
+  ],
+  "unsupported": [
+   "tome 1 edition date",
+   "loan interest paid to a non-resident individual: no withholding (art. 185 ter), but the IRPP reaches non-residents on Congo-source income (tome 1 art. 1, art. 61 revenus des créances): assessed by return, not modelled (grade C)"
+  ]
+ }
+}

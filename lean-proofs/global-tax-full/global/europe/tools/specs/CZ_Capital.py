@@ -1,0 +1,9 @@
+S = {'cc': 'CZ', 'fam': 'Capital', 'families': [], 'doc': "# CZ 2025: Capital family not reached (grade C)\n\n* 1100 Gains of individuals on shares and property (disposals) (zákon 586/1992 Sb. § 4 (1) písm. b, w, § 10): tried the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed); would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)\n", 'notes': [], 'unsupported': [('g.entity == .household && !g.disposals.isEmpty', "1100 Gains of individuals on shares and property (disposals): not modelled (grade C: the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed))")], 'guards': [], 'taxes': [{'oecd': '1100', 'tax': 'Gains of individuals on shares and property (disposals)', 'statute': 'zákon 586/1992 Sb. § 4 (1) písm. b, w, § 10', 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'tried': "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)", 'unsupported': ["would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"]}]}
+
+# ---- pass 10 (R1 Europe, 2026-11-21): vehicle taxes, conditional withholding, remaining withholding (tools/p10_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+p10_rows(S)
+p6_finish(S)

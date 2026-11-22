@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "2200",
+  "tax": "IMSS cuotas patronales",
+  "statute": "Ley del Seguro Social arts. 25, 28, 73, 106 (transitorio décimo noveno), 107, 147, 211, 212",
+  "dated": "LSS consolidation (Cámara de Diputados) archived 2025-06; UMA 2025 from the 1.x model",
+  "grade": "A",
+  "package": "P4",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "riesgos de trabajo at class I prima media",
+   "art. 36 minimum-wage worker quota"
+  ]
+ },
+ {
+  "oecd": "2200",
+  "tax": "Retiro, cesantía en edad avanzada y vejez; INFONAVIT",
+  "statute": "LSS art. 168; Ley del INFONAVIT art. 29",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P4",
+  "kernel_parts": [],
+  "unsupported": [
+   "individual-account contributions: non-tax compulsory payments in the OECD classification"
+  ]
+ },
+ {
+  "oecd": "3000",
+  "tax": "Impuesto sobre Nóminas (Ciudad de México)",
+  "statute": "Código Fiscal de la Ciudad de México arts. 156, 157, 158 (art. 158 reformado G.O. 27-12-2024: 4 %)",
+  "dated": "lexifina/mexico-mexico-city-law codigo/2009/codigo-fiscal (consolidation to G.O. 19-12-2025; art. 158 last reformed G.O. 27-12-2024, in force for all of 2025)",
+  "grade": "A",
+  "package": "P7",
+  "kernel_parts": [
+   "payrollFamily",
+   "PayrollTax"
+  ],
+  "unsupported": [
+   "employer taken as located in the Ciudad de México",
+   "art. 157 exclusions (household workers etc.) not inputs"
+  ],
+  "p7_triage": "(a) modelled in the P7 triage pass 2026-11-21"
+ }
+]

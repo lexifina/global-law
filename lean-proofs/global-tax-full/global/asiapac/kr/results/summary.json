@@ -1,0 +1,282 @@
+{
+ "country": "KR",
+ "name": "South Korea",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:24:39"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Separate (final) withholding on interest and dividends (14 % + 1.4 %)",
+   "statute": "소득세법 art. 129 (1); 지방세법 art. 103-3",
+   "dated": "2025; session 11 year-in-force audit: confirmed, version stamped: 지방세법 art. 103-3 in the version in force 2025-01-01 (lsiSeq 268065) held (version stamped); 소득세법 art. 129 not held",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "aggregation above 2,000만"
+   ],
+   "family_file": "lean/KrGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "증권거래세 (securities transaction tax)",
+   "statute": "증권거래세법 art. 8; 시행령 art. 5; 농어촌특별세법 art. 5",
+   "dated": "law.go.kr current text, dated by article notes",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "KONEX and foreign exchanges"
+   ],
+   "family_file": "lean/KrGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1100",
+   "tax": "양도소득세 (capital gains tax)",
+   "statute": "소득세법 arts. 94-104",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "real estate 6-45 %, unlisted shares 10-25 %"
+   ],
+   "family_file": "lean/KrGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "부가가치세",
+   "statute": "부가가치세법 제26조 ①, 제30조",
+   "dated": "law.go.kr current text; 제26조 last amended 2024-12-31, 제30조 unchanged",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "간이과세자 (simplified taxpayers)",
+    "processed vs unprocessed food"
+   ],
+   "family_file": "lean/KrGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5121",
+   "tax": "담배소비세, 지방교육세 (담배소비세분)",
+   "statute": "지방세법 제52조 ① 1. 가., 제151조 ① 4. (version in force 2025-01-01, Law 20630)",
+   "dated": "law.go.kr version in force 2025-01-01 (lsiSeq 268065); art. 52 (1) unchanged from 2017-12-26 to Law 21308 (2025-12-31, in force 2026)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "개별소비세 on cigarettes, 국민건강증진부담금",
+    "fuel (교통·에너지·환경세: decree rates), liquor (주세)"
+   ],
+   "family_file": "lean/KrGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5200",
+   "tax": "자동차세 on passenger cars (with 지방교육세 30 %)",
+   "statute": "지방세법 제127조 제1항 제1호-제3호, 제150조, 제151조 제1항 제7호",
+   "dated": "law.go.kr version in force 2026-07-01; art. 127 (1) unchanged since 2011-12-02, art. 151 (1) since 2021-12-28 (in force 2025); checked in the 2025-01-01 version (lsiSeq 268065): art. 127 (1) <개정 2011. 12. 2.>, the same text",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax"
+   ],
+   "unsupported": [
+    "standard rates (local ordinance surcharge not read)",
+    "차령 per the Enforcement Decree not read (year - first registration + 1)",
+    "commercial vehicles and non-passenger vehicles not distinguished"
+   ],
+   "family_file": "lean/KrGlobal/Consumption.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "법인세 (corporate income tax)",
+   "statute": "법인세법 제55조 ① 1. (<개정 2024. 12. 31.>; law.go.kr version in force 2025-07-01, lsiSeq 267551)",
+   "dated": "2025 version (Law 20613, 2024-12-31); 2025-12-23 amendment applies from 2026",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "minimum tax",
+    "art. 55 (1) 2 real-estate-leasing companies"
+   ],
+   "family_file": "lean/KrGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "법인세법 art. 98 (1) (<개정 2019. 12. 31.>)",
+   "dated": "2025 (art. 98 (1) <개정 2019. 12. 31.>; unchanged in the 2025-07-01 version, lsiSeq 267551)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KrGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "법인지방소득세 (local income tax on corporations)",
+   "statute": "지방세법 제103조의20 ① 1. (<개정 2024. 12. 31.>; law.go.kr version in force 2025-01-01, lsiSeq 268065)",
+   "dated": "2025 version (Law 20630, in force 2025-01-01)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KrGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Korea, Republic of as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Korea, Republic of for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C410&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/kr.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 1006301000 (several MFN rows (MFN statutory (legal/autonomous) duty 5.0% (In-quota); MFN statutory (le); 1006302000 (several MFN rows (MFN statutory (legal/autonomous) duty 5.0% (In-quota); MFN statutory (le)"
+   ],
+   "family_file": "lean/KrGlobal/Customs.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4100",
+   "tax": "재산세 (property tax) and 지방교육세 (재산세분, 20 %)",
+   "statute": "지방세법 art. 111 (1), art. 111-2 (1); 시행령 art. 109 (1); art. 151 (1) 6 (지방교육세 20 %)",
+   "dated": "지방세법 version in force 2025-01-01 (lsiSeq 268065); 시행령 version in force 2025-05-27 (lsiSeq 271283, the 2025-06-01 assessment date)",
+   "grade": "A",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "종합부동산세",
+    "land",
+    "base cap (art. 110 (3))",
+    "도시지역분 (art. 112 (1) 2): grade C (no location)",
+    "art. 151 (2) local variation of the 지방교육세 rate"
+   ],
+   "family_file": "lean/KrGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4400",
+   "tax": "취득세 (acquisition tax)",
+   "statute": "지방세법 art. 11 (1)",
+   "dated": "law.go.kr current text, dated by article notes",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "multi-home rates",
+    "surcharges"
+   ],
+   "family_file": "lean/KrGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social insurance (pension, health, long-term care, employment)",
+   "statute": "국민연금법 88; 국민건강보험법 73; 노인장기요양보험법 9; 고용보험료징수법 14",
+   "dated": "2025: pension cap 6,170,000 a month to June and 6,370,000 from July 2025 (session 12 fix; PwC captures 2025-04-25 and 2025-12-16, secondary); health 7.09 %, long-term care 0.918 % confirmed (same source)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "산재보험",
+    "wages taken as spread evenly over the year for the pension cap"
+   ],
+   "family_file": "lean/KrGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "3000",
+   "tax": "주민세 종업원분 (payroll-based resident tax)",
+   "statute": "지방세법 arts. 84-3, 84-4",
+   "dated": "law.go.kr current text, dated by article notes",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/KrGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4300",
+   "tax": "상속세 (inheritance tax)",
+   "statute": "상증법 arts. 19, 21, 26",
+   "dated": "law.go.kr current text, dated by article notes",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "estate-based apportionment",
+    "other deductions"
+   ],
+   "family_file": "lean/KrGlobal/Transfers.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4300",
+   "tax": "증여세 (gift tax)",
+   "statute": "상증법 arts. 53, 56",
+   "dated": "law.go.kr current text, dated by article notes",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "generation-skipping surcharge"
+   ],
+   "family_file": "lean/KrGlobal/Transfers.lean",
+   "family_guards": 3
+  }
+ ],
+ "grades": {
+  "A": 12,
+  "B": 3,
+  "C": 1
+ },
+ "guards": 38,
+ "sorry": 0,
+ "cases": 3,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

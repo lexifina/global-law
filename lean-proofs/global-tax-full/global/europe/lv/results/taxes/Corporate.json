@@ -1,0 +1,60 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Uzņēmumu ienākuma nodoklis (distributed profit)",
+  "statute": "UIN likums 4. pants (1), (9)",
+  "dated": "likumi.lv redakcija uz 01.07.2025",
+  "grade": "A",
+  "kernel_parts": [
+   "charge (distribution base)"
+  ],
+  "unsupported": [
+   "deemed distributions",
+   "dividend reductions (6. pants)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "UIN likums 5. pants",
+  "dated": "likumi.lv redakcija uz 01.07.2025",
+  "grade": "B",
+  "status": "not modelled (read in part: 20 % on management and consultancy fees)",
+  "kernel_parts": [],
+  "unsupported": [
+   "no withholding on dividends, interest and royalties to non-low-tax residents (structure only)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Uzņēmumu ienākuma nodoklis, ko ietur no nerezidentiem (dividend, interest, royalty, services)",
+  "statute": "likums Par uzņēmumu ienākuma nodokli 5. pants (1), (5), (6)",
+  "dated": "likumi.lv, redakcija 2025-07-01 (`lv/law/uin_2025-07-01.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "services are taken as management and consultancy services (5. panta 5. daļa)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Iedzīvotāju ienākuma nodoklis, ko ietur no nerezidentiem (dividend, interest, royalty, services)",
+  "statute": "likums Par iedzīvotāju ienākuma nodokli 3. panta 3. daļa, 9. panta 1. daļa, 15. panta 2., 5., 8. daļa, 17. panta 12. daļa",
+  "dated": "likumi.lv, redakcija 2025-07-01 (`lv/law/iin_2025-07-01.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "royalties are taken as payments for intellectual property other than authors' fees (authors' fees 25,5 %, 15. panta 7.1 daļa)",
+   "the 33 % band above the contribution ceiling (15. panta 2. daļas 2. punkts) and the EU/EEA 75 % option are not applied",
+   "dividends are taken as paid from profit on which UIN was paid",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

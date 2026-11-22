@@ -1,0 +1,197 @@
+{
+ "country": "ET",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "VAT Proclamation No. 1341/2024 art. 7 (2) b) (15 %) [text version: Proclamation No. 1341/2024 as published (Federal Negarit Gazette No. 61, 21 August 2024)]",
+   "dated": "VAT Proclamation No. 1341/2024 (Federal Negarit Gazette No. 61, 21 August 2024); tax year EFY 2017 (8 July 2024 - 7 July 2025) holds most of 2025",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "exempt supply list not resolved"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Excise Tax Proclamation No. 1186/2020 as amended by the Excise Tax (Amendment) Proclamation No. 1287/2023 (charging provision as replaced: \"Excise Tax shall be charged at the rate specified in the First Schedule attached\"), First Schedule: beer 40 % or 11 Birr per litre whichever is higher; wine (local content below 75 %) 40 %; spirits 80 %; sweetened waters 25 %; cigarettes 30 % + 8 Birr per pack of 20; kerosene, benzene and diesel oils 15 % [text version: Proclamation No. 1186/2020 as amended by Proclamation No. 1287/2023 (Federal Negarit Gazette, 2023); no later amendment in the Ministry of Revenues' archived list (flag)]",
+   "dated": "VAT Proclamation No. 1341/2024 (Federal Negarit Gazette No. 61, 21 August 2024); tax year EFY 2017 (8 July 2024 - 7 July 2025) holds most of 2025",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "local-content beer and wine rates",
+    "amendments after 1287/2023 not searched beyond the MoR list"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Business income tax (bodies)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Federal Income Tax Proclamation No. 979/2016 art. 19 (1) (business income tax rate for bodies 30 %); unchanged by Proclamation 1395/2025",
+   "dated": "VAT Proclamation No. 1341/2024 (Federal Negarit Gazette No. 61, 21 August 2024); tax year EFY 2017 (8 July 2024 - 7 July 2025) holds most of 2025",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "alternative minimum tax (Proc. 1395/2025, from 8 July 2025)",
+    "Proc. 1157/2019 not read"
+   ],
+   "guards": 12
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Income tax on non-residents' Ethiopian-source payments (Schedule D)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Federal Income Tax Proclamation No. 979/2016 art. 51 (2) (a) insurance premium or royalty 5 %, (b) dividend or interest 10 %, (c) management or technical service fee 15 %, to 6 August 2025; Proclamation No. 1395/2025 art. 52 (2) as replaced (a) insurance premium 15 %, royalty 10 %, (b) dividend 15 %, (c) interest 10 %, (d) management or technical fee 15 %, for Schedule D tax collected from 7 August 2025 (art. 4 (2)) [text version: Proclamation No. 979/2016 as published (Federal Negarit Gazette, 2016); Proclamation No. 1395/2025 as published (Federal Negarit Gazette No. 64, 1 September 2025; world/B10-anglophone-africa/et/law/mor_proc_1395.txt, English column of art. 4 and of art. 52 (2)). Split by the payment's date (twentieth pass); pass 19's '8 July' was the date of art. 4 (3), which does not govern Schedule D]",
+   "dated": "VAT Proclamation No. 1341/2024 (Federal Negarit Gazette No. 61, 21 August 2024); tax year EFY 2017 (8 July 2024 - 7 July 2025) holds most of 2025",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht",
+    "R4.DatedWhtRule (payment date; undated with a changed rate: grade C)"
+   ],
+   "unsupported": [
+    "undated royalty and dividend payments (the rate changed on 7 August 2025): grade C",
+    "insurance premiums (5 -> 15 %): not a payment kind"
+   ],
+   "guards": 12
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on the registration of title to property (2 % of the value, on the transferee)",
+   "statute": "Stamp Duty Proclamation No. 110/1998 (Federal Negarit Gazeta No. 36, 12 May 1998) art. 5 (1), 6 (5) and Schedule item 13 'Register title to property: on value 2 %' (R4 registry copy global/registry/afm_data/fetch/ET/et_stamp_110.pdf.txt l. 511-512); Stamp Duty (Amendment) Proclamation No. 612/2008 (et_stamp_612.pdf.txt) amends only the authority's name and art. 9-12 (appeals), not the Schedule. B: no later amendment located; the 2 % for 2025 is confirmed by a secondary summary (PwC Ethiopia 'Other taxes', reviewed 18 December 2025; facts only)",
+   "dated": "-",
+   "unsupported": [
+    "regional stamp duty proclamations (e.g. Addis Ababa) for instruments under regional competence not checked",
+    "valuation by the committee where the value cannot be determined (art. 5 (2)-(4))",
+    "other items (leases 0,5 %, bonds and security deeds 1 %, contracts Birr 5, memoranda of association) not modelled",
+    "the annual property tax of Proclamation No. 1365/2025 (urban land and buildings) is a P5 recurrent item, not reached"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (federal vs regional income-tax powers (regional proclamations mirror the federal one); provision not located by keyword in the reachable text)",
+   "statute": "Federal Income Tax Proclamation No. 979/2016 as amended by Proclamation No. 1395/2025",
+   "dated": "-",
+   "unsupported": [],
+   "status": "reclassified",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "classification": "duplicate (not a separate tax)",
+   "oecdGuide": "OECD Interpretative Guide (Revenue Statistics 2026, Annex A; R4/fetch/gap/oecd_guide.txt) §28 (receipts classified by base: income taxes under 1000), §97 and §104 (a State's tax is attributed to the State that imposes it and sets its rate; the heading does not change)",
+   "why": "The registry row is a note on the division of income-tax powers, not a levy: the States levy the same income taxes on employees of the State and of private enterprises, on individual traders, on rental income from private houses and on farmers (FDRE Constitution 1995 art. 97 (1), (3), (4), (6); lexifina/ethiopia-law, constitution/art-097.md), under regional proclamations that reproduce the federal schedules of Proclamation 979/2016 (as amended by 1395/2025). Those payments are the 1100/1200 taxes already modelled (P2 CIT, P3 Schedules B-D, 1.x PIT); only their attribution to the State level differs. No separate payment remains to model.",
+   "was": "grade C (triage notATax: registry note on federal vs regional income-tax powers, not a separate tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass)",
+   "guards": 0
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Schedule D dividend income tax (10 % to 6 August 2025, 15 % from 7 August)",
+   "statute": "Federal Income Tax Proclamation 979/2016 art. 57 as replaced by Income Tax (Amendment) Proclamation 1395/2025 (Negarit Gazette No. 64, 1 September 2025), Schedule D effective 7 August 2025 (art. 4(2)) [text version: Proclamation No. 1395/2025 as published (Federal Negarit Gazette No. 64, 1 September 2025); to 6 August 2025 the Proclamation No. 979/2016 rate (10 %); split by the income record's date (twentieth pass)]",
+   "dated": "-",
+   "unsupported": [
+    "undated dividends (rate changed on 7 August 2025): grade C",
+    "group-company distributions outside art. 57 (art. 57(3))"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.datedFinalWhtFamily (R4Common.Dated)"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Schedule D interest income tax (10 % from 7 August 2025)",
+   "statute": "Proclamation 979/2016 art. 56, renumbered art. 58 and replaced by Proclamation 1395/2025, effective 7 August 2025 [text version: Proclamation No. 1395/2025 as published (Federal Negarit Gazette No. 64, 1 September 2025); interest dated before 7 August 2025 (Proclamation No. 979/2016 art. 56) not computed (twentieth pass)]",
+   "dated": "-",
+   "unsupported": [
+    "interest dated before 7 August 2025 or undated (Proclamation 979/2016 art. 56: 5 % on savings deposits; deposit type not an input): grade C"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.datedFinalWhtFamily (R4Common.Dated)"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Schedule B rental income tax of individuals (0-35 % bands on annual taxable rental income)",
+   "statute": "Proclamation 979/2016 art. 14(2) as replaced by Proclamation 1395/2025 (applicable to income derived from 8 July 2025, art. 4(3)) [text version: Proclamation No. 1395/2025 as published (Federal Negarit Gazette No. 64, 1 September 2025)]",
+   "dated": "-",
+   "unsupported": [
+    "the bands of art. 14 (2) as replaced apply to income derived from 8 July 2025 (art. 4 (3)), i.e. to the tax year EFY 2018 (8 July 2025-7 July 2026); income derived from 1 January to 7 July 2025 belongs to EFY 2017, taxed on that year's whole rental income under the Proclamation 979/2016 bands (not re-read): a calendar-2025 rent cannot be split between the two tax years' band schedules (twentieth pass: B -> C)"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "Proclamation 1395/2025 art. 4 (3) and art. 14 (2) (new bands 0-35 %); the household's rent is one annual amount",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Private Organization Employees' Pension Fund, employer contribution (11 %)",
+   "statute": "Private Organization Employees' Pension Proclamation No. 1268/2022 art. 10 (Federal Negarit Gazette No. 16, 18 March 2022; metaappz.com copy, R4/fetch/et11) [text version: Proclamation No. 1268/2022 as published (Federal Negarit Gazette No. 16, 18 March 2022)]",
+   "dated": "-",
+   "unsupported": [
+    "base is salary (basic pay per some guides): applied to wages",
+    "the employee's 7 %",
+    "sole proprietors' own staff excluded"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

@@ -1,0 +1,60 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "CVAE (CGI art. 1586 ter, being phased out); CFE (CGI art. 1447); taxe d'habitation on second homes",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVFRA v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/FRA.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6100 property contributions of corporations 7 708, discounts from pharmaceutical companies 9 680, flat-rate tax on network corporations (IFER) 1 864, other and various taxes 2 629, chambers of commerce fees 739 million EUR (2024); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "model (high revenue): CFE (CGI art. 1447) and CVAE (art. 1586 ter, being phased out); taxe d'habitation on second homes",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 10: malus CO2 (2025 barème, new cars) and taxe fixe modelled; taxe régionale, malus au poids and the annual taxes on company cars not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 10: malus CO2 (2025 barème, new cars) and taxe fixe modelled; taxe régionale, malus au poids and the annual taxes on company cars not modelled",
+  "unsupported": [
+   "would unlock: the regional tariff per cheval administratif (L. 421-41 ff., regional deliberations); CIBS L. 421-71 ff. (masse en ordre de marche) with the mass in running order; L. 421-93 ff. (company cars)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Taxe sur les émissions de CO2 des véhicules de tourisme (malus)",
+  "statute": "CIBS L. 421-58, L. 421-59, L. 421-62 (barème 2025), L. 421-67; L. 421-62 as modified by loi n° 2023-1322 art. 97 (barème from 2024) for first registrations to 28 February 2025 [year in force 2025 (pass 16), unchanged-confirmed: the table used is the barème dated for first registrations from 1 March 2025 (113 g/km 50 € … 192 g/km 67 467 €, above 70 000 €), not the 2026 one; L. 421-62 in its January 2025 wording (Légifrance section captured 2025-01-23, pass 14) gives the earlier barème to 28.2.2025]",
+  "dated": "barème from 1 March 2025 (service-public.gouv.fr, vérifié le 21 février 2026); L. 421-59, L. 421-67 Légifrance via the Internet Archive (2024-02-23); split at 1 March 2025 (kernel 2.6.0 date window; pass 14)",
+  "grade": "B",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "vehicles first registered before 2025 and registered in France in 2025 (used imports: earlier barèmes, L. 421-60 décote), NEDC and non-EU-approved vehicles (L. 421-63, 421-64), vehicles other than cars",
+   "5200 malus: the cap at 50 % of the price including taxes (L. 421-61 bis) is not applied (grade C)",
+   "5200 malus: the barème from 1 March 2025 is booked for the whole year; family, disability and E85 abatements (L. 421-65 ff., L. 421-68) are not applied"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "5200",
+  "tax": "Taxe fixe sur les certificats d'immatriculation",
+  "statute": "CIBS L. 421-30 1°, L. 421-37, L. 421-38",
+  "dated": "Légifrance via the Internet Archive (2025-01-24)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "none (every vehicle registered in the year)"
+  ]
+ }
+]

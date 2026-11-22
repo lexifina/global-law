@@ -1,0 +1,241 @@
+{
+ "country": "RO",
+ "name": "Romania",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:04:39"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Impozit pe câștigul din transferul titlurilor de valoare",
+   "statute": "Codul fiscal art. 94-96 (10 % for 2025)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-05-31 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "the tax on real estate transfers (1 %/3 % of value, Codul fiscal art. 111) is not modelled"
+   ],
+   "family_file": "lean/RoGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Taxa pe valoarea adăugată",
+   "statute": "Codul fiscal art. 291 (versions to 31.7.2025 and from 1.8.2025, Legea 141/2025); art. 292 (scutiri)",
+   "dated": "legislatie.just.ro consolidations captured 2025-05-02 and 2025-11-25",
+   "grade": "A",
+   "kernel_parts": [
+    "DatedVat (kernel 2.1)",
+    "Vat"
+   ],
+   "unsupported": [
+    "art. 310 small-business threshold",
+    "NC 2202 drinks and sugared food at the standard rate",
+    "housing 5 % / 9 % (art. 291 (3) c, Legea 141 art. III)"
+   ],
+   "family_file": "lean/RoGlobal/Consumption.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Codul fiscal Titlul VIII (accize)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not reached in the P1 pass",
+   "unsupported": [
+    "would unlock: the excise act's 2025 rate articles"
+   ],
+   "family_file": "lean/RoGlobal/Consumption.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impozit pe profit",
+   "statute": "Codul fiscal (Legea nr. 227/2015) art. 17 (16 %)",
+   "dated": "art. 17 as in force 2025-03-01 (unchanged since 2016)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "impozitul pe veniturile microîntreprinderilor (art. 47-56: 1 % / 3 % of turnover, mandatory under the conditions) not modelled",
+    "minimum turnover tax (art. 18^3, 1 % for turnover over 50 M€) not modelled",
+    "withholding (art. 224) not read"
+   ],
+   "family_file": "lean/RoGlobal/Corporate.lean",
+   "family_guards": 22
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impozit pe veniturile obținute din România de nerezidenți (dividend, interest, royalty, services)",
+   "statute": "Legea 227/2015 privind Codul fiscal art. 223 (1), art. 224 (1), (4)",
+   "dated": "Internet Archive capture 2025-05-02 of the consolidated Code (`ro/law/cf_wb20250502.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "StateWht (2.4.0, recipient state)"
+   ],
+   "unsupported": [
+    "services are taken as management or consultancy services or services performed in Romania (art. 223 (1) i), k))",
+    "the 10% rate for individuals resident in the EU or a treaty state (art. 224 (4) c^1)) is not applied: the input does not give the recipient's state",
+    "the 50% rate (art. 224 (4) c)) and the EU directive exemptions are not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/RoGlobal/Corporate.lean",
+   "family_guards": 22
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: impozitul pe mijloacele de transport on cars and motorcycles modelled at the statutory amounts; local indexation and additional quotas, buses, lorries (art. 470 (5)-(7)) and trailers not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: impozitul pe mijloacele de transport on cars and motorcycles modelled at the statutory amounts; local indexation and additional quotas, buses, lorries (art. 470 (5)-(7)) and trailers not modelled",
+   "unsupported": [
+    "would unlock: the 2025 decision of the Bucharest general council (art. 491 indexation, art. 489 additional quotas, art. 470 (3) hybrid reduction); art. 470 (5)-(7) for heavy vehicles"
+   ],
+   "family_file": "lean/RoGlobal/Other.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "Impozitul pe mijloacele de transport",
+   "statute": "Codul fiscal (Legea 227/2015) art. 469 alin. (1) lit. n), art. 470 alin. (2), (3)",
+   "dated": "legislatie.just.ro via the Internet Archive, 2025-05-02 (`ro/law/cf_wb20250502.txt`; unchanged in the 2025-11-25 capture)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "buses, lorries (art. 470 (2) I.7-I.9, (5)-(7) by axles and mass), trailers, other kinds",
+    "5200 impozitul pe mijloacele de transport: the statute's amounts of art. 470 (2) are booked without the Bucharest council's 2025 indexation (art. 491) and additional quotas (art. 489) (grade C for the local part)",
+    "5200 impozitul pe mijloacele de transport: the tax is owed for the whole year by the owner at 31 December of the previous year (a vehicle acquired in the year from the next 1 January); the model prorates by months held"
+   ],
+   "family_file": "lean/RoGlobal/Other.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "European Commission TEDB, RO: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 497, 801, 806, 884, 3301, 494, 1301) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/RoGlobal/Other.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real estate transfer tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Romania, Corporate - Other taxes, accessed 2025-06-17 (Wayback capture; `law/pwc_corpother_wb2025.txt`)",
+   "dated": "PwC WWTS Corporate - Other taxes, 2025-06-17 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/RoGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4100",
+   "tax": "Impozit pe clădiri rezidențiale",
+   "statute": "Codul fiscal (Legea 227/2015) Titlul IX cap. 2, art. 457 alin. (1) (residential buildings of individuals: 0,08-0,2 % of the taxable value, set by the local council); HG 1/2016 (norme metodologice)",
+   "dated": "Codul fiscal Title IX ch. 2 as applicable 1.1.2025; EC Taxes in Europe Database (TEDB), tax 497, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "LocalTax (2.8.0)"
+   ],
+   "unsupported": [
+    "no capital-city rate declared: Bucharest's HCGMB 356/2024 is held as metadata only (text not read) (rate input localRates.propertyTax)",
+    "non-residential buildings (0,2-1,3 %, 2 % / 5 % if not revalued) and the tax on land (art. 465): not modelled; a non-residential rate above 0,2 % is flagged",
+    "the local council's increase of up to 50 % (art. 489) is included in the rate given"
+   ],
+   "lfw": 1,
+   "status": "framework (local rate input)",
+   "local_rate": "the municipality's rate is an input: localRates.propertyTax",
+   "family_file": "lean/RoGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contribuția asiguratorie pentru muncă",
+   "statute": "Codul fiscal art. 220^3 (1): 2,25 %",
+   "dated": "legislatie.just.ro via Internet Archive 2025-05-02",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/RoGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Romania, Individual - Other taxes, accessed 2025-06-16 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-16 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/RoGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Romania, Individual - Other taxes, accessed 2025-06-16 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-16 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/RoGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 6,
+  "C": 2
+ },
+ "guards": 47,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

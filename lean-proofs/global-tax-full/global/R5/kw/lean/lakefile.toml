@@ -1,0 +1,22 @@
+name = "KwGlobal"
+version = "0.1.0"
+defaultTargets = ["KwGlobal", "kwglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); KwTax = the 1.x model, vendored from cmp20/world/B15-no-pit/kw/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "KwTax"
+
+[[lean_lib]]
+name = "KwGlobal"
+
+[[lean_exe]]
+name = "kwglobal"
+root = "KwGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

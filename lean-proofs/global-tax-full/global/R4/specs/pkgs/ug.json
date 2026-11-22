@@ -1,0 +1,98 @@
+{
+ "cc": "UG",
+ "dated": "Income Tax Act (ULII consolidation 2024-12-23); NSSF Act (2022-01-07)",
+ "entries": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "income": "dividend",
+   "rateBp": 1500,
+   "grade": "A",
+   "name": "Withholding tax on dividends (resident)",
+   "statute": "ITA s. 128 (1); Third Schedule Part IX para 1 (15 %)",
+   "doc": "Third Schedule Part IX: \"1. The withholding tax rate applicable for interest and dividend payments to a resident person under sections 127 and 128 excluding interest on government securities is 15%. 2. The withholding tax rate applicable for dividend payments from companies listed on the stock exchange to individuals under section 128 is 10%. 3. The withholding tax rate for interest payments on Government securities to a resident person ... (a) twenty percent ... not exceed ten years; (b) ten percent ... at least ten years.\"",
+   "notes": [
+    "ITA Third Schedule Part IX: 10 % for listed-company dividends to individuals not separable; withholding booked as the final charge on the item (finality of s. 127-128 for individuals not checked)"
+   ],
+   "unsupported": [
+    "listed-company dividends 10 %"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "intWht",
+   "income": "interest",
+   "rateBp": 1500,
+   "grade": "A",
+   "name": "Withholding tax on interest (resident)",
+   "statute": "ITA s. 127 (1); Third Schedule Part IX para 1 (15 %)",
+   "notes": [
+    "interest on government securities 20 % / 10 % (Part IX para 3) not separable"
+   ],
+   "unsupported": [
+    "government securities"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "nssf",
+   "rateBp": 1000,
+   "level": "social",
+   "grade": "A",
+   "name": "NSSF standard contribution (employer share)",
+   "statute": "NSSF Act s. 11 (1) (15 % of total wages), s. 12 (1) (employee share 5 %): employer 10 %",
+   "doc": "s. 11 (1): \"every contributing employer shall ... pay to the fund ... a standard contribution of 15 percent calculated on the total wages paid during that month to that employee\"; s. 12 (1): \"A contributing employer may deduct from the monthly wage payment of his or her employee the employee's share of a standard contribution of 5 percent\".",
+   "unsupported": []
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stampTransfer",
+   "grade": "B",
+   "name": "Stamp duty on transfers (land, buildings, unlisted shares)",
+   "statute": "Stamp Duty Act 2014, Schedule 2 item 63 (a) (ULII consolidation eng@2023-12-31; amendments after 2023 not checked)",
+   "doc": "Schedule 2 item 63: transfer, 1,5 % of the total value; (b) transfers of listed shares arising from trading on the stock exchange 0,5 %.",
+   "unsupported": [
+    "exempted transfers (item 63 (c)-(d): special purpose vehicles, Islamic finance) and Nil items for licensed investors"
+   ],
+   "rateBp": 150,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land",
+    "unlistedShares"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (local service tax; local hotel tax)",
+   "statute": "Local Governments Act Cap. 243 (local service tax on employees)",
+   "why": "triage minor: local service tax (fixed by income band, local governments) and local hotel tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "not reached",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stampListed",
+   "grade": "B",
+   "name": "Stamp duty on transfers of listed shares traded on the stock exchange",
+   "statute": "Stamp Duty Act 2014, Schedule 2 item 63 (b) (ULII eng@2023-12-31)",
+   "doc": "Schedule 2 item 63 (b): 0,5 %.",
+   "rateBp": 50,
+   "kinds": [
+    "listedShares"
+   ]
+  }
+ ]
+}

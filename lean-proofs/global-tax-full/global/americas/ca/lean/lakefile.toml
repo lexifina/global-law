@@ -1,0 +1,22 @@
+name = "CaGlobal"
+version = "0.1.0"
+defaultTargets = ["CaGlobal", "caglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); CaTax = the 1.x model, vendored from cmp20/anglo/ca/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CaTax"
+
+[[lean_lib]]
+name = "CaGlobal"
+
+[[lean_exe]]
+name = "caglobal"
+root = "CaGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

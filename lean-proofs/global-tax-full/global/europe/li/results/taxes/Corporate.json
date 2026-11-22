@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Ertragssteuer",
+  "statute": "Steuergesetz (SteG, LGBl. 2010 Nr. 340) Art. 61 (12,5 %), Art. 62 Abs. 1-2 (Mindestertragssteuer 1 800 Franken, anrechenbar) [year in force 2025 (pass 16), unchanged-confirmed: li/law/steg_konso.txt (Fassung 01.07.2026) footnotes: Art. 61 none (text of LGBl. 2010 Nr. 340); Art. 62 Abs. 1 LGBl. 2016 Nr. 524, Abs. 2 LGBl. 2016 Nr. 344 (erstmals Steuerjahr 2017); no later change]",
+  "dated": "SteG Fassung 01.07.2026; Art. 61-62 unchanged since 2010 / 2016",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "Art. 62 (3) exemption from the minimum tax for small trading companies (Bilanzsumme ≤ 500 000 Fr.) not applied",
+   "Eigenkapitalzinsabzug (Art. 54) and the GloBE QDMTT not modelled"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad (none levied) (dividend, interest, royalty, services)",
+  "statute": "SteG (no withholding tax)",
+  "dated": "2025-06-17",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

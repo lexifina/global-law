@@ -1,0 +1,18 @@
+name = "CzGlobal"
+version = "0.1.0"
+defaultTargets = ["CzGlobal", "czglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); CzTax = the 1.x model, vendored from cmp20/emerging/cz/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "CzTax"
+
+[[lean_lib]]
+name = "CzGlobal"
+
+[[lean_exe]]
+name = "czglobal"
+root = "CzGlobal.Main"

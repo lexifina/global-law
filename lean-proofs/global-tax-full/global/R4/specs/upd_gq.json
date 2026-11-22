@@ -1,0 +1,11 @@
+{"GQ": [
+ {"package": "P5", "oecd": "4100", "kind": "propertyValue", "fam": "ibi", "grade": "A", "rateBp": 15, "den": 100000, "kinds": ["home", "realEstate", "land"], "replaces": "^Impuesto sobre Bienes Inmuebles$",
+  "name": "Impuesto sobre Bienes Inmuebles, urban property (0,05 % of 30 % of land and building value)",
+  "statute": "Ley n° 1/2024 (tax code) art. 208-214",
+  "doc": "art. 213 1): for urban property the taxable base is 30 % of the sum of the values of land and building (30 % of the price of a transfer in the previous year); art. 214 1): rate 0,05 % of that base, i.e. 0,015 % of the value, applied in one step (15 / 100 000). The household's holdings are taken as urban property in Malabo or Bata (no regional rebate).",
+  "unsupported": ["rural property: 250 FCFA per hectare (art. 214 2)", "rebates of 40 % / 60 % / 100 % outside Malabo and Bata (art. 211)", "exemptions (art. 210)", "rounding of the two-step computation"]},
+ {"package": "P6", "oecd": "4300", "kind": "unsupported", "name": "Impuesto sobre Sucesiones y Donaciones", "replaces": "^Impuesto sobre Sucesiones y Donaciones$",
+  "statute": "Ley n° 1/2024 art. 248-256",
+  "why": "art. 256 1) rates are illegible in the OCR ('),5%' for the direct line above 5 000 000 FCFA, spouses and collaterals): the leading digit is lost",
+  "tried": "rescue3/Ley1-2024_ocr_spa.txt offsets 315076-323000 (Capítulo V, Sección 5)"}
+]}

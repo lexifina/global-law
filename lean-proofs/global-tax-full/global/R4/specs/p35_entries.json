@@ -1,0 +1,17 @@
+{
+ "SN": [
+  {"package": "P4", "oecd": "3000", "tax": "Contribution forfaitaire à la charge de l'employeur", "status": "modelled", "grade": "A", "statute": "CGI art. 267 (3 %)", "dated": "CGI annoté janvier 2025", "module": "Social.lean", "kernel_parts": ["R4.payrollFamily"], "unsupported": []},
+  {"package": "P4", "oecd": "2200", "tax": "Employer social contributions (CSS, IPRES, IPM)", "status": "unsupported", "grade": "C", "statute": "Code de la sécurité sociale", "dated": "-", "module": "", "kernel_parts": [], "unsupported": ["Code de la sécurité sociale and IPRES/IPM texts not held"]},
+  {"package": "P5", "oecd": "4100", "tax": "Contribution foncière des propriétés bâties et non bâties", "status": "modelled", "grade": "A", "statute": "CGI art. 290, 294, 302", "dated": "CGI annoté janvier 2025", "module": "Property.lean", "kernel_parts": ["R4.propertyFamily"], "unsupported": ["exemptions art. 291-293", "surtaxe on unbuilt land"]},
+  {"package": "P5", "oecd": "4400", "tax": "Droits d'enregistrement (mutations d'immeubles)", "status": "unsupported", "grade": "C", "statute": "CGI livre III", "dated": "-", "module": "", "kernel_parts": [], "unsupported": ["rate article for sales of immovables not located in this pass (text held)"]}
+ ],
+ "TG": [
+  {"package": "P5", "oecd": "4100", "tax": "Taxes foncières", "status": "modelled", "grade": "A", "statute": "CGI art. 275-276", "dated": "CGI-LPF édition 2025", "module": "Property.lean", "kernel_parts": ["R4.propertyFamily"], "unsupported": ["revenu net cadastral taken from annualValue"]},
+  {"package": "P5", "oecd": "4400", "tax": "Droits d'enregistrement (mutations d'immeubles)", "status": "unsupported", "grade": "C", "statute": "CGI art. 448 ff.", "dated": "-", "module": "", "kernel_parts": [], "unsupported": ["general rate for sales of immovables not located in this pass (text held; art. 448: 1 % for religious missions)"]}
+ ],
+ "KE": [
+  {"package": "P4", "oecd": "3000", "tax": "Affordable Housing Levy (employer)", "status": "modelled", "grade": "A", "statute": "Affordable Housing Act 2024 s. 4 (2), 5 (1) (b)", "dated": "Act as passed 2024 (in force 2025)", "module": "Social.lean", "kernel_parts": ["R4.payrollFamily"], "unsupported": []},
+  {"package": "P4", "oecd": "2200", "tax": "NSSF employer contributions", "status": "unsupported", "grade": "C", "statute": "NSSF Act 2013 s. 20", "dated": "-", "module": "", "kernel_parts": [], "unsupported": ["2025 tier limits (year 3 notice) not mapped in this pass; texts held"]},
+  {"package": "P3", "oecd": "1100", "tax": "Withholding tax on dividends (resident individuals)", "status": "modelled", "grade": "A", "statute": "ITA Third Schedule Head B para 5 (a) (15 %)", "dated": "ITA consolidation 2025-07-01", "module": "Capital.lean", "kernel_parts": ["R4.finalWhtFamily"], "unsupported": ["capital gains tax (Eighth Schedule)", "interest and rental income"]}
+ ]
+}

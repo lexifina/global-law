@@ -1,0 +1,41 @@
+S = {'cc': 'ME', 'fam': 'Corporate', 'doc': '# ME 2025: Porez na dobit pravnih lica (1200) and withholding on payments abroad\n\nSource: PwC Worldwide Tax Summaries, Montenegro, Corporate - Taxes on corporate income, accessed 2025-05-27 (Wayback capture; `me/law/pwc_cit_wb2025.html`); Corporate - Withholding taxes, accessed 2025-07-14 (Wayback capture; `me/law/pwc_wht_wb2025.html`); sha256 in `law/SHA256SUMS`.\n* CIT: profit ≤ EUR 100 000: 9 %; 100 000-1 500 000: EUR 9 000 + 12 % of the excess; above: EUR 177 000 + 15 % of the excess (PwC page reviewed 25 March 2025)\n* WHT 15 %: dividends, interest, royalties and other listed income; 30 % to entities in listed tax havens\n', 'lean': 'def cit : CorpRegime :=\n  { name := "Porez na dobit pravnih lica",\n    sched := Schedule.ofList [(0, 900), (100000, 1200), (1500000, 1500)] }\n\ndef wht : Wht :=\n  { name := "withholding tax on payments abroad", rules := [\n    { kind := .dividend, toCompany := none, minStakeBp := 0, rateBp := 1500, statute := "Zakon o porezu na dobit pravnih lica: 15 % (PwC 2025)" },\n    { kind := .interest, toCompany := none, minStakeBp := 0, rateBp := 1500, statute := "15 % (PwC 2025)" },\n    { kind := .royalty, toCompany := none, minStakeBp := 0, rateBp := 1500, statute := "15 % (PwC 2025)" }] }\n\ndef citStatute : String := "Zakon o porezu na dobit pravnih lica (progressive 9 % / 12 % / 15 %)"\n', 'families': [('1200 Porez na dobit pravnih lica', ['.cit'], '(if g.entity == .company then [cit.citCharge g.company citStatute] else [])\n       ++ (if g.entity == .company then wht.charges g.company else [])')], 'notes': ['ME 1200: PwC, last reviewed 25 March 2025'], 'unsupported': [('g.entity == .company && g.company.interestExpense > 0', 'interest limitation (ATAD art. 4 transposition) not modelled'), ('g.entity == .company', 'group regimes, CFC, transfer pricing and treaties out of scope')], 'guards': ['cit.citTax { profit := 100000, turnover := 10000000 } == 9000', 'cit.citTax { profit := 1000000, turnover := 10000000 } == 117000', 'wht.amount { kind := .dividend, amount := 100000, toCompany := true, stakeBp := 0 } == 15000', 'wht.amount { kind := .interest, amount := 100000, toCompany := true, stakeBp := 0 } == 15000', 'wht.amount { kind := .royalty, amount := 100000, toCompany := true, stakeBp := 0 } == 15000'], 'taxes': [{'oecd': '1200', 'tax': 'Porez na dobit pravnih lica', 'statute': 'Zakon o porezu na dobit pravnih lica (progressive 9 % / 12 % / 15 %)', 'dated': 'PwC, last reviewed 25 March 2025', 'grade': 'B', 'kernel_parts': ['CorpRegime'], 'unsupported': ["the act's own text not reached (secondary host)", 'loss carry-forward not modelled']}, {'oecd': '1200', 'tax': 'withholding tax on payments abroad', 'statute': 'Zakon o porezu na dobit pravnih lica: 15 % (PwC 2025); 15 % (PwC 2025); 15 % (PwC 2025)', 'dated': 'PwC, last reviewed 25 March 2025', 'grade': 'B', 'kernel_parts': ['Wht'], 'unsupported': ['30 % rate for payments to listed tax havens not modelled', 'treaty rates out of scope (statutory, treaty-free)']}]}
+
+# ---- pass 9 (R1 Europe, 2026-11-21): remaining withholding, carry-overs, B -> A, P5/P6 (tools/p9_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+p9_rows(S)
+p6_finish(S)
+
+# ---- pass 18 (R1 Europe, 2026-11-21): item-5 leftovers, audit, GR ENFIA, vehicles (tools/p18_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+p18_rows(S)
+p6_finish(S)
+
+# ---- gap pass (R1 Europe, 2026-11-21): gap-closing pass (tools/pgap_rows.py, tools/gap_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/pgap_rows.py")).read())
+pgap_rows(S)
+p6_finish(S)

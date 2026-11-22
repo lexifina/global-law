@@ -1,0 +1,442 @@
+{
+ "cc": "NE",
+ "dated": "CGI 2013 mis à jour LF 2022; Ordonnance 2024-59 (LF 2025)",
+ "entries": [
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "regImm",
+   "rateBp": 300,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "B",
+   "name": "Droit de mutation immobilière à titre onéreux",
+   "statute": "CGI art. 466 (3 %)",
+   "doc": "art. 466: \"Les adjudications, ventes, reventes, rétrocessions ... et tous autres actes civils et judiciaires translatifs de propriété ou d'usufruit de biens immeubles à titre onéreux sont assujettis à un droit de 3%.\" The LF 2025 (art. 30) amends art. 377 and 481 and repeals art. 469 and 482 only; LF 2023 and LF 2024 are not held: grade B.",
+   "notes": [
+    "CGI art. 466: 3 % (edition updated to LF 2022; LF 2023-2024 not held)"
+   ],
+   "unsupported": [
+    "LF 2023-2024 not held"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "irvmDiv",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1000,
+   "name": "Impôt sur le revenu des valeurs mobilières, dividends (10 %, final)",
+   "statute": "CGI 2013 updated to LF 2022, art. 69, 74 (Ordonnance 2024-59, LF 2025, checked: art. 69-111 not amended; LF 2023 and LF 2024 not held)",
+   "doc": "art. 74: 10 % on dividends (7 % from companies listed on a CREPMF-approved exchange), 7 % on gains on shares, 6 % on bonds, 5 % on gains on bonds, 15 % on other products; the levies are final.",
+   "unsupported": [
+    "7 % for listed companies' dividends"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "mutGratuit",
+   "grade": "B",
+   "classes": [
+    {
+     "rels": [
+      "child",
+      "spouse",
+      "parent",
+      "grandchild"
+     ],
+     "bands": [
+      [
+       1000000,
+       0
+      ],
+      [
+       2000000,
+       100
+      ],
+      [
+       5000000,
+       200
+      ],
+      [
+       10000000,
+       300
+      ]
+     ],
+     "top": 400
+    },
+    {
+     "rels": [
+      "sibling"
+     ],
+     "bands": [
+      [
+       1000000,
+       200
+      ],
+      [
+       2000000,
+       300
+      ],
+      [
+       5000000,
+       400
+      ],
+      [
+       10000000,
+       500
+      ]
+     ],
+     "top": 600
+    },
+    {
+     "rels": [
+      "nieceNephew"
+     ],
+     "bands": [
+      [
+       1000000,
+       400
+      ],
+      [
+       2000000,
+       500
+      ],
+      [
+       5000000,
+       600
+      ],
+      [
+       10000000,
+       700
+      ]
+     ],
+     "top": 800
+    },
+    {
+     "rels": [
+      "otherRelative"
+     ],
+     "bands": [
+      [
+       1000000,
+       500
+      ],
+      [
+       2000000,
+       700
+      ],
+      [
+       5000000,
+       700
+      ],
+      [
+       10000000,
+       800
+      ]
+     ],
+     "top": 900
+    }
+   ],
+   "default": {
+    "bands": [
+     [
+      1000000,
+      1500
+     ],
+     [
+      2000000,
+      1600
+     ],
+     [
+      5000000,
+      1700
+     ],
+     [
+      10000000,
+      1800
+     ]
+    ],
+    "top": 1900
+   },
+   "allowRels": [],
+   "allowance": 0,
+   "giftAllowance": false,
+   "name": "Droits de mutation à titre gratuit (successions, donations)",
+   "statute": "CGI art. 459 (tariff by share and degree), art. 456 (gifts on the same tariff)",
+   "doc": "art. 459: \"Les droits de mutation par décès sont fixés, pour la part nette recueillie par chaque ayant droit, après partage de l'héritage, selon le tarif du tableau ci-après\": fractions 1-1 000 000, -2 000 000, -5 000 000, -10 000 000, above 10 000 000 F: first degree, direct line and spouses 0/1/2/3/4 %; brothers and sisters 2/3/4/5/6 %; uncles, aunts, nephews, nieces 4/5/6/7/8 %; great-uncles, cousins 5/7/7/8/9 %; beyond the fourth degree and non-relatives 15/16/17/18/19 % (pdftotext -layout). art. 456: \"Les droits d'enregistrement des donations entre vifs sont perçus aux mêmes tarifs que ceux prévus à l'article 459\". Edition updated to LF 2022; LF 2025 art. 30 does not touch these articles; LF 2023-2024 not held: grade B.",
+   "notes": [
+    "CGI art. 459: grandchildren taken in the direct-line class; art. 457 25 % reduction for marriage-contract gifts and art. 460 provision not applied"
+   ],
+   "unsupported": [
+    "25 % reduction (art. 457)",
+    "LF 2023-2024 not held"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts (loi n° 2012-37 du 20 juin 2012), DGI edition 'CGI 2013 MAJ LF 2022' + Ordonnance n° 2024-59 (LF 2025)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.impots.gouv.ne (archived copies))",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "taxePro",
+   "grade": "B",
+   "name": "Taxe professionnelle (formerly patente: 1 per mille of turnover with floor and caps + 10 % of rental value)",
+   "statute": "CGI 2013 mis à jour LF 2022, art. 174-176 (LF 2025, ordonnance 2024-59, amends only art. 173; LF 2023-2024 not held)",
+   "doc": "art. 175: fixed duty 1 per mille of the previous year's turnover, at least 150 000 F, capped at 3 M (turnover up to 10 bn), 7 M (10-30 bn), 15 M (30-50 bn), 30 M (above); art. 176: proportional duty 10 % of the rental value of the premises, rented or free, at least a quarter of the fixed duty.",
+   "unsupported": [
+    "specific rates 1,5 % / 3 % of rental value under art. 169 sexies (art. 176), transport-sector taxe professionnelle (section III), new-business and young-entrepreneur exemptions (art. 173)"
+   ],
+   "lic": {
+    "tiers": [
+     [
+      10000000000,
+      1000,
+      150000,
+      3000000
+     ],
+     [
+      30000000000,
+      1000,
+      150000,
+      7000000
+     ],
+     [
+      50000000000,
+      1000,
+      150000,
+      15000000
+     ]
+    ],
+    "top": [
+     1000,
+     150000,
+     30000000
+    ],
+    "rentPpm": 100000,
+    "propMinDen": 4
+   },
+   "tests": [
+    {
+     "turnover": 3000000000,
+     "rv": 60000000,
+     "expect": [
+      3000000,
+      6000000
+     ]
+    },
+    {
+     "turnover": 12000000000,
+     "expect": [
+      7000000,
+      1750000
+     ]
+    },
+    {
+     "turnover": 100000000,
+     "rv": 1000000,
+     "expect": [
+      150000,
+      100000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "CGI-2013-MAJ-LF2022.txt (whole code)",
+   "why": "NE: the general tax code held (CGI-2013-MAJ-LF2022.txt, 1154k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "auto5": true,
+   "name": "Net wealth tax",
+   "statute": "CGI-2013-MAJ-LF2022.txt (whole code)",
+   "why": "NE: the general tax code held (CGI-2013-MAJ-LF2022.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "vignette",
+   "grade": "B",
+   "name": "Vignette (annual motor-vehicle tax by fiscal horsepower)",
+   "statute": "CGI 2013 mis à jour LF 2022 art. 207-212 (LF 2025 does not amend them; LF 2023-2024 not held)",
+   "doc": "art. 212: 1-2 CV 5 000 F, 3-6 CV 15 000, 7-11 CV 20 000, 12-14 CV 25 000, 15-19 CV 35 000, 20-24 CV 45 000, 25 CV and more 60 000.",
+   "unsupported": [
+    "exemptions (art. 211: below 1 CV, public bodies, invalids, stock for sale)"
+   ],
+   "bands": [
+    [
+     2,
+     5000
+    ],
+    [
+     6,
+     15000
+    ],
+    [
+     11,
+     20000
+    ],
+    [
+     14,
+     25000
+    ],
+    [
+     19,
+     35000
+    ],
+    [
+     24,
+     45000
+    ]
+   ],
+   "top": 60000,
+   "tests": [
+    {
+     "hps": [
+      9,
+      25
+     ],
+     "expect": [
+      20000,
+      60000
+     ]
+    },
+    {
+     "hps": [
+      12
+     ],
+     "company": true,
+     "expect": [
+      25000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircInt",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 1000,
+   "name": "Impôt sur le revenu des créances, interest on deposit and current accounts (10 %)",
+   "statute": "CGI 2013/LF 2022 art. 79-80 (LF 2025 checked; LF 2023-2024 not held)",
+   "doc": "art. 80: 20 %, but 10 % for interest on deposit and current accounts with banks and similar bodies, exchange agents, brokers, treasurers and agricultural credit funds (the household's interest is taken to be bank interest).",
+   "unsupported": [
+    "other claims, deposits and guarantees 20 % (art. 80)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "pvTitres",
+   "grade": "B",
+   "rateBp": 700,
+   "kinds": [
+    "listedShares",
+    "unlistedShares"
+   ],
+   "name": "IRVM on gains on shares (7 %, final)",
+   "statute": "CGI 2013/LF 2022 art. 74 (LF 2025 checked)",
+   "unsupported": [
+    "gains on bonds 5 %"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "pvImm",
+   "grade": "B",
+   "rateBp": 500,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Impôt sur les plus-values de cessions immobilières (5 %)",
+   "statute": "CGI 2013/LF 2022 art. 110-111 (LF 2025 checked)",
+   "doc": "art. 110: gain = sale price less the acquisition price, the latter increased by a flat 10 % for acquisition costs and by works; art. 111: 5 %.",
+   "unsupported": [
+    "flat 10 % uplift of the acquisition price for acquisition costs (art. 110): the household's stated costs are used instead",
+    "works at cost or a flat 10 %"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "ta",
+   "grade": "A",
+   "rateBp": 300,
+   "name": "Taxe d'apprentissage (3 %)",
+   "statute": "CGI Livre I art. 129-130 as replaced by Ordonnance n° 2024-59 (LF 2025) art. 15, from 1 January 2025",
+   "doc": "art. 129 (new): base = all remuneration paid in money plus benefits in kind, less listed deductions (new firms' first year, training costs, apprentices, new permanent contracts...); art. 130 (new): 3 % (the former 5 % for non-national workers and the reductions of art. 131-136 are repealed).",
+   "unsupported": [
+    "deductions of art. 129 (new firms, apprentices, net pay of new contracts in the year)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyAnnual",
+   "fam": "irbh",
+   "grade": "A",
+   "rateBp": 1200,
+   "kinds": [
+    "realEstate"
+   ],
+   "name": "Impôt sur les revenus des baux d'habitation (12 % of annual rental value; main residence exempt)",
+   "statute": "CGI Livre I art. 146-148, 159 as amended by Ordonnance n° 2024-59 (LF 2025) art. 16",
+   "doc": "art. 147: base = rental value of buildings let as dwellings; art. 148 (new): 12 % of the annual rental value, 6 % for free and secondary dwellings; art. 159 6° (new): the main residence is exempt. The household's other buildings are taken as let dwellings.",
+   "unsupported": [
+    "6 % for dwellings occupied free and secondary homes",
+    "impôt sur les revenus des baux professionnels 12 % (art. 151)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnss",
+   "level": "social",
+   "rateBp": 1740,
+   "cap": 6000000,
+   "grade": "B",
+   "name": "CNSS employer contributions incl. ANPE (family 8,4 %, work accidents 1,75 %, pensions 6,25 %, ANPE 1 %; ceiling 500 000 F a month)",
+   "statute": "CNSS Niger 'Guide de l'employeur' (December 2019; décret n° 2005-64/MFP/T art. 31-32; held ne/law/w5) and CLEISS 'Les cotisations au Niger' (1 Jan 2024, ANPE 1 %)",
+   "doc": "Guide 2019: 'Le plafond annuel ... est de 6.000.000 F.CFA'; 8,4 % family, 1,75 % work accidents, pensions 6,25 % employer / 5,25 % worker, ANPE 0,5 %. CLEISS 2024: same branch rates, 'Agence Nationale pour la Promotion de l'Emploi (ANPE) 1 %', ceiling 500 000 FCFA a month, total employer 17,40 %.",
+   "unsupported": [
+    "SMIG floor",
+    "ANPE rate: 0,5 % in the 2019 guide, 1 % in the 2024 CLEISS table (later source used)",
+    "the worker's 5,25 %"
+   ]
+  }
+ ]
+}

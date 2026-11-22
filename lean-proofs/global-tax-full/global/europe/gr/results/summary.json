@@ -1,0 +1,233 @@
+{
+ "country": "GR",
+ "name": "Greece",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:34"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Φόρος υπεραξίας από μεταβίβαση μετοχών",
+   "statute": "ΚΦΕ (ν. 4172/2013) άρθρο 42 (15 %)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-07-22 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "listed shares below a 0,5 % holding are taken as taxed (the exemption's conditions are not modelled)",
+    "real estate gains (tax suspended) not modelled"
+   ],
+   "family_file": "lean/GrGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Φόρος προστιθέμενης αξίας",
+   "statute": "Κώδικας ΦΠΑ (ν. 5144/2024, ΦΕΚ Α' 162/11.10.2024) άρθρο 26 (24 %, 13 %, 6 %), Παράρτημα III, άρθρο 44 (10.000 ευρώ)",
+   "dated": "codification ν. 5144/2024 (in force 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+    "island rates reduced by 30 % (άρθρο 26 παρ. 4) not modelled; restaurant alcohol and coffee drinks at 24 % not separated",
+    "άρθρο 44 threshold as codified in 2024: a 2025 amendment by ν. 5162/2024 not checked"
+   ],
+   "family_file": "lean/GrGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Εθνικός Τελωνειακός Κώδικας (ν. 2960/2001) άρθρα 73, 78, 87, 98, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "heating gas oil: a reduced winter rate (280 EUR per 1 000 l from 15 October to 30 April) against 410 the rest of the year; the basket line is undated (not modelled)",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/GrGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Φόρος εισοδήματος νομικών προσώπων",
+   "statute": "ΚΦΕ (ν. 4172/2013) άρθρο 58 παρ. 1 α) (22 % from tax year 2021), as replaced by ν. 4799/2021 άρθρο 120 [year in force 2025 (pass 17), re-cited 2025: PwC Greece, Corporate - Taxes on corporate income, Internet Archive 2025-05-27 (gr/law/pwc_cit_wb20250527.*): 22 % for legal entities other than credit institutions, as modelled]",
+   "dated": "PwC Greece CIT page, Internet Archive 2025-05-27; ν. 4799/2021 read",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "read from the 2021 amending act, not from the 2025 consolidated ΚΦΕ",
+    "credit institutions under άρθρο 27Α (29 %) and simple-book entities of άρθρο 45 not separated",
+    "Pillar Two minimum tax not modelled"
+   ],
+   "yif17": "re-cited 2025",
+   "family_file": "lean/GrGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Παρακράτηση φόρου (ΚΦΕ άρθρο 64) (dividend, interest, royalty, services)",
+   "statute": "ν. 4172/2013 (ΚΦΕ) άρθρο 64",
+   "dated": "2025-06-23",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/GrGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/GrGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVGRC v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/GRC.csv`, SHA256SUMS; general government S13; 2025 not yet published): heading 6000 total 0 in 2021-2024; the stamp duties (χαρτόσημο) are booked by the OECD under other headings, not 6000",
+   "dated": "OECD Revenue Statistics 2021-2024 (2025 not yet published); no 6000 tax known in the national law read",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 2,
+   "family_file": "lean/GrGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Φόρος μεταβίβασης ακινήτων (ΦΜΑ)",
+   "statute": "ν. 1587/1950 ΦΜΑ 3 % + municipal surcharge 3 % of it = 3,09 %",
+   "dated": "PwC WWTS Corporate - Other taxes, 2025-06-23 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "the base is the objective value where higher (the price stands in); new buildings under VAT not separated"
+   ],
+   "family_file": "lean/GrGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4100",
+   "tax": "ΕΝ.Φ.Ι.Α. (Ενιαίος Φόρος Ιδιοκτησίας Ακινήτων), φυσικά πρόσωπα, κτίσματα",
+   "statute": "ν. 4223/2013 άρθ. 1 παρ. 3, 4 Α παρ. 2-3, Γ, Δ, Ε, 7 παρ. 2Α, as amended by ν. 4916/2022 άρθ. 40, 43, 44, 46",
+   "dated": "ν. 4916/2022, ΦΕΚ Α' 65/28.03.2022 (et.gr PDF, Internet Archive 2024-06-13: `gr/law/n4916_fek_a65_2022_wb20240613.*`), from ΕΝ.Φ.Ι.Α. 2022; the coefficients in the 2013 wording (e-nomothesia, Internet Archive 2024-07-22: `gr/law/n4223_enomothesia_wb20240722.*`), not touched by ν. 4916/2022; PwC Greece 2025 captures: the same 2-16,20 €/m² range and ν. 5162/2024 (insurance discount) as the only 2025 change; amendments of άρθ. 4 and 7 between 2022 and the 2025 assessment not checked in a 2025 consolidation (B)",
+   "grade": "B",
+   "status": "",
+   "kernel_parts": [
+    "ZoneTax (2.7.0: zoneValueM2, buildYear, floor, frontages)",
+    "Schedule"
+   ],
+   "unsupported": [
+    "plots and land (Ενότητα Β) and legal persons (άρθ. 5) not modelled",
+    "the objective value (ν. 3842/2010 άρθ. 32) is an input (\"objectiveValue\"), not computed",
+    "ν. 5162/2024 insurance discount and άρθ. 7 παρ. 1-2 not applied",
+    "Σ.Μ., Σ.Β.Χ., Σ.Η.Κ., special buildings not inputs"
+   ],
+   "family_file": "lean/GrGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Εισφορές εργοδότη μισθωτών ιδιωτικού τομέα (e-ΕΦΚΑ, ΔΥΠΑ)",
+   "statute": "ν. 4387/2016 as amended by ν. 5162/2024 (ΦΕΚ Α' 198/05.12.2024) art. 12: employer 21,79 % from 1.1.2025 (PwC, facts); health branch 3,80 % + 0,25 % employer (e-ΕΦΚΑ εγκύκλιος 38/2024); monthly ceiling 7 572,62 EUR",
+   "dated": "PwC capture 2025-06-17 (rates from 1.1.2025); e-ΕΦΚΑ εγκύκλιος 38/2024",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/GrGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "Φόρος κληρονομιών και δωρεών",
+   "statute": "ν. 2961/2001 (Κώδικας φορολογίας κληρονομιών, δωρεών, γονικών παροχών), scales of categories Α', Β', Γ' (art. 29 and 44, as stated by PwC; the act itself not read)",
+   "dated": "PwC Worldwide Tax Summaries, Greece, Individual - Other taxes, last reviewed 4 March 2025 (Internet Archive 2025-06-17)",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "parental grant (γονική παροχή, parent to child): EUR 800 000 tax-free with the category A' rates above it; the scale above the 800 000 is not stated clearly enough to compute, so a gift to a child is charged 0 here (grade C)",
+    "an 'other relative' is taken as category Γ' (distant relatives); uncles and aunts, step-children, in-laws, grandparents and great-grandchildren are category Β'; legal entities and charities have their own rates (not read)",
+    "earlier gifts and parental grants from the same person, which the act adds to the later acquisition, are not looked back on; real estate at its objective value is not in the input (the value given stands in); disability reliefs not applied"
+   ],
+   "family_file": "lean/GrGlobal/Wealth.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "4200",
+   "tax": "Taxes on net wealth (4200)",
+   "statute": "European Commission TEDB, GR: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 838, 210, 3561, 216, 6961, 215, 222, 223, 961, 1141, 6960)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "the national taxes the OECD books under 4200 (named above) and their 2025 statutes"
+   ],
+   "gap": 2,
+   "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVGRC v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/GRC.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 4200: heading 4200 total 1 157, 1 295, 1 308 million EUR in 2021-2023 (unnamed); the national taxes behind it not read",
+   "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVGRC v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/GRC.csv`, SHA256SUMS; general government S13; 2025 not yet published)",
+   "family_file": "lean/GrGlobal/Wealth.lean",
+   "family_guards": 14
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 9,
+  "C": 2
+ },
+ "guards": 45,
+ "sorry": 0,
+ "cases": 7,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

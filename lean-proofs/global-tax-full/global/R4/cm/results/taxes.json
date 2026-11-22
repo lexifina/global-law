@@ -1,0 +1,323 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 142 (1) a); art. C 53, C 54 (1) (centimes additionnels communaux 10 %)",
+  "dated": "CGI édition 2024; LF 2025 circular (no rate change)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "art. 128 exemptions not read (two-column OCR)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Droit d'accises (tabacs)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 142 (1) b), e), (7)",
+  "dated": "CGI édition 2024",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc (minimum per stick)"
+  ],
+  "unsupported": [
+   "drinks: rate class and specific duties not read",
+   "fuel tax (TSPP) not read"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés + minimum de perception + CAC",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 12, 17, 21-22",
+  "dated": "CGI édition 2024; LF 2025 circular",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "CAC article itself not read",
+   "loss age"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "IRCM (15 %) and taxe spéciale sur les revenus (15 %)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 70 (1); CGI 2024 art. 225, 225 ter (twelfth pass)",
+  "dated": "CGI édition 2024",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "TSR reduced rates (10 % / 3 %) not applied"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI 2024 (édition held) (whole code)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "CM CGI 2024 (édition held) (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net' finds no charging provision"
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Droit de timbre gradué on the land title of an immovable bought (25 000 to 400 000 F by value)",
+  "statute": "CGI edition 2024 art. 585-586 (unchanged in the 2026 edition; the DGI circular on LF 2025 has no change to art. 586)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "one copy per deed; loan and credit agreements (art. 585) are not in the input",
+   "the dimension stamp duty due in addition (art. 587)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.purchaseFixedBandFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Contribution des patentes (rate on turnover by enterprise size, with floor and cap)",
+  "statute": "CGI édition 2024, Livre II (fiscalité locale) art. C 10, C 13 (nouveau); same text in the 2026 edition",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "class boundaries (3 bn) set outside the CGI (ministerial decision on the tax centres' competence)",
+   "activities taxable whatever the turnover (annexe II), one-year exemption of new businesses (art. C 12), licence duties (contribution des licences)",
+   "other local taxes listed by the registry (centimes additionnels communaux on IS/IRPP, taxe de développement local) not modelled"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "cgi2026.txt (whole code)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "CM: the general tax code held (cgi2026.txt, 2326k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Droit de timbre automobile (annual, by fiscal horsepower; vehicles other than public transport)",
+  "statute": "CGI art. 597 1) B, 598 (same text in the 2024 and 2026 editions)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "public transport tariff 15 000-150 000 F on a transport licence (art. 597 1 A)",
+   "motorcycles (art. 598 ter-quinquies)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.vehicleFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRCM on dividends (15 % final + 10 % communal additional centimes)",
+  "statute": "CGI art. 70 (1), 71 (editions 2024 and 2026 identical)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "30 % on income paid to tax-haven residents (art. 70 (1))"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRCM on interest (15 % final + 10 % CAC)",
+  "statute": "CGI art. 70 (1), 71 (editions 2024 and 2026)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "exemptions of savings interest under the CGI's IRCM exemption list (not applied)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Employer contributions to the Crédit Foncier (1,5 %) and the Fonds National de l'Emploi (1 %)",
+  "statute": "Law on the CFC and FNE contributions as annexed to the CGI 2024 (art. 6: CFC 1 % employee / 1,5 % employer, FNE 1 %)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "two versions of art. 6 annexed (later version used)",
+   "base rounded down to the thousand",
+   "CNPS employer contributions (rates outside the CGI)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Registration duty on transfers of urban built property (intermediate rate 10 %)",
+  "statute": "CGI art. 340, 543 b) (editions 2024 and 2026)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Registration duty on transfers of urban unbuilt land (average rate 5 %)",
+  "statute": "CGI art. 543 c) (editions 2024 and 2026)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "rural unbuilt land 2 % (art. 543 d)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Taxe sur la propriété foncière (0,1 % of the declared value of land and buildings)",
+  "statute": "CGI 2024 art. 577, 580, 581 (1); the 2026 edition moves it to art. C 53 with a progressive schedule above 500 M (date of that change not established)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "exemptions (art. 578: public bodies, schools, industrial plant buildings, agricultural land)",
+   "progressive schedule above 500 M FCFA in the 2026 edition (art. C 53 (2))"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyValueFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation par décès (progressive 2 / 3 / 5 %)",
+  "statute": "CGI art. 348, 544 B b) 1) (editions 2024 and 2026)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateBandFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation entre vifs à titre gratuit (5 / 10 / 20 % by relationship)",
+  "statute": "CGI art. 349, 544 B c) (editions 2024 and 2026)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateBandFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNPS family benefits, employer (7 % up to 750 000 F a month)",
+  "statute": "Décret n° 2016/072 du 15 février 2016 art. 2 a), 4, 7 (CNPS compilation 2022; rates 'revisable every two years' (art. 11): no later decree held, flagged)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "agricultural (5,65 %) and private-education (3,7 %) schemes",
+   "SMIG floor on the contributory wage"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNPS old-age, invalidity and death pensions, employer share (4,2 % up to 750 000 F a month)",
+  "statute": "Décret n° 2016/072 art. 3, 4 (CNPS compilation 2022, flagged as above)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "the worker's 4,2 % (2100) is not modelled here"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNPS work accidents and occupational diseases, employer (1,75 %, risk group A)",
+  "statute": "Décret n° 2016/072 art. 7-8 (CNPS compilation 2022, flagged as above)",
+  "dated": "CGI 2024 (édition held)",
+  "unsupported": [
+   "risk groups B (2,5 %) and C (5 %): the risk class is not in the input"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ }
+]

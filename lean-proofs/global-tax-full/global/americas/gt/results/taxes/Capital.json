@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "see the pass 11 entry below for disposals",
+   "other income kinds"
+  ]
+ },
+ {
+  "tax": "Impuesto sobre ganancias de capital (10 %)",
+  "statute": "Decreto 10-2012 arts. 15, 87, 89, 91, 92",
+  "dated": "Decreto 10-2012 as reformed by Decreto 19-2013 (held text)",
+  "grade": "A",
+  "unsupported": [
+   "loss carry-forward (art. 91)"
+  ],
+  "oecd": "1100",
+  "package": "P3",
+  "kernel_parts": [
+   "charge"
+  ]
+ }
+]

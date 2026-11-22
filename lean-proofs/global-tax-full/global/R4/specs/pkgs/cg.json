@@ -1,0 +1,137 @@
+{
+ "cc": "CG",
+ "dated": "cgi_tome1.txt",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts tome I (finances.gouv.cg) + finance laws in the Journal officiel (LF 2022-2025)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.finances.gouv.cg ; https://www.sgg.cg/JO/)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (patente / contribution des patentes or contribution des licences (CGI); provision not located by keyword in the reachable text)",
+   "statute": "Code général des impôts tome I (finances.gouv.cg) + finance laws in the Journal officiel (LF 2022-2025)",
+   "why": "triage moderate: patente: business licence on traders (tome 1 tableau A amounts not located, see seventh pass). listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.finances.gouv.cg ; https://www.sgg.cg/JO/)",
+   "triage": "moderate"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnssPfAt",
+   "level": "social",
+   "rateBp": 1228,
+   "cap": 7200000,
+   "grade": "A",
+   "name": "CNSS family benefits 10,03 % and work accidents 2,25 % (employer, up to 600 000 F a month)",
+   "statute": "Loi n° 47-2024 (LF 2025) art. 9 (CNSS employer total 20,28 %, read); branch split and ceilings from CLEISS 'Les cotisations au Congo' (1 Jan 2023, R4/fetch/cleiss11/congo.html)",
+   "doc": "LF 2025 art. 9: CNSS 'cotisations patronales : 20,28 %'. CLEISS: prestations familiales 10,03 % and accidents du travail 2,25 % (employer only) up to 600 000 FCFA a month; pensions 8 % employer up to 1 200 000 FCFA (10,03 + 2,25 + 8 = 20,28).",
+   "unsupported": [
+    "branch split and ceilings from a secondary table dated 2023 (flag)",
+    "State takeover for newly declared informal employers (art. 9 al. 2)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "camu",
+   "level": "social",
+   "rateBp": 455,
+   "cap": 7200000,
+   "grade": "A",
+   "name": "CAMU (universal health insurance) employer contribution (4,55 %, up to 600 000 F a month)",
+   "statute": "Loi n° 47-2024 (LF 2025) art. 9 (rate); ceiling 600 000 FCFA a month from CLEISS (2023)",
+   "doc": "LF 2025 art. 9: 'pour la caisse d'assurance maladie universelle : cotisations patronales : 4,55 % ; cotisations de l'employé : 2,27 %'. CLEISS: RAMU 4,55 % / 2,27 % up to 600 000 FCFA a month.",
+   "unsupported": [
+    "the employee's 2,27 %"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnssPension",
+   "level": "social",
+   "rateBp": 800,
+   "cap": 14400000,
+   "grade": "A",
+   "name": "CNSS pensions, employer share (8 %, up to 1 200 000 F a month)",
+   "statute": "Loi n° 47-2024 (LF 2025) art. 9; ceiling from CLEISS 'Les cotisations au Congo' (2023)",
+   "doc": "See the CNSS family/work-accident entry: pensions 8 % employer / 4 % employee, monthly ceiling 1 200 000 FCFA (CLEISS); the LF 2025 total of 20,28 % includes this 8 %.",
+   "unsupported": [
+    "the employee's 4 % (LF 2025 prints 4,55 % for the employee: the 1.x PIT side is unchanged)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "fncAcpe",
+   "level": "central",
+   "rateBp": 250,
+   "cap": 14400000,
+   "grade": "B",
+   "name": "Fonds national de construction 2 % and ACPE/FONEA 0,5 % (employer, up to 1 200 000 F a month)",
+   "statute": "CLEISS 'Les cotisations au Congo' (1 Jan 2023); the instruments (CGI tome 1, ACPE texts) not read [text version: CLEISS edition 'au 1er janvier 2023', the latest edition held (no 2025 edition reached: flag)]",
+   "doc": "CLEISS: 'Fonds National de construction 2 % ... 1 200 000 FCFA'; 'Agence Congolaise pour l'Emploi (ACPE) et Fonds National d'Appui à l'Employabilité et l'Apprentissage (FONEA) (y compris la taxe d'apprentissage de 1 % retenue par les contributions directes) 0,5 % ... 1 200 000 FCFA'.",
+   "unsupported": [
+    "taxe d'apprentissage 1 % (collected by the tax administration) not modelled: rate and base not read in the CGI",
+    "taxe unique sur les salaires: not checked"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "tvts",
+   "grade": "B",
+   "name": "Taxe sur les véhicules de tourisme des sociétés (annual: 200 000 F up to 9 CV, 500 000 F above)",
+   "statute": "CGI tome 1 (finances.gouv.cg edition; edition date not established), world/B08-central-africa-fr/cg/law/cgi_tome1.txt l. 5001-5050 art. 171-A to 171-G (art. 171-F: Loi n° 05/96 du 2 mars 1996). The finance laws held (Journal officiel special editions 2022-2025 incl. LF 2025, Loi n° 47-2024) contain no amendment of art. 171-A to 171-G (searched); B as the code edition is undated",
+   "doc": "art. 171-F: 'deux cent mille (200.000) francs par voiture imposable dont la puissance est inférieure ou égale à 09 CV, et 500.000 francs par voiture imposable dont la puissance est supérieure à 09 CV'; art. 171-D: cars first put into circulation more than 10 years before 1 January exempt; art. 171-E: annual, 1 January - 31 December. Households: the communal taxe sur les véhicules à moteur (art. 355-359) at rates fixed by municipal deliberation (art. 358), not modelled (nil tariff here). Worked case (hand): a company with cars of 9 and 12 CV -> 200 000 + 500 000 = 700 000. Sixteenth pass.",
+   "unsupported": [
+    "exemption of cars first put into circulation more than 10 years before (art. 171-D): age not read by this family (cars taken as younger)",
+    "communal taxe sur les véhicules à moteur (CGI art. 355-358): rate fixed by each municipal council, not modelled",
+    "commercial vehicles (voitures commerciales) outside the tax"
+   ],
+   "bands": [],
+   "top": 0,
+   "companyBands": [
+    [
+     9,
+     200000
+    ]
+   ],
+   "companyTop": 500000,
+   "tests": [
+    {
+     "hps": [
+      9,
+      12
+     ],
+     "company": true,
+     "expect": [
+      200000,
+      500000
+     ]
+    },
+    {
+     "hps": [
+      9
+     ],
+     "expect": [
+      0
+     ]
+    }
+   ]
+  }
+ ]
+}

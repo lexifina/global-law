@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Tatimi në të ardhurat e korporatave",
+  "statute": "Ligji Nr. 06/L-105 për tatimin në të ardhurat e korporatave (10 %)",
+  "dated": "Ligji 06/L-105 neni 7 (10 %), in force in 2025 (via lexifina/kosovo-law)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "gross-income regime of small taxpayers (3 % / 9 %) not modelled"
+  ],
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "withholding tax on payments abroad",
+  "statute": "Ligji për tatimin në të ardhurat e korporatave: 10 % (statute read, gap pass); 10 % (statute read, gap pass)",
+  "dated": "Ligji 06/L-105: interest and royalties 10 %, in force in 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "rent 9 % and non-resident services 5 % not modelled (payment kinds outside the line)",
+   "no withholding line for dividends in Ligji 06/L-105"
+  ],
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding tax (dividends, services) (dividend, services)",
+  "statute": "Ligji për tatimin në të ardhurat e korporatave (withholding on non-residents)",
+  "dated": "Ligji 06/L-105: non-resident services 5 %, no dividend line, in force in 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "gap": 6
+ }
+]

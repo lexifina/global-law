@@ -1,0 +1,18 @@
+name = "AlGlobal"
+version = "0.1.0"
+defaultTargets = ["AlGlobal", "alglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); AlTax = the 1.x model, vendored from cmp20/world/B04-europe-rest/al/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AlTax"
+
+[[lean_lib]]
+name = "AlGlobal"
+
+[[lean_exe]]
+name = "alglobal"
+root = "AlGlobal.Main"

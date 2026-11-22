@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Arvonlisävero",
+  "statute": "Arvonlisäverolaki (1501/1993) 84 § (25,5 %, L 462/2024), 85 § (14 %, items 1-2 and L 691/2024 items 4-12), 85 a § (10 %, L 691/2024), 3 § (20 000 euroa, L 448/2024)",
+  "dated": "wording in force 1.1.2025 (acts 462/2024, 691/2024, 448/2024)",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+   "alcoholic drinks and tobacco excluded from the 14 % food item: the household's alcohol is in the excise goods, taken at 25,5 %"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Laki alkoholijuomaverosta (1471/1994) liite; laki tupakkaverosta (1470/1994) liite, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "beer taken above 3.5 % vol and wine at 8-18 % vol (the TEDB standard rows)",
+   "motor and heating fuel: the TEDB gives only a volume-weighted average of the fuel-quality rates, not a statutory rate (not modelled)",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Tupakkavero, savukkeet (kaksi verotaulukkoa 2025)",
+  "statute": "Laki tupakkaverosta (1470/1994) liite, as amended by laki 565/2024",
+  "dated": "table A to 30.6.2025, table B from 1.7.2025",
+  "grade": "A",
+  "kernel_parts": [
+   "ExciseRule (validFrom/validTo, kernel 2.1)"
+  ],
+  "unsupported": [],
+  "gap": 1
+ }
+]

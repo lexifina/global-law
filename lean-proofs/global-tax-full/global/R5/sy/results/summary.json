@@ -1,0 +1,323 @@
+{
+ "country": "SY",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail)",
+   "statute": "PIT law of the country",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "the 1.x model does not tax capital gains and the gain provisions were not read this round; interest/dividend/rent treatment is the 1.x model s"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "ضريبة الأرباح الحقيقية (real profits tax)",
+   "statute": "ITL 24/2003 art. 16 as replaced by LD 30/2023 (15/20/25/35 %; partnerships 10-25 %)",
+   "dated": "LD 30/2023, rates from 2024-01-01 (art. 29); MoAAR publication; pass 3q year-in-force audit: re-cited: LD 30/2023 governs 2025: a new income-tax law was announced for 2026 (SANA 16/07 and 06/09/2025, 1.x SyTax)",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime",
+    "R5Common.corpFamily"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "local administration addition and reconstruction contribution not computed",
+    "exempt minimum (art. 20) not applied",
+    "post-December-2024 changes not checked"
+   ],
+   "withholding": {
+    "grade": "C",
+    "rules": "no rule (kernel 2.3.0 lists each payment abroad as grade C)",
+    "why": "no text of the non-residents' tax (LD 30/2023 / Income Tax Law 24/2003) on payments abroad held",
+    "pass": "3i"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "التأمينات الاجتماعية: employer contributions (work injury 3 %, old age/disability/death 14 %)",
+   "statute": "Social Insurance Law LD 92/1959 art. 21(a), 56(1) (annotated to LD 78/2001)",
+   "dated": "mohamah.net reprint (unofficial; no official consolidation reached); pass 3q year-in-force audit: downgraded: unofficial reprint annotated to LD 78/2001; later amendments (e.g. 2014) not traced",
+   "grade": "C",
+   "kernel_parts": [
+    "R5Common.employerOn (17 %, no ceiling)"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "pass 3q year-in-force audit: downgraded to C: unofficial reprint annotated to LD 78/2001; later amendments (e.g. 2014) not traced",
+    "insurable-wage ceiling by decree not read (whole wage used)",
+    "amendments after 2001 not checked"
+   ],
+   "pass": "3l",
+   "status": "unsupported"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Per-worker fees on employers (work permits of foreign workers)",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "3000 taxes on payroll and workforce: fees for work permits of foreign workers (Labour Law 17/2010; not read); no payroll tax in the laws read (ITL 24/2003 as amended by LD 30/2023). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ],
+   "pass": "3l"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "built property income tax: no text reached (pass 3m)"
+   ],
+   "pass": "3m (split from the combined 4400/4100 entry)"
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "not established for 2025",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "pass 3n (FT reviewer 6 Y-6): was a cited absence resting on the 2012 Constitution art. 18, which the Constitutional Declaration of 13/03/2025 suspended for most of 2025; the 2025 reserve-to-law clause was not read",
+    "tax laws read: Income Tax Law 24/2003 as amended by LD 30/2023 (no wealth tax in them)"
+   ],
+   "pass": "3n"
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Inheritance tax",
+   "statute": "registry: unknown",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "existence not confirmed"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Transfer and registration taxes on immovable property",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "real estate sales tax Law 15/2021: no text reached (pass 3m)"
+   ],
+   "pass": "3m (split from the combined 4400/4100 entry)"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "ضريبة الإنفاق الاستهلاكي",
+   "statute": "Law 61/2004 as amended",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "text not reached"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other taxes (zakat or other)",
+   "statute": "not established for 2025",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "pass 3n (FT reviewer 6 Y-6): was a cited absence resting on the 2012 Constitution art. 18, which the Constitutional Declaration of 13/03/2025 suspended for most of 2025; the 2025 reserve-to-law clause was not read",
+    "tax laws read: Income Tax Law 24/2003 as amended by LD 30/2023"
+   ],
+   "pass": "3n"
+  }
+ ],
+ "notLevied": [],
+ "cases": [
+  {
+   "id": "sy-h1",
+   "total": 8400,
+   "byOecd": {
+    "1100": 0,
+    "2100": 8400
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 8400,
+    "withheld": 0
+   },
+   "net": 321600,
+   "notModelled": [
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4200",
+    "4300",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "2200 social insurance (employer) grade C (year-in-force audit, pass 3q): LD 92/1959 annotated to LD 78/2001 (unofficial reprint) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "SY employer contributions: insurable-wage ceiling (by decree) not read: whole wage used; amendments after 2001 not checked"
+   ]
+  },
+  {
+   "id": "sy-c1",
+   "total": 140000,
+   "byOecd": {
+    "1200": 140000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 140000,
+    "withheld": 0
+   },
+   "net": 660000,
+   "notModelled": [
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4200",
+    "4300",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "local administration addition and national reconstruction contribution (other laws) not computed; post-2024 changes not checked",
+    "losses brought forward: carry-forward rule not read; offset in full",
+    "3000 taxes on payroll and workforce: fees for work permits of foreign workers (Labour Law 17/2010; not read); no payroll tax in the laws read (ITL 24/2003 as amended by LD 30/2023). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l).",
+    "1200 withholding on payment 1 (dividend) abroad: no rule read (grade C)",
+    "1200 withholding on payment 2 (royalty) abroad: no rule read (grade C)",
+    "1200 withholding on payment 3 (interest) abroad: no rule read (grade C)"
+   ]
+  },
+  {
+   "id": "sy-c2",
+   "total": 20000000,
+   "byOecd": {
+    "1200": 20000000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 20000000,
+    "withheld": 0
+   },
+   "net": 80000000,
+   "notModelled": [
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4200",
+    "4300",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "local administration addition and national reconstruction contribution (other laws) not computed; post-2024 changes not checked",
+    "3000 taxes on payroll and workforce: fees for work permits of foreign workers (Labour Law 17/2010; not read); no payroll tax in the laws read (ITL 24/2003 as amended by LD 30/2023). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "sy-s1",
+   "total": 1285800,
+   "byOecd": {
+    "1100": 445800,
+    "2100": 840000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 1285800,
+    "withheld": 0
+   },
+   "net": 10714200,
+   "notModelled": [
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4200",
+    "4300",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "2200 social insurance (employer) grade C (year-in-force audit, pass 3q): LD 92/1959 annotated to LD 78/2001 (unofficial reprint) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "SY employer contributions: insurable-wage ceiling (by decree) not read: whole wage used; amendments after 2001 not checked"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 2,
+ "theorems": 1
+}

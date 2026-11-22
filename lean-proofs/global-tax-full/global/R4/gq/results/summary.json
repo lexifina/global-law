@@ -1,0 +1,206 @@
+{
+ "country": "GQ",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Impuesto sobre el Valor Añadido",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Ley 1/2024 art. 155 (15 %; 5 %; 0 %)",
+   "dated": "Ley Tributaria Núm. 1/2024 (in force for 2025)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "5 % list not separable",
+    "exemptions not read"
+   ],
+   "guards": 7
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Impuestos especiales al consumo",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Ley 1/2024 art. 175 (base: customs value plus duties), art. 176 (rates)",
+   "dated": "Ley Tributaria Núm. 1/2024 (in force for 2025)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "beer surcharge not netted from the base",
+    "fuel"
+   ],
+   "guards": 7
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impuesto sobre Sociedades",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Ley 1/2024 art. 75 (25 %; Cuota Mínima Fiscal 1,5 % of revenue)",
+   "dated": "Ley Tributaria Núm. 1/2024 (in force for 2025)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "loss rules not read"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenciones a no residentes",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Ley 1/2024 art. 76 (10 % of gross turnover of non-residents); IRCM 15 % for non-residents (exposición de motivos)",
+   "dated": "Ley Tributaria Núm. 1/2024 (in force for 2025)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "IRCM article not located (rate from the preamble)"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Impuesto sobre Transmisiones Patrimoniales (inmuebles)",
+   "statute": "Ley 1/2024 art. 233 2) a) (5 % between residents; 10 % with non-residents)",
+   "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+   "unsupported": [
+    "10 % with non-residents"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Impuesto sobre Bienes Inmuebles, urban property (0,05 % of 30 % of land and building value)",
+   "statute": "Ley n° 1/2024 (tax code) art. 208-214",
+   "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+   "unsupported": [
+    "rural property: 250 FCFA per hectare (art. 214 2)",
+    "rebates of 40 % / 60 % / 100 % outside Malabo and Bata (art. 211)",
+    "exemptions (art. 210)",
+    "rounding of the two-step computation"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Property.lean",
+   "kernel_parts": [
+    "R4.propertyValueFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Impuesto sobre Sucesiones y Donaciones",
+   "statute": "Ley n° 1/2024 art. 248-256",
+   "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+   "unsupported": [
+    "art. 256 1) rates are illegible in the OCR ('),5%' for the direct line above 5 000 000 FCFA, spouses and collaterals): the leading digit is lost"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "rescue3/Ley1-2024_ocr_spa.txt offsets 315076-323000 (Capítulo V, Sección 5)",
+   "guards": 0
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Impuesto sobre el Patrimonio",
+   "statute": "Ley 1/2024 art. 179 (charge), mínimo exento 300 000 000 F (base liquidable), baremo of the cuota (0,015 % … 0,090 %)",
+   "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+   "unsupported": [
+    "valuation rules",
+    "exempt assets",
+    "foreign-tax limit (art. 203)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Transfers.lean",
+   "kernel_parts": [
+    "R4.wealthBandFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty (IAJD) on conveyances of property: no tariff for notarial deeds",
+   "statute": "Ley n.º 1/2024 Tributaria (19 November 2024, in force on publication; OCR world/B08-central-africa-fr/gq/law/rescue3/Ley1-2024_ocr_spa.txt) art. 240-247 Impuesto sobre Actos Jurídicos Documentados",
+   "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "art. 241 7) lists 'las escrituras, actas y testimonios notariales' as taxable operations and art. 243 1) e) gives the base of first copies of notarial deeds, but the tariff of art. 245 has only three items: preventive annotations in notarial and property / commercial registers 0,15 %, bills of exchange and similar titles 0,5 %, BVMAC listing authorisations 1 %. No rate applies to the deed of a home purchase, so a household's conveyance bears no IAJD; the transfer itself is taxed by the ITP (P5, art. 233). A preventive annotation (0,15 %) is not part of an ordinary purchase and is not modelled",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (as a tax)",
+   "statute": "Ley1-2024_ocr_spa.txt (whole code)",
+   "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "GQ: the general tax code held (Ley1-2024_ocr_spa.txt, 521k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "INSESO employer contribution (21,5 % of wages, all branches, no ceiling)",
+   "statute": "US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019, Equatorial Guinea (Wayback 2020-08-02, R4/fetch/p14/ssptw_equatorial-guinea.txt; facts restated): employer 21,5 % of gross covered monthly pay, with no earnings ceiling; the contribution also finances sickness, maternity, work injury and family allowances; official secondary, edition 2019 (flagged)",
+   "dated": "Ley Núm. 1/2024 (Ley Tributaria), in force for 2025",
+   "unsupported": [
+    "edition 2019",
+    "minimum base (sector minimum wage)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  }
+ ],
+ "cases": 7,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

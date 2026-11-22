@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Daň z příjmů právnických osob",
+  "statute": "zákon 586/1992 Sb. § 21 (1) (21 %)",
+  "dated": "znění k 1. 7. 2025 (zakonyprolidi.cz)",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "§ 34 loss carry-forward (5 years) not modelled",
+   "§ 19 participation exemption not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Srážková daň (zvláštní sazba)",
+  "statute": "ZDP § 36 (2): zvláštní sazba 15 %; ZDP § 36 (2): 15 %; ZDP § 36 (2): 15 %",
+  "dated": "znění k 1. 7. 2025 (zakonyprolidi.cz)",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "StateWht (2.4.0, recipient state)",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "EU parent-subsidiary exemption (§ 19) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Srážková daň (služby) (services)",
+  "statute": "ZDP § 22 odst. 1 písm. c), § 36 odst. 1 písm. a) bod 1",
+  "dated": "zákon 586/1992 Sb., znění k 1.7.2025 (`cz/law/zdp_zneni-20250701.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "StateWht (2.4.0, recipient state)",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "services are taken as provided in the Czech Republic (§ 22 (1) c))",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

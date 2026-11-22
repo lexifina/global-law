@@ -1,0 +1,457 @@
+{
+ "country": "BR",
+ "name": "Brazil",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:01:14"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "short-held listed shares",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Capital.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1100",
+   "tax": "Imposto sobre a renda: ganho de capital de pessoa física",
+   "statute": "Lei 8.981/1995 art. 21 (Lei 13.259/2016)",
+   "dated": "planalto compiled text fetched 2026-11-21 (rates from 2017)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "Schedule",
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "Lei 9.250 art. 23, Lei 11.196 arts. 39-40 exemptions",
+    "cost updating"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Capital.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "5111",
+   "tax": "ICMS (São Paulo)",
+   "statute": "Lei SP 6.374/1989 art. 34",
+   "dated": "ALESP consolidation with amendment notes to Lei 17.784/2023",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "fuel monophasic ICMS",
+    "RICMS reductions"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Consumption.lean",
+   "guards": 13
+  },
+  {
+   "oecd": "5111",
+   "tax": "PIS/COFINS",
+   "statute": "Lei 10.637/2002 art. 2; Lei 10.833/2003 art. 2",
+   "dated": "Planalto, archived 2025-07-02",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "cumulative regime (3,65 %) for presumed-profit sellers",
+    "zero rates"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Consumption.lean",
+   "guards": 13
+  },
+  {
+   "oecd": "5112",
+   "tax": "ISS (São Paulo)",
+   "statute": "Lei municipal 13.701/2003 art. 16",
+   "dated": "Prefeitura consolidation (2026 fetch, amendment notes)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "service-by-service list"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Consumption.lean",
+   "guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "IPI (bebidas, demais tabacos: TIPI)",
+   "statute": "TIPI (Decreto 11.158/2022), RFB consolidated table updated to ADE RFB 5/2026 (no chapter 22 or 24 change noted after 2022): 2202.10.00 / 2202.99.00 2,6 %; 2203.00.00 cervejas de malte 3,9 %; 2204 vinhos 6,5 % (2205 vermutes 9,75 %); 2208.20-2208.90 aguardentes, uísques, gim, vodca, licores 19,5 % (2208.40.00 cachaça 16,25 %); 2402.10, 2403.19, 2404.11 30 %",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P1",
+   "unsupported": [
+    "producer price not an input (upper bound)",
+    "cachaça, vermouth, non-alcoholic beer sub-rates"
+   ],
+   "dated": "TIPI 2022 consolidated by RFB (tipi.pdf fetched 2026-11-21; updates to ADE 5/2026)",
+   "kernel_parts": [
+    "charge"
+   ],
+   "family_file": "lean/BrGlobal/Consumption.lean",
+   "guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "IPI (cigarros, regime especial)",
+   "statute": "Decreto 7.212/2010 art. 212-B (Decreto 12.127/2024); Decreto 7.555/2011 arts. 4-5",
+   "dated": "Planalto texts via Wayback (Dec 2025 / Jan 2026 captures); rates from 1 Nov 2024; pass 10, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "special regime assumed",
+    "price paid taken as the retail price"
+   ],
+   "family_file": "lean/BrGlobal/Consumption.lean",
+   "guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "CIDE-combustíveis",
+   "statute": "Lei 10.336/2001 art. 5; Decreto 5.060/2004 art. 1 I, parágrafo único VII",
+   "dated": "Planalto compilation via Wayback (2025-12-21); pass 10, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BrGlobal/Consumption.lean",
+   "guards": 13
+  },
+  {
+   "oecd": "1200",
+   "tax": "IRPJ",
+   "statute": "Lei 9.249/1995 art. 3",
+   "dated": "Planalto archived 2025-07-02",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "presumed-profit and Simples regimes"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "CSLL",
+   "statute": "Lei 7.689/1988 art. 3",
+   "dated": "Planalto archived 2025-06-25",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Lei 9.249/1995 arts. 10, 28; MP 2.159-70/2001 art. 3; Lei 9.779/1999 arts. 7, 8",
+   "dated": "planalto.gov.br texts read 2026-11-21 (the build server cannot reach planalto: not archived); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "technical services at 15 % (MP 2.159-70 art. 3), the 25 % for low-tax jurisdictions (Lei 9.779 art. 8) and CIDE (Lei 10.168, 10 %) not modelled: services at the general 25 %"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribuição de melhoria (Constituição art. 145 III",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribuição de melhoria (Constituição art. 145 III; CTN arts. 81-82). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribuição de melhoria (Constituição art. 145 III; CTN arts. 81-82). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBRA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BRA.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "MERCOSUR Arancel Externo Común (NCM) with national exception lists",
+   "customs_note": "customs import duties (5123): MERCOSUR Arancel Externo Común (NCM) with national exception lists; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/BrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: OECD BR 6000 0 in 2024 but unallocated amounts in 2021-2023: no named tax; a cited absence needs a text"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: OECD BR 6000 0 in 2024 but unallocated amounts in 2021-2023: no named tax; a cited absence needs a text",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBRA, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BRA.csv): general government heading 6000 = 2021:143.7 2022:92.4 2023:-232.7 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BrGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "Lei SP 10.705/2000 (ITCMD 4 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read in this pass",
+   "unsupported": [
+    "would unlock: the act's 2025 text"
+   ],
+   "family_file": "lean/BrGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constituição art. 150 I; Const. art. 153 VII",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constituição art. 150 I: \"exigir ou aumentar tributo sem lei que o estabeleça\" (`br/law/const_art-150.md`); Constituição art. 153 VII: \"grandes fortunas, nos termos de lei complementar\" (`br/law/const_art-153.md`). The tax on grandes fortunas of art. 153 VII needs a lei complementar, which has not been enacted; no law read in this build levies a recurrent tax on net wealth (laws read include: Lei SP 6.374/1989 art. 34; Lei 10.637/2002 art. 2; Lei municipal 13.701/2003 art. 16; TIPI (Decreto 11.158/2022), RFB consolidated table updated to ADE RFB 5/2026 (no chapter 22 or 24 change noted after 2022): 2202.10.00 / 2202.99.00 2,6 %; Decreto 7.212/2010 art. 212-B (Decreto 12.127/2024); Lei 10.336/2001 art. 5).",
+   "family_file": "lean/BrGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contribuição patronal previdenciária (20 %)",
+   "statute": "Lei 8.212/1991 art. 22 I",
+   "dated": "planalto compiled text, capture 2025-07-04",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Social.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "2200",
+   "tax": "RAT/GILRAT (employer)",
+   "statute": "Lei 8.212 art. 22 II a)-c)",
+   "dated": "Lei 8.212 compilada (planalto), wording of Lei 9.732/1998",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "risk band of the employer (1 % charged)",
+    "FAP multiplier"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Social.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "3000",
+   "tax": "Salário-educação (employer)",
+   "statute": "Lei 9.424/1996 art. 15",
+   "dated": "planalto compiled text fetched 2026-11-21",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "refiled_note": "filed under 3000 (was 2200) in the P7 triage pass 2026-11-21: OECD BR table \"Payroll-based contribution to education\" (3000); Guide §40, §47",
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Social.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "3000",
+   "tax": "Contributions to third parties: Sistema S, INCRA",
+   "statute": "DL 4.048/1942; DL 9.403/1946; Lei 8.029/1990; Lei 2.613/1955",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P4",
+   "kernel_parts": [],
+   "tried": "not fetched (rates depend on the employer's sector, FPAS code)",
+   "unsupported": [
+    "would unlock: the FPAS table and the Sistema S acts"
+   ],
+   "refiled_note": "filed under 3000 (was 2200) in the P7 triage pass 2026-11-21: OECD BR table \"S System contributions\" (3000); Guide §40, §47",
+   "family_file": "lean/BrGlobal/Social.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "2300",
+   "tax": "Contribuição previdenciária do contribuinte individual (20 %)",
+   "statute": "Lei 8.212/1991 art. 21, art. 28 III, § 3, § 5",
+   "dated": "lexifina/brazil-law lei-de-custeio-da-seguridade-social (art. 21 wording of Lei 12.470/2011, commit 176d47091b; repository versions to 2026-03-27); 2025 teto R$ 8.157,41 and salário mínimo R$ 1.518,00 from the 1.x model (BrTax.inss)",
+   "grade": "A",
+   "package": "P7",
+   "kernel_parts": [
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "11 % / 5 % (MEI) plans of art. 21 § 2",
+    "services to companies: art. 22 III and Lei 10.666 art. 4 withholding",
+    "13th wage in the teto"
+   ],
+   "p7_triage": "(a) modelled in the P7 triage pass 2026-11-21",
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Social.lean",
+   "guards": 10
+  },
+  {
+   "oecd": "4100",
+   "tax": "IPTU (São Paulo)",
+   "statute": "Lei municipal 6.989/1966 arts. 7º, 7º-A, 8º, 8º-A (Lei 15.889/2013)",
+   "dated": "compiled text on legislacao.prefeitura.sp.gov.br (fetched 2026-11-21)",
+   "grade": "A",
+   "package": "P5",
+   "kernel_parts": [
+    "PropertyTax",
+    "propertyFamily"
+   ],
+   "unsupported": [
+    "land (art. 27)",
+    "band-limit updates and exemptions"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Transfers.lean",
+   "guards": 14
+  },
+  {
+   "oecd": "4400",
+   "tax": "ITBI (São Paulo)",
+   "statute": "Lei municipal 11.154/1991 art. 10 (Lei 16.098/2014)",
+   "dated": "compiled text on legislacao.prefeitura.sp.gov.br (fetched 2026-11-21)",
+   "grade": "A",
+   "package": "P5",
+   "kernel_parts": [
+    "TransferDuty",
+    "transferFamily"
+   ],
+   "unsupported": [
+    "SFH reduced rate"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BrGlobal/Transfers.lean",
+   "guards": 14
+  },
+  {
+   "oecd": "5200",
+   "tax": "IPVA (São Paulo)",
+   "statute": "Lei SP 13.296/2008 art. 9 (wording of Lei 17.473/2021, from 1 Jan 2022): I 1.5 % trucks; II 2 % buses and minibuses, single-cab pickups, motorcycles and the like, machinery; III 4 % any other motor vehicle; art. 7: on the valor venal; art. 13 VIII: exempt over 20 years from manufacture; art. 3 I-II, 7 II, 11: a vehicle first acquired in 2025 pays (13 - month) / 12 on the invoice value",
+   "dated": "ALESP repositório, Lei 13.296/2008 updated text (archived br/law/alesp_lei13296_2008.*), wording of Lei 17.473/2021 and Lei 18.065/2024; pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "VehicleTax",
+    "vehicleTaxFamily"
+   ],
+   "unsupported": [
+    "all vehicles taken as registered in SP",
+    "transitional 2025-2026 exemptions (Lei 18.065/2024) not applied",
+    "rental-fleet 1 % not applied",
+    "2025 acquisitions by firstRegMonth; no firstRegYear (or no month for 2025): grade C",
+    "vehicles from another State in 2025 (art. 3 IX) taken as 1 January vehicles"
+   ],
+   "family_file": "lean/BrGlobal/Transfers.lean",
+   "guards": 14
+  }
+ ],
+ "grades": {
+  "A": 12,
+  "B": 7,
+  "C": 5
+ },
+ "guards": 47,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

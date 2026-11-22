@@ -1,0 +1,30 @@
+{
+"MZ": {
+ "dated": "Código do IVA as amended by Lei n.º 22/2022 (from 2023) and Código do ICE approved by Lei n.º 19/2022 (rate table 2023-2025), both from the AT legislation library (at.gov.mz /api/documents)",
+ "sources_add": "Lei 22/2022 and Lei 19/2022 (Boletim da República, 28-29 Dec 2022) fetched from www.at.gov.mz (`/api/documents?root=LEGISLAÇÃO` lists the library; files via `/api/webdav?path=...`), saved in `cmp20/global/R4/fetch/mz8/` with SHA256SUMS.",
+ "vat": {
+  "name": "Imposto sobre o Valor Acrescentado",
+  "standard": 1600,
+  "classes": {},
+  "grade": "A",
+  "statute": "Código do IVA (Lei n.º 32/2007, republicado pela Lei n.º 13/2016) art. 17 (1) as amended by Lei n.º 22/2022: 16 %",
+  "doc": "Lei n.º 22/2022 (BR I série n.º 250, 28 Dec 2022) 'Altera os artigos 9, 10, 12, 15, 17, 20 e 21 do Código do Imposto sobre o Valor Acrescentado': \"Artigo 17 (Taxa do imposto) 1. A taxa do imposto é de 16%.\" No later amendment of art. 17 is listed in the AT library.",
+  "notes": ["art. 9 exemptions (health services, education, financial services, basic foods, ...) and art. 10 reduced regimes are not applied: only the amended paragraphs were read"],
+  "unsupported": ["art. 9 exemptions", "reduced-rate regimes"]
+ },
+ "excise": {
+  "name": "Imposto sobre Consumos Específicos",
+  "grade": "A",
+  "statute": "Código do ICE (Lei n.º 19/2022) art. 27 and the annexed rate table, column 'Taxa 2025 (MT)': beer 475 MT, wine 619 MT, spirits 460 MT per litre of pure alcohol; cigarettes 540 MT per 1 000",
+  "doc": "art. 27: \"2. O grau de teor alcoólico é expresso por litro de álcool puro a 100% ... 3. O valor do Imposto sobre Consumos Específicos é obtido através da multiplicação da taxa pela quantidade do bem ... na unidade de tributação prevista em litros, pela quantidade de álcool expressa em volume (ex: 5%=0,05, 42%=0,42)\". Tabela de taxas (columns Taxa 2023 / 2024 / 2025, MT): \"2203.00.10 - De malte ... 465/Litro Alc. 470/Litro Alc. 475/Litro Alc.\"; \"2204.21.00 -- Em recipientes de capacidade não sup. a 2 litros ... 610/Litro Alc. 614/Litro Alc. 619/Litro Alc.\"; \"2208.30.00 - Uísques ... 455/Litro Alc. 457/Litro Alc. 460/Litro Alc.\"; \"2402.20.00 - Cigarros contendo tabaco ... 500/mil Unid 520/mil Unid 540/mil Unid\".",
+  "items": [
+   {"good": "beer", "name": "ICE cervejas de malte", "onPureAlcohol": true, "perUnitNum": 475000, "perUnitDen": 1000, "vatBp": 1600, "statute": "Código do ICE tabela 2203.00.10 (475 MT/l alc., 2025)"},
+   {"good": "wine", "name": "ICE vinhos", "onPureAlcohol": true, "perUnitNum": 619000, "perUnitDen": 1000, "vatBp": 1600, "statute": "Código do ICE tabela 2204.21.00 (619 MT/l alc., 2025)"},
+   {"good": "spirits", "name": "ICE bebidas espirituosas", "onPureAlcohol": true, "perUnitNum": 460000, "perUnitDen": 1000, "vatBp": 1600, "statute": "Código do ICE tabela 2208 (460 MT/l alc., 2025)"},
+   {"good": "cigarettes", "name": "ICE cigarros", "perUnitNum": 540, "perUnitDen": 1000, "vatBp": 1600, "statute": "Código do ICE tabela 2402.20.00 (540 MT por mil, 2025)"}
+  ],
+  "notes": ["soft drinks are taxed per gram of added sugar per 100 ml (2202.99.10: 0,0147 MT in 2025): the basket carries no sugar content, not applied", "local cereal beers (2203.00.50) and opaque beer (5,50 MT/l) not separable; fuel ICE not modelled"],
+  "unsupported": ["sugar-based soft-drink duty", "local and opaque beers", "fuel"]
+ }
+}
+}

@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Käibemaks",
+  "statute": "Käibemaksuseadus §§ 15, 16, 19",
+  "dated": "Riigi Teataja via Internet Archive 2025-08-07",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "22 % January-June: rate known from the amendment, capture dated 2025-08-07",
+   "exemptions (§ 16) not quoted"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Alkoholi-, tubaka-, kütuse- ja elektriaktsiisi seadus §§ 45, 53, 66, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Aktsiisid, mille 2025. aasta määr muutus aasta jooksul (sigaretid, bensiin, diislikütus, kerge kütteõli)",
+  "statute": "Alkoholi-, tubaka-, kütuse- ja elektriaktsiisi seadus §§ 56, 66 with the amending acts 461 SE (RT I, 14.12.2021, 1), 705 SE, 145 SE (RT I, 01.07.2023, 1) and 510 SE (RT I, 02.01.2025, 1)",
+  "dated": "cigarettes and petrol from 1.7.2025, diesel and light heating oil from 1.5.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRule (validFrom/validTo, kernel 2.1)"
+  ],
+  "unsupported": [
+   "B, not A: the petrol rate before 1.7.2025 (563) is the TEDB figure; the act that set it was not read"
+  ],
+  "gap": 1
+ }
+]

@@ -1,0 +1,154 @@
+{
+"BF": {
+ "excise": {
+  "name": "Taxe sur les boissons et taxe sur les tabacs",
+  "grade": "B",
+  "statute": "CGI 2023 art. 359 as substituted by LF 2024 art. 29 (beverages, from 1 Jan 2024); art. 365 (loi n° 029-2022/ALT art. 53: tobacco 55 %); art. 358 and 364 (base); LFR 2024 does not amend them; LF 2025 not held",
+  "doc": "LF 2024 art. 29, art. 359: \"Il est fait application des taux suivants quelle que soit l'origine des produits : I. Boissons alcoolisées 1. Bières titrant moins de 8° d'alcool : 30% 2. Bières titrant 8° d'alcool et plus : 40% 3. Vins : 70% 4. Autres boissons alcoolisées titrant moins de 35° d'alcool : 50% 5. Autres boissons alcoolisées titrant 35° d'alcool et plus : 70% Le reste sans changement\" (CGI 2023: \"II. Boissons non alcoolisées 1. Boissons non alcoolisées énergisantes : 50% 2. Autres boissons non alcoolisées : 15%\"). Art. 358: local products taxed on turnover excluding VAT; imports on customs value plus duties except VAT. Art. 365: \"Le taux de la taxe est fixé à 55 %\"; art. 364: ex-factory price excluding VAT, at least 300 FCFA per 20 cigarettes. Grade B: LF 2025 not held.",
+  "items": [
+   {"good": "beer", "name": "TSB bières < 8°", "maxAbvBp": 799, "advBp": 3000, "vatBp": 1800, "statute": "CGI art. 359 I 1 (LF 2024 art. 29): 30 %"},
+   {"good": "beer", "name": "TSB bières >= 8°", "minAbvBp": 799, "advBp": 4000, "vatBp": 1800, "statute": "CGI art. 359 I 2 (LF 2024 art. 29): 40 %"},
+   {"good": "wine", "name": "TSB vins", "advBp": 7000, "vatBp": 1800, "statute": "CGI art. 359 I 3 (LF 2024 art. 29): 70 %"},
+   {"good": "spirits", "name": "TSB autres boissons alcoolisées < 35°", "maxAbvBp": 3499, "advBp": 5000, "vatBp": 1800, "statute": "CGI art. 359 I 4 (LF 2024 art. 29): 50 %"},
+   {"good": "spirits", "name": "TSB autres boissons alcoolisées >= 35°", "minAbvBp": 3499, "advBp": 7000, "vatBp": 1800, "statute": "CGI art. 359 I 5 (LF 2024 art. 29): 70 %"},
+   {"good": "nonAlcoholic", "name": "TSB autres boissons non alcoolisées", "advBp": 1500, "vatBp": 1800, "statute": "CGI art. 359 II 2: 15 %"},
+   {"good": "cigarettes", "name": "Taxe sur les tabacs, cigares et cigarettes", "advBp": 5500, "vatBp": 1800, "statute": "CGI art. 365 (loi n° 029-2022/ALT art. 53): 55 %"}
+  ],
+  "notes": ["CGI art. 356: water without sugar or flavouring, local fruit juices from local raw materials and traditional local drinks are exempt (not separable from the basket line); energy drinks 50 % (art. 359 II 1) not separable", "art. 364: the minimum base of 300 FCFA per 20 cigarettes is not applied", "taxe sur les produits pétroliers, café/thé, colas and cosmetics (15 %) not modelled"],
+  "unsupported": ["energy drinks 50 %", "minimum tobacco base", "petroleum products tax (TPP)", "LF 2025 (not held)"]
+ },
+ "wht": {
+  "name": "IRVM / retenues non-résidents",
+  "grade": "B",
+  "statute": "CGI 2023 art. 210-212 (loi n° 029-2022/ALT art. 36: 20 % on services and royalties paid to non-residents); art. 140 (IRCM: 12,5 % on income from securities, 25 % on claims); LF 2024 and LFR 2024 do not amend them; LF 2025 not held",
+  "doc": "art. 210: \"une retenue à la source est opérée sur les sommes que les personnes physiques ou morales non résidentes au Burkina Faso perçoivent en rémunération de prestations de toute nature fournies ou utilisées au Burkina Faso\"; art. 211 lists studies, consulting, technical assistance, head-office costs and the use of patents, trademarks, designs and copyrights; art. 212: \"Le taux de la retenue à la source est fixé à 20 % du montant net des sommes versées aux personnes non établies au Burkina Faso\". Art. 140: income from securities 12,5 %; income from claims 25 % (halved for deposit accounts). A loan from a foreign lender is a claim: 25 %.",
+  "rules": [
+   {"kind": "services", "rateBp": 2000, "statute": "CGI art. 210-212 (20 %)"},
+   {"kind": "royalty", "rateBp": 2000, "statute": "CGI art. 211-212 (use of patents, trademarks, copyrights: 20 %)"},
+   {"kind": "dividend", "rateBp": 1250, "statute": "CGI art. 140 2) (IRVM 12,5 %)"},
+   {"kind": "interest", "rateBp": 2500, "statute": "CGI art. 140 1) (income from claims 25 %)"}
+  ],
+  "notes": ["art. 212: 10 % for road transport by ECOWAS providers without proof of residence, not modelled; interest on deposit accounts is halved (12,5 %), a loan from abroad is taken at 25 %"],
+  "unsupported": ["ECOWAS road transport 10 %", "bonds issued in Burkina Faso 6 %", "LF 2025 (not held)"]
+ }
+},
+"GN": {
+ "excise": {
+  "name": "Droits d'accises (produits fabriqués en Guinée)",
+  "grade": "B",
+  "statute": "CGI 2021 (official text, local file Loi-2021-32) art. 435 I (domestic rates), art. 436 III (base: ex-factory price excluding VAT); LF 2025 (L/2024/0235/CNT) has no excise change in the pages held",
+  "doc": "art. 435 I (layout extraction): \"a. Produits du tabac et produits du vapotage 35% b. Bières et boissons maltées (Malta) 12% c. Vins 12% d. Spiritueux 15% e. Boissons alcoolisées autres que les bières, boissons maltées, vins et spiritueux 30% f. jus de fruit ... 0% g. eau ... et autres boissons non alcooliques ... 0% h. Boissons énergisantes 0%\"; II: \"Les tarifs des droits d'accises sur les produits imposables importés sont fixés dans le TARIF DES DOUANES\" (not held). Art. 436 III: \"La base d'imposition des produits fabriqués en Guinée soumis à un droit d'accise ad valorem est le prix de vente ex-usine hors TVA\".",
+  "items": [
+   {"good": "beer", "name": "Droit d'accise bières", "advBp": 1200, "vatBp": 1800, "imported": false, "statute": "CGI art. 435 I b (12 %)"},
+   {"good": "wine", "name": "Droit d'accise vins", "advBp": 1200, "vatBp": 1800, "imported": false, "statute": "CGI art. 435 I c (12 %)"},
+   {"good": "spirits", "name": "Droit d'accise spiritueux", "advBp": 1500, "vatBp": 1800, "imported": false, "statute": "CGI art. 435 I d (15 %)"},
+   {"good": "cigarettes", "name": "Droit d'accise produits du tabac", "advBp": 3500, "vatBp": 1800, "imported": false, "statute": "CGI art. 435 I a (35 %)"}
+  ],
+  "notes": ["CGI art. 435 II: imported goods bear the customs tariff's excise rates (not held): only locally made goods are charged here; soft drinks, water and juices are at 0 % (art. 435 I f-h)"],
+  "unsupported": ["excise on imported goods (customs tariff not held)", "other alcoholic drinks 30 % (art. 435 I e) not separable"]
+ },
+ "wht": {
+  "name": "Retenues à la source (non-résidents)",
+  "grade": "B",
+  "statute": "CGI 2021 art. 187 I and III (15 % on dividends and fixed-income products paid to non-residents, final); art. 198 (15 % on services paid to non-residents)",
+  "doc": "art. 187 I: \"les revenus de capitaux mobiliers de source Guinéenne payés en Guinée et perçus par les personnes ayant leur domicile fiscal ou leur siège de direction effective hors de Guinée, font l'objet d'une retenue à la source égale à 15% du montant brut des revenus distribués\"; III: \"La même retenue s'applique également aux produits de placements à revenus fixes\"; VI: \"libératoire\". Art. 198 I-III: a withholding on payments by a debtor established in Guinea to a person without tax residence in Guinea for services taxable in Guinea under the VAT territoriality rules; \"Le taux de la retenue est fixé à quinze pourcent (15%) du montant brut des sommes versées\" (excluding VAT).",
+  "rules": [
+   {"kind": "dividend", "rateBp": 1500, "statute": "CGI art. 187 I (15 %)"},
+   {"kind": "interest", "rateBp": 1500, "statute": "CGI art. 187 III (15 %)"},
+   {"kind": "services", "rateBp": 1500, "statute": "CGI art. 198 III (15 %)"}
+  ],
+  "notes": ["royalties: art. 198 covers services as defined in art. 356 Ter; whether royalties fall under it was not established"],
+  "unsupported": ["royalties (scope of art. 356 Ter not read)"]
+ }
+},
+"MR": {
+ "excise": {
+  "name": "Taxe de consommation",
+  "grade": "B",
+  "statute": "CGI version officielle janvier 2023 art. 258 (LFI 2020), 262 (base), 263 (LFI 2020, LFR 2020: tariffs); LF 2024-2025 held only in Arabic, not checked",
+  "doc": "art. 258: production and import of petroleum products, alcohols, tobacco, mineral water, dairy products, ... are subject to a taxe de consommation; art. 262: base = customs value plus import duties, or the ex-factory selling price for local products, VAT and the tax itself excluded; art. 263: \"1) Produits pétroliers : essence auto ordinaire : 5,7 Ouguiya/l; super carburant : 5,8 Ouguiya/l; gazole (gas-oil) : 3,67 Ouguiya/l ... 2) Alcools : a) bière : 195 % b) vins ordinaires : 209 % c) vins mousseux et champagne : 229 % d) whisky, vodka, rhum, gin, eau de vie : 294 % 3) Tabac : 29 % 4) Eaux minérales importées : 80 %\".",
+  "items": [
+   {"good": "beer", "name": "Taxe de consommation bière", "advBp": 19500, "vatBp": 1600, "statute": "CGI art. 263 2) a (195 %)"},
+   {"good": "wine", "name": "Taxe de consommation vins ordinaires", "advBp": 20900, "vatBp": 1600, "statute": "CGI art. 263 2) b (209 %)"},
+   {"good": "spirits", "name": "Taxe de consommation whisky, vodka, rhum, gin, eau de vie", "advBp": 29400, "vatBp": 1600, "statute": "CGI art. 263 2) d (294 %)"},
+   {"good": "cigarettes", "name": "Taxe de consommation tabac", "advBp": 2900, "vatBp": 1600, "statute": "CGI art. 263 3) (29 %)"},
+   {"good": "petrol", "name": "Taxe de consommation super carburant", "perUnitNum": 5800, "perUnitDen": 1000, "vatBp": 1600, "statute": "CGI art. 263 1) (5,8 MRU per litre)"},
+   {"good": "diesel", "name": "Taxe de consommation gazole", "perUnitNum": 3670, "perUnitDen": 1000, "vatBp": 1600, "statute": "CGI art. 263 1) (3,67 MRU per litre)"}
+  ],
+  "notes": ["CGI art. 263: sparkling wine 229 %, ordinary petrol 5,7 MRU/l, imported mineral water 80 % and dairy products not separable from the basket lines (still wine, premium petrol taken)"],
+  "unsupported": ["sparkling wine 229 %", "imported mineral water 80 %", "dairy, cement, steel, plastics, phone cards", "LF 2024-2025 (Arabic) not checked"]
+ },
+ "wht": {
+  "name": "Retenues (non-résidents)",
+  "grade": "B",
+  "statute": "CGI version officielle janvier 2023 art. 132-133 (15 % on services paid to non-residents without a permanent establishment); art. 126 (IRCM 10 %; 20 % to privileged tax regimes)",
+  "doc": "art. 132 1): \"une retenue à la source est opérée sur les sommes que les personnes physiques ou morales non-résidentes en Mauritanie et n'y disposant pas d'un établissement stable perçoivent en rémunération de prestations de toute nature fournies ou utilisées en Mauritanie\"; art. 133 1): \"Le taux de la retenue à la source est fixé à 15 % du montant des sommes dues aux personnes non-résidentes\". Art. 126: \"le taux de l'impôt est fixé à : 20 % pour les plus-values de cession de valeurs mobilières si le cédant est établi dans un État à fiscalité privilégiée ... ; 10 % dans tous les autres cas\" (IRCM on distributed income, art. 120, and on interest from claims, art. 121).",
+  "rules": [
+   {"kind": "services", "rateBp": 1500, "statute": "CGI art. 133 1) (15 %)"},
+   {"kind": "dividend", "rateBp": 1000, "statute": "CGI art. 120, 126 (IRCM 10 %)"},
+   {"kind": "interest", "rateBp": 1000, "statute": "CGI art. 121, 126 (IRCM 10 %)"}
+  ],
+  "notes": ["royalties: art. 132 covers 'prestations de toute nature'; not applied to royalties without a statement in the text"],
+  "unsupported": ["royalties", "20 % IRCM to privileged tax regimes", "LF 2024-2025 (Arabic) not checked"]
+ }
+},
+"KM": {
+ "vat": {
+  "name": "Taxe sur la consommation",
+  "standard": 1000,
+  "reduced": 500,
+  "reduced2": 300,
+  "classes": {"restaurants": "reduced", "financial": "reduced", "water": "reduced2", "electricity": "reduced2"},
+  "grade": "B",
+  "statute": "CGI 2022 art. 152 (L.F. 2018, 2019, 2020, L.F.R. 2020): 10 %; 5 % restaurants and banking; 3 % water and electricity",
+  "doc": "art. 152 (layout extraction): \"Le taux de la taxe sur la consommation est fixé à 10 %. Par exception, la taxe sur la consommation est prélevée au taux de : 0 % à l'importation et à l'intérieur pour les produits de première nécessité défini par arrêté du Ministre des Finances et du Budget ; 3 % pour la fourniture d'eau et d'électricité ainsi que pour la vente des titres de transport inter-îles ; 5 % pour la restauration, les activités bancaires et le téléphone fixe ; 7,5 % pour la fourniture des recharges mobile en voix et en Data ; 5 % pour les titres de transport à l'international ; 25 % pour les activités des casinos\". The Comoros levy this tax instead of a VAT. Grade B: CGI 2022 edition; LF 2024 pages 1-60 held (no change to art. 152 found); LF 2025 not held.",
+  "notes": ["art. 152: 0 % on basic necessities listed by order (not held), 3 % inter-island and 5 % international transport tickets, 5 % fixed phone and 7,5 % mobile recharges are not separable from the basket lines (standard rate)", "art. 140: businesses with turnover below 20 000 000 FC are not liable (not applied)"],
+  "unsupported": ["0 % on basic necessities (order not held)", "transport and telephony rates", "small-business threshold"]
+ },
+ "excise": {
+  "name": "Taxes intérieures (alcools, tabacs, produits pétroliers, boissons sucrées)",
+  "grade": "B",
+  "statute": "CGI 2022 art. 157 (alcohol and tobacco 10 %), art. 153 (TIPP normal rate), non-codified LF 2018 art. 19 (sugary drinks 25 FC/l)",
+  "doc": "art. 157: \"La taxe intérieure sur les alcools et tabacs est fixée à 10 % du prix de vente appliqué par le fabricant ou l'importateur\"; art. 153: \"La taxe intérieure sur les produits pétroliers (TIPP) est fixée comme suit : taux normal : 230 FC par litre d'essence ; 115 FC par litre de Gas-oil. taux réduit : 211 FC ... 95 FC ...\"; LF 2018 art. 19: \"un Droit d'Accise de 25 FC le litre sur les boissons sucrées\". The LF 2016 cigarette surtax (12 300 FC per 1 000) applies \"dès la création du fonds de couverture maladie universelle\" (date not established): not applied.",
+  "items": [
+   {"good": "beer", "name": "Taxe intérieure sur les alcools (bière)", "advBp": 1000, "vatBp": 1000, "statute": "CGI art. 157 (10 %)"},
+   {"good": "wine", "name": "Taxe intérieure sur les alcools (vin)", "advBp": 1000, "vatBp": 1000, "statute": "CGI art. 157 (10 %)"},
+   {"good": "spirits", "name": "Taxe intérieure sur les alcools (spiritueux)", "advBp": 1000, "vatBp": 1000, "statute": "CGI art. 157 (10 %)"},
+   {"good": "cigarettes", "name": "Taxe intérieure sur les tabacs", "advBp": 1000, "vatBp": 1000, "statute": "CGI art. 157 (10 %)"},
+   {"good": "petrol", "name": "TIPP essence", "perUnitNum": 230000, "perUnitDen": 1000, "vatBp": 1000, "statute": "CGI art. 153 (230 FC per litre, taux normal)"},
+   {"good": "diesel", "name": "TIPP gas-oil", "perUnitNum": 115000, "perUnitDen": 1000, "vatBp": 1000, "statute": "CGI art. 153 (115 FC per litre, taux normal)"},
+   {"good": "nonAlcoholic", "name": "Droit d'accise sur les boissons sucrées", "perUnitNum": 25000, "perUnitDen": 1000, "vatBp": 1000, "statute": "LF 2018 art. 19 (25 FC per litre)"}
+  ],
+  "notes": ["LF 2016 cigarette surtax 12 300 FC per 1 000 not applied (effective on creation of the CMU fund, date not established); TIPP reduced rates for beneficiaries set by regulation not applied; the sugary-drinks duty is applied to the whole non-alcoholic line (plain water not separable)"],
+  "unsupported": ["cigarette surtax (LF 2016)", "TIPP reduced rate", "rice tax"]
+ },
+ "wht": {
+  "name": "Taxe sur les rémunérations extérieures (TRE)",
+  "grade": "B",
+  "statute": "CGI 2022 art. 128-130 (TRE 10 % on services and royalties paid to persons domiciled outside the Comores)",
+  "doc": "art. 128: \"Il est institué une taxe sur les rémunérations extérieures au taux global de 10 % sur les revenus servis aux personnes morales ou physiques domiciliées hors des Comores, par des entreprises ou établissements situés aux Comores, l'État ou les collectivités territoriales décentralisées au titre : des droits d'auteurs ; de la vente ou de la location de licence d'exploitation de brevets, marques de fabrique, procédés et formules secrets ; ... des rémunérations pour études, consultations, assistance technique, ou comptable ; ... et plus généralement, des rémunérations payées au titre d'un service quelconque à l'exception des rémunérations d'emprunts contractés à l'étranger\"; art. 130: base = gross amount.",
+  "rules": [
+   {"kind": "services", "rateBp": 1000, "statute": "CGI art. 128 (TRE 10 %)"},
+   {"kind": "royalty", "rateBp": 1000, "statute": "CGI art. 128 (TRE 10 %: copyrights, patents, trademarks)"}
+  ],
+  "notes": ["art. 128 excludes interest on loans contracted abroad; dividends: art. 109 1) withholds the IRVM at 10 % 'en ce qui concerne les personnes morales' (two-column extraction, scope for non-residents not established): not applied"],
+  "unsupported": ["dividends and interest to non-residents (art. 109 scope not established)"]
+ }
+},
+"CF": {
+ "wht": {
+  "name": "Retenues sur paiements à l'étranger",
+  "grade": "B",
+  "statute": "CGI 2017 édition officielle mise à jour 2023 art. 166 bis 1 (15 % final on services paid abroad; 15 % on capital income); art. 52 e and art. 84 (IRCM 15 % on capital income paid to persons domiciled abroad)",
+  "doc": "art. 166 bis 1: \"en ce qui concerne les revenus des capitaux mobiliers, la retenue à la source est effectuée au taux de 15% des revenus bruts distribués. S'agissant des rémunérations des prestations de services versées à l'étranger et sous réserve des conventions internationales, le taux de la retenue est de 15%. Cette retenue constitue pour le redevable un prélèvement libératoire\"; services include \"les travaux d'études, de recherches, et d'expertises ... les prestations de professions libérales\" and assimilated \"livraisons de biens meubles incorporels (brevets, marques etc.)\". Art. 52 e: capital income paid to persons without domicile or seat in the CAR bears a final IRPP withholding at the art. 84 rate; art. 84: \"application de 15% du montant brut des revenus distribués\".",
+  "rules": [
+   {"kind": "services", "rateBp": 1500, "statute": "CGI art. 166 bis 1 (15 %)"},
+   {"kind": "royalty", "rateBp": 1500, "statute": "CGI art. 166 bis 1 (patents, trademarks assimilated to services: 15 %)"},
+   {"kind": "dividend", "rateBp": 1500, "statute": "CGI art. 52 e, 84 (15 %)"},
+   {"kind": "interest", "rateBp": 1500, "statute": "CGI art. 52 e, 84 (15 %)"}
+  ],
+  "notes": ["grade B: 2023 edition of the CGI; LF 2025 pages 1-60 held with no change to these articles found"],
+  "unsupported": []
+ }
+}
+}

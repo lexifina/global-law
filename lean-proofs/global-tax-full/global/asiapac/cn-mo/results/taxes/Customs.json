@@ -1,0 +1,18 @@
+[
+ {
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "statute": "customs tariff of Macao, China as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Macao, China for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C446&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/mo.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "grade": "B",
+  "kernel_parts": [
+   "TariffRule"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+  ]
+ }
+]

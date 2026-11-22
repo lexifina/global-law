@@ -1,0 +1,308 @@
+{
+ "cc": "ZW",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transferBands",
+   "fam": "stampImmovable",
+   "grade": "B",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     5000,
+     70
+    ],
+    [
+     15000,
+     300
+    ],
+    [
+     100000,
+     500
+    ]
+   ],
+   "top": 600,
+   "marginal": true,
+   "nilUpTo": 0,
+   "testValues": [
+    4000,
+    10000,
+    50000,
+    200000
+   ],
+   "expect": [
+    28,
+    185,
+    2085,
+    10585
+   ],
+   "name": "Stamp duty on the registration of acquisitions of immovable property (Item 6 (1) marginal bands)",
+   "statute": "Finance Act [Chapter 23:04] Chapter II (stamp duties under the Stamp Duties Act [Chapter 23:09]) Schedule Item 6 (1) (Schedule substituted by Act 3 of 2009; consolidation to 2024, R4/fetch/zw8/zw_4235.txt). Liability: the acquirer (duty on registering the acquisition in the Deeds Registry)",
+   "doc": "Item 6 (1), per $100 or part thereof of the value: to $5 000 0,70; $5 000 to $15 000 3,00; $15 000 to $100 000 5,00; above $100 000 6,00. Item 6 (2), property acquired with foreign currency: US$1/2/3/4 per US$100 with bands at US$5 000, US$20 000, US$100 000. Thirteenth pass.",
+   "unsupported": [
+    "the Item 6 (1) bands are printed in '$' with no conversion after the 2024 ZWG redenomination: read as ZWG (flag)",
+    "acquisitions paid in foreign currency (Item 6 (2), US$ bands): no currency field",
+    "'per $100 or part thereof' rounding not applied",
+    "other Schedule items (bonds 0,40 %, brokers' notes, off-market share transfers, insurance)",
+    "exemptions to Item 6"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Securities transaction tax",
+   "statute": "Capital Gains Tax Act Cap. 23:01",
+   "why": "triage minor: securities transaction tax on listed-share trades: small base for households, not read. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (official source)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (intermediated money transfer tax (IMTT), AIDS levy (Finance Act); provision not located by keyword in the reachable text)",
+   "statute": "Income Tax Act Cap. 23:06 + Finance Act Cap. 23:04 (rates) as amended by Finance (No. 2) Act 7 of 2024",
+   "why": "triage high: intermediated money transfer tax 2 % on electronic transfers: no transaction base in the model. listed by the registry (background (unverified)); charging provision not read/modelled in this pass | Re-triage for kernel 2.5.0 (seventeenth pass): IMTT read in the Finance Act, 2024 (No. 2) s. 7 (world/B09-southern-africa/zw/law/fa_2024.txt l. 315-371): Finance Act [Chapter 23:04] s. 22G from 3 May 2024: 2 cents on every ZiG or US$ transacted (2 %), flat US$10 150 for a transaction of US$500 000 or more; no 2.5.0 input carries the volume of a household's electronic transfers, so it stays C (the Finance Act 2025 copy held is a bot-check page: changes for 2025 not checked)",
+   "tried": "local copy (https://www.veritaszim.net)",
+   "triage": "high"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "unsupported",
+   "name": "NSSA employer contributions and ZIMDEF levy",
+   "grade": "C",
+   "why": "NSSA rates/insurable-earnings ceiling (set in ZWG/US$ by SI) and the ZIMDEF levy (Manpower Planning and Development Act) not held",
+   "tried": "Wayback captures of nssa.org.zw contribution pages (redirect stubs only)",
+   "statute": "not reached: tried Wayback captures of nssa.org.zw contribution pages (redirect stubs only)"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "rst",
+   "grade": "A",
+   "income": "dividend",
+   "rateBp": 1500,
+   "name": "Resident shareholders' tax on dividends (15 %; 10 % on listed securities)",
+   "statute": "Finance Act [Chapter 23:04] s. 17 (resident shareholders' tax under s. 28 of the Taxes Act: (a) 10 % on dividends from securities listed on a registered securities exchange, (b) 15 % on any other dividend; rates reduced by Finance (No. 3) Act 10 of 2009 w.e.f. 1 January 2010); consolidation to 2024, R4/fetch/zw8/zw_4235.txt",
+   "doc": "s. 17: 'The resident shareholders' tax chargeable in terms of section 28 of the Taxes Act shall be calculated ... (a) in the case of a dividend distributed from a security which ... is listed in the official list kept by a registered securities exchange ... at the rate of 10%; (b) in the case of any other dividend, at the rate of 15%'. Thirteenth pass.",
+   "unsupported": [
+    "dividends from listed securities (10 %): the model cannot tell listed from unlisted (15 % applied)",
+    "Finance Acts 2025 not checked for s. 17"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicleTax",
+   "fam": "zinara",
+   "grade": "A",
+   "unknown": true,
+   "name": "Vehicle licence fees (ZINARA; annual, by vehicle mass, in US$)",
+   "statute": "Vehicle Registration and Licensing Act [Chapter 13:14] s. 52; Vehicle Registration and Licensing Regulations, 1999 (SI 427 of 1999) Third Schedule Part II as substituted by the Vehicle Registration and Licensing (Amendment) Regulations, 2024 (No. 26) (SI 67 of 2024, Gazette 12 April 2024; Veritas copy R4/fetch/p17/zw_si67_2024_veritas.pdf, p. 514) [text version: SI 67 of 2024 as gazetted; next replaced by SI 10 of 2026 (January 2026), no 2025 amendment listed by Veritas or ZimLII]. US$ amounts converted at the line's fxRates.USD, else at the declared RBZ interbank ZWG mid rate of 1 July 2025 (26.9502; RBZ 'RATES_01_JULY_2025.pdf', Wayback 20250822114844, R4/fetch/p19/zw_rbz_rates_20250701_wb20250822114844.pdf) (kernel 2.7.0 Fx)",
+   "doc": "SI 67 of 2024, Third Schedule Part II 'Vehicle classifications and tariffs' (12 months, US$): up to 1 500 kg 120; 1 500-2 250 kg 150; 2 251-3 000 kg 180; 3 001-3 750 kg 360; 3 751-4 250 kg 450; 4 251-5 000 kg 540; 5 001-5 750 kg 600; 5 751-6 250 kg 630; 6 251-7 000 kg 720; 7 001-7 750 kg 780; 7 751-9 250 kg 840; 9 251-10 000 kg 900; 10 001-10 750 kg 1 200; 10 751 kg and above 1 800; the 4, 6, 8 and 10-month columns are the 12-month amount pro rata. 'The fees stipulated above may be payable in local currency (ZiG) for locally registered vehicles at the ruling exchange rate of the day.' Nineteenth pass (kernel 2.7.0 VehicleTax.currency).",
+   "taxes": "[{ name := \"Vehicle licence fee (ZINARA, 12 months, by mass)\", parts := [(.massKg, QtyTable.ofCeilings [(1500, 120), (2250, 150), (3000, 180), (3750, 360), (4250, 450), (5000, 540), (5750, 600), (6250, 630), (7000, 720), (7750, 780), (9250, 840), (10000, 900), (10750, 1200)] 1800)], currency := \"USD\", fxRate := some { currency := \"USD\", num := 269502, den := 10000, source := \"RBZ interbank rate, ZWG mid rate (RATES_01_JULY_2025.pdf)\", date := \"2025-07-01\" }, statute := \"Vehicle Registration and Licensing Regulations, 1999 (SI 427 of 1999) Third Schedule Part II as substituted by SI 67 of 2024 (Gazette 12 April 2024): 12-month tariff in US$ by mass, payable in ZiG at the ruling exchange rate of the day\" }]",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 100000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 1,
+        "massKg": 1200
+       }
+      ]
+     },
+     "expect": [
+      3234
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 100000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 1,
+        "massKg": 1200
+       }
+      ],
+      "fxRates": {
+       "USD": 26.75
+      }
+     },
+     "expect": [
+      3210
+     ]
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 100000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 1,
+        "massKg": 1500
+       }
+      ]
+     },
+     "expect": [
+      3234
+     ]
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 100000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 1,
+        "massKg": 1501
+       }
+      ]
+     },
+     "expect": [
+      4042
+     ]
+    },
+    {
+     "line": {
+      "id": "t4",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t4",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 100000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 1,
+        "massKg": 5200
+       }
+      ]
+     },
+     "expect": [
+      16170
+     ]
+    },
+    {
+     "line": {
+      "id": "t5",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t5",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 100000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 1,
+        "massKg": 12000
+       }
+      ]
+     },
+     "expect": [
+      48510
+     ]
+    },
+    {
+     "line": {
+      "id": "t6",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t6",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 100000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 1
+       }
+      ]
+     },
+     "expect": []
+    }
+   ],
+   "notes": [
+    "nineteenth pass: C -> A. The tariff is applied by the vehicle's mass (massKg, every vehicle kind; the table has no kind column); a licence for fewer than 12 months ('months') is the 12-month amount pro rata, which is what the 4-10-month columns print. Hand cases: 1 200 kg -> US$120 -> ZWG 3 234 at 26.9502 (3 210 with fxRates.USD 26.75 on the line); 1 500 kg -> 3 234; 1 501 kg -> US$150 -> 4 042; 5 200 kg -> US$600 -> 16 170; 12 000 kg -> US$1 800 -> 48 510; no mass -> listed (grade C)"
+   ],
+   "unsupported": [
+    "the ruling exchange rate of the payment day: a line without fxRates.USD is converted at the RBZ mid rate of 1 July 2025 (declared, dated; flag)",
+    "a vehicle without massKg: listed (grade C)",
+    "the 4-10-month licences are the 12-month amount × months / 12 (as the table prints); licensing periods across 2024/2026 not split",
+    "registration and other Part I fees (one-off fees, not the annual licence)"
+   ]
+  }
+ ]
+}

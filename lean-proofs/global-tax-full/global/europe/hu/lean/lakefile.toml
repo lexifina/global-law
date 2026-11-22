@@ -1,0 +1,18 @@
+name = "HuGlobal"
+version = "0.1.0"
+defaultTargets = ["HuGlobal", "huglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); HuTax = the 1.x model, vendored from cmp20/central/hu/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "HuTax"
+
+[[lean_lib]]
+name = "HuGlobal"
+
+[[lean_exe]]
+name = "huglobal"
+root = "HuGlobal.Main"

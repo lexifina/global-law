@@ -1,0 +1,210 @@
+{
+ "country": "LI",
+ "name": "Liechtenstein",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 20:48:10"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Steuergesetz (Kapitalgewinne steuerfrei; Grundstücksgewinnsteuer)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/LiGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Mehrwertsteuer",
+   "statute": "Mehrwertsteuergesetz (MWSTG, LGBl. 2009 Nr. 330) Art. 25 Abs. 1 (8,1 %), Abs. 2 (2,6 %), Abs. 3 (gastgewerbliche Leistungen Normalsatz), Abs. 4 (3,8 %); Art. 10 Abs. 2 Bst. a (100 000 Franken); Art. 21 (ausgenommene Leistungen)",
+   "dated": "Lilex Fassung 01.01.2025 (valid to 31.12.2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item"
+   ],
+   "family_file": "lean/LiGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Mineralölsteuer, Tabaksteuer, Biersteuer under the customs treaty with Switzerland (Swiss acts; not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/LiGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Ertragssteuer",
+   "statute": "Steuergesetz (SteG, LGBl. 2010 Nr. 340) Art. 61 (12,5 %), Art. 62 Abs. 1-2 (Mindestertragssteuer 1 800 Franken, anrechenbar) [year in force 2025 (pass 16), unchanged-confirmed: li/law/steg_konso.txt (Fassung 01.07.2026) footnotes: Art. 61 none (text of LGBl. 2010 Nr. 340); Art. 62 Abs. 1 LGBl. 2016 Nr. 524, Abs. 2 LGBl. 2016 Nr. 344 (erstmals Steuerjahr 2017); no later change]",
+   "dated": "SteG Fassung 01.07.2026; Art. 61-62 unchanged since 2010 / 2016",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "Art. 62 (3) exemption from the minimum tax for small trading companies (Bilanzsumme ≤ 500 000 Fr.) not applied",
+    "Eigenkapitalzinsabzug (Art. 54) and the GloBE QDMTT not modelled"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/LiGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad (none levied) (dividend, interest, royalty, services)",
+   "statute": "SteG (no withholding tax)",
+   "dated": "2025-06-17",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/LiGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/LiGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/LiGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "Grundstücksgewinnsteuer; no transfer tax as such",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rate articles (and the reference region's rate where regional)"
+   ],
+   "family_file": "lean/LiGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "Vermögenssteuer covers real estate (P6)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/LiGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social contributions and payroll taxes",
+   "statute": "AHVG/IVG/FAK (LI, Arbeitgeber)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P4 pass (no dated employer rates with quotes in the 1.x model or fetched texts)",
+   "unsupported": [
+    "would unlock: the act's 2025 employer rates and ceilings (official consolidation or the 1.x model's parameters with quotes)"
+   ],
+   "family_file": "lean/LiGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Liechtenstein, Individual - Other taxes, accessed 2025-07-15 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-07-15 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LiGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Vermögenssteuer (Sollertrag)",
+   "statute": "Steuergesetz Art. 5 Abs. 1 (Sollertrag 4 %), Art. 14 Abs. 2 Bst. l (the Sollertrag of the taxable wealth is Erwerb), Art. 6 Abs. 1",
+   "dated": "SteG, Lilex consolidated PDF Fassung 01.07.2026 (`li/law/steg_konso.txt`; Art. 5 unchanged in 2025 not checked)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "the wealth tax is a 4 % notional return (Sollertrag) on the taxable net wealth, added to the Erwerb and taxed with the Erwerbssteuer tariff (no separate wealth rate); the 1.x PIT line carries no wealth, so it is not computed. To model: PIT(Erwerb + 4 % x net wealth) - PIT(Erwerb)"
+   ],
+   "family_file": "lean/LiGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 2,
+  "C": 8
+ },
+ "guards": 15,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

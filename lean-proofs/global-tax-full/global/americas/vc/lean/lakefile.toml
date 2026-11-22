@@ -1,0 +1,22 @@
+name = "VcGlobal"
+version = "0.1.0"
+defaultTargets = ["VcGlobal", "vcglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); VcTax = the 1.x model, vendored from cmp20/world/B13-caribbean/vc/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "VcTax"
+
+[[lean_lib]]
+name = "VcGlobal"
+
+[[lean_exe]]
+name = "vcglobal"
+root = "VcGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

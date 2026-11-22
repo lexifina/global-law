@@ -1,0 +1,286 @@
+{
+ "country": "LV",
+ "name": "Latvia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:04:34"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Iedzīvotāju ienākuma nodoklis no kapitāla pieauguma",
+   "statute": "likums Par iedzīvotāju ienākuma nodokli 15. pants (25,5 % from 2025)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-07-08 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "real estate gains (25,5 %; the declared-residence home exemption) not modelled: the exemption's conditions are not in the B source"
+   ],
+   "family_file": "lean/LvGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Pievienotās vērtības nodoklis",
+   "statute": "PVN likums 41., 42., 52., 59. pants",
+   "dated": "likumi.lv redakcija uz 01.07.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "5 % fruit and vegetables, 12 % infant food",
+    "exemptions not quoted item by item"
+   ],
+   "family_file": "lean/LvGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "Akcīzes nodoklis (fuel)",
+   "statute": "Par akcīzes nodokli 14. pants (1) 1), 4); 2025: pārejas noteikumi 174., 180. punkts (532 / 440,5 euro), 169. punkts 2) heating oil 236 euro",
+   "dated": "likumi.lv redakcija uz 01.07.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate"
+   ],
+   "unsupported": [
+    "biofuel blends, heating oil"
+   ],
+   "family_file": "lean/LvGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "Akcīzes nodoklis (cigarettes)",
+   "statute": "Par akcīzes nodokli 13. pants (1) 2), (1¹)",
+   "dated": "likumi.lv redakcija uz 01.07.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (minimum)"
+   ],
+   "unsupported": [
+    "other tobacco, e-liquids"
+   ],
+   "family_file": "lean/LvGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "Akcīzes nodoklis (beer, wine, spirits)",
+   "statute": "Par akcīzes nodokli 12. pants (1) 1), 3), 5)",
+   "dated": "likumi.lv redakcija uz 01.07.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "small-brewer 50 % rate",
+    "intermediate products"
+   ],
+   "family_file": "lean/LvGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "1200",
+   "tax": "Uzņēmumu ienākuma nodoklis (distributed profit)",
+   "statute": "UIN likums 4. pants (1), (9)",
+   "dated": "likumi.lv redakcija uz 01.07.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (distribution base)"
+   ],
+   "unsupported": [
+    "deemed distributions",
+    "dividend reductions (6. pants)"
+   ],
+   "family_file": "lean/LvGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "UIN likums 5. pants",
+   "dated": "likumi.lv redakcija uz 01.07.2025",
+   "grade": "B",
+   "status": "not modelled (read in part: 20 % on management and consultancy fees)",
+   "kernel_parts": [],
+   "unsupported": [
+    "no withholding on dividends, interest and royalties to non-low-tax residents (structure only)"
+   ],
+   "family_file": "lean/LvGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Uzņēmumu ienākuma nodoklis, ko ietur no nerezidentiem (dividend, interest, royalty, services)",
+   "statute": "likums Par uzņēmumu ienākuma nodokli 5. pants (1), (5), (6)",
+   "dated": "likumi.lv, redakcija 2025-07-01 (`lv/law/uin_2025-07-01.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "services are taken as management and consultancy services (5. panta 5. daļa)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/LvGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Iedzīvotāju ienākuma nodoklis, ko ietur no nerezidentiem (dividend, interest, royalty, services)",
+   "statute": "likums Par iedzīvotāju ienākuma nodokli 3. panta 3. daļa, 9. panta 1. daļa, 15. panta 2., 5., 8. daļa, 17. panta 12. daļa",
+   "dated": "likumi.lv, redakcija 2025-07-01 (`lv/law/iin_2025-07-01.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "royalties are taken as payments for intellectual property other than authors' fees (authors' fees 25,5 %, 15. panta 7.1 daļa)",
+    "the 33 % band above the contribution ceiling (15. panta 2. daļas 2. punkts) and the EU/EEA 75 % option are not applied",
+    "dividends are taken as paid from profit on which UIN was paid",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/LvGlobal/Corporate.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/LvGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "European Commission TEDB, LV: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 4447, 4542, 6825, 406, 412, 416, 789, 1081, 1102) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/LvGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Valsts nodeva (zemesgrāmata)",
+   "statute": "Cabinet regulation on state fees for the Land Register (2 % of the deal or cadastral value, at most EUR 50 000)",
+   "dated": "PwC WWTS Corporate - Other taxes, 2025-08-29 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty",
+    "cap (min)"
+   ],
+   "unsupported": [
+    "the base is the higher of the deal and cadastral value (the price stands in); reduced fees for family transfers not modelled"
+   ],
+   "family_file": "lean/LvGlobal/Property.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4100",
+   "tax": "Nekustamā īpašuma nodoklis",
+   "statute": "Likums \"Par nekustamā īpašuma nodokli\" 3. pants: 0,2-3 % of the cadastral value, set in the municipality's binding regulations published by 1 November of the preceding year; above 1,5 % only for property not maintained",
+   "dated": "Law on Immovable Property Tax (in force from 1.1.1998, as applicable 2025); EC Taxes in Europe Database (TEDB), tax 4542, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "LocalTax (2.8.0)"
+   ],
+   "unsupported": [
+    "no capital-city rate declared: Riga's 2025 binding regulations were not reached (rate input localRates.propertyTax)",
+    "progressive municipal rates by value band: give the rate for the asset (asset localRates) or one rate per case",
+    "the statutory fallback bands (no regulations published) and the 1,5 % surcharge on unfarmed land: not modelled"
+   ],
+   "lfw": 1,
+   "status": "framework (local rate input)",
+   "local_rate": "the municipality's rate is an input: localRates.propertyTax",
+   "family_file": "lean/LvGlobal/Property.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "2200",
+   "tax": "VSAOI (darba devējs)",
+   "statute": "VSAOI likums 18. pants 1. daļa: 23,59 % darba devējs; maksimālais objekts 105 300 euro",
+   "dated": "VSAOI likums (2025 redaction, via the 1.x model)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LvGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Latvia, Individual - Other taxes, accessed 2025-05-14 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-05-14 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/LvGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance tax (not levied)",
+   "statute": "likums Par iedzīvotāju ienākuma nodokli 9. panta 1. daļas 9. punkts (likumi.lv, current text fetched 2026-11-21, `lv/law/iin.txt`) [year in force 2025 (pass 16), unchanged-confirmed: lv/law/iin.txt: point 9 carries no redakcija note (amended points carry one), so its wording is unchanged through 2025]",
+   "dated": "likumi.lv current text (provision in force in 2025)",
+   "grade": "A",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/LvGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 9,
+  "B": 6,
+  "C": 1
+ },
+ "guards": 35,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

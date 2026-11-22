@@ -1,0 +1,265 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Value Added Tax",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "VAT Act 2013 s. 5 (2); First and Second Schedules",
+  "dated": "Kenya Law consolidation 2025-07-01",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "zero-rated/exempt foods not separable",
+   "educational and medical services exemption not located"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duty (alcohol, tobacco, soft drinks, fuel)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Excise Duty Act 2015 First Schedule",
+  "dated": "Kenya Law consolidation 2025-07-01",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc (specific, per cl of pure alcohol)"
+  ],
+  "unsupported": [
+   "Road Maintenance Levy, RDL, IDF",
+   "inflation adjustment after 1 July 2025 not checked"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Corporation tax",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "ITA Third Schedule Head B para 2; s. 12D repealed (Act No. 9 of 2025)",
+  "dated": "ITA consolidation 2025-07-01",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "minimum tax Jan-Jun 2025 (repealed 1 July 2025)",
+   "loss rule s. 15(4) not read",
+   "SEP tax, DMTT"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Non-resident withholding tax",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "ITA Third Schedule Head B para 3 (a), (b), (d), (e)",
+  "dated": "ITA consolidation 2025-07-01",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "EAC citizen 5 % dividend rate",
+   "SEZ 5 %",
+   "treaties"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Withholding tax on dividends (resident)",
+  "statute": "ITA Third Schedule Head B para 5 (a) (15 %)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Withholding tax on interest (resident)",
+  "statute": "ITA Third Schedule Head B para 5 (b) (ii) (15 %)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "bearer instruments"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Residential rental income tax",
+  "statute": "ITA s. 6A; Third Schedule Head B para 10 (7,5 % of gross rent)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "band test 288 000 - 15 000 000 Sh",
+   "commercial rent"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Capital gains tax",
+  "statute": "ITA s. 3 (2) (f); Third Schedule Head B para 14 (15 %, final)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "Eighth Schedule exemptions (private residence, listed securities)",
+   "adjusted cost rules"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.gainsFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Affordable Housing Levy (employer)",
+  "statute": "Affordable Housing Act 2024 s. 4 (2), 5 (1) (b) (1.5 %)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "NSSF Tier I + Tier II employer contribution (6 % of pensionable earnings up to the Upper Earnings Limit)",
+  "statute": "National Social Security Fund Act 2013 (Cap. 258) s. 20, Third Schedule (Table: year 2 UEL = 1 × National Average Earnings, year 3 LEL 8 000 / UEL = 2 × NAE); year 3 runs from February 2025",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "the annual ceiling is exact for constant monthly wages up to 36 000 or from 69 000; in between the January month is slightly over-counted",
+   "contracting out of Tier II (s. 21)",
+   "the employee's matching 6 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Stamp duty on conveyances of immovable property (municipality)",
+  "statute": "Stamp Duty Act Schedule item 12A (Sh. 40 per Sh. 1 000: 4 %)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "2 % outside municipalities",
+   "rounding per Sh. 1 000"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "County property rates",
+  "statute": "county Rating Acts",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "county rating legislation not held"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "-"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (significant economic presence tax (replaced DST from Dec 2024); provision not located by keyword in the reachable text)",
+  "statute": "Income Tax Act Cap. 470 (Kenya Law consolidations 2025-07-01, 2026-01-01; archived new.kenyalaw.org)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "triage outOfScope: significant economic presence tax applies to non-resident digital service providers. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://new.kenyalaw.org/akn/ke/act/1973/16 (archived))",
+  "triage": "outOfScope"
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Industrial training levy (NITA), KES 600 per employee per year",
+  "statute": "Industrial Training Act (Cap. 237) s. 5A; Industrial Training (Training Levy) Order, L.N. 113 of 2007, para. 4 (1) as amended by L.N. 10 of 2020 and L.N. 62 of 2021 (Kenya Law revised edition 31 Dec 2022, Wayback 2025-10-28, R4/fetch/p14/ke_nita_order.txt)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [
+   "pro rata for part-year service not modelled (each employee counted for the full year)",
+   "para. 3A (new employers with fewer than 100 employees, 12 months from registration) concerns registration; not applied"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollHeadFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Annual motor vehicle licence fee (no fee prescribed for vehicles registered in Kenya)",
+  "statute": "Traffic Act (Cap. 403) s. 15, 19 (1) (Kenya Law version of 26 April 2024 via Wayback 20261002153541, R4/fetch/p17/ke_traffic_act_2024-04-26.html): vehicle licences 'upon payment of such fees as may be prescribed'; Traffic Rules First Schedule Part I 'Fees' (Rev. 2012, last amended by L.N. 56/2006 per the Schedule's note; Kenya Law PDF via Wayback 20150807001257, R4/fetch/p17/ke_traffic_cap403_rev2012.pdf)",
+  "dated": "Kenya Law consolidations at 2025-07-01",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "the fee schedule prescribes registration fees (one-off, by engine capacity: KSh 1 700 to 8 300), dealer's general licences and licences for foreign private vehicles, but no annual licence fee for vehicles registered in Kenya; the Act's ss. 15 and 19 are unchanged in the 2024 version. Flag: the Rules are read in the 2012 revision (no later consolidation reached); the one-off registration fee and the ITA s. 12A advance tax on commercial vehicles (an income-tax prepayment) are not 5200 charges modelled here"
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (EAC Common External Tariff)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "East African Community Customs Management Act 2004 (charging provisions not read) and the EAC CET; EAC Common External Tariff 2022 Version (Annex 1 to the Protocol on the Establishment of the East African Community Customs Union), edition 'CET 2022 VERSION updated June 2025' (eac.int, Wayback 20260303052110, R4/fetch/gap/eac_cet2022_upd_jun2025_wb20260303052110.pdf): Legal Notice No. EAC/117/2022 para 1 (four bands 0, 10, 25 and 35 per centum) and 2 (in force 1 July 2022); the amending Legal Notices printed at its end (EAC/129/2023, 81/2024, 147/2024, 298/2024, 32/2025, 171/2025) touch none of the lines below",
+  "dated": "CET 2022 version as updated to June 2025 (lines unchanged by the 2023-2025 amending notices): the whole of 2025",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "stays of application and duty remissions by partner state (EAC Gazette notices for 2024/25 and 2025/26) not read",
+   "COMESA / AfCFTA / EPA preferences not applied (CET charged)",
+   "national import levies (KE Import Declaration Fee and Railway Development Levy, UG/TZ/RW/BI equivalents) not modelled",
+   "lines of other HS headings (grade C)"
+  ]
+ }
+]

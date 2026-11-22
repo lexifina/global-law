@@ -1,0 +1,724 @@
+{
+ "cc": "GA",
+ "dated": "CGI 2025 (DGI Gabon)",
+ "entries": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircm",
+   "income": "dividend",
+   "rateBp": 2000,
+   "grade": "A",
+   "name": "IRPP — prélèvement libératoire sur revenus de capitaux mobiliers, dividends (20 %)",
+   "statute": "CGI 2025 (DGI Gabon) art. 106, 109",
+   "doc": "art. 109: \"L'IRPP pour les bénéficiaires de revenus des capitaux mobiliers est déterminé en appliquant un prélèvement libératoire dont le taux est fixé à 20 % aux revenus tels que définis à l'article 106\".",
+   "unsupported": [
+    "10 % on bonds of at least 5 years issued in Gabon (art. 110 2)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnamgs",
+   "rateBp": 410,
+   "cap": 30000000,
+   "level": "social",
+   "grade": "B",
+   "name": "CNAMGS employer contribution (private sector)",
+   "statute": "Décret n°0022 art. 38 (4,1 %), monthly ceiling 2 500 000 F (CNAMGS)",
+   "doc": "CNAMGS, 'Payement des cotisations employeurs' (archived 2025-08-15): \"Le plafond mensuel des salaires soumis à cotisation est de 2 500 000 FCFA ... Secteur privé: (Décret n°0022 … art. 38) Cotisations patronales : 4,1 % ; Cotisations salariales : 2 %\". The decree itself not held: grade B. Annual ceiling 12 x 2 500 000.",
+   "source": "CNAMGS official page (secondary)",
+   "notes": [
+    "CNAMGS 4,1 % up to 2 500 000 F a month (CNAMGS page; decree not held); CNSS employer contributions not modelled"
+   ],
+   "unsupported": [
+    "CNSS employer contributions (texts not held)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "regImm",
+   "rateBp": 600,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "A",
+   "name": "Droit d'enregistrement (ventes d'immeubles)",
+   "statute": "CGI art. 603 (6 %; +2 % in Libreville, Port-Gentil, Owendo, Akanda)",
+   "doc": "art. 603: \"Les adjudications, ventes, reventes, cessions, rétrocessions ... translatifs de propriété ou d'usufruit de biens immeubles à titre onéreux sont assujettis à un droit de 6 %. Ce taux est majoré de 2 % lorsque les biens sont situés dans les communes de Libreville ...\".",
+   "notes": [
+    "CGI art. 603: 6 % applied; the 2 % increase in Libreville, Port-Gentil, Owendo and Akanda not applied (purchase region not mapped)"
+   ],
+   "unsupported": [
+    "2 % urban increase"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "succession",
+   "grade": "A",
+   "onlyKind": "inheritance",
+   "classes": [
+    {
+     "rels": [
+      "child",
+      "spouse"
+     ],
+     "bands": [
+      [
+       200000,
+       0
+      ],
+      [
+       1000000,
+       0
+      ],
+      [
+       2000000,
+       0
+      ]
+     ],
+     "top": 0
+    },
+    {
+     "rels": [
+      "grandchild"
+     ],
+     "bands": [
+      [
+       200000,
+       0
+      ],
+      [
+       1000000,
+       500
+      ],
+      [
+       2000000,
+       900
+      ]
+     ],
+     "top": 1400
+    },
+    {
+     "rels": [
+      "parent"
+     ],
+     "bands": [
+      [
+       200000,
+       800
+      ],
+      [
+       1000000,
+       1400
+      ],
+      [
+       2000000,
+       1600
+      ]
+     ],
+     "top": 2000
+    },
+    {
+     "rels": [
+      "sibling"
+     ],
+     "bands": [
+      [
+       200000,
+       1000
+      ],
+      [
+       1000000,
+       1800
+      ],
+      [
+       2000000,
+       2200
+      ]
+     ],
+     "top": 2500
+    },
+    {
+     "rels": [
+      "nieceNephew"
+     ],
+     "bands": [
+      [
+       200000,
+       1300
+      ],
+      [
+       1000000,
+       2200
+      ],
+      [
+       2000000,
+       2500
+      ]
+     ],
+     "top": 2700
+    },
+    {
+     "rels": [
+      "otherRelative"
+     ],
+     "bands": [
+      [
+       200000,
+       1500
+      ],
+      [
+       1000000,
+       2400
+      ],
+      [
+       2000000,
+       2600
+      ]
+     ],
+     "top": 3000
+    }
+   ],
+   "default": {
+    "bands": [
+     [
+      200000,
+      1800
+     ],
+     [
+      1000000,
+      2600
+     ],
+     [
+      2000000,
+      2800
+     ]
+    ],
+    "top": 3500
+   },
+   "allowRels": [
+    "grandchild",
+    "parent"
+   ],
+   "allowance": 20000000,
+   "giftAllowance": false,
+   "name": "Droits de mutation par décès",
+   "statute": "CGI art. 611 (tariff by share and relationship), art. 615 (20 000 000 F abatement, direct line and spouses), art. 618 1° (children and spouses exempt)",
+   "doc": "art. 611: \"Les droits de mutation par décès sont fixés au taux ci-après pour la part nette recueillie par chaque ayant droit\": fractions 1-200 000, 200 001-1 000 000, 1 000 001-2 000 000, over 2 000 000 F: first-degree descendants and spouses exempt; descendants beyond the first degree (deceased leaving 1 child) exempt/5/9/14 %; ascendants (no child) 8/14/16/20 %; brothers and sisters 10/18/22/25 %; uncles/aunts, nephews/nieces 13/22/25/27 %; great-uncles, cousins 15/24/26/30 %; beyond the 4th degree and non-relatives 18/26/28/35 % (read on the pdftotext -layout page). art. 615: \"il est effectué sur l'ensemble des parts recueillies par les ayants droits en ligne directe et par le ou les conjoints un abattement de 20.000.000 FCFA\", plus 10 000 000 per child or dependent ascendant.",
+   "notes": [
+    "CGI art. 611: rates for grandchildren use the 'one child' row and for ascendants the 'no child' row; the art. 615 abatement (20 000 000 F + 10 000 000 per child) is applied as 20 000 000 F per transfer to a grandchild or parent; art. 612 10 % levy on liquid estate assets and art. 617 large-family reduction not applied"
+   ],
+   "unsupported": [
+    "number of the deceased's children (rows by children)",
+    "art. 612 10 % levy on liquidities",
+    "art. 617 reduction",
+    "gifts (art. 605 tariff) not modelled"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI 2025 (whole code)",
+   "why": "GA CGI 2025 (complete code): no tax on net wealth; 'fortune'/'patrimoine' occur only in income-tax and registration contexts"
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "donation",
+   "grade": "A",
+   "onlyKind": "gift",
+   "classes": [
+    {
+     "rels": [
+      "child"
+     ],
+     "bands": [
+      [
+       200000,
+       0
+      ],
+      [
+       1000000,
+       400
+      ],
+      [
+       2000000,
+       800
+      ]
+     ],
+     "top": 1200
+    },
+    {
+     "rels": [
+      "grandchild"
+     ],
+     "bands": [
+      [
+       200000,
+       0
+      ],
+      [
+       1000000,
+       500
+      ],
+      [
+       2000000,
+       900
+      ]
+     ],
+     "top": 1400
+    },
+    {
+     "rels": [
+      "spouse"
+     ],
+     "bands": [
+      [
+       200000,
+       300
+      ],
+      [
+       1000000,
+       600
+      ],
+      [
+       2000000,
+       1000
+      ]
+     ],
+     "top": 1400
+    },
+    {
+     "rels": [
+      "parent"
+     ],
+     "bands": [
+      [
+       200000,
+       800
+      ],
+      [
+       1000000,
+       1400
+      ],
+      [
+       2000000,
+       1600
+      ]
+     ],
+     "top": 2000
+    },
+    {
+     "rels": [
+      "sibling"
+     ],
+     "bands": [
+      [
+       200000,
+       1000
+      ],
+      [
+       1000000,
+       1800
+      ],
+      [
+       2000000,
+       2200
+      ]
+     ],
+     "top": 2500
+    },
+    {
+     "rels": [
+      "nieceNephew"
+     ],
+     "bands": [
+      [
+       200000,
+       1300
+      ],
+      [
+       1000000,
+       2200
+      ],
+      [
+       2000000,
+       2500
+      ]
+     ],
+     "top": 2700
+    },
+    {
+     "rels": [
+      "otherRelative"
+     ],
+     "bands": [
+      [
+       200000,
+       1500
+      ],
+      [
+       1000000,
+       2400
+      ],
+      [
+       2000000,
+       2600
+      ]
+     ],
+     "top": 3000
+    }
+   ],
+   "default": {
+    "bands": [
+     [
+      200000,
+      1800
+     ],
+     [
+      1000000,
+      2800
+     ],
+     [
+      2000000,
+      2800
+     ]
+    ],
+    "top": 3500
+   },
+   "allowRels": [
+    "child",
+    "grandchild",
+    "parent",
+    "spouse"
+   ],
+   "allowance": 20000000,
+   "giftAllowance": true,
+   "name": "Droits de mutation entre vifs (donations)",
+   "statute": "CGI art. 605 (tariff by share, relationship and the donor's children), art. 615 (20 000 000 F abatement, also for gifts)",
+   "doc": "art. 605: \"Les droits d'enregistrement des mutations entre vifs sont perçus selon les quotités ... pour la part nette recueillie par chaque ayant droit\": fractions 1-200 000, 200 001-1 000 000, 1 000 001-2 000 000, over 2 000 000 F; first-degree descendants (donor with 1 child) exempt/4/8/12 %; beyond the first degree (1 child) exempt/5/9/14 %; spouses (1 child) 3/6/10/14 %; ascendants (no child) 8/14/16/20 %; brothers and sisters 10/18/22/25 %; uncles, nephews 13/22/25/27 %; great-uncles, cousins 15/24/26/30 %; beyond the 4th degree and non-relatives 18/28/28/35 % (pdftotext -layout). Reduced by 25 % for gifts by marriage contract and donations-partages. art. 615 applies the abatement 'aussi bien en cas de donation que de succession'.",
+   "notes": [
+    "CGI art. 605: rows for a donor with one child (ascendants: no child); the art. 615 abatement applied as 20 000 000 F per gift in the direct line or to a spouse; prior gifts and the 25 % reduction not applied"
+   ],
+   "unsupported": [
+    "number of the donor's children",
+    "prior gifts aggregation",
+    "25 % reduction for marriage-contract gifts"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts 2025 (DGI)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.dgi.ga/document/code-general-des-impots-2025/)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (contribution spéciale de solidarité (CSS 1 %), patente, taxe sur les salaires abolished? (to verify); provision not located by keyword in the reachable text)",
+   "statute": "Code général des impôts 2025 (DGI)",
+   "why": "triage moderate: contribution spéciale de solidarité: levy on business turnover/imports, not on households. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.dgi.ga/document/code-general-des-impots-2025/)",
+   "triage": "moderate"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "cgi2025.txt (whole code)",
+   "why": "GA: the general tax code held (cgi2025.txt, 805k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmInt",
+   "income": "interest",
+   "rateBp": 2000,
+   "grade": "A",
+   "name": "IRPP — prélèvement libératoire sur revenus de capitaux mobiliers, interest on claims and deposits (20 %)",
+   "statute": "CGI 2025 art. 103-104, 106 5°, 109",
+   "doc": "art. 106 5°: for the claims, deposits and guarantees of art. 103-104, the gross interest; art. 109: final levy of 20 % on the income defined in art. 106; art. 110 (LF 2021): bank cash bonds 15 %.",
+   "unsupported": [
+    "cash bonds issued by banks 15 % (art. 110 1)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "incomeBands",
+   "fam": "tsil",
+   "grade": "A",
+   "income": "rent",
+   "abateBp": 0,
+   "bands": [],
+   "top": 1500,
+   "periods": 12,
+   "exemptBelow": 200000,
+   "testValue": 6000000,
+   "expect": 900000,
+   "name": "Taxe spéciale immobilière sur les loyers (15 % of gross rents; nil below 200 000 F a month)",
+   "statute": "CGI 2025 art. 384-387 (art. 385 as amended by LF 2024)",
+   "doc": "art. 384: due by persons letting bare land or buildings; art. 385 (LF 2024): owners receiving a monthly rent below 200 000 F are exempt (registered lease and sworn expert report required); art. 386: base = gross rents of all let buildings; art. 387: 15 %. The household's annual rent is taken as twelve equal monthly rents.",
+   "unsupported": [
+    "the exemption's formal conditions (registered lease, expert report) are taken as met"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyAnnual",
+   "fam": "cfuHome",
+   "grade": "A",
+   "rateBp": 300,
+   "kinds": [
+    "home"
+   ],
+   "abateBp": 500,
+   "name": "Contribution foncière unique, owner's main residence (3 % of rental value less 5 %)",
+   "statute": "CGI 2025 art. 289, 292, 294 (LF 2022, LFR 2022, LF 2024, LF 2025)",
+   "doc": "art. 289: base = real rental value at 1 January; art. 292: less 5 % for wear and upkeep (not on bare land); art. 294: 3 % for built property that is the owner's main residence, 15 % in all other cases; base rounded down to the thousand.",
+   "unsupported": [
+    "rounding of the base down to the thousand francs",
+    "5-year exemption of new dwellings (Section 2, temporary exemptions)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyAnnual",
+   "fam": "cfuOther",
+   "grade": "A",
+   "rateBp": 1500,
+   "kinds": [
+    "realEstate"
+   ],
+   "abateBp": 500,
+   "name": "Contribution foncière unique, other built property (15 % of rental value less 5 %)",
+   "statute": "CGI 2025 art. 289, 292, 294",
+   "doc": "art. 294: 15 % in all cases other than the owner's main residence.",
+   "unsupported": [
+    "bare land (rental value of land not in the input; rural land on a per-hectare value, art. 294 bis)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "fnh",
+   "level": "central",
+   "rateBp": 200,
+   "cap": 18000000,
+   "grade": "B",
+   "name": "Prélèvement pour le Fonds national de l'habitat (2 % up to the CNSS ceiling)",
+   "statute": "CGI 2025 art. 401-404 (rate and base, read); CNSS ceiling 1 500 000 F a month: CLEISS 'Les cotisations au Gabon', table 'Taux de cotisation au 1er janvier 2023' as shown on 6 May 2025 (Wayback 20250506125305, R4/fetch/p16/cleiss_gabon_wb20250506.html) (the same ceiling on the 2026 page)",
+   "doc": "art. 401: wages 'constituant l'assiette des cotisations du régime des prestations familiales et des accidents du travail dans la limite du plafond fixé par la Caisse Nationale de Sécurité Sociale' are subject to the levy; art. 402: private and public employers (except the State) under the CNSS; art. 403: 'Le taux du prélèvement pour le Fonds National de l'Habitat est fixé à 2 %.'",
+   "unsupported": [
+    "CNSS ceiling from a secondary table"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "patente",
+   "grade": "B",
+   "name": "Contribution des patentes, stated profession: architect or design office employing more than 2 persons, Libreville / Port-Gentil (tableau A, class 3, 170 000 F)",
+   "statute": "CGI 2025 art. 252-253 and the tariff annexed under art. 271 (tableau A)",
+   "doc": "art. 253: the patente is a fixed duty set by the general tariff for the professions of tableau A, or the exceptional tariff of tableaux B and C; the annexed tariff gives, for 'Architecte ou Bureau d'études (tenant un) — employant plus de 2 personnes', tableau A, class 3, 170 000 F (Libreville or Port-Gentil column). Every company line is taken to carry on that profession in one establishment in Libreville.",
+   "unsupported": [
+    "the trade of the company is not in the input: one stated profession is applied to every company",
+    "other towns' columns and other professions (tableaux A, B, C)",
+    "one fixed duty per establishment (art. 256)"
+   ],
+   "lic": {
+    "tiers": [],
+    "top": [
+     0,
+     170000,
+     170000
+    ]
+   },
+   "tests": [
+    {
+     "turnover": 500000000,
+     "expect": [
+      170000
+     ]
+    },
+    {
+     "turnover": 5000000000,
+     "rv": 30000000,
+     "expect": [
+      170000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnss",
+   "level": "social",
+   "rateBp": 1600,
+   "cap": 18000000,
+   "grade": "B",
+   "name": "CNSS employer contributions in 2025 (family 8 %, work accidents 3 %, pensions 5 %; up to 1 500 000 F a month)",
+   "statute": "CLEISS 'Les cotisations au Gabon', table 'Taux de cotisation au 1er janvier 2023' as shown on 6 May 2025 (Wayback 20250506125305, R4/fetch/p16/cleiss_gabon_wb20250506.html); the 2026 page (R4/fetch/cleiss11/gabon.html, 'au 1er janvier 2026': family 5 %, work accidents 2 %, pensions 11 %) gives the reform decree's rates from 1 January 2026, not applied to 2025; CNSS decrees not read",
+   "doc": "CLEISS as at May 2025 (rates of 1 January 2023, in force through 2025): prestations familiales 8 %, accidents du travail 3 %, pensions 5 % (employer; employee 2,5 %), monthly ceiling 1 500 000 FCFA; assurance maladie (CNAMGS) 4,1 % / 2 % up to 2 500 000. The pension reform (16 % = 11 % employer + 5 % employee; family 5 %, work accidents 2 %) applies from 1 January 2026 (CLEISS 2026 page; decree of late 2025 per press). Sixteenth pass (year-in-force fix; was 18 % from the 2026 page).",
+   "unsupported": [
+    "the employee's 2,5 %",
+    "rates of the 2026 reform (from 1 January 2026) not applied"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicleTax",
+   "fam": "vehLuxe",
+   "grade": "A",
+   "unknown": true,
+   "name": "Taxe sur les véhicules de luxe (passenger cars above 10 CV: 20 000 or 30 000 FCFA per CV above 10, by age)",
+   "statute": "CGI 2025 (DGI Gabon edition), Livre des taxes diverses, 3.1 Taxe sur les véhicules de luxe, art. 5-11 (LFR 2018), world/B08-central-africa-fr/ga/law/cgi2025.txt l. 13711-13745; the 2025 edition holds the LFR 2018 text unchanged. Liability: the owner (art. 6), collected by insurers with the policy (art. 9-10)",
+   "taxes": "[{ name := \"Taxe sur les véhicules de luxe (vehicle up to 5 years old)\", kinds := [\"car\"], fuels := [.petrol, .diesel, .hybrid, .pluginHybrid, .lpg, .cng, .hydrogen, .other], «when» := [(.fiscalHp, 10, VehicleTax.noBound), (.age, -1, 4)], parts := [(.fiscalHp, { steps := [(10, 20000)], den := 1 })], proRata := false, statute := \"CGI 2025 taxe sur les véhicules de luxe art. 6, 8: 20 000 FCFA per fiscal horsepower above 10 CV, new vehicles and under 5 years\" }, { name := \"Taxe sur les véhicules de luxe (vehicle over 5 years old)\", kinds := [\"car\"], fuels := [.petrol, .diesel, .hybrid, .pluginHybrid, .lpg, .cng, .hydrogen, .other], «when» := [(.fiscalHp, 10, VehicleTax.noBound), (.age, 4, VehicleTax.noBound)], parts := [(.fiscalHp, { steps := [(10, 30000)], den := 1 })], proRata := false, statute := \"CGI 2025 taxe sur les véhicules de luxe art. 6, 8: 30 000 FCFA per fiscal horsepower above 10 CV, vehicles over 5 years\" }]",
+   "tests": [
+    {
+     "line": {
+      "id": "t0",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t0",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 20000000,
+        "fiscalHp": 12,
+        "fuel": "petrol",
+        "firstRegYear": 2023
+       }
+      ]
+     },
+     "expect": [
+      40000
+     ]
+    },
+    {
+     "line": {
+      "id": "t1",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t1",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 9000000,
+        "fiscalHp": 14,
+        "fuel": "diesel",
+        "firstRegYear": 2015
+       }
+      ]
+     },
+     "expect": [
+      120000
+     ]
+    },
+    {
+     "line": {
+      "id": "t2",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t2",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 8000000,
+        "fiscalHp": 9,
+        "fuel": "petrol",
+        "firstRegYear": 2022
+       }
+      ]
+     },
+     "expect": []
+    },
+    {
+     "line": {
+      "id": "t3",
+      "schema": "global/2.0",
+      "household": {
+       "id": "t3",
+       "year": 2025,
+       "adults": [
+        {
+         "age": 40,
+         "wages": 6000000
+        }
+       ]
+      },
+      "assets": [
+       {
+        "kind": "vehicle",
+        "value": 30000000,
+        "fiscalHp": 12,
+        "fuel": "electric",
+        "firstRegYear": 2024
+       }
+      ]
+     },
+     "expect": []
+    }
+   ],
+   "doc": "art. 6: 'due par les propriétaires de véhicules de tourisme terrestres à moteur dont la puissance fiscale est supérieure à 10 CV'; art. 7: exempt diplomatic, utility and electric vehicles; art. 8: 'véhicules neufs et de moins de 5 ans : 20.000 FCFA par cheval fiscal (CV) supplémentaire ; véhicules de plus de 5 ans : 30.000 FCFA par cheval fiscal (CV) supplémentaire'. Worked case (hand): 12 CV petrol car first registered 2023 -> (12 - 10) x 20 000 = 40 000; 14 CV diesel car of 2015 -> 4 x 30 000 = 120 000. Sixteenth pass.",
+   "unsupported": [
+    "the tax is collected by insurers with each policy (art. 9-10): modelled as one annual amount, not pro rata",
+    "age = 2025 - year of first registration; a vehicle exactly 5 years old is taken as 'de plus de 5 ans' (the text leaves the boundary open)",
+    "a car without fiscalHp, firstRegYear or fuel: grade C line",
+    "utility vehicles (exempt) and other kinds: no charge",
+    "no other national annual vehicle tax in the CGI 2025 (the taxe sur les immatriculations personnalisées, 3.2, is an optional plate charge)"
+   ]
+  }
+ ]
+}

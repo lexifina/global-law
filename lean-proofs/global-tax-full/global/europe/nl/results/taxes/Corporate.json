@@ -1,0 +1,78 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Vennootschapsbelasting",
+  "statute": "Wet Vpb 1969 art. 22 lid 1 (19 % tot € 200.000, 25,8 %)",
+  "dated": "wetten.overheid.nl geldend 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "art. 20 loss offset (€ 1 mln + 50 %) not read",
+   "deelnemingsvrijstelling (art. 13) not modelled",
+   "art. 15b earnings stripping"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Dividendbelasting",
+  "statute": "Wet op de dividendbelasting 1965 art. 5: 15%",
+  "dated": "wetten.overheid.nl geldend 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "participation exemption for EU parents (art. 4) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Bronbelasting (rente, royalty's) (interest, royalty)",
+  "statute": "Wet bronbelasting 2021 (conditional withholding on interest and royalties)",
+  "dated": "2025-03-08",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Geen bronheffing op dienstvergoedingen (lichamen) (services)",
+  "statute": "Wet op de vennootschapsbelasting 1969 art. 17 lid 1-3",
+  "dated": "wetten.overheid.nl, geldig op 01-07-2025 (`nl/law/vpb_g2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)",
+   "StateWht (2.4.0, recipient state)"
+  ],
+  "unsupported": [
+   "the recipient company is taken to have no permanent establishment in the Netherlands",
+   "services paid to non-resident individuals: Dutch income from work or other activities (Wet IB 2001 hoofdstuk 7) is taxed by assessment, not withheld; not read (grade C)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Geen bronheffing op dienstvergoedingen (natuurlijke personen) (services)",
+  "statute": "Wet inkomstenbelasting 2001 art. 7.1, 7.2",
+  "dated": "wetten.overheid.nl, geldig op 1 juli 2025 (`nl/law/ib2001_g2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "the recipient is taken as performing the services outside the Netherlands or without a Dutch enterprise; artists and athletes of non-treaty states (art. 7.2 lid 3; loonbelasting) are not separated",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

@@ -1,0 +1,22 @@
+name = "EcGlobal"
+version = "0.1.0"
+defaultTargets = ["EcGlobal", "ecglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); EcTax = the 1.x model, vendored from cmp20/world/B12-latin-america/ec/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "EcTax"
+
+[[lean_lib]]
+name = "EcGlobal"
+
+[[lean_exe]]
+name = "ecglobal"
+root = "EcGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

@@ -1,0 +1,359 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 317 (18 %; 10 % hotel and restaurant services)",
+  "dated": "CGI à jour LF 2023 (DGI); LF 2024 OCR held; LF 2025 not held: grade B",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "exemptions",
+   "LF 2025"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Taxe sur les boissons et taxe sur les tabacs",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2023 art. 359 as substituted by LF 2024 art. 29 (beverages, from 1 Jan 2024); art. 365 (loi n° 029-2022/ALT art. 53: tobacco 55 %); art. 358 and 364 (base); LFR 2024 does not amend them; LF 2025 not held",
+  "dated": "CGI à jour LF 2023 (DGI); LF 2024 OCR held; LF 2025 not held: grade B",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc"
+  ],
+  "unsupported": [
+   "energy drinks 50 %",
+   "minimum tobacco base",
+   "petroleum products tax (TPP)",
+   "LF 2025 (not held)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les sociétés",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI art. 87 (27,5 %, fraction below 1 000 F dropped), art. 23-24 (minimum forfaitaire 0,5 % of turnover, at least 1 000 000 F under the régime du réel normal)",
+  "dated": "CGI à jour LF 2023 (DGI); LF 2024 OCR held; LF 2025 not held: grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "simplified-regime floor",
+   "loss rules"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "IRVM / retenues non-résidents",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI 2023 art. 210-212 (loi n° 029-2022/ALT art. 36: 20 % on services and royalties paid to non-residents); art. 140 (IRCM: 12,5 % on income from securities, 25 % on claims); LF 2024 and LFR 2024 do not amend them; LF 2025 not held",
+  "dated": "CGI à jour LF 2023 (DGI); LF 2024 OCR held; LF 2025 not held: grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "ECOWAS road transport 10 %",
+   "bonds issued in Burkina Faso 6 %",
+   "LF 2025 (not held)"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts (loi n° 058-2017/AN), édition officielle 2023 à jour de la LF 2023",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://dgi.bf (archived copy, Code-general-des-impots-a-jour-avec-la-LF-2023.pdf))",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Contribution des patentes (tableau A fixed duty by turnover + 8 % of rental value)",
+  "statute": "CGI édition officielle 2023 (à jour LF 2023) art. 237, 239 (loi n° 042-2018/AN art. 34), 240-241; LF 2024 and LFR 2024 do not amend them; LF 2025 not held",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "tableaux B (liberal professions), C (beverage wholesalers, filling stations, airtime dealers) and D (transporters)",
+   "proportional patente on public contracts (art. 242)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.licenceFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "CGI-LF2023-b.txt (whole code)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "BF: the general tax code held (CGI-LF2023-b.txt, 1234k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Taxe sur les véhicules à moteur (four wheels and more, by fiscal horsepower)",
+  "statute": "CGI édition 2023 art. 295-1, 295-5 1) (loi n° 029-2022/ALT art. 48); LF 2024 and LFR 2024 do not amend it; LF 2025 not held",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "two- and three-wheelers and quadricycles (art. 295-5 2)",
+   "exemptions (art. 295-3)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.vehicleFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRCM on dividends and other income from securities (12,5 %)",
+  "statute": "CGI 2023 art. 140 2) (edition at 2023; LF 2024 and LFR 2024 checked: art. 140 not amended; LF 2025 not held)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "half rate on distributions of newly formed companies (art. 141)",
+   "bonds issued in Burkina Faso 6 % (art. 140 2)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "IRCM on interest on deposit and current accounts (25 % halved: 12,5 %)",
+  "statute": "CGI 2023 art. 140 1) (edition at 2023; LF 2024/LFR 2024 checked; LF 2025 not held)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "other claims, deposits and guarantees 25 % (art. 140 1)",
+   "bonds issued in Burkina Faso 6 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les revenus fonciers (18 % / 25 % on monthly rent after a 50 % abatement)",
+  "statute": "CGI 2023 art. 125-126 (edition at 2023; LF 2024/LFR 2024 checked; LF 2025 not held)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "withholding of the IRF by tenants (Livre 1, Titre 1, chapitre 9, section 4)",
+   "quarterly/irregular rent periods"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.incomeBandFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Taxe sur les plus-values immobilières (10 % of the gain)",
+  "statute": "CGI 2023 art. 161-166 (edition at 2023; LF 2024/LFR 2024 checked; LF 2025 not held)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "flat 10 % (15 %) uplift of the acquisition price for costs and works (art. 165)",
+   "gain set at 75 % of the price when the acquisition price is unknown",
+   "exemptions (art. 162-163)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.gainsFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Taxe patronale et d'apprentissage (3 % of wages)",
+  "statute": "CGI 2023 art. 228-229 (edition at 2023; LF 2024/LFR 2024 checked; LF 2025 not held)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "20 % abatement for members of approved management centres (art. 228 2)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière, built property used as housing (0,1 % of cadastral value)",
+  "statute": "CGI 2023 art. 270-271, 275-276 (art. 275 as amended by loi n° 042-2021/AN; LF 2024/LFR 2024 checked)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "0,2 % for buildings not used as housing (asset kinds do not carry the use)",
+   "5-year exemption of new buildings (art. 271)",
+   "companies subject to the taxe foncière des sociétés are exempt (art. 271)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyValueFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière, unbuilt property (0,2 % of cadastral value)",
+  "statute": "CGI 2023 art. 272-276 (LF 2024/LFR 2024 checked)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "exemptions of art. 273"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyValueFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Droit de mutation à titre onéreux d'immeubles (5 %)",
+  "statute": "CGI 2023 art. 409-410 (art. 410 as amended by loi n° 029-2022/ALT art. 54; LF 2024/LFR 2024 checked)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "exchanges on the higher value; sales with repurchase option 6 000 F fixed duty (art. 410 2-3)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation à titre gratuit (successions and gifts, tariff by bands per degree)",
+  "statute": "CGI 2023 art. 478 (edition at 2023; LF 2024/LFR 2024 checked; LF 2025 not held)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "deduction of 100 % capped at 100 000 F per child from the third (art. 479)",
+   "2 % for gifts to public-interest bodies (art. 480)",
+   "exempt estates (art. 481)",
+   "otherRelative taken as 4th degree or beyond"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateBandFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI 2023 (whole code, CGI-LF2023-b.txt)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "BF CGI 2023 (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net', 'fortune' finds only the UEMOA double-tax convention annexed"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNSS employer contributions (16 %: pensions 8,5 %, occupational risks 1,5 %, family benefits 6 %; ceiling 800 000 F a month)",
+  "statute": "Décret n° 2023-0129/PRES-TRANS/PM/MFPTPS/MEFP du 24 février 2023 art. 2-6 (effective 30 Aug 2022; repeals décret 2003-252); Arrêté n° 2022-067 du 30 août 2022 art. 2 (plafond); Loi n° 004-2021/AN art. 10-11 (cnss.bf PDFs via Wayback, R4/fetch/bf11, OCR)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "occupational-risk surcharge for high-risk employers (arrêté 2023-018)",
+   "the worker's 5,5 %"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Assurance maladie universelle (CNAMU), employer contribution",
+  "statute": "Loi n° 060-2015/CNT portant régime d'assurance maladie universelle; Décret n° 2018-0265 (CNAMU)",
+  "dated": "CGI-LF2023-b.txt",
+  "unsupported": [
+   "the decree fixing the contribution rate was not located (press reports of Nov 2025 give 5 %, half each, with benefits from 1 February 2026; not a rate text); collection for the 2025 year not established"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "CNSS Wayback listing (no AMU text); one web search"
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Burkina Faso as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Burkina Faso for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C854&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/bf.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "WAEMU (UEMOA) customs union (origin BJ, CI, GW, ML, NE, SN, TG): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+  ]
+ }
+]

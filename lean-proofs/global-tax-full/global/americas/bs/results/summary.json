@@ -1,0 +1,340 @@
+{
+ "country": "BS",
+ "name": "Bahamas",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:13"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BsGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "statute": "VAT Act 2014 (Reprint as at 1 July 2024) s. 6 (1) (VAT (Amendment) Act, 2025 s. 3), First, Third and Fourth Schedules",
+   "dated": "Reprint 4 November 2024; Amendment Act 2025 in force 1 April 2025",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "5 % food rate only from 1 April 2025 and only unprepared in food stores",
+    "utility caps"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BsGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "statute": "Excise Tax Act 2018",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "inlandrevenue.finance.gov.bs VAT texts read; excise tariff not fetched",
+   "unsupported": [
+    "would unlock: the Excise Tax Act schedule in force 2025"
+   ],
+   "family_file": "lean/BsGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "statute": "none: no income tax is levied in The Bahamas (Ministry of Finance, Introduction of a Domestic Minimum Top-up Tax in The Bahamas, Aug 2024: an income tax would have to be built 'from the ground up'; smaller businesses pay the Business Licence Tax)",
+   "dated": "Ministry of Finance consultation paper and DMTT Bill 2024 (opm.gov.bs, archived bs/law/Introduction-of-a-Domestic-Minimum-Top-Up-Tax-in-the-Bahamas.*, Domestic-Minimum-Top-Up-Tax-Bill-2024.*); pass 8, 2026-11-21",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P2",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BsGlobal/Corporate.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "no income tax is levied in The Bahamas (Ministry of Finance, Introduction of a Domestic Minimum Top-up Tax in The Bahamas, Aug 2024: an income tax would have to be built 'from the ground up'; smaller businesses pay the Business Licence Tax): none withheld",
+   "dated": "Ministry of Finance consultation paper and DMTT Bill 2024 (opm.gov.bs, archived bs/law/Introduction-of-a-Domestic-Minimum-Top-Up-Tax-in-the-Bahamas.*, Domestic-Minimum-Top-Up-Tax-Bill-2024.*); pass 8, 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BsGlobal/Corporate.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Domestic minimum top-up tax (MNE groups with consolidated revenue of at least EUR 750 million)",
+   "statute": "Domestic Minimum Top-up Tax Act 2024 (enacted 28/29 Nov 2024; the Act was not read, the Bill of Aug 2024 was)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P2",
+   "kernel_parts": [],
+   "tried": "laws.bahamas.gov.bs 403 to scripts; opm.gov.bs Bill 2024 read",
+   "unsupported": [
+    "the enacted DMTT Act is not held; group revenue is not an input"
+   ],
+   "family_file": "lean/BsGlobal/Corporate.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "National Insurance Act, Fifth Schedule",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed persons' contributions (Fifth Schedule, income-based) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed persons' contributions (Fifth Schedule, income-based) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 2300 = 2021:6.0 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "Taxes on payroll and workforce",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 3000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Real Property Tax Act (owner-occupied bands)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Real Property Tax Act (owner-occupied bands); not in lexifina/bahamas-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Real Property Tax Act (owner-occupied bands); not in lexifina/bahamas-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 4100 = 2021:143.5 2022:146.9 2023:161.5 2024:203.2"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "Non-recurrent taxes on property",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales tax (single stage)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 5112 = ?",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Bahamas Tariff Act schedule (The Bahamas does not apply the CARICOM CET)",
+   "customs_note": "customs import duties (5123): Bahamas Tariff Act schedule (The Bahamas does not apply the CARICOM CET); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "Road Traffic Act licence fees (OECD BS 5210 'Motor vehicle tax')",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Road Traffic Act licence fees (OECD BS 5210 'Motor vehicle tax'). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Road Traffic Act licence fees (OECD BS 5210 'Motor vehicle tax'). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 5200 = 2021:154.9 2022:172.0 2023:203.5 2024:281.4; named lines: 5210 Motor vehicle tax (2024: 34.7); 5213 Other (2024: 246.7)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 6000 (other taxes, Guide §85) in 2021-2024; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVBHS, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/BHS.csv): general government heading 6000 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/BsGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for The Bahamas (DSD_REV_LAC@DF_REVBHS v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BHS.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for The Bahamas (DSD_REV_LAC@DF_REVBHS v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BHS.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for The Bahamas (DSD_REV_LAC@DF_REVBHS v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/BHS.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/BsGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Department of Inland Revenue (inlandrevenue.finance.gov.bs): list of taxes administered",
+   "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Department of Inland Revenue (inlandrevenue.finance.gov.bs) list of the taxes it administers, `bs/law/dir_home_2025-02-06.*` (Wayback 2025-02-06), names: Value Added Tax, Business Licence, Real Property Tax, stamp duty (DMTT), Condo-Hotel Tax; consolidated index of revenue Acts not held; none of them is a recurrent tax on net wealth.",
+   "family_file": "lean/BsGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "National Insurance (employer)",
+   "statute": "National Insurance (Contributions) Regulations Fifth Schedule, reg. 23 (1A) (S.I. 37 of 2024)",
+   "dated": "S.I. 37 of 2024 in force 1 July 2024",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "2025 ceiling"
+   ],
+   "status": "modelled",
+   "family_file": "lean/BsGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Stamp Act; Real Property Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/BsGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 0,
+  "B": 11,
+  "C": 7
+ },
+ "guards": 11,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

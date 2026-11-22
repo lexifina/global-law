@@ -1,0 +1,64 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Income tax (companies)",
+  "statute": "Income Tax Act (Cap. 123) art. 56 (6) (a) (thirty-five cents on every euro) [year in force 2025 (pass 17), upgraded: PwC Malta, Corporate - Taxes on corporate income, Internet Archive 2025-04-20 (mt/law/pwc_cit_wb20250420.*): flat 35 %, as modelled]",
+  "dated": "Cap. 123 art. 56(6), consolidation of 17.4.2025 (legislation.mt via lexifina/malta-law)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "shareholder refunds under the full imputation system (6/7, 5/7, 2/3; Income Tax Management Act art. 48) not modelled: the 35 % is the company's charge before refunds"
+  ],
+  "yif16": "downgraded",
+  "yif17": "upgraded",
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad (interest, royalties) (interest, royalty)",
+  "statute": "Income Tax Act (Cap. 123) art. 12 (1) (c) (i) [year in force 2025 (pass 17), upgraded: PwC Malta, Corporate - Withholding taxes, Internet Archive 2025-05-27 (mt/law/pwc_wht_wb20250527.*): interest and royalties of non-residents exempt where not connected with a Maltese PE, as modelled]",
+  "dated": "Cap. 123 art. 12(1)(c)(i), consolidation in force in 2025 (legislation.mt via lexifina/malta-law)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "downgraded",
+  "yif17": "upgraded",
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on services paid abroad",
+  "statute": "not read",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 8: no statute or official/secondary source on disk states the rule for these kinds; pass 9: Cap. 123 read for withholding on payments to non-residents: only investment income (art. 41) and the art. 12 (1) (c) exemptions; a non-resident's Malta-source service income is taxed by return (art. 4), no deduction at source found; pass 12: Cap. 123 (`mt/law/cap123.txt`) re-read: the only deduction at source on a non-resident's fees for services is art. 23 (5) (a), petroleum Contractors paying non-resident sub-contractors at the art. 56 (13) (b) rate; any other non-resident's Malta-source service income is charged by return (art. 4), so a generic company deducts nothing",
+  "unsupported": [
+   "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\"",
+   "would unlock: the Final Settlement System rules (S.L. 123.13) on payments to non-residents, to confirm that no deduction applies",
+   "would unlock (pass 12): a Commissioner for Tax and Customs guide or the FSS rules (S.L. 123.13) stating that no other deduction applies, to cite the 0 as A"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on dividends (none) (dividend)",
+  "statute": "Income Tax Act (Cap. 123): full imputation, no tax on distributions",
+  "dated": "2025-05-27",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

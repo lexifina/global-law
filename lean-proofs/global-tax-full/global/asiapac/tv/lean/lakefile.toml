@@ -1,0 +1,18 @@
+name = "TvGlobal"
+version = "0.1.0"
+defaultTargets = ["TvGlobal", "tvglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); TvTax = the 1.x model, vendored from cmp20/world/B14-pacific/tv/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TvTax"
+
+[[lean_lib]]
+name = "TvGlobal"
+
+[[lean_exe]]
+name = "tvglobal"
+root = "TvGlobal.Main"

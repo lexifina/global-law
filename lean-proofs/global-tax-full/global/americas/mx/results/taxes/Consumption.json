@@ -1,0 +1,42 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Impuesto al Valor Agregado",
+  "statute": "LIVA arts. 1o, 2o-A, 9, 15, 20",
+  "dated": "DOF consolidation (última reforma 12-11-2021) archived 2025-06-17",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "5121",
+  "tax": "Impuesto Especial sobre Producción y Servicios",
+  "statute": "LIEPS art. 2o I A), C), D), G), H)",
+  "dated": "archived 2025-06-18, quotas updated DOF 27-12-2024",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "fuel stimulus decrees",
+   "ad valorem base from consumer price"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Constitución art. 31 fr. IV; LIVA art. 41",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 31 fr. IV: \"de la manera proporcional y equitativa que dispongan las leyes\" (`mx/law/const_art-031.md`). LIVA art. 41 fr. I (held `mx/law/LIVA.txt`): states in the Sistema Nacional de Coordinación Fiscal agree 'en no mantener impuestos locales o municipales sobre ... Los actos o actividades por los que deba pagarse el impuesto al valor agregado' (lodging excepted); no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: LIVA arts. 1o, 2o-A, 9, 15, 20; LIEPS art. 2o I A), C), D), G), H); LISR art. 9 (30 %); LISR (DOF 01-04-2024) arts. 140, 164, 156, 166, 167; 1.x model (see its summary.json); LISR arts. 119-121, 124 (DOF 01-04-2024))."
+ }
+]

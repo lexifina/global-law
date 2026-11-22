@@ -1,0 +1,83 @@
+{
+ "cc": "DJ",
+ "name": "Djibouti",
+ "dated": "Finance laws 2017-2025 (Loi n°203/AN/25 for 2025); the CGI itself not held",
+ "sources": "No usable 2025 text for these headings: only finance laws (2017-2025) are held, not the CGI; rates not consolidated. Second pass: Finance laws 2017-2025 (Loi n°203/AN/25 for 2025); the CGI itself not held. Pass 9: the Code général des impôts as recast by Loi n° 42/AN/08/6ème L, full text on the Journal officiel site (https://www.journalofficiel.dj/texte-juridique/loi-n42-an-08-6emel-portant-refonte-du-code-generale-des-impots/, found with the site's WordPress search `/wp-json/wp/v2/search?search=impôts`), saved with SHA256SUMS in `R4/fetch/dj9/` (cgi2008.html / .txt). The finance laws 2017-2025 held were searched for amendments of art. 56, 57-61, 70-75 (LF 2024, Loi n° 64/AN/23: art. 58 al. 2 added, art. 62 al. 3 repealed, new art. 90F-90L IRVM 5 %); the finance laws 2009-2016 and the CGI amending laws of 2009, 2017 and 2018 listed on the same site were not read: graded B and flagged.",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée",
+  "standard": 1000,
+  "classes": {},
+  "grade": "B",
+  "statute": "TVA 10 % as imposed by the finance laws (LF 2025 art. on electric vehicles; Loi n°111/AN/20 art. 28; Loi n°142/AN/21); the CGI rate article not held",
+  "doc": "LF 2025: \"Il est perçu au profit du budget de l'État, une taxe intérieure de consommation de 10% et une taxe sur la valeur ajoutée de 10% sur les véhicules électriques importés ou produits sur le territoire national\"; Loi n°111/AN/20 art. 28: \"une taxe intérieure de consommation (TIC) de 10% et une taxe sur la valeur ajoutée de 10% sur les couches et lange pour bébés\"; Loi n°142/AN/21: \"en plus de la taxe intérieure de consommation de 23% une taxe sur la valeur ajoutée de 10%\". The general rate article of the CGI is not held: grade B (rate from the finance laws' own charging lines).",
+  "notes": [
+   "VAT 10 % taken from the finance laws' charging lines (the CGI rate article not held)"
+  ],
+  "unsupported": [
+   "CGI rate article and exemptions not held"
+  ]
+ },
+ "excise": {
+  "status": "unsupported",
+  "name": "Excises",
+  "why": "only finance laws (2017-2025) are held, not the CGI; rates not consolidated",
+  "tried": "world/B08-central-africa-fr/dj/law",
+  "statute": "not reached: tried world/B08-central-africa-fr/dj/law"
+ },
+ "cit": {
+  "name": "Impôt sur les bénéfices professionnels (sociétés)",
+  "rate": 2500,
+  "step": 1000,
+  "min": {
+   "bp": 100,
+   "floor": 120000
+  },
+  "grade": "B",
+  "statute": "CGI (Loi n° 42/AN/08) art. 56 (25 %; fractions below 1 000 FD disregarded) and art. 57-61 impôt minimum forfaitaire (1 % of turnover excluding VAT, at least 120 000 FD, due when higher than the profit tax or with a loss); LF 2024 art. 6 adds export turnover to the IMF base — 2008 text, amendments 2009-2016 not read, flagged",
+  "doc": "art. 56: \"1) Pour le calcul de l'impôt, toute fraction de bénéfice inférieur à 1.000 FD est négligée. 2) Le taux de l'impôt sur les bénéfices professionnels est fixé à 25 % du bénéfice net imposable.\" art. 60: \"Le taux d'imposition applicable est fixé à 1 % du chiffre d'affaire réalisé hors TVA. En aucun cas le montant de l'impôt ne peut être inférieur à 120.000 FD.\" art. 61: \"1) L'Impôt minimum forfaitaire est dû s'il est supérieur au montant de l'impôt sur les bénéfices ou dans l'hypothèse d'un résultat déficitaire.\" LF 2024 art. 6: \"Art.58 al.2 : Est imposable le chiffre d'affaires issus des ventes et des prestations à l'exportation\".",
+  "notes": [
+   "2008 recast: the finance laws 2009-2016 and the CGI amending laws of 2009, 2017 and 2018 were not read (flagged)",
+   "the IMF base is the previous year's turnover (art. 59); the current turnover is used"
+  ],
+  "unsupported": [
+   "amending laws 2009-2016 not read",
+   "IMF on the previous year's turnover"
+  ]
+ },
+ "wht": {
+  "name": "Impôt sur les rémunérations versées à des personnes non domiciliées et IRVM",
+  "grade": "B",
+  "statute": "CGI (Loi n° 42/AN/08) art. 70-75 (10 % on services of any kind supplied or used in Djibouti, copyright and industrial-property royalties paid to non-residents) and art. 90F-90L (inserted by LF 2024, Loi n° 64/AN/23: IRVM 5 % on distributed dividends, distributions below 10 million FD exempt) — 2008 text, amendments 2009-2016 not read, flagged; thirteenth pass: CGI (Loi 42/AN/08) art. 70-72 (non-domiciled tax: services and royalties only), art. 80 (impôt d'incitation sociale: placements of public institutions only), art. 90F-90I (LF 2024: IRVM on distributed income only): no schedular tax reaches interest paid to a non-resident lender (cited 0; LF 2017-2025 held searched, LF 2009-2016 not held: flagged)",
+  "doc": "art. 70: \"Il est institué un impôt perçu par la voie de retenue à la source, sur les rémunérations versées à des personnes physiques ou morales non domiciliées à Djibouti\"; art. 72: \"1) Les rémunérations imposables sont constituées par : les sommes versées en rémunération de prestations de service de toute nature fournies ou utilisées sur le territoire de la République de Djibouti ; les sommes perçues à titre de droit d'auteur, les produits tirés de la propriété industrielle, commerciale ou assimilée.\" art. 75: \"2) Le taux d'imposition applicable sur la base ci-dessus est fixé à 10 %.\" LF 2024 art. 12: \"Art. 90G ... Sont exonérées les dividendes distribués inférieurs à 10 millions FDJ\"; art. 17: \"Art. 90L CGI : Le taux d'imposition applicable est fixé à 5%\". Thirteenth pass (kernel 2.3.0 grade-C withholding): interest 0 %: CGI (Loi 42/AN/08) art. 70-72 (non-domiciled tax: services and royalties only), art. 80 (impôt d'incitation sociale: placements of public institutions only), art. 90F-90I (LF 2024: IRVM on distributed income only): no schedular tax reaches interest paid to a non-resident lender (cited 0; LF 2017-2025 held searched, LF 2009-2016 not held: flagged)",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1000,
+    "statute": "CGI art. 72, 75 (10 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1000,
+    "statute": "CGI art. 72, 75 (10 %)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 500,
+    "statute": "CGI art. 90L (LF 2024): 5 %"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 0,
+    "statute": "CGI (Loi 42/AN/08) art. 70-72 (non-domiciled tax: services and royalties only), art. 80 (impôt d'incitation sociale: placements of public institutions only), art. 90F-90I (LF 2024: IRVM on distributed income only): no schedular tax reaches interest paid to a non-resident lender (cited 0; LF 2017-2025 held searched, LF 2009-2016 not held: flagged)"
+   }
+  ],
+  "notes": [
+   "the 10 million FD exemption of distributions (art. 90G) is not applied per payment; interest paid abroad is outside art. 72 (no withholding modelled); international transport services are excluded by art. 72 3)"
+  ],
+  "unsupported": [
+   "IRVM 10 million FD threshold",
+   "amending laws 2009-2016 not read",
+   "interest: LF 2009-2016 not held (the cited 0 rests on the 2008 code and LF 2017-2025)"
+  ]
+ }
+}

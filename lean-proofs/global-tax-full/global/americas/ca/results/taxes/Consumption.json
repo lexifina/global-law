@@ -1,0 +1,76 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "GST/HST",
+  "statute": "Excise Tax Act s. 165, Sched. V, VI, VIII",
+  "dated": "Justice Laws consolidation current to 2026-10-29; s. 165 unchanged since 2007",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "POS rebates",
+   "GST/HST holiday"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Federal excise tax on fuel + Ontario gasoline and fuel taxes",
+  "statute": "ETA Sched. I s. 9, 9.1; Gasoline Tax Act s. 2; Fuel Tax Act s. 2",
+  "dated": "ETA current consolidation; Ontario versions from 2025-07-01",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "5121",
+  "tax": "Ontario tobacco tax",
+  "statute": "Tobacco Tax Act s. 2 (1)",
+  "dated": "Ontario version from 2025-06-05",
+  "grade": "A",
+  "package": "P1",
+  "kernel_parts": [
+   "ExLine"
+  ],
+  "unsupported": [
+   "cigars"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Federal tobacco and alcohol duties",
+  "statute": "Excise Act, 2001 Sched. 1, 4, 6; beer schedule",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "unsupported": [
+   "CPI-adjusted amounts (1 April 2025) in CRA notices; would unlock: the CRA 2025 adjusted-rate notices"
+  ]
+ },
+ {
+  "oecd": "5120",
+  "tax": "Customs duties (MFN and preferential tariffs)",
+  "statute": "Customs Tariff (S.C. 1997, c. 36) Schedule, 2025: 1006.30 Free, 2202.10 11 %, 2203.00 Free, 2204.21.10 1.87 c/l, 2204.21.21 4.68 c/l, 2208.30 Free, 2402.20 12.5 %, 2710.12.90 and 2710.19.99 Free, 3004.90 Free, 4901.99 Free, 6109.10 18 %, 6203.42 17 %, 8471.30, 8517.13 Free, 8703.23 and 8703.80 6.1 %; preferential treatments UST, MXT, CEUT, CPTPT, UKT, CCCT and the bilateral tariffs as listed per line",
+  "dated": "CBSA Customs Tariff 2025 chapters 10, 22, 24, 27, 30, 49, 61, 62, 84, 85, 87 (cbsa-asfc.gc.ca tariff-tarif/2025/01-99/chNN-2025-eng.pdf, 'Issued January 1, 2025'), ca/law/cbsa_tariff2025_chNN-2025-eng.{pdf,txt}; gap pass 2026-11-21",
+  "grade": "B",
+  "status": "modelled",
+  "package": "P7",
+  "kernel_parts": [
+   "TariffRule",
+   "customsFamily",
+   "consumptionC"
+  ],
+  "unsupported": [
+   "only the listed HS lines are modelled; any other code is grade C (no tariff line)",
+   "supply-managed lines (0207.14 poultry, 0402.21 milk powder: tariff-rate quotas) not modelled",
+   "GPT and LDCT (developing and least-developed beneficiaries) not modelled: such origins are charged MFN",
+   "2025 surtaxes (United States Surtax Order 2025, China Surtax Order 2024) flagged, not computed",
+   "excise duty and the excise tax inside the price (alcohol, tobacco, fuel) need \"customsValue\""
+  ],
+  "gap_pass": "2026-11-21 approach 1 (customs, kernel 2.8.0)"
+ }
+]

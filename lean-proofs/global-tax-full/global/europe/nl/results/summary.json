@@ -1,0 +1,335 @@
+{
+ "country": "NL",
+ "name": "Netherlands",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:05:46"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Wet IB 2001 hoofdstuk 5 (box 3, forfaitair)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/NlGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Omzetbelasting",
+   "statute": "Wet op de omzetbelasting 1968 art. 9 lid 1 (21 %), lid 2 onderdeel a (9 %, tabel I); art. 11 (vrijstellingen); art. 25a (KOR)",
+   "dated": "wetten.overheid.nl, geldend 2025-01-01 t/m 2025-12-31",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "kleineondernemersregeling (art. 25a, optional exemption up to 20 000 euro) not applied",
+    "exemptions (art. 11) by category, not quoted"
+   ],
+   "family_file": "lean/NlGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Wet op de accijns art. 7-8 (bier), 9-10 (wijn), 21 (overige alcoholhoudende producten), 26-27 (tabak), 27 (minerale oliën), rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "still wine taken up to 15 % vol",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/NlGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Vennootschapsbelasting",
+   "statute": "Wet Vpb 1969 art. 22 lid 1 (19 % tot € 200.000, 25,8 %)",
+   "dated": "wetten.overheid.nl geldend 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "art. 20 loss offset (€ 1 mln + 50 %) not read",
+    "deelnemingsvrijstelling (art. 13) not modelled",
+    "art. 15b earnings stripping"
+   ],
+   "family_file": "lean/NlGlobal/Corporate.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "1200",
+   "tax": "Dividendbelasting",
+   "statute": "Wet op de dividendbelasting 1965 art. 5: 15%",
+   "dated": "wetten.overheid.nl geldend 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "StateWht (2.4.0, recipient state)"
+   ],
+   "unsupported": [
+    "participation exemption for EU parents (art. 4) not modelled"
+   ],
+   "family_file": "lean/NlGlobal/Corporate.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "1200",
+   "tax": "Bronbelasting (rente, royalty's) (interest, royalty)",
+   "statute": "Wet bronbelasting 2021 (conditional withholding on interest and royalties)",
+   "dated": "2025-03-08",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)",
+    "StateWht (2.4.0, recipient state)"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/NlGlobal/Corporate.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "1200",
+   "tax": "Geen bronheffing op dienstvergoedingen (lichamen) (services)",
+   "statute": "Wet op de vennootschapsbelasting 1969 art. 17 lid 1-3",
+   "dated": "wetten.overheid.nl, geldig op 01-07-2025 (`nl/law/vpb_g2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)",
+    "StateWht (2.4.0, recipient state)"
+   ],
+   "unsupported": [
+    "the recipient company is taken to have no permanent establishment in the Netherlands",
+    "services paid to non-resident individuals: Dutch income from work or other activities (Wet IB 2001 hoofdstuk 7) is taxed by assessment, not withheld; not read (grade C)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/NlGlobal/Corporate.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "1200",
+   "tax": "Geen bronheffing op dienstvergoedingen (natuurlijke personen) (services)",
+   "statute": "Wet inkomstenbelasting 2001 art. 7.1, 7.2",
+   "dated": "wetten.overheid.nl, geldig op 1 juli 2025 (`nl/law/ib2001_g2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "the recipient is taken as performing the services outside the Netherlands or without a Dutch enterprise; artists and athletes of non-treaty states (art. 7.2 lid 3; loonbelasting) are not separated",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/NlGlobal/Corporate.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 10: motorrijtuigenbelasting (hoofdsom) on cars modelled; provinciale opcenten, BPM and the other vehicle classes not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 10: motorrijtuigenbelasting (hoofdsom) on cars modelled; provinciale opcenten, BPM and the other vehicle classes not modelled",
+   "unsupported": [
+    "would unlock: Provinciewet art. 222 and the 2025 opcenten of a reference province; Wet BPM 1992 art. 9 (CO2 table) with the list price; Wet MRB art. 24-25 (bestelauto, motorrijwiel)"
+   ],
+   "family_file": "lean/NlGlobal/Other.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5200",
+   "tax": "Motorrijtuigenbelasting",
+   "statute": "Wet op de motorrijtuigenbelasting 1994 art. 22, 23, 23b",
+   "dated": "wetten.overheid.nl, geldend op 1 juli 2025 (`nl/law/mrb_g2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "LPG cars (art. 23 lid 2 b or 3 by installation type), bestelauto, motorrijwiel, vrachtauto, autobus",
+    "5200 Motorrijtuigenbelasting: a diesel car first admitted from 2009 is taken as emitting at most 5 mg/km of particulates (no fijnstoftoeslag, art. 23 lid 4); 2009 is read as from 1 September",
+    "5200 Motorrijtuigenbelasting: a hybrid is taken as petrol-electric (no brandstoftoeslag, art. 23 lid 2)",
+    "5200 Motorrijtuigenbelasting: a plug-in hybrid without CO2 is booked at the full art. 23 tax (art. 23b lid 1 b not tested)",
+    "5200 Motorrijtuigenbelasting: provinciale opcenten (Provinciewet art. 222) not modelled (grade C)"
+   ],
+   "family_file": "lean/NlGlobal/Other.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000)",
+   "statute": "European Commission TEDB, NL: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 435, 447, 682, 790, 4022, 443, 444, 685, 791, 874, 2781, 3828) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "the national taxes the OECD books under 6000 (named above) and their 2025 statutes"
+   ],
+   "gap": 2,
+   "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVNLD v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/NLD.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 6000: 6100 administrative levies 73; 6200 other taxes 93, Caribbean Netherlands 244, wage tax reductions 722 million EUR (2024); the national taxes behind it not read",
+   "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVNLD v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/NLD.csv`, SHA256SUMS; general government S13; 2025 not yet published)",
+   "family_file": "lean/NlGlobal/Other.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "4400",
+   "tax": "Overdrachtsbelasting (woning)",
+   "statute": "WBR art. 14 lid 1 (10,4 %), lid 2 (2 % own dwelling); art. 15 lid 1 onderdeel p (starters, ≤ € 525.000)",
+   "dated": "wetten.overheid.nl geldend 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "startersvrijstelling assumes the buyer is 18-34 and never used it",
+    "a home not occupied by the buyer: 10,4 % (2 % + 8,4 points)"
+   ],
+   "family_file": "lean/NlGlobal/Property.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "4400",
+   "tax": "Overdrachtsbelasting (overig)",
+   "statute": "WBR art. 14 lid 1 (10,4 %)",
+   "dated": "wetten.overheid.nl geldend 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "startersvrijstelling assumes the buyer is 18-34 and never used it",
+    "a home not occupied by the buyer: 10,4 % (2 % + 8,4 points)"
+   ],
+   "family_file": "lean/NlGlobal/Property.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "4100",
+   "tax": "Onroerendezaakbelastingen (eigenaren, woningen)",
+   "statute": "Gemeentewet art. 220-220h (onroerendezaakbelastingen: a percentage of the WOZ value under the Wet waardering onroerende zaken, set by the municipal council; no statutory maximum rate)",
+   "dated": "Gemeentewet and Wet WOZ as applicable 2025; EC Taxes in Europe Database (TEDB), tax 3828, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "LocalTax (2.8.0)"
+   ],
+   "unsupported": [
+    "no capital-city rate declared: the Amsterdam 2025 belastingverordening was not reached (rate input localRates.propertyTax)",
+    "no statutory range to check a rate against (the macro norm limits the national total, not a municipality's rate)",
+    "non-residential property (owners' and users' rates) and the water boards' levies: not modelled"
+   ],
+   "lfw": 1,
+   "status": "framework (local rate input)",
+   "local_rate": "the municipality's rate is an input: localRates.propertyTax",
+   "family_file": "lean/NlGlobal/Property.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "2200",
+   "tax": "Werkgeversheffing Zvw",
+   "statute": "Zvw art. 42-43; 2025: 6,51 %, maximum bijdrage-inkomen € 75.864",
+   "dated": "2025 (Belastingdienst table via the 1.x model)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NlGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Premies werknemersverzekeringen (AWf laag, Aof hoog, opslag kinderopvang)",
+   "statute": "Wfsv arts. 17 (1), 27, 36; Wet kinderopvang art. 1.10; Regeling SZW 19 november 2024 (Stcrt. 2024, 38722) arts. III, IV, VI, VII",
+   "dated": "Stcrt. 2024, 38722, in force 2025-01-01",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "AWf high rate (flexible contracts)",
+    "Aof low rate (small employers)",
+    "Whk",
+    "Ufo"
+   ],
+   "family_file": "lean/NlGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4300",
+   "tax": "Erfbelasting",
+   "statute": "Successiewet 1956 art. 24 lid 1, art. 32 lid 1 onderdeel 4°",
+   "dated": "wetten.overheid.nl geldend 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "schenkbelasting",
+    "ANBI",
+    "bedrijfsopvolgingsregeling",
+    "partner pension deduction"
+   ],
+   "family_file": "lean/NlGlobal/Transfers.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4200",
+   "tax": "Vermogensbelasting (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Netherlands, Individual - Other taxes, accessed 2025-07-18 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-07-18 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NlGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 10,
+  "B": 5,
+  "C": 3
+ },
+ "guards": 55,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

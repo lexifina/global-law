@@ -1,0 +1,400 @@
+{
+ "country": "AM",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains (routed through the 1.x PIT)",
+   "statute": "the 1.x model provisions (see Capital.lean)",
+   "dated": "1.x model (2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "stackedTax",
+    "R5Common.stackedCapital"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "the routing rule is not read from the code: exemptions by holding period / main home not applied (GL for AM AZ GE)"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Շահութահարկ (profit tax)",
+   "statute": "Tax Code art. 114, 125(1)",
+   "dated": "2025-07-01 (Global law); pass 3q year-in-force audit: re-cited: arlis English text (to HO-487-N of 17/12/2025): art. 114 last amended HO-595-N of 23/12/2022; art. 125 HO-285-N of 12/06/2024 (in force 1/1/2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime (thin cap)",
+    "R5Common.corpFamily"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "loss carry-forward not read",
+    "turnover tax regime (art. 254-263) not modelled",
+    "dividend exemption (art. 108) not read"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding on non-residents (art. 125(4))",
+   "statute": "Tax Code art. 125(4) 1)-5)",
+   "dated": "2025-07-01; pass 3q year-in-force audit: re-cited: arlis notes: art. 125 last amended HO-285-N of 12/06/2024 (in force 1/1/2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "treaty rates (out of scope)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employer social contributions",
+   "statute": "Law on Funded Pensions art. 5(1): payers are the employees themselves",
+   "dated": "as in force 2025-07-01",
+   "grade": "A",
+   "status": "not levied",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": []
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Immovable property tax (local)",
+   "statute": "Tax Code HO-165-N art. 224-225 (owners), 228(1) (cadastral value approximated to market value), 229(1)(3) apartments and (1)(4) houses (marginal 0,05 / 0,1 / 0,2 / 0,4 / 0,6 / 1 / 1,5 %), 229(1)(2)(a) residential building land 0,6 %, 230 exemptions; 233(7) phase-in: 2025 = 75 % of the full tax (pass 3l; case am-p1 80 000 -> 60 000)",
+   "dated": "arlis.am official English translation acts/229632 (changes to HO-487-N of 17/12/2025), law/am_tc_en_arlis229632.txt; pass 3q year-in-force audit: confirmed: arlis notes: art. 224, 225, 229, 230, 233 last amended 2022; art. 228 supplemented by HO-20-N of 22/01/2025 (base corrections for registration errors, not the base used); 2025 phase-in written in art. 233(7)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge per asset (marginal bands; land 60 bp)"
+   ],
+   "guards": 8,
+   "unsupported": [
+    "home = apartment unless asset house: true",
+    "other buildings (public 0,3 %, industrial 0,25 %, garages 0,2 %) and organisations not computed"
+   ],
+   "pass": "3j"
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "Gifts and inheritances: state duty on inheritance certificates and gift contracts (no income tax)",
+   "statute": "Tax Code ՀՕ-165-Ն art. 147(1)(13) (inheritances and gifts from natural persons are non-taxable income; developer gifts of art. 145(1)(1) excepted); Law ՀՕ-186 on State Duty art. 11(10) (certificate of the right of inheritance, certification of a gift contract: first-order heirs 2-fold, second and third order 3-fold, other persons 5-fold), art. 8 (base duty AMD 1 000), art. 3",
+   "dated": "gap-closing pass: lexifina/armenia-law (git history of arlis.am texts): Tax Code art. 147 in every version in force in 2025 (1/1, 4/7, 30/10 (ՀՕ-324-Ն: wording only), 25/12/2025); State Duty law art. 8 and 11 the same blob in every version in force from 1/1/2025 to 7/1/2026; law/am_gitlaw_tc147_sd11_2025.txt",
+   "grade": "A",
+   "status": "modelled",
+   "pass": "gap",
+   "kernel_parts": [
+    "charge per immovable gift or inheritance (TransferX realPropertyPart)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "heir orders mapped from the relation (Civil Code not read): spouse, child, grandchild, parent first; sibling, niece/nephew second; others 5-fold (a third-order heir pays 3-fold)",
+    "only gifts and inheritances of immovable property are charged (a certified contract or certificate is what registration needs); movables, deposits and insurance money (art. 24) are not",
+    "exemptions of art. 22 and 24 (heirs living in the home, war victims' heirs) not modelled",
+    "registration of the donee's right (art. 16(36)(2), 20-fold) not booked for gifts (4400 books purchases)",
+    "gifts from legal persons and developer gifts are income (1100), not here"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Պետական տուրք: state duty on the registration of a right based on alienation of immovable property",
+   "statute": "Law HO-186 on State Duty art. 3 (payer: the user of the service), 8 (base duty AMD 1 000), 16(36)(2)(a), (d) (20-fold: AMD 20 000 on the buyer)",
+   "dated": "arlis.am official English translation acts/209221 (changes to HO-393-N of 08/12/2023; HO-339-N in force 01/01/2026), law/am_state_duty_en_arlis209221.txt",
+   "grade": "A",
+   "kernel_parts": [
+    "charge per real-estate purchase (fixed amount)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "agricultural land (1-fold) and social or industrial constructions above 200 m² (40-fold) not distinguished",
+    "notarial certification (art. 11(1)(b), 5-fold) not booked: certification not an input",
+    "amendments to art. 16 after 08/12/2023 not in the translation"
+   ],
+   "pass": "3k"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Ավելացված արժեքի հարկ (VAT)",
+   "statute": "Tax Code ՀՕ-165-Ն art. 59(4)(1), 63(1), 64(2) 1)-5), 11), 24), 44), 47)",
+   "dated": "2025-07-01 (Global law read_law date; art. 63 last changed ՀՕ-285-Ն in force 2025-01-01)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "rent taxed at 20 % although private landlords are not VAT payers",
+    "medicines: art. 64(2) 12) covers medical-purpose goods; medicines not exempted in the basket",
+    "previous-year turnover test read on the year given"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Ակցիզային հարկ (excise)",
+   "statute": "Tax Code art. 85(1), 88(1) rows 2, 6, 7, 10 (2025 column), 88(2) coefficient 1.16, 88(3); art. 88(1) rows 17-18 petrol/diesel per tonne × 1.16 (kernel 2.1 ExciseRule per mass)",
+   "dated": "2025-07-01 (art. 88 last changed ՀՕ-452-Ն, in force 2025-07-01); pass 3q year-in-force audit: confirmed: rows used are the table's column 'from 1 January 2025'; the arlis English text to 17/12/2025 shows the same column (art. 88 last amended HO-474-N of 4/12/2024); art. 88(7) petrol floor not applied",
+   "grade": "A",
+   "kernel_parts": [
+    "Spend quantity",
+    "R5Common.exciseCharge",
+    "ExciseRule (2.1, perKg)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "cigars, heated tobacco, liquids (rows 11-15)",
+    "cognac by age (row 4) and the art. 88(5) minimum prices",
+    "fuel lines need massG (no statutory density)",
+    "art. 88(7) petrol floor not applied"
+   ]
+  },
+  {
+   "package": "P8",
+   "oecd": "5200",
+   "tax": "Vehicle property tax (local) + environmental tax on vehicles",
+   "statute": "Tax Code HO-165-N art. 243, 244(1)(1)-(2), (2), (4)-(5), (7), 246; pass 3m: annual environmental tax on vehicles, Tax Code art. 168(1)(2) (AMD 2,5-25 per hp by power band in the 1st-3rd year, x1,2-x2 from the 4th to the 8th year), art. 175(2)",
+   "dated": "arlis.am official English translation acts/229632 (to HO-487-N of 17/12/2025); pass 3q year-in-force audit: confirmed: arlis notes: art. 243-244 no amendment note; art. 246 amended HO-55-N of 5/3/2025 (start/end of the liability, not the rates); art. 168, 175 last amended 2019",
+   "grade": "A",
+   "kernel_parts": [
+    "custom Family over g.vehicles (kernel 2.4.0 vehicle attributes engineKw, seats, firstRegYear, months)",
+    "charge per car/motorcycle: hp x band rate x year factor (environmental tax, central)"
+   ],
+   "guards": 12,
+   "unsupported": [
+    "trucks' 20-year cut-off (244(6)), water vehicles/snowmobiles/quadricycles (244(3)), community surcharge (244(8)) not computed",
+    "firstRegYear taken as the release year",
+    "environmental tax: cargo vehicles (art. 168(1)(1)) not inputs; firstRegYear taken as the production year; whole year booked"
+   ],
+   "pass": "3l,3m"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "2200",
+   "why": "2200: not levied. Law on Funded Pensions (ՀՕ-244-Ն) art. 5(1), as in force 2025-07-01 (1.x law/funded_5_6_20250701.txt): the social payment is made by employees and opted-in self-employed persons from their own income; the employer only withholds it. Grade A.",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "3000",
+   "why": "3000: no payroll or workforce tax: Tax Code HO-165-N art. 6(1) closed list (state taxes: VAT, excise, profit tax, income tax, environmental tax, road tax, turnover tax; local: immovable property tax, vehicle property tax) and art. 6(2) ('Taxes not prescribed by points 1 and 2 of part 1 of this Article cannot be defined in the Republic of Armenia'); art. 7 fees (state duty, natural-resource payment, welfare payment, radio-frequency payment, public-services regulation fee, pension fee; local duty and payment); official English translation on arlis.am (acts/229632, with changes to HO-487-N of 17/12/2025), law/am_tc_art6_7.txt; grade A",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Tax Code HO-165-N art. 6(1) closed list (state taxes: VAT, excise, profit tax, income tax, environmental tax, road tax, turnover tax; local: immovable property tax, vehicle property tax) and art. 6(2) ('Taxes not prescribed by points 1 and 2 of part 1 of this Article cannot be defined in the Republic of Armenia'); art. 7 fees (state duty, natural-resource payment, welfare payment, radio-frequency payment, public-services regulation fee, pension fee; local duty and payment); official English translation on arlis.am (acts/229632, with changes to HO-487-N of 17/12/2025), law/am_tc_art6_7.txt; grade A",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "6000",
+   "why": "6000: no other tax (no zakat or other levy outside the list): Tax Code HO-165-N art. 6(1) closed list (state taxes: VAT, excise, profit tax, income tax, environmental tax, road tax, turnover tax; local: immovable property tax, vehicle property tax) and art. 6(2) ('Taxes not prescribed by points 1 and 2 of part 1 of this Article cannot be defined in the Republic of Armenia'); art. 7 fees (state duty, natural-resource payment, welfare payment, radio-frequency payment, public-services regulation fee, pension fee; local duty and payment); official English translation on arlis.am (acts/229632, with changes to HO-487-N of 17/12/2025), law/am_tc_art6_7.txt; grade A",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "am-h1",
+   "total": 1350626,
+   "byOecd": {
+    "1100": 786000,
+    "2100": 180000,
+    "5111": 281666,
+    "5121": 102960
+   },
+   "borne": {
+    "consumer": 384626,
+    "employer": 0,
+    "entity": 966000,
+    "withheld": 0
+   },
+   "net": 2634000,
+   "notModelled": [
+    "2300",
+    "4300",
+    "4500",
+    "5112",
+    "5120"
+   ],
+   "unsupported": [
+    "excise on petrol/diesel is per tonne (art. 88(1) rows 17-18): give the line's massG (the code prints no density); without it the duty is 0",
+    "art. 88(7) floor on petrol (excise + VAT ≥ 135 000 × 1.16 per tonne) not applied"
+   ]
+  },
+  {
+   "id": "am-c1",
+   "total": 64800000,
+   "byOecd": {
+    "1200": 10800000,
+    "5111": 54000000
+   },
+   "borne": {
+    "consumer": 54000000,
+    "employer": 0,
+    "entity": 10800000,
+    "withheld": 0
+   },
+   "net": 49200000,
+   "notModelled": [
+    "2300",
+    "4300",
+    "4500",
+    "5112",
+    "5120"
+   ],
+   "unsupported": [
+    "immovable property tax of organisations (quarterly, art. 229(2)) not computed"
+   ]
+  },
+  {
+   "id": "am-h2",
+   "total": 2016000,
+   "byOecd": {
+    "1100": 1836000,
+    "2100": 180000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 2016000,
+    "withheld": 0
+   },
+   "net": 12584000,
+   "notModelled": [
+    "2300",
+    "4300",
+    "4500",
+    "5112",
+    "5120"
+   ],
+   "unsupported": [
+    "disposal gains are routed as capitalGains: the code's exemptions by asset (art. 147) are those of the 1.x model; holding periods not read (GL)"
+   ]
+  },
+  {
+   "id": "am-h3",
+   "total": 200576,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 150000,
+    "5121": 50576
+   },
+   "borne": {
+    "consumer": 200576,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4300",
+    "4500",
+    "5112",
+    "5120"
+   ],
+   "unsupported": [
+    "art. 88(7) floor on petrol (excise + VAT ≥ 135 000 × 1.16 per tonne) not applied"
+   ]
+  },
+  {
+   "id": "am-p1",
+   "total": 876000,
+   "byOecd": {
+    "1100": 666000,
+    "2100": 150000,
+    "4100": 60000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 876000,
+    "withheld": 0
+   },
+   "net": 2124000,
+   "notModelled": [
+    "2300",
+    "4300",
+    "4500",
+    "5112",
+    "5120"
+   ],
+   "unsupported": [
+    "immovable property tax: base taken as the asset's assessed (cadastral) value, else its value; community benefits (art. 230(3)) not applied"
+   ]
+  },
+  {
+   "id": "am-t1",
+   "total": 836000,
+   "byOecd": {
+    "1100": 666000,
+    "2100": 150000,
+    "4400": 20000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 836000,
+    "withheld": 0
+   },
+   "net": 2164000,
+   "notModelled": [
+    "2300",
+    "4300",
+    "4500",
+    "5112",
+    "5120"
+   ],
+   "unsupported": [
+    "state duty: agricultural land (1-fold) and social or industrial constructions above 200 m² (40-fold) not distinguished; notarial certification of the contract (art. 11(1)(b), 5-fold) not booked (whether the contract is certified is not an input)"
+   ]
+  },
+  {
+   "id": "am-v1",
+   "total": 847892,
+   "byOecd": {
+    "1100": 666000,
+    "2100": 150000,
+    "5200": 31892
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 847892,
+    "withheld": 0
+   },
+   "net": 2152108,
+   "notModelled": [
+    "2300",
+    "4300",
+    "4500",
+    "5112",
+    "5120"
+   ],
+   "unsupported": [
+    "community surcharges (art. 244(8)) not computed; firstRegYear taken as the release (production) year; environmental tax booked for the whole year (cargo vehicles, art. 168(1)(1), not inputs)"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 36,
+ "theorems": 1
+}

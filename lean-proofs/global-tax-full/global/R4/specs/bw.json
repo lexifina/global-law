@@ -1,0 +1,87 @@
+{
+ "cc": "BW",
+ "name": "Botswana",
+ "dated": "Income Tax Act Cap. 52:01 (repealed by the Income Tax Act 2026 from 1 July 2026): rates as stated by the Botswana Unified Revenue Service pages 'Companies' (Wayback 19 Apr 2025) and 'Other Withholding Taxes' (Wayback 17 Sep 2025); the Act text for 2025 is not held: grade B",
+ "sources": "No usable 2025 text for these headings: the held income tax text is the new Act applying from 2026 (ita_amend_2026.txt: non-resident WHT dividends 10 %, interest 15 %, royalties 15 %, technical fees 15 %); the 2025 text and the VAT Act are not held. Pass 10 (CIT/WHT): BURS pages via Wayback (`web.archive.org/web/20250419134746id_/http://www.burs.org.bw/index.php/tax/income-tax/companies`, `…/20250917234502id_/…/tax/income-tax/other-withholding-taxes`), saved in `R4/fetch/bw10/`. The BURS site keeps stale pages: its VAT page (Wayback 26 Mar 2025) still prints a 12 % standard rate, and the withholding page refers to Additional Company Tax (pre-2011), so only statements that the Income Tax Act 2026 (`world/B09-southern-africa/bw/law/ita_amend_2026.txt`, Schedule 1, from 1 July 2026) does not contradict are used. The tax-rates page answers a bot-verification page (not bypassed).",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 1400,
+  "classes": {
+   "education": "exempt",
+   "rent": "exempt",
+   "medicines": "exempt",
+   "health": "exempt",
+   "transport": "exempt",
+   "financial": "exempt"
+  },
+  "grade": "B",
+  "statute": "Value Added Tax Act Cap. 50:03 (Act not read). Rate and exemptions from two professional guides dated 2025 (facts only): PwC Worldwide Tax Summaries, Botswana, Corporate - Other taxes, section 'Value-added tax (VAT)', last reviewed 25 September 2025 (Wayback capture 2025-12-16, R4/fetch/swp/pwc_bw_corpother_wb20251216.txt; same 14 % in Individual - Other taxes, capture 2025-11-21); Deloitte International Tax, Botswana Highlights 2025 (updated January 2025), 'Value added tax' (R4/fetch/swp/deloitte_bw_2025.txt)",
+  "doc": "Secondary-source sweep (2026-11-22): both guides put the standard rate at 14 %. Deloitte names as exempt: education, non-fee financial services, residential lettings, passenger transport other than tourist transport, prescription medicines and medical services (public or private); zero-rated: exports, some foodstuffs, LPG, farm fertiliser and some pesticides. PwC gives a BWP 1 million registration threshold. The BURS VAT page as captured on 26 March 2025 shows 12 %, which neither 2025 guide supports (taken as stale; recorded as a disagreement). Grade B: the Act was not read.",
+  "notes": [
+   "exempt here: education, residential rent, medicines, health, passenger transport, financial services (Deloitte 2025 list); fee-based financial services, over-the-counter medicines and tourist transport are taxable in the guide but cannot be told apart in the input",
+   "zero-rated foodstuffs ('some foodstuffs' in the guide, no list): food is charged at 14 %"
+  ],
+  "unsupported": [
+   "zero-rated food items not listed by the guides: food taxed at the standard rate (overstates where a food is zero-rated)",
+   "exempt classes taken whole (fee-based financial services, OTC medicines, tourist transport are standard-rated in law)",
+   "BURS VAT page (Wayback 26 March 2025) prints 12 %: disagrees with both 2025 guides (14 %)"
+  ]
+ },
+ "excise": {
+  "status": "unsupported",
+  "name": "Excise duties",
+  "why": "Botswana's own Schedule No. 1 Part 2A is not held: BURS's archived 'Tariff Volume I July 2025' holds Part 1 (customs) only and the Volume II captures are HTML stubs; no BURS statement that the SACU common rates apply was found",
+  "tried": "R4/fetch/bw10/tariff_vol1_july2025.pdf; BURS customs downloads on Wayback (885, 931)",
+  "statute": "Customs and Excise Duty Act Cap. 50:01 Schedule 1 Part 2A"
+ },
+ "cit": {
+  "name": "Company tax",
+  "rate": 2200,
+  "grade": "B",
+  "statute": "Income Tax Act Cap. 52:01 (rate as stated by BURS 'Companies', Wayback 19 Apr 2025): resident companies 22 %",
+  "doc": "BURS 'Companies' page (captured 19 April 2025): companies pay 22 % if resident and 30 % if not; approved manufacturing and IFSC companies pay 15 %, and pension and provident funds the Commissioner has not approved 7.5 %.",
+  "notes": [
+   "official secondary source; other BURS pages are stale (VAT 12 %, Additional Company Tax), so the 22 % statement is flagged; the Income Tax Act 2026 (from 1 July 2026) sets 24.5 % for other companies and does not apply to 2025",
+   "manufacturing and IFSC companies (15 %) and non-resident companies (30 %) are not modelled"
+  ],
+  "unsupported": [
+   "Cap. 52:01 Schedule not read",
+   "15 % manufacturing / IFSC rates"
+  ]
+ },
+ "wht": {
+  "name": "Withholding tax on payments to non-residents (s. 58, Seventh Schedule)",
+  "grade": "B",
+  "statute": "Income Tax Act Cap. 52:01 s. 58 and Seventh Schedule (rates as stated by BURS 'Other Withholding Taxes', Wayback 17 Sep 2025): management and consultancy fees 15 % (final), commercial royalties 15 % (final), interest to non-residents 15 % (final); twelfth pass: ITA Cap. 52:01 s. 58, Seventh Schedule para 2 (b) (15 % on each dividend paid to a non-resident; BURS 'Withholding Taxes' 2025: 15 %, final)",
+  "doc": "BURS 'Other Withholding Taxes' (captured 17 September 2025): management and consultancy fees (s. 58 and the Seventh Schedule), commercial royalties and interest paid to a non-resident bear a final 15 % of the gross amount. The Income Tax Act 2026 Schedule 1 (from 1 July 2026) keeps 15 % for interest, royalties and technical fees. Twelfth pass (kernel 2.3.0 grade-C withholding): dividend 15 %: ITA Cap. 52:01 s. 58, Seventh Schedule para 2 (b) (15 % on each dividend paid to a non-resident; BURS 'Withholding Taxes' 2025: 15 %, final)",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "s. 58, Seventh Schedule (BURS): management and consultancy fees to non-residents 15 %"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "s. 58, Seventh Schedule (BURS): commercial royalties to non-residents 15 %"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "s. 58, Seventh Schedule (BURS): interest to non-residents 15 %"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "ITA Cap. 52:01 s. 58, Seventh Schedule para 2 (b) (15 % on each dividend paid to a non-resident; BURS 'Withholding Taxes' 2025: 15 %, final)"
+   }
+  ],
+  "notes": [
+   "dividends are not modelled: the BURS page prints 15 % next to a pre-2011 Additional Company Tax paragraph, while the Income Tax Act 2026 prints 10 %; the 2025 rate is not established",
+   "official secondary source"
+  ],
+  "unsupported": [
+   "Seventh Schedule not read"
+  ]
+ }
+}

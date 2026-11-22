@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "short-held listed shares",
+   "other income kinds"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "Impuesto cedular: inmuebles (desde 2018) y acciones que no cotizan (15 %)",
+  "statute": "LIG (t.o. 2019) arts. 98 c), 99",
+  "dated": "texto actualizado (argentina.gob.ar) held locally; rates unchanged in 2025",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "Family",
+   "charge"
+  ],
+  "unsupported": [
+   "IPIM indexation of cost",
+   "pre-2018 property under Ley 23.905"
+  ]
+ }
+]

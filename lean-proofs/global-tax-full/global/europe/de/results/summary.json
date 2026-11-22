@@ -1,0 +1,407 @@
+{
+ "country": "DE",
+ "name": "Germany",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "kernel-2.0 pilot (pilots/de, unchanged) with the 1.x detax line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:16"
+ },
+ "taxes": [
+  {
+   "oecd": "1200",
+   "tax": "Körperschaftsteuer + Solidaritätszuschlag",
+   "statute": "KStG § 23 (1), § 8b (1), (4), (5); EStG § 10d (2); SolZG § 3 (1) Nr. 1, § 4",
+   "dated": "gesetze-im-internet.de as archived 2025-06..08",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime (loss cap, participation exemption)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "§ 8b (2) gains on shares held by the company",
+    "interest barrier § 4h EStG / § 8a KStG"
+   ],
+   "family_file": "lean/DeGlobal/Basic.lean (pilot)"
+  },
+  {
+   "oecd": "1200",
+   "tax": "Gewerbesteuer",
+   "statute": "GewStG § 8 Nr. 1, 5, § 9 Nr. 2a, § 11 (1) S. 3, (2), § 16 (4) (2025: 200 %)",
+   "dated": "archived 2025; § 36 (5b) dates the 280 % to 2027",
+   "grade": "A",
+   "kernel_parts": [
+    "twoStage"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "§ 10a loss carry-forward",
+    "§ 8 Nr. 1 b-f (rents, royalties)",
+    "municipal Hebesatz is an input (deHebesatz)"
+   ],
+   "family_file": "lean/DeGlobal/Basic.lean (pilot)"
+  },
+  {
+   "oecd": "1100",
+   "tax": "ESt on gains: § 20 (2) (Abgeltungsteuer) and § 23 (private sales, tariff)",
+   "statute": "EStG § 20 (2), (9), § 23 (1) Nr. 1, 2, (3) S. 5, § 32d (1)",
+   "dated": "archived 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "stackedTax",
+    "AnnualExempt (threshold)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "§ 17 holdings ≥ 1 %",
+    "§ 23 (3) S. 4 depreciation add-back",
+    "§ 20 (6) loss ring-fencing"
+   ],
+   "family_file": "lean/DeGlobal/Basic.lean (pilot)"
+  },
+  {
+   "oecd": "5111",
+   "tax": "Umsatzsteuer",
+   "statute": "UStG § 12 (1), (2) Nr. 1 + Anlage 2, Nr. 10, 11; § 19 (1); § 4 Nr. 8, 10, 12, 14, 21 [year in force 2025 (pass 16), re-cited 2025: § 4 captured 2025-07-02 (de/law/ustg_1980___4_wb20250702.*): Nr. 8, 10, 12, 14, 21 identical; the 2026 text drops Nr. 4a (tax warehouses, not used)]",
+   "dated": "UStG §§ 12, 19 archived 2025; § 4 archived 2025-07-02",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "Anlage 2 item by item (food/books/newspapers/water classes)",
+    "§ 19: current-year 100 000 € limit taken as met"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/DeGlobal/Basic.lean (pilot)"
+  },
+  {
+   "oecd": "5121",
+   "tax": "Energiesteuer (petrol, diesel)",
+   "statute": "EnergieStG § 2 (1) Nr. 1 b), Nr. 4 b)",
+   "dated": "archived 2025-07-07",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "alcohol, beer, tobacco, coffee, electricity duties"
+   ],
+   "family_file": "lean/DeGlobal/Basic.lean (pilot)"
+  },
+  {
+   "oecd": "4300",
+   "tax": "Erbschaft- und Schenkungsteuer",
+   "statute": "ErbStG § 10 (1) S. 6, § 14 (1), (3), §§ 15, 16, 17, 19 (1), (3)",
+   "dated": "archived 2025-07-09",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax",
+    "slabRelieved",
+    "withLookback"
+   ],
+   "guards": 6,
+   "unsupported": [
+    "§ 13 family home, §§ 13a-13d business and rented-property reliefs",
+    "§ 14 (1) S. 3 actual prior tax"
+   ],
+   "family_file": "lean/DeGlobal/Basic.lean (pilot)"
+  },
+  {
+   "oecd": "4400",
+   "tax": "Grunderwerbsteuer",
+   "statute": "GrEStG § 11 (3,5 %, rounding); Land rate by input",
+   "dated": "archived 2025-06",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "Land rates (Art. 105 (2a) GG) not read: input deGrEStRateBp",
+    "§ 3 Nr. 4, 6 family exemptions (seller's relation not in the input)"
+   ],
+   "family_file": "lean/DeGlobal/Basic.lean (pilot)"
+  },
+  {
+   "oecd": "5121",
+   "tax": "Tabaksteuer (cigarettes)",
+   "statute": "TabStG § 2 (1) Nr. 1 lit. d, (2)",
+   "dated": "Internet Archive 2025-05-30 of gesetze-im-internet.de",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate",
+    "custom minimum less VAT"
+   ],
+   "unsupported": [
+    "cigars, fine-cut, heated tobacco"
+   ],
+   "family_file": "lean/DeGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Alkoholsteuer (spirits)",
+   "statute": "AlkStG § 2 (1) (1 303 €/hl A)",
+   "dated": "Internet Archive 2025-02-15",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol)"
+   ],
+   "unsupported": [
+    "§ 2 (2) reduced rates for small distilleries",
+    "Alkopopsteuer"
+   ],
+   "family_file": "lean/DeGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Biersteuer",
+   "statute": "BierStG § 2 (1)",
+   "dated": "Internet Archive 2025-01-23",
+   "grade": "A",
+   "status": "not modelled (kernel input: degree Plato)",
+   "kernel_parts": [],
+   "unsupported": [
+    "per degree Plato (KERNEL_REQUESTS)"
+   ],
+   "family_file": "lean/DeGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Kapitalertragsteuer / Abzugsteuer (§ 50a) (dividend, interest, royalty, services)",
+   "statute": "EStG §§ 43, 43a, 49 Abs. 1 Nr. 5, 50a Abs. 1-2; SolZG §§ 3, 4 [year in force 2025 (pass 16), re-cited 2025: § 43a and § 50a captured 2025-08-28 and 2025-01-02 (de/law/estg_43a_wb20250828.*, estg_50a_wb20250102.*): word for word the copies used (25 % / 15 %); SolZG § 4 already held as archived 2025]",
+   "dated": "EStG §§ 43a, 50a archived 2025-08-28 / 2025-01-02; §§ 43, 49 and SolZG as before",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)",
+    "SolZ on the withheld amount"
+   ],
+   "unsupported": [
+    "the refund of two fifths to foreign corporations (§ 44a Abs. 9) and the EU parent-subsidiary exemption (§ 43b) not applied",
+    "the § 50c exemption for EU associated companies not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/DeGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "6000",
+   "tax": "Kirchensteuer (Berlin)",
+   "statute": "Kirchensteuerbeschluss Erzbistum Berlin 2025 § 2 (1) (9 % der Einkommensteuer; Kirchensteuergesetz Berlin); EStG § 51a Abs. 1-2 [year in force 2025 (pass 16), re-cited 2025: § 51a captured 2025-11-22 (de/law/estg_51a_wb20251122.*): identical] [gap pass 2: not a tax (OECD guide § 6): the Kirchensteuer is levied by the churches, public-law religious societies outside general government; the Finanzamt collects it for them; the 1.x surtax option (--kist=900) is kept as it is and the default run (not a member) charges nothing; OECD: OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent; law: WRV Art. 137 (6) (via GG Art. 140): the religious societies that are public-law corporations are entitled to levy taxes on the basis of the civil tax lists under Land law (lexifina/germany-law `bund/gesetze/wrv/art-137.md`, commit b1f5fa6b7b04d); Kirchensteuergesetz Berlin as named by the Kirchensteuerbeschluss Erzbistum Berlin 2025 (`de/law/kistb_erzbistum_berlin_2025.txt`; the KiStG Berlin text itself is not held); EStG § 51a (`de/law/estg_51a.txt`); the OECD Revenue Statistics table for Germany (`tools/in_gap2/oecd/DEU.csv`, 2021-2024) has no church-tax line]",
+   "dated": "Amtsblatt des Erzbistums Berlin 12/2024 (2025 ff.); EStG § 51a archived 2025-11-22",
+   "grade": "R",
+   "kernel_parts": [
+    "1.x surtax Kirchensteuer (DeTax.Assess kistBp, option --kist=900 for Berlin)"
+   ],
+   "unsupported": [
+    "membership is an option of the run (--kist): default not a member",
+    "the other 6000 items (none recorded)"
+   ],
+   "yif16": "re-cited 2025",
+   "status": "reclassified",
+   "reclass": "not a tax (OECD guide § 6): the Kirchensteuer is levied by the churches, public-law religious societies outside general government; the Finanzamt collects it for them; the 1.x surtax option (--kist=900) is kept as it is and the default run (not a member) charges nothing",
+   "guide": "OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 6: church taxes are included only in countries where the church forms part of general government; levies paid to non-government bodies are excluded even where compulsory, unless the government is more than an agent",
+   "law": "WRV Art. 137 (6) (via GG Art. 140): the religious societies that are public-law corporations are entitled to levy taxes on the basis of the civil tax lists under Land law (lexifina/germany-law `bund/gesetze/wrv/art-137.md`, commit b1f5fa6b7b04d); Kirchensteuergesetz Berlin as named by the Kirchensteuerbeschluss Erzbistum Berlin 2025 (`de/law/kistb_erzbistum_berlin_2025.txt`; the KiStG Berlin text itself is not held); EStG § 51a (`de/law/estg_51a.txt`); the OECD Revenue Statistics table for Germany (`tools/in_gap2/oecd/DEU.csv`, 2021-2024) has no church-tax line",
+   "gap": 5,
+   "was_grade": "A",
+   "family_file": "lean/DeGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (rest)",
+   "statute": "not reached: pass 8: Kirchensteuer modelled; no other national tax recorded",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: the TEDB list of 1.7.2025 names no tax for heading 6000 (church tax not a tax, guide § 6; the others under 1100-5000), but OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVDEU v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/DEU.csv`, SHA256SUMS; general government S13; 2025 not yet published) books 6200 revenue without a name (2021-2024: 256, 358, 407, 553 million EUR): what it is was not found, so no absence is cited; the table has no church-tax line (Kirchensteuer outside the general-government figures, as guide § 6)",
+   "unsupported": [
+    "the national account of the 6200 item (Destatis / Bundesministerium der Finanzen tax revenue tables)"
+   ],
+   "gap_note": true,
+   "family_file": "lean/DeGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Kraftfahrzeugsteuer",
+   "statute": "KraftStG 2002 § 9 (1) Nr. 2 b, c; § 3d (1) [year in force 2025 (pass 16), re-cited 2025: captures 2025-07-20 (§ 9) and 2025-09-11 (§ 3d): § 9 identical; § 3d in 2025 exempts electric cars first registered by 31.12.2025 until 31.12.2030 (the 2026 text: by 31.12.2030, until 31.12.2035); every car of a 2025 return was registered by 2025, so the charge is the same; statute now quotes the 2025 wording]",
+   "dated": "KraftStG § 9 archived 2025-07-20, § 3d archived 2025-09-11",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "cars first registered before 2009 (Euro-class rates, § 9 (1) Nr. 2 a), hybrids (engine type not given), electric cars of 2011-2015 (weight rates, § 9 (2)), motorcycles, motor caravans, vans and lorries",
+    "5200 Kraftfahrzeugsteuer: a car first registered in 2009 is taken under § 9 (1) Nr. 2 b (only from 1 July 2009; earlier: Nr. 2 a)",
+    "5200 Kraftfahrzeugsteuer: an electric car of 2015 leaves the § 3d exemption during 2025 (not split)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/DeGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 9: the main annual vehicle tax is modelled; other 5200 items not read",
+   "unsupported": [
+    "registration taxes, licences and permits other than the one modelled"
+   ],
+   "family_file": "lean/DeGlobal/Other.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4100",
+   "tax": "Grundsteuer B (Berlin)",
+   "statute": "GrStG §§ 13, 25, 37 (1); BlnGrStMG vom 27.6.2024 § 1 (1); Haushaltsgesetz 2024/2025 § 4 (2) (2. NHG 24/25 Art. 1 Nr. 3)",
+   "dated": "GrStG in the 2025 version (§ 37 (1): erstmals 2025); BlnGrStMG GVBl. 2024, 422; Hebesatz 470 % 'für das Jahr 2025' (GVBl. 2024 S. 433)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (two-stage: Grundsteuerwert x Messzahl x Hebesatz)"
+   ],
+   "unsupported": [
+    "Grundsteuerwert valuation (BewG §§ 243 ff.) is an input (asset.assessed)",
+    "Geschäftsgrundstücke 0,45 ‰ need the use; realEstate taken as residential",
+    "GrStG § 15 (2)-(5) reductions",
+    "Grundsteuer A (0 % in 2025)"
+   ],
+   "family_file": "lean/DeGlobal/Property.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "Rentenversicherung (Arbeitgeberanteil)",
+   "statute": "SGB VI § 287 (1) Satz 2 (mindestens 18,6 Prozent bis 2025), § 168 (1) Nr. 1 (je zur Hälfte); SVBezGrV 2025 § 4 (1) Nr. 1: 96 600 Euro",
+   "dated": "2025 (SVBezGrV 2025, PBAV 2025; SGB texts captured 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/DeGlobal/Social.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "2200",
+   "tax": "Krankenversicherung (Arbeitgeberanteil, allgemeiner Beitragssatz)",
+   "statute": "SGB V § 241 (14,6 Prozent), § 249 (1) (jeweils zur Hälfte); SVBezGrV 2025 § 2 (2): 66 150 Euro (§ 223 (3))",
+   "dated": "2025 (SVBezGrV 2025, PBAV 2025; SGB texts captured 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/DeGlobal/Social.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "2200",
+   "tax": "Pflegeversicherung (Arbeitgeberanteil)",
+   "statute": "SGB XI § 55 (1), (2); PBAV 2025 § 1 (1): 3,6 Prozent ab 1.1.2025; § 58 (1) (jeweils zur Hälfte)",
+   "dated": "2025 (SVBezGrV 2025, PBAV 2025; SGB texts captured 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/DeGlobal/Social.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "2200",
+   "tax": "Arbeitslosenversicherung (Arbeitgeberanteil)",
+   "statute": "SGB III § 341 (2) 2,6 Prozent, (4); § 346 (1) (je zur Hälfte)",
+   "dated": "2025 (SVBezGrV 2025, PBAV 2025; SGB texts captured 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/DeGlobal/Social.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "2200",
+   "tax": "Minijob: Renten- und Krankenversicherung (Arbeitgeber, Pauschalbeiträge)",
+   "statute": "SGB IV § 8 (1) Nr. 1, (1a); MiLoV4 § 1 Nr. 2; SGB VI § 168 (1) Nr. 1b, § 172 (3); SGB V § 249b [year in force 2025 (pass 16), re-cited 2025: § 8 captured 2025-07-04 (de/law/sgb_4___8_wb20250704.*): identical except the 2026 addition of the 15-week farm limit (not modelled)]",
+   "dated": "SGB IV § 8 archived 2025-07-04; the other §§ fetched 2026-11-21",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "§ 8a Privathaushalt rates",
+    "Umlagen U1/U2, Insolvenzgeldumlage"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/DeGlobal/Social.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "2200",
+   "tax": "Insolvenzgeldumlage",
+   "statute": "SGB III §§ 358, 359, 360 (Umlagesatz 0,15 Prozent; § 361 InsoGeldFestV for 2022-2024 only) [year in force 2025 (pass 16), re-cited 2025: § 360 captured 2025-08-19 (de/law/sgb3_360_wb20250819.*): identical (0,15 Prozent)]",
+   "dated": "SGB III § 360 archived 2025-08-19",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "employer type (public bodies, private households exempt)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/DeGlobal/Social.lean",
+   "family_guards": 14
+  },
+  {
+   "oecd": "4200",
+   "tax": "Vermögensteuer (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Germany, Individual - Other taxes, accessed 2025-06-23 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-23 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/DeGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 18,
+  "B": 2,
+  "C": 2
+ },
+ "guards": 59,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

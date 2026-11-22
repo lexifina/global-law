@@ -1,0 +1,316 @@
+{
+ "country": "SI",
+ "name": "Slovenia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:55"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Dohodnina od dobička iz kapitala",
+   "statute": "ZDoh-2 97. člen (25 % to 5 years, 20 %, 15 %, 0 % after 15 years)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-07-11 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "pass 7: each disposal is taxed at its holding-period rate (25/20/15 %) and losses offset at their own rates; the act's loss rules (ZDoh-2 98. člen) were not read"
+   ],
+   "family_file": "lean/SiGlobal/Capital.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5111",
+   "tax": "Davek na dodano vrednost",
+   "statute": "ZDDV-1 čl. 41 (22 %, 9,5 %, 5 %; Priloga I, Priloga IV), čl. 94 (1) (60.000 eurov, ZDDV-1O, Uradni list RS 104/2024)",
+   "dated": "FURS guide April 2025; ZDDV-1O in force 1.1.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+    "non-alcoholic drinks at 22 % (drinks with added sugar left Priloga I in 2025; unsweetened drinks are 9,5 %)"
+   ],
+   "family_file": "lean/SiGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Zakon o trošarinah (ZTro-1) 53, 62, 70-71 člen and the Uredba o določitvi zneskov trošarine za energente, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate"
+   ],
+   "unsupported": [
+    "fuel: the excise duty only; the strategic-stock fee and the end-use efficiency and CO2 surcharges in the TEDB total not modelled",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/SiGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties whose 2025 rate changed during the year (cigarettes, beer, spirits, diesel, heatingOil)",
+   "statute": "Zakon o trošarinah (ZTro-1) 53, 62, 70-71 člen and the Uredba o določitvi zneskov trošarine za energente; TEDB situations 1.1, 1.7 and 31.12.2025",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: the rates are set by government decrees (uredbe), fuels every two weeks; the decree dates not read (no decree index found in lexifina/slovenia-law)",
+   "unsupported": [
+    "would unlock: the day the rate changed, from the act or decree (then dated kernel 2.1 ExciseRule rules, validFrom / validTo, as IT fuel)"
+   ],
+   "gap_note": true,
+   "family_file": "lean/SiGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Davek od dohodkov pravnih oseb",
+   "statute": "ZORZFS (Uradni list RS 131/2023) 64. člen (1): 22 % for 2024-2028, notwithstanding ZDDPO-2 60. člen [year in force 2025 (pass 17), re-cited 2025: PwC Slovenia, Corporate - Taxes on corporate income, Internet Archive 2025-05-27 (si/law/pwc_cit_wb20250527.*): the reconstruction law raised the rate to 22 % for 2024-2028, as modelled]",
+   "dated": "ZORZFS (Uradni list RS 131/2023) 64. člen; PwC Slovenia CIT page, Internet Archive 2025-05-27",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "loss offset limit (63 % of the base, ZDDPO-2) and the investment and R&D reliefs not modelled"
+   ],
+   "yif17": "re-cited 2025",
+   "family_file": "lean/SiGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad",
+   "statute": "ZDDPO-2 70. člen (15 %)",
+   "dated": "PwC WWTS Corporate - Withholding taxes, 2025-06-17 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/SiGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Davčni odtegljaj (storitve) (services)",
+   "statute": "ZDDPO-2 čl. 70 (withholding on services)",
+   "dated": "2025-06-17",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "services are taken as paid to a state not on the low-tax list",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/SiGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/SiGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "European Commission TEDB, SI: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 812, 6880, 536, 537, 543, 545, 714, 811, 813, 814, 3741) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/SiGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "nadomestilo za uporabo stavbnega zemljišča (Ljubljana)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/SiGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Davek na promet nepremičnin",
+   "statute": "Zakon o davku na promet nepremičnin (ZDPN-2) (2 %; not where VAT is charged)",
+   "dated": "PwC WWTS Corporate - Other taxes, 2025-06-23 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "new buildings sold under VAT (first supply) are outside the tax (not separated)"
+   ],
+   "family_file": "lean/SiGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Prispevek za pokojninsko in invalidsko zavarovanje (delodajalec)",
+   "statute": "FURS 2025: 8,85 % (ZPIZ-2)",
+   "dated": "FURS brochure, 2025 (long-term care from 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SiGlobal/Social.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "2200",
+   "tax": "Prispevek za zdravstveno zavarovanje (delodajalec)",
+   "statute": "FURS 2025: 6,56 % (ZZVZZ)",
+   "dated": "FURS brochure, 2025 (long-term care from 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SiGlobal/Social.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "2200",
+   "tax": "Prispevek za poškodbe pri delu in poklicne bolezni",
+   "statute": "FURS 2025: 0,53 % (ZZVZZ)",
+   "dated": "FURS brochure, 2025 (long-term care from 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SiGlobal/Social.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "2200",
+   "tax": "Prispevek za starševsko varstvo (delodajalec)",
+   "statute": "FURS 2025: 0,10 %",
+   "dated": "FURS brochure, 2025 (long-term care from 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SiGlobal/Social.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "2200",
+   "tax": "Prispevek za primer brezposelnosti (delodajalec)",
+   "statute": "FURS 2025: 0,06 %",
+   "dated": "FURS brochure, 2025 (long-term care from 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SiGlobal/Social.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "2200",
+   "tax": "Prispevek za dolgotrajno oskrbo (delodajalec, od 1. 7. 2025)",
+   "statute": "ZDOsk-1; FURS 2025: 1,00 % od 1. julija 2025 (6 of 12 months: 0,50 % of the year's pay)",
+   "dated": "FURS brochure, 2025 (long-term care from 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SiGlobal/Social.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "Zakon o davku na dediščine in darila",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/SiGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Taxes on net wealth (4200)",
+   "statute": "European Commission TEDB, SI: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 812, 6880, 536, 537, 543, 545, 714, 811, 813, 814, 3741)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "the national taxes the OECD books under 4200 (named above) and their 2025 statutes"
+   ],
+   "gap": 2,
+   "tried": "gap pass 2: the cited absence of the gap pass (TEDB list read against the guide) is withdrawn: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVSVN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/SVN.csv`, SHA256SUMS; general government S13; 2025 not yet published) books revenue under heading 4200: 4220 tax on balance wealth paid by banks 93,8 million EUR (2024; the bank balance-sheet tax, in force in 2025); the national taxes behind it not read",
+   "reopened": "gap pass 2: absence contradicted by OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVSVN v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/SVN.csv`, SHA256SUMS; general government S13; 2025 not yet published)",
+   "family_file": "lean/SiGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 13,
+  "C": 5
+ },
+ "guards": 38,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

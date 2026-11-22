@@ -1,0 +1,326 @@
+{
+ "country": "VC",
+ "name": "Saint Vincent and the Grenadines",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 19:30:08"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VcGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "statute": "VAT Act Cap. 445 s. 8, Third and Fourth Schedules (Rev. Ed. 2009); rates per IRD page (16 %, 11 %)",
+   "dated": "IRD 'Taxes' page, Wayback capture 25 Apr 2025",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "Amendment Acts No. 4 of 2019 and No. 8 of 2022 not read",
+    "staple foods and the 200 kWh electricity limit"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VcGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "statute": "Excise Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "IRD page names the tax (goods manufactured in SVG) without rates; the Act was not reached",
+   "unsupported": [
+    "would unlock: the Excise Tax Act schedule"
+   ],
+   "family_file": "lean/VcGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Inland Revenue Department (ird.gov.vc): list of taxes administered",
+   "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Inland Revenue Department (ird.gov.vc) list of the taxes it administers, `vc/law/ird_taxes_20250425024416.*` ('List of Taxes: The following taxes are administered by the Inland Revenue Department', Wayback 2025-04-25), names: Corporate Income Tax, Value Added Tax, Personal Income Tax, Withholding Taxes, Excise Tax, Climate Resiliency Levy, PAYE, Travel Tax, Insurance Business Tax, Property Tax; consolidated index of revenue Acts not held; none of them is a general sales or turnover tax beside the VAT of the 5111 row.",
+   "family_file": "lean/VcGlobal/Consumption.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporation tax",
+   "statute": "Income Tax Act Cap. 435 Fifth Sched. item 2 as amended by the Finance Act 2023 (No. 10 of 2023): 28 % on every dollar of a company's chargeable income",
+   "dated": "Cap. 435 Revised Laws (world/B13-caribbean/vc/law/rescue/Cap435.txt) and the Finance Act 2023 (OCR); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/VcGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "ITA Cap. 435 s. 30 (2), s. 66, Third Sched. paras 1, 3 (Acts No. 5 of 2019, No. 20 of 2020)",
+   "dated": "Cap. 435 Revised Laws, Income Tax (Amendment) Acts 2019 and 2020 (OCR) (world/B13-caribbean/vc/law/rescue); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "Third Sched. para 1 (1) (f) proviso (hoteliers' and exporters' commissions abroad exempt) and treaty rates (s. 66 (3)) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VcGlobal/Corporate.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"no self-employed contribution in the 1.x model\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"no self-employed contribution in the 1.x model\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "no OECD Revenue Statistics table for VC"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "payroll (3000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: no OECD Revenue Statistics table and no tax act in the lexifina repository (checked tree); a cited absence needs a held text"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: no OECD Revenue Statistics table and no tax act in the lexifina repository (checked tree); a cited absence needs a held text",
+   "evidence": [
+    "no OECD Revenue Statistics table for VC"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "no OECD table, no text",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: no OECD table, no text. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: no OECD table, no text. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "no OECD Revenue Statistics table for VC"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+   "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/VcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "vehicle licences",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): vehicle licences; no text. 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): vehicle licences; no text. 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "no OECD Revenue Statistics table for VC"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: no OECD table, no text"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: no OECD table, no text",
+   "evidence": [
+    "no OECD Revenue Statistics table for VC"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/VcGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "registry: none levied (not cited from a text)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "no statute read",
+   "unsupported": [
+    "would unlock: a text showing the abolition or absence"
+   ],
+   "family_file": "lean/VcGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Inland Revenue Department (ird.gov.vc): list of taxes administered",
+   "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Inland Revenue Department (ird.gov.vc) list of the taxes it administers, `vc/law/ird_taxes_20250425024416.*` ('List of Taxes: The following taxes are administered by the Inland Revenue Department', Wayback 2025-04-25), names: Corporate Income Tax, Value Added Tax, Personal Income Tax, Withholding Taxes, Excise Tax, Climate Resiliency Levy, PAYE, Travel Tax, Insurance Business Tax, Property Tax; consolidated index of revenue Acts not held; none of them is a recurrent tax on net wealth.",
+   "family_file": "lean/VcGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "National Insurance (employer)",
+   "statute": "National Insurance Act Cap. 229 and regulations (via the NIS Employers' Guide)",
+   "dated": "NIS Employers' Guide, Wayback capture 2025-04-21",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "rate change after April 2025 not checked"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VcGlobal/Social.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4100",
+   "tax": "Property tax",
+   "statute": "Property Tax Act (IRD 'Property Tax Rates' page)",
+   "dated": "IRD page, Wayback capture 25 Apr 2025",
+   "grade": "B",
+   "package": "P5",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "0.04 % rates by use",
+    "valuation basis not read"
+   ],
+   "status": "modelled",
+   "family_file": "lean/VcGlobal/Transfers.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty and transfer taxes on real property",
+   "statute": "Stamp Act; Aliens Land Holding Regulation",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read (IRD pages list no stamp duty rates)",
+   "unsupported": [
+    "would unlock: the Stamp Act schedule as in force 2025"
+   ],
+   "family_file": "lean/VcGlobal/Transfers.lean",
+   "guards": 2
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 6,
+  "C": 9
+ },
+ "guards": 15,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

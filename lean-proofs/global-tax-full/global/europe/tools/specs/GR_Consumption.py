@@ -1,0 +1,29 @@
+S = {'cc': 'GR', 'fam': 'Consumption', 'family_name': '5111 Φόρος προστιθέμενης αξίας', 'doc': '# GR 2025: Φόρος προστιθέμενης αξίας (5111); excises not modelled in this pass\n\nSource: ν. 5144/2024 Κύρωση Κώδικα ΦΠΑ, ΦΕΚ Α\' 162/11.10.2024 (signed gazette PDF as posted by ΑΑΔΕ, Internet Archive 2025-05-18, `gr/law/kodikas_fpa_n5144_wb20250518.pdf`); sha256 in `law/SHA256SUMS`.\n* άρθρο 26: "Ο συντελεστής του ΦΠΑ ορίζεται σε είκοσι τέσσερα τοις εκατό (24%) στη φορολογητέα αξία. Για τα αγαθά και τις υπηρεσίες που περιλαμβάνονται στο Παράρτημα III ... ορίζεται σε δεκατρία τοις εκατό (13%). Για τα αγαθά και τις υπηρεσίες για τα οποία υπάρχει ειδική πρόβλεψη στο Παράρτημα III ... σε έξι τοις εκατό (6%) και σε τέσσερα τοις εκατό (4%) κατά περίπτωση"\n* Παράρτημα III Α: 1-32 food items ("4. Κρέατα ...", "6. Γάλα ...", "10. Λαχανικά ..."), "33. Η παράδοση νερού", "35. Η ηλεκτρική ενέργεια ... και το φυσικό αέριο ... έξι τοις εκατό (6%)", 36-37 medicines (6 %), "40. Βιβλία ..." (6 %), newspapers (6 %), "51. Μη αλκοολούχα ποτά"; Β: "2. Η μεταφορά προσώπων", "5. Η διαμονή σε ξενοδοχεία", "9. Η εκμετάλλευση καφενείων, ... εστιατορίων"\n* άρθρο 44: small undertakings with supplies in the previous year "αξίας μέχρι δέκα χιλιάδες (10.000) ευρώ"\n', 'vat': {'name': 'Φόρος προστιθέμενης αξίας', 'standard': 2400, 'threshold': 10000, 'statute': "Κώδικας ΦΠΑ (ν. 5144/2024, ΦΕΚ Α' 162/11.10.2024) άρθρο 26 (24 %, 13 %, 6 %), Παράρτημα III, άρθρο 44 (10.000 ευρώ)", 'classes': {'health': 'exempt', 'education': 'exempt', 'financial': 'exempt', 'insurance': 'exempt', 'rent': 'exempt', 'food': 'reduced', 'nonAlcoholic': 'reduced', 'water': 'reduced', 'transport': 'reduced', 'hotels': 'reduced', 'restaurants': 'reduced', 'electricity': 'superReduced', 'medicines': 'superReduced', 'books': 'superReduced', 'newspapers': 'superReduced'}, 'reduced': 1300, 'superReduced': 600}, 'notes': ['GR 5111: codification ν. 5144/2024 (in force 2025)'], 'unsupported': [('g.consumption.any (fun s => s.good == .health || s.good == .education || s.good == .rent || s.good == .financial || s.good == .insurance)', "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item"), ('!g.consumption.isEmpty', 'island rates reduced by 30 % (άρθρο 26 παρ. 4) not modelled; restaurant alcohol and coffee drinks at 24 % not separated'), ('g.entity == .company', 'άρθρο 44 threshold as codified in 2024: a 2025 amendment by ν. 5162/2024 not checked'), ('g.consumption.any (fun s => s.good == .petrol || s.good == .diesel || s.good == .cigarettes || s.good == .beer || s.good == .wine || s.good == .spirits)', 'excise (Εθνικός Τελωνειακός Κώδικας (ν. 2960/2001) άρθρα 73-78, 87, 98 (not read)) not modelled in this pass')], 'guards': ['vat.embedded { good := .clothing, amount := 12400 } == 2400', 'vat.embedded { good := .food, amount := 11300 } == 1300', 'vat.embedded { good := .electricity, amount := 10600 } == 600', 'vat.net { turnover := 10000, sales := [{ good := .other, net := 10000 }] } == 0'], 'taxes': [{'oecd': '5111', 'tax': 'Φόρος προστιθέμενης αξίας', 'statute': "Κώδικας ΦΠΑ (ν. 5144/2024, ΦΕΚ Α' 162/11.10.2024) άρθρο 26 (24 %, 13 %, 6 %), Παράρτημα III, άρθρο 44 (10.000 ευρώ)", 'dated': 'codification ν. 5144/2024 (in force 2025)', 'grade': 'A', 'kernel_parts': ['Vat'], 'unsupported': ["exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item", 'island rates reduced by 30 % (άρθρο 26 παρ. 4) not modelled; restaurant alcohol and coffee drinks at 24 % not separated', 'άρθρο 44 threshold as codified in 2024: a 2025 amendment by ν. 5162/2024 not checked']}, {'oecd': '5121', 'tax': 'Excise duties', 'statute': 'Εθνικός Τελωνειακός Κώδικας (ν. 2960/2001) άρθρα 73-78, 87, 98 (not read)', 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'unsupported': ["not read in the P1 pass: would unlock with the act's 2025 rate articles"]}]}
+
+
+# ---- FT review (2026-11-21, third pass): natural gas 6 % (ftd_ec_tedb_vat_2025 dev; IMPROVE_FT D3-7) ----
+S["doc"] += """
+## FT review (2026-11-21, third pass): natural gas
+Same ΦΕΚ Α' 162/11.10.2024 (`gr/law/kodikas_fpa_n5144_wb20250518.txt`), Παράρτημα III item **35**: "Η ηλεκτρική
+ενέργεια (Δ.Κ. 2716) και το φυσικό αέριο (Δ.Κ. ΕΧ 2711). Ο συντελεστής του φόρου για τα αγαθά της παρούσας περίπτωσης
+ορίζεται σε έξι τοις εκατό (6%)." The model had electricity at 6 % and gas at 24 %.
+"""
+S["vat"]["classes"]["gas"] = "superReduced"
+S["guards"] = S["guards"] + ["vat.embedded { good := .gas, amount := 106 } == 6"]
+
+# ---- gap pass (R1 Europe, 2026-11-21): gap-closing pass (tools/pgap_rows.py, tools/gap_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/pgap_rows.py")).read())
+pgap_rows(S)
+p6_finish(S)

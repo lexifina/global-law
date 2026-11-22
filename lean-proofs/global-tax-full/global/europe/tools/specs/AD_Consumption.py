@@ -1,0 +1,41 @@
+S = {'cc': 'AD', 'fam': 'Consumption', 'families': [], 'doc': "# AD 2025: Consumption family not reached (grade C)\n\n* 5111 VAT (Llei 11/2012 de l'impost general indirecte (IGI)): tried bopa.ad not fetched; 1.x law folder holds only IRPF articles; Global law (the 1.x source) not used (coordinator, 2026-11-21); would unlock: the IGI law consolidated as in force 2025 (bopa.ad)\n* 5121 Excise duties (Llei de l'impost especial sobre ...): tried not reached in the P1 pass; would unlock: the excise act's 2025 rate articles\n", 'notes': [], 'unsupported': [('!g.consumption.isEmpty || g.entity == .company', '5111 VAT: not modelled (grade C: bopa.ad not fetched; 1.x law folder holds only IRPF articles; Global law (the 1.x source) not used (coordinator, 2026-11-21))'), ('!g.consumption.isEmpty || g.entity == .company', '5121 Excise duties: not modelled (grade C: not reached in the P1 pass)')], 'guards': [], 'taxes': [{'oecd': '5111', 'tax': 'VAT', 'statute': "Llei 11/2012 de l'impost general indirecte (IGI)", 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'tried': 'bopa.ad not fetched; 1.x law folder holds only IRPF articles; Global law (the 1.x source) not used (coordinator, 2026-11-21)', 'unsupported': ['would unlock: the IGI law consolidated as in force 2025 (bopa.ad)']}, {'oecd': '5121', 'tax': 'Excise duties', 'statute': "Llei de l'impost especial sobre ...", 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'tried': 'not reached in the P1 pass', 'unsupported': ["would unlock: the excise act's 2025 rate articles"]}]}
+
+# ---- pass 9 (R1 Europe, 2026-11-21): remaining withholding, carry-overs, B -> A, P5/P6 (tools/p9_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+p9_rows(S)
+p6_finish(S)
+
+# ---- pass 18 (R1 Europe, 2026-11-21): item-5 leftovers, audit, GR ENFIA, vehicles (tools/p18_rows.py) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+p18_rows(S)
+p6_finish(S)
+
+# ---- gap pass (R1 Europe, 2026-11-21): gap-closing pass (tools/pgap_rows.py, tools/gap_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/pgap_rows.py")).read())
+pgap_rows(S)
+p6_finish(S)

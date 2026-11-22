@@ -1,0 +1,84 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "IMSS voluntary incorporation of the self-employed",
+  "statute": "Ley del Seguro Social art. 13 fr. I (lexifina/mexico-law ley/1995/ley-del-seguro-social/art-013.md); OECD Guide §11, §42",
+  "grade": "R",
+  "status": "reclassified: not a tax (voluntary contributions; OECD Guide §11, §42)",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "(c) not a tax",
+  "triage_note": "not a tax: the self-employed join the IMSS régimen obligatorio only voluntarily (LSS art. 13 fr. I: 'Voluntariamente podrán ser sujetos de aseguramiento al régimen obligatorio: I. Los trabajadores independientes o por cuenta propia'); Guide §11 and §42: voluntary contributions are not taxes and are excluded from heading 2000",
+  "evidence": [
+   "LSS art. 13 fr. I text read",
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Impuesto Predial of the Ciudad de México (Código Fiscal CDMX art. 130): lexifina/mexico-mexico-city-law holds only the tariff 'REFORMADA EN SUS CUOTAS, G.O. 19 DE DICIEMBRE DE 2025' (2026)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Predial of the Ciudad de México (Código Fiscal CDMX art. 130): lexifina/mexico-mexico-city-law holds only the tariff 'REFORMADA EN SUS CUOTAS, G.O. 19 DE DICIEMBRE DE 2025' (2026); the 2025 cuotas are not in the repository. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Predial of the Ciudad de México (Código Fiscal CDMX art. 130): lexifina/mexico-mexico-city-law holds only the tariff 'REFORMADA EN SUS CUOTAS, G.O. 19 DE DICIEMBRE DE 2025' (2026); the 2025 cuotas are not in the repository. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 4100 = 2021:56148.1 2022:64904.1 2023:70209.5 2024:66291.6; named lines: 4120 Property tax (2024: 66291.6)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribuciones de mejoras (Código Fiscal CDMX)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribuciones de mejoras (Código Fiscal CDMX). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribuciones de mejoras (Código Fiscal CDMX). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "Ley de los Impuestos Generales de Importación y de Exportación (LIGIE)",
+  "customs_note": "customs import duties (5123): Ley de los Impuestos Generales de Importación y de Exportación (LIGIE); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD MX 6200: 'Accessories' (recargos and surcharges; fines are not taxes, Guide §2) and 'Additional state and local taxes' (state surcharges on state taxes): not identified for the Ciudad de México"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD MX 6200: 'Accessories' (recargos and surcharges; fines are not taxes, Guide §2) and 'Additional state and local taxes' (state surcharges on state taxes): not identified for the Ciudad de México",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVMEX, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/MEX.csv): general government heading 6000 = 2021:82094.2 2022:115845.9 2023:106884.8 2024:118181.0; named lines: 6200 Accessories (2024: 71110.7); 6200 Additional state and local taxes (2024: 46880.0); 6200 Adjustment (2024: 1253784.0); 6200 Unallocable between 1000 and 5000 caused in exercices fiscal previous liquidation slopes or of payment (2024: 190.3)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

@@ -1,0 +1,186 @@
+{
+ "cc": "GN",
+ "name": "Guinea",
+ "dated": "CGI 2021 (Loi 2021-32) with LF 2024 OCR; LF 2025 not held: grade B",
+ "sources": "Sources: CGI 2021 (`cmp20/world/B07-west-africa-fr-pt/gn/src/cgi2021.txt`), Loi 2024-23 (LF) OCR.",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée",
+  "standard": 1800,
+  "classes": {},
+  "grade": "B",
+  "statute": "CGI art. 373 (18 %)",
+  "doc": "art. 373: \"Le taux de droit commun de la Taxe sur la Valeur Ajoutée est de dix-huit pourcent (18%). II. Toutefois … sont imposables au taux de zéro pourcent (0%)\" (exports). Exemptions not read.",
+  "notes": [
+   "Guinea: CGI 2021 (LF 2025 not held); VAT exemptions not read"
+  ],
+  "unsupported": [
+   "exemptions",
+   "LF 2025"
+  ]
+ },
+ "excise": {
+  "name": "Droits d'accises (produits fabriqués en Guinée)",
+  "grade": "B",
+  "statute": "CGI 2021 (official text, local file Loi-2021-32) art. 435 I (domestic rates), art. 436 III (base: ex-factory price excluding VAT); LF 2025 (L/2024/0235/CNT) has no excise change in the pages held",
+  "doc": "art. 435 I (layout extraction): \"a. Produits du tabac et produits du vapotage 35% b. Bières et boissons maltées (Malta) 12% c. Vins 12% d. Spiritueux 15% e. Boissons alcoolisées autres que les bières, boissons maltées, vins et spiritueux 30% f. jus de fruit ... 0% g. eau ... et autres boissons non alcooliques ... 0% h. Boissons énergisantes 0%\"; II: \"Les tarifs des droits d'accises sur les produits imposables importés sont fixés dans le TARIF DES DOUANES\" (not held). Art. 436 III: \"La base d'imposition des produits fabriqués en Guinée soumis à un droit d'accise ad valorem est le prix de vente ex-usine hors TVA\".",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Droit d'accise bières",
+    "advBp": 1200,
+    "vatBp": 1800,
+    "imported": false,
+    "statute": "CGI art. 435 I b (12 %)"
+   },
+   {
+    "good": "wine",
+    "name": "Droit d'accise vins",
+    "advBp": 1200,
+    "vatBp": 1800,
+    "imported": false,
+    "statute": "CGI art. 435 I c (12 %)"
+   },
+   {
+    "good": "spirits",
+    "name": "Droit d'accise spiritueux",
+    "advBp": 1500,
+    "vatBp": 1800,
+    "imported": false,
+    "statute": "CGI art. 435 I d (15 %)"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Droit d'accise produits du tabac",
+    "advBp": 3500,
+    "vatBp": 1800,
+    "imported": false,
+    "statute": "CGI art. 435 I a (35 %)"
+   }
+  ],
+  "notes": [
+   "CGI art. 435 II: imported goods bear the customs tariff's excise rates (not held): only locally made goods are charged here; soft drinks, water and juices are at 0 % (art. 435 I f-h)"
+  ],
+  "unsupported": [
+   "excise on imported goods (customs tariff not held)",
+   "other alcoholic drinks 30 % (art. 435 I e) not separable"
+  ]
+ },
+ "cit": {
+  "name": "Impôt sur les sociétés",
+  "rate": 2500,
+  "step": 1000,
+  "grade": "B",
+  "statute": "CGI 2021 art. 229 II 3 (25 % for other companies; base rounded down to 1 000 GNF)",
+  "doc": "art. 229: \"I. ... toute fraction du bénéfice imposable inférieure à mille (1 000) francs guinéens est négligée. II. Les taux de l'Impôt sur les Sociétés sont fixés comme suit : 1. trente-cinq pourcent (35%) ... téléphonie, les banques et assurances et ... produits pétroliers ; 2. trente pourcent (30%) ... titre d'exploitation minière ; 3. vingt-cinq pourcent (25%) pour les autres personnes morales.\" CGI 2021 (Loi L/2021/32) edition; the 2025 finance law held (Loi 2024-23) is budgetary and LF 2022-2024 were not checked: grade B.",
+  "notes": [
+   "CGI 2021 art. 229 by company.sector: 'telecom', 'bank', 'insurer', 'petroleum' (import, storage and distribution of petroleum products) 35 %; 'mining' (holders of a mining title) 30 %; another sector 25 %; no sector given: 25 % (declared); minimum tax (IMF) not read"
+  ],
+  "unsupported": [
+   "IMF not read",
+   "loss rules not read"
+  ],
+  "sectors": [
+   {
+    "sectors": [
+     "telecom",
+     "bank",
+     "insurer",
+     "petroleum"
+    ],
+    "rate": 3500,
+    "statute": "CGI 2021 art. 229 II 1 (35 %: telephony companies, banks and insurers, importers, storers and distributors of petroleum products)"
+   },
+   {
+    "sectors": [
+     "mining"
+    ],
+    "rate": 3000,
+    "statute": "CGI 2021 art. 229 II 2 (30 %: holders of a mining title)"
+   }
+  ],
+  "ifAbsent": "general",
+  "sectorTests": [
+   {
+    "line": {
+     "id": "s18-gn-tel",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000500,
+      "lossesForward": 0,
+      "sector": "telecom"
+     }
+    },
+    "expect": [
+     350000
+    ]
+   },
+   {
+    "line": {
+     "id": "s18-gn-min",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000500,
+      "lossesForward": 0,
+      "sector": [
+       "mining"
+      ]
+     }
+    },
+    "expect": [
+     300000
+    ]
+   },
+   {
+    "line": {
+     "id": "s18-gn-none",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 10000000,
+      "profit": 1000500,
+      "lossesForward": 0
+     }
+    },
+    "expect": [
+     250000
+    ]
+   }
+  ]
+ },
+ "wht": {
+  "name": "Retenues à la source (non-résidents)",
+  "grade": "B",
+  "statute": "CGI 2021 art. 187 I and III (15 % on dividends and fixed-income products paid to non-residents, final); art. 198 (15 % on services paid to non-residents); twelfth pass: CGI 2021 art. 198 I-III with art. 356 Ter I ('une prestation de services peut consister notamment en l'utilisation ou en la cession d'un bien incorporel'): 15 %",
+  "doc": "art. 187 I: \"les revenus de capitaux mobiliers de source Guinéenne payés en Guinée et perçus par les personnes ayant leur domicile fiscal ou leur siège de direction effective hors de Guinée, font l'objet d'une retenue à la source égale à 15% du montant brut des revenus distribués\"; III: \"La même retenue s'applique également aux produits de placements à revenus fixes\"; VI: \"libératoire\". Art. 198 I-III: a withholding on payments by a debtor established in Guinea to a person without tax residence in Guinea for services taxable in Guinea under the VAT territoriality rules; \"Le taux de la retenue est fixé à quinze pourcent (15%) du montant brut des sommes versées\" (excluding VAT). Twelfth pass (kernel 2.3.0 grade-C withholding): royalty 15 %: CGI 2021 art. 198 I-III with art. 356 Ter I ('une prestation de services peut consister notamment en l'utilisation ou en la cession d'un bien incorporel'): 15 %",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "CGI art. 187 I (15 %)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "CGI art. 187 III (15 %)"
+   },
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "CGI art. 198 III (15 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "CGI 2021 art. 198 I-III with art. 356 Ter I ('une prestation de services peut consister notamment en l'utilisation ou en la cession d'un bien incorporel'): 15 %"
+   }
+  ],
+  "notes": [
+   "royalties: art. 198 covers services as defined in art. 356 Ter; whether royalties fall under it was not established"
+  ],
+  "unsupported": []
+ }
+}

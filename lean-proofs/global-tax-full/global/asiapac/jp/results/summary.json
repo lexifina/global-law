@@ -1,0 +1,323 @@
+{
+ "country": "JP",
+ "name": "Japan",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:08:41"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Separate taxation of interest and dividends (所得税 15.315 %, 住民税 5 %)",
+   "statute": "租特 arts. 3, 8-4; 復興 art. 28; 地方税法 arts. 71-6, 71-28",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "aggregate taxation of dividends"
+   ],
+   "family_file": "lean/JpGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1100",
+   "tax": "Tax on gains from shares (15.315 % + 5 %)",
+   "statute": "租特 arts. 37-10, 37-11; 地方税法 附則 35-2",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "land/building gains",
+    "NISA"
+   ],
+   "family_file": "lean/JpGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: none (有価証券取引税 abolished 1999-04-01)",
+   "statute": "有価証券取引税法廃止 (平成10年法律第23号 附則)",
+   "dated": "abolished 1999",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/JpGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "消費税・地方消費税",
+   "statute": "消費税法 第6条, 第9条, 第29条, 別表第一, 別表第二; 地方税法 第72条の83",
+   "dated": "e-Gov asof 2025-07-01 (revision 363AC0000000108_20250620)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "simplified taxation (簡易課税), the 2割特例 for invoice registrants",
+    "invoice-registrant exemption limits"
+   ],
+   "family_file": "lean/JpGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5121",
+   "tax": "揮発油税・地方揮発油税・軽油引取税・たばこ税 (国・道府県・市町村)・酒税 (wine, spirits)",
+   "statute": "租特法 第88条の8; 地方税法 附則第12条の2の8, 第74条の5, 第468条; たばこ税法 第11条; 酒税法 第23条",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "Excise",
+    "charge"
+   ],
+   "unsupported": [
+    "beer and other sparkling liquor (transitional rate not in e-Gov)",
+    "石油石炭税, 航空機燃料税, 自動車重量税 (5200)"
+   ],
+   "family_file": "lean/JpGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "自動車税種別割 (prefectural) and 軽自動車税種別割 (municipal) on private passenger cars",
+   "statute": "地方税法 第177条の7 第1項第1号ロ, 第177条の10, 第463条の15 第1項第2号ハ(1)(ii)",
+   "dated": "e-Gov text as at 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax"
+   ],
+   "unsupported": [
+    "standard rates (ordinance rates of the prefecture/municipality not read)",
+    "cars registered before 2020 (kei: before 2016) and electric cars not computed (grade C lines)",
+    "自動車重量税 and 環境性能割 not modelled"
+   ],
+   "family_file": "lean/JpGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "所得税法 arts. 161, 212, 213 (1) 1; 復興財源確保法 art. 28",
+   "dated": "asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "family_file": "lean/JpGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "法人税 (corporation tax)",
+   "statute": "法人税法 (昭和40年法律第34号) art. 66 (1)-(2) (e-Gov revision 20250620, asof 2025-07-01); 租税特別措置法 art. 42-3-2 (15 % on the first 8 m yen, years beginning by 2027-03-31)",
+   "dated": "asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "enterprise tax, special corporate enterprise tax, corporate inhabitants tax",
+    "group (通算) taxation"
+   ],
+   "family_file": "lean/JpGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "地方法人税 (local corporation tax)",
+   "statute": "地方法人税法 art. 10 (1) (10.3 %)",
+   "dated": "asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/JpGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "6000",
+   "tax": "森林環境税 (forest environment tax, 1,000 yen a head with the 均等割): already covered in the PIT line",
+   "statute": "森林環境税及び森林環境譲与税に関する法律 (平成31年法律第3号) 第3条-第5条, 第7条; 1.x model JpTax.Local (LocalOut.shinrin, in LocalOut.total)",
+   "dated": "FY2025 (levied from FY2024); gap-closing triage: the vendored 1.x residents' tax adds shinrin = 1,000 yen for every 均等割 payer and the global PIT line (pitLine, not --oecd) books LocalOut.total, so the tax is computed; it sits inside the 1100 PIT charge, whereas the OECD guide §85 puts a capitation tax in 6200",
+   "grade": "A",
+   "status": "covered",
+   "kernel_parts": [
+    "pit"
+   ],
+   "unsupported": [
+    "booked inside the 1100 PIT charge (residents' tax line), not under 6200 (OECD Interpretative Guide §85: poll or capitation taxes)"
+   ],
+   "family_file": "lean/JpGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "固定資産税 and 都市計画税",
+   "statute": "地方税法 arts. 350, 702-4",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "residential land reductions",
+    "convention: base = `assessed` (台帳 price, art. 349), standard rate 1.4 % (art. 350 (1)); art. 351 免税点 not applied"
+   ],
+   "family_file": "lean/JpGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4400",
+   "tax": "不動産取得税 and 登録免許税",
+   "statute": "地方税法 art. 73-15, 附則 11-2; 登録免許税法 別表第一; 租特 72",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "印紙税"
+   ],
+   "family_file": "lean/JpGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4400",
+   "tax": "印紙税 (不動産譲渡契約書)",
+   "statute": "印紙税法 別表第一 第一号; 租税特別措置法 art. 91 (1)",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "one copy (the buyer's) per purchase"
+   ],
+   "family_file": "lean/JpGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social insurance (pension, health, employment, child-care levy)",
+   "statute": "厚生年金保険法 81; 健康保険法 160; 労働保険徴収法 12; 子ども・子育て支援法 70",
+   "dated": "2025: FY2024 rates to Feb (health) / Mar (employment insurance) 2025, FY2025 rates after, by months (session 12 fix; PwC captures 2025-01-13 and 2025-12-16, secondary)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "介護保険",
+    "労災保険",
+    "wages taken as spread evenly over the year for the FY2024/FY2025 split"
+   ],
+   "family_file": "lean/JpGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "事業所税 従業者割",
+   "statute": "地方税法 art. 701-42",
+   "dated": "2025; session 11 year-in-force audit: confirmed, version stamped: e-Gov 地方税法 asof 2025-07-01 holds art. 701-42 (version stamped)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/JpGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "相続税 (inheritance tax)",
+   "statute": "相続税法 arts. 15, 16",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "several heirs (statutory-share method)",
+    "spouse credit",
+    "small-site relief"
+   ],
+   "family_file": "lean/JpGlobal/Transfers.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4300",
+   "tax": "贈与税 (gift tax, general rates)",
+   "statute": "相続税法 arts. 21-5, 21-7; 租特 70-2-4",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "相続時精算課税"
+   ],
+   "family_file": "lean/JpGlobal/Transfers.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "no net wealth tax act (富裕税 1950-1953 repealed)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/JpGlobal/Transfers.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "4300",
+   "tax": "贈与税 (gift tax, special rates)",
+   "statute": "租特 art. 70-2-5 (1); 相続税法 art. 21-5; 租特 70-2-4",
+   "dated": "e-Gov asof 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax"
+   ],
+   "unsupported": [
+    "70-2-5 (3) apportionment for mixed years",
+    "相続時精算課税"
+   ],
+   "family_file": "lean/JpGlobal/Transfers.lean",
+   "family_guards": 7
+  }
+ ],
+ "grades": {
+  "A": 15,
+  "B": 4,
+  "C": 0
+ },
+ "guards": 40,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

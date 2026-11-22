@@ -1,0 +1,109 @@
+{
+ "bloc": "eac",
+ "blocStatute": "EAC Common External Tariff 2022 Version (Annex 1 to the Protocol on the Establishment of the East African Community Customs Union), edition 'CET 2022 VERSION updated June 2025' (eac.int, Wayback 20260303052110, R4/fetch/gap/eac_cet2022_upd_jun2025_wb20260303052110.pdf): Legal Notice No. EAC/117/2022 para 1 (four bands 0, 10, 25 and 35 per centum) and 2 (in force 1 July 2022); the amending Legal Notices printed at its end (EAC/129/2023, 81/2024, 147/2024, 298/2024, 32/2025, 171/2025) touch none of the lines below",
+ "lines": [
+  {
+   "hs": "2202",
+   "adValoremBp": 3500,
+   "statute": "2202.10.00, 2202.91.00, 2202.99.00: 35 %"
+  },
+  {
+   "hs": "2203",
+   "adValoremBp": 3500,
+   "statute": "2203.00.10 stout and porter, 2203.00.90 other beer: 35 %"
+  },
+  {
+   "hs": "220410",
+   "adValoremBp": 3500,
+   "statute": "2204.10.00 sparkling wine: 35 %"
+  },
+  {
+   "hs": "220421",
+   "adValoremBp": 3500,
+   "statute": "2204.21.00 wine in containers of 2 l or less: 35 %"
+  },
+  {
+   "hs": "2208",
+   "adValoremBp": 3500,
+   "statute": "2208.20.00-2208.90.90 spirits, whiskies, rum, gin, vodka, liqueurs, other: 35 %"
+  },
+  {
+   "hs": "2402",
+   "adValoremBp": 3500,
+   "statute": "2402.10.00-2402.90.00 cigars, cigarettes: 35 %"
+  },
+  {
+   "hs": "271012",
+   "adValoremBp": 0,
+   "statute": "2710.12.10-2710.12.90 motor spirit and other light oils: 0 %"
+  },
+  {
+   "hs": "27101922",
+   "adValoremBp": 0,
+   "statute": "2710.19.22 illuminating kerosene: 0 %"
+  },
+  {
+   "hs": "27101931",
+   "adValoremBp": 0,
+   "statute": "2710.19.31 gas oil (automotive): 0 %"
+  },
+  {
+   "hs": "27101932",
+   "adValoremBp": 0,
+   "statute": "2710.19.32 diesel oil (industrial): 0 %"
+  },
+  {
+   "hs": "27101939",
+   "adValoremBp": 0,
+   "statute": "2710.19.39 other gas oils: 0 %"
+  },
+  {
+   "hs": "300490",
+   "adValoremBp": 0,
+   "statute": "3004.90.00 other medicaments: 0 %"
+  },
+  {
+   "hs": "610910",
+   "adValoremBp": 2500,
+   "statute": "6109.10.00 T-shirts, singlets, of cotton: 25 %"
+  },
+  {
+   "hs": "851713",
+   "adValoremBp": 0,
+   "statute": "8517.13.00 smartphones: 0 %"
+  },
+  {
+   "hs": "87032390",
+   "adValoremBp": 2500,
+   "statute": "8703.23.90 motor cars 1 500-3 000 cm3, other: 25 %"
+  }
+ ],
+ "preferences": [
+  {
+   "name": "EAC Customs Union (internal tariff elimination)",
+   "partners": [
+    "KE",
+    "UG",
+    "TZ",
+    "RW",
+    "BI",
+    "SS"
+   ],
+   "rateBp": 0,
+   "statute": "Protocol on the Establishment of the EAC Customs Union art. 11 (internal tariffs eliminated; text not held: grade B for this preference)"
+  }
+ ],
+ "otherBp": -1,
+ "mfnIfOriginUnknown": true,
+ "blocNotes": [
+  "Lines covered: non-alcoholic beverages (2202), beer, wine (2204.10, 2204.21), spirits (2208), tobacco products (2402), motor spirit, kerosene and gas oils, medicaments (3004.90), cotton T-shirts, smartphones, cars of 1 500-3 000 cm3; any other code is grade C. Rice (1006.30) is a Schedule 2 sensitive item at '75% or $345/MT' (a US$ specific alternative with no rate of exchange in the rule): grade C.",
+  "An imported line with no origin pays the CET (the model's convention); an EAC origin (KE UG TZ RW BI SS) pays nothing.",
+  "The customs value is the price before VAT and duty; where an excise is also inside the price the line should give customsValue."
+ ],
+ "blocUnsupported": [
+  "stays of application and duty remissions by partner state (EAC Gazette notices for 2024/25 and 2025/26) not read",
+  "COMESA / AfCFTA / EPA preferences not applied (CET charged)",
+  "national import levies (KE Import Declaration Fee and Railway Development Levy, UG/TZ/RW/BI equivalents) not modelled",
+  "lines of other HS headings (grade C)"
+ ]
+}

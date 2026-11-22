@@ -1,0 +1,222 @@
+{
+ "country": "MM",
+ "name": "Myanmar",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:38:08"
+ },
+ "taxes": [
+  {
+   "oecd": "5112",
+   "tax": "Commercial tax (5 %; hotels and tourism 3 %)",
+   "statute": "Union Taxation Law, 2025 (SAC Law No. 6/2025) ss. 14-15; Commercial Tax Law 1990 s. 6; Union Taxation Law 2024 (SAC Law No. 23/2024) ss. 14 (b), (c), (e), (h), 15 (b) (to 31 March 2025)",
+   "dated": "UTL 2024 (SAC Law No. 23/2024) ss. 14 (b), (c), (e), (h), 15 (b) to 31 March 2025 and UTL 2025 ss. 14-15 from 1 April 2025 (s. 1 (b)): the same 5 % / 3 % rates and 50 million kyat threshold",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "internet 15 % and SIM card charge not separated",
+    "Jan-Mar 2025 law not read"
+   ],
+   "family_file": "lean/MmGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Specific goods tax (cigarettes 13/26/29 kyats per stick to 31 Mar 2025, 14/27/30 from 1 Apr 2025; liquor and wine per litre by price tier; beer 60 %)",
+   "statute": "Union Taxation Law 2024 (SAC Law No. 23/2024) s. 11 (to 31 March 2025); Union Taxation Law 2025 (SAC Law No. 6/2025) s. 11 (from 1 April 2025); Specific Goods Tax Law 2016 s. 6",
+   "dated": "two periods: UTL 2024 (in force 1 April 2024, s. 1 (b); SAC Law 54/2024 amends s. 14 gold only) to 31 March 2025; UTL 2025 from 1 April 2025 (s. 1 (b)); undated lines split by days",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule (2.4.0 price tiers, date windows)"
+   ],
+   "unsupported": [
+    "tier price taken before tax from the household price (factory price / landed value not in the basket)",
+    "other tobacco items not modelled"
+   ],
+   "family_file": "lean/MmGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "Income Tax Law 1974 s. 14; Union Tax Law 2025",
+   "dated": "2025-26; session 11 year-in-force audit: re-cited: UTL 2024 (to 31 March 2025) and UTL 2025 (from 1 April 2025) both s. 23: 22 % (mm/law/mm_utl2024_en.pdf, mm_utl2025.pdf)",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/MmGlobal/Corporate.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding on non-residents",
+   "statute": "Income Tax Law s. 15; MOPF notification (No. 47/2017 as amended)",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "session 7: ird.gov.mm/policies/notification lists notifications from 2021 to 2026 only (pages 1-6, Burmese titles by number); the 2021 PDFs read (3, 36, 38, 57, 389, 510 of 2021) are in legacy Burmese font encodings (pdftotext unreadable, not OCRed); the UTL 2025 (mm/law/mm_utl2025.pdf) sets income tax rates but no withholding on payments abroad: grade C"
+   ],
+   "family_file": "lean/MmGlobal/Corporate.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Myanmar as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Myanmar for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C104&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/mm.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "ASEAN free trade area (ATIGA) (origin BN, KH, ID, LA, MY, PH, SG, TH, VN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "family_file": "lean/MmGlobal/Customs.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "Income Tax Law 1974 (as amended) s. 6 reliefs; Union Tax Law 2025 ss. 14-28 (rates for FY 2025-26: salary 0-25%, capital gains 10%, rental income at scale)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade B (tables): "
+   ],
+   "family_file": "lean/MmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/MmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property (partly)",
+   "statute": "municipal property taxes (Yangon City Development Law 2018 etc.)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): "
+   ],
+   "family_file": "lean/MmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/MmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/MmGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on conveyances of immovable property (2 %)",
+   "statute": "Stamp Act 1899 as amended (not read); PwC Worldwide Tax Summaries, Myanmar, Individual - Other taxes, last reviewed 3 June 2025 (Wayback capture 2025-11-08, asiapac/mm/law/pwc_mm_indother_wb20251108.txt)",
+   "dated": "2025: guide reviewed 3 June 2025; secondary-source sweep C -> B",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "further 2 % in Nay Pyi Taw, Yangon and Mandalay not applied (no city in the input)",
+    "shares 0.1 %, bonds 0.5 %, leases not modelled",
+    "registry background (4 % + 3 % Yangon) disagrees with the 2025 guide (2 % + 2 %)"
+   ],
+   "family_file": "lean/MmGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/MmGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Social security contribution, employer (3 %, capped at MMK 9,000 a month)",
+   "statute": "Social Security Law 2012 (not read); PwC Worldwide Tax Summaries, Myanmar, Individual - Other taxes, last reviewed 3 June 2025 (Wayback capture 2025-11-08, asiapac/mm/law/pwc_mm_indother_wb20251108.txt)",
+   "dated": "2025: guide reviewed 3 June 2025 (no change during 2025 stated); secondary-source sweep C -> B",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "employers with five workers or fewer are outside the scheme (headcount not an input)",
+    "the law and notifications not read (grade B)"
+   ],
+   "family_file": "lean/MmGlobal/Social.lean",
+   "family_guards": 2
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 8,
+  "C": 3
+ },
+ "guards": 19,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

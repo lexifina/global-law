@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Tinglysningsafgift (ejerskifte)",
+  "statute": "Tinglysningsafgiftsloven (LBK nr 307 af 13/03/2025) § 4 stk. 1 (1.850 kr. og 0,6 pct. af ejerskiftesummen) [year in force 2025 (pass 17), re-cited 2025: LBK 307 of 13.3.2025 re-issues LBK 27 of 13.1.2025 only to correct consolidation errors (its note 1), so § 4 (1 850 kr. + 0,6 %) is the law for all of 2025; PwC Denmark other taxes, Internet Archive 2025-06-15: fixed fee DKK 1 850 in 2025]",
+  "dated": "LBK nr 307 af 13/03/2025 (same law as LBK 27/2025 of 13.1.2025); PwC Denmark, Internet Archive 2025-06-15",
+  "grade": "A",
+  "kernel_parts": [
+   "charge per Purchase (fixed + rate)"
+  ],
+  "unsupported": [
+   "arm's-length rule of § 4 stk. 2-3",
+   "pantebrev fee (§ 5)"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "4100",
+  "tax": "Ejendomsværdiskat",
+  "statute": "Ejendomsskatteloven (lov nr. 678 af 3. juni 2023) § 3, § 13 stk. 2, § 22 stk. 2-4 [year in force 2025 (pass 17), re-cited 2025: PwC Denmark, Individual - Other taxes, Internet Archive 2025-05-27 (dk/law/pwc_indother_wb20250527.*): rate 0,51 % to a value of 9,2 million kroner and 1,4 % on the excess, as modelled]",
+  "dated": "lov nr. 678 af 3.6.2023; PwC Denmark individual other taxes, Internet Archive 2025-05-27",
+  "grade": "A",
+  "kernel_parts": [
+   "PropertyTax"
+  ],
+  "unsupported": [
+   "ejendomsværdiskat: the asset's value is taken as the assessed ejendomsværdi of the preceding year; the 1998 reductions (§§ 23-24) and the § 40 rebate are not applied"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "4100",
+  "tax": "Grundskyld (Københavns Kommune)",
+  "statute": "Ejendomsskatteloven (lov nr. 678 af 3. juni 2023) § 17 stk. 1-2 (base 80 pct. of the grundværdi), § 28 stk. 1 and bilag 1 (Københavns Kommune: 5,1 promille for 2024-2028)",
+  "dated": "retsinformation.dk, lov nr. 678 af 3.6.2023 (`dk/law/ejendomsskattelov_lov2023_678.xml`); Indenrigs- og Sundhedsministeriet, Ændring i de kommunale skattesatser 2023-2024 and 2024-2025 (`dk/law/ism_skattesatser_aendring_2023_2024.pdf`, `..._2024_2025.pdf`)",
+  "grade": "B",
+  "kernel_parts": [
+   "PropertyTax"
+  ],
+  "unsupported": [
+   "grundskyld on a built property: only the land's grundværdi is taxed and it is not in the input (a home's value is the ejendomsværdi), so no grundskyld is charged on homes or other real estate (grade C there)",
+   "grundskyld: the land's value is taken as the grundværdi assessed for 2024; the § 40 rebate and the § 45 cap on increases are not applied"
+  ]
+ }
+]

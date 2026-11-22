@@ -1,0 +1,22 @@
+name = "SoGlobal"
+version = "0.1.0"
+defaultTargets = ["SoGlobal", "soglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); SoTax = the 1.x model, vendored from cmp20/world/B10-anglophone-africa/so/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "R4Common"
+path = "../../common"
+
+[[lean_lib]]
+name = "SoTax"
+
+[[lean_lib]]
+name = "SoGlobal"
+
+[[lean_exe]]
+name = "soglobal"
+root = "SoGlobal.Main"

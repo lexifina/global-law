@@ -1,0 +1,19 @@
+[
+ {
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "statute": "customs tariff of Sri Lanka as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Sri Lanka for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C144&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/lk.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "grade": "B",
+  "kernel_parts": [
+   "TariffRule"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "lines left out (grade C): 10063011 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 10063019 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 10063021 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 10063029 (MFN duty '20% or Rs.80/= per kg': specific or compound duty, unit/currency not mapped); 17019910 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019920 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019930 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019940 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 17019990 (MFN duty 'Rs.30/= per kg': specific or compound duty, unit/currency not mapped); 22030010 (MFN duty 'Rs.550/= per l': specific or compound duty, unit/currency not mapped); 22030020 (MFN duty 'Rs.550/= per l': specific or compound duty, unit/currency not mapped); 22030090 (MFN duty 'Rs.550/= per l': specific or compound duty, unit/currency not mapped); 22042100 (MFN duty 'Rs.440/= per l': specific or compound duty, unit/currency not mapped); 22083000 (MFN duty 'Rs.2750/= per l': specific or compound duty, unit/currency not mapped); 24022010 (MFN duty '80% or Rs.9100/= per kg gross weight': specific or compound duty, unit/currency ); 24031910 (MFN duty '255% or Rs.4100/= per kg gross weight': specific or compound duty, unit/cu"
+  ]
+ }
+]

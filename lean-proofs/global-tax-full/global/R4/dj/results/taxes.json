@@ -1,0 +1,169 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "TVA 10 % as imposed by the finance laws (LF 2025 art. on electric vehicles; Loi n°111/AN/20 art. 28; Loi n°142/AN/21); the CGI rate article not held",
+  "dated": "Finance laws 2017-2025 (Loi n°203/AN/25 for 2025); the CGI itself not held",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "CGI rate article and exemptions not held"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excises",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "not reached: tried world/B08-central-africa-fr/dj/law",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "only finance laws (2017-2025) are held, not the CGI; rates not consolidated"
+  ],
+  "tried": "world/B08-central-africa-fr/dj/law"
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les bénéfices professionnels (sociétés)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI (Loi n° 42/AN/08) art. 56 (25 %; fractions below 1 000 FD disregarded) and art. 57-61 impôt minimum forfaitaire (1 % of turnover excluding VAT, at least 120 000 FD, due when higher than the profit tax or with a loss); LF 2024 art. 6 adds export turnover to the IMF base — 2008 text, amendments 2009-2016 not read, flagged",
+  "dated": "Finance laws 2017-2025 (Loi n°203/AN/25 for 2025); the CGI itself not held",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "amending laws 2009-2016 not read",
+   "IMF on the previous year's turnover"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Impôt sur les rémunérations versées à des personnes non domiciliées et IRVM",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "CGI (Loi n° 42/AN/08) art. 70-75 (10 % on services of any kind supplied or used in Djibouti, copyright and industrial-property royalties paid to non-residents) and art. 90F-90L (inserted by LF 2024, Loi n° 64/AN/23: IRVM 5 % on distributed dividends, distributions below 10 million FD exempt) — 2008 text, amendments 2009-2016 not read, flagged; thirteenth pass: CGI (Loi 42/AN/08) art. 70-72 (non-domiciled tax: services and royalties only), art. 80 (impôt d'incitation sociale: placements of public institutions only), art. 90F-90I (LF 2024: IRVM on distributed income only): no schedular tax reaches interest paid to a non-resident lender (cited 0; LF 2017-2025 held searched, LF 2009-2016 not held: flagged)",
+  "dated": "Finance laws 2017-2025 (Loi n°203/AN/25 for 2025); the CGI itself not held",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "IRVM 10 million FD threshold",
+   "amending laws 2009-2016 not read",
+   "interest: LF 2009-2016 not held (the cited 0 rests on the 2008 code and LF 2017-2025)"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts + lois de finances (Journal officiel, texte-juridique pages; LF 2025)",
+  "dated": "-",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.journalofficiel.dj)",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (patente / contribution des patentes or contribution des licences (CGI); provision not located by keyword in the reachable text)",
+  "statute": "Code général des impôts + lois de finances (Journal officiel, texte-juridique pages; LF 2025)",
+  "dated": "-",
+  "unsupported": [
+   "triage moderate: patente: business licence on traders and professions, not a household tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.journalofficiel.dj)",
+  "triage": "moderate"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNSS employer contributions (family 5,5 %, health and work accidents 6,2 %, pensions 4 %)",
+  "statute": "CNSS Djibouti, page 'Déclaration et versement des cotisations' (published 4 Dec 2016; Internet Archive capture 2024-07-13; held copy dj/law/w5/dj_cnss_declaration_2016.html)",
+  "dated": "-",
+  "unsupported": [
+   "page dated 2016 (flag: no later rate decree held)",
+   "the employee's 6 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Contribution foncière sur les propriétés bâties (10 / 18 / 25 % of rent or rental value less 20 %)",
+  "statute": "CGI (refonte, Loi n° 42/AN/08/6ème L, journalofficiel.dj text, R4/fetch/dj9) art. 137-144; later finance laws not read (flag) [text version: the 2008 refonte (Loi n° 42/AN/08/6ème L) as published on journalofficiel.dj (R4/fetch/dj9/cgi2008.txt), without later finance laws (flag)]",
+  "dated": "-",
+  "unsupported": [
+   "band reading (marginal vs whole-base) not settled by the text: marginal used",
+   "urban properties only (art. 137); new buildings exempt for five years (art. 141)",
+   "land (contribution foncière non bâtie 25 %, art. 157) not modelled",
+   "amendments 2009-2025 not read"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyBandFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Droit d'enregistrement on sales of immovables (10 %)",
+  "statute": "CGI (refonte 2008) art. 499-500 (amendments 2009-2025 not read, flag)",
+  "dated": "-",
+  "unsupported": [
+   "7 % first-home rate (art. 500): needs the buyer's first-purchase status"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI refonte 2008 (Loi n° 42/AN/08/6ème L, whole text, R4/fetch/dj9/cgi2008.txt)",
+  "dated": "-",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "DJ CGI 2008 recast (complete text): no tax on net wealth; the only occurrence of 'fortune' is in a penal provision (helping to hide 'la fortune d'autrui' from tax); no 'patrimoine net' (later finance laws not read)"
+ }
+]

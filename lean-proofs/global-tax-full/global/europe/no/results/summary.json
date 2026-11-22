@@ -1,0 +1,253 @@
+{
+ "country": "NO",
+ "name": "Norway",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (its Country built from the options, as its main does)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:38"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gevinst på aksjer (oppjustert 1,72 x 22 %)",
+   "statute": "Skatteloven § 10-31 (oppjusteringsfaktor 1,72) and § 15-1 (22 %): 37,84 % on gains on shares",
+   "dated": "PwC WWTS Individual - Income determination, 2025-08-03 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "gains on real property (22 %, home exempt after one year of ownership and use) not modelled: the conditions are not in the B source",
+    "bonds are ordinary capital income at 22 %, taken here at the share rate"
+   ],
+   "family_file": "lean/NoGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Merverdiavgift",
+   "statute": "Stortingsvedtak om merverdiavgift for 2025 (FOR-2024-12-13-3208) §§ 2-5; merverdiavgiftsloven § 2-1 (1) (50 000 kroner), § 5-2, kap. 3 (unntak)",
+   "dated": "Stortingsvedtak for budsjettåret 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+    "water from waterworks at 25 % (the 15 % in vedtak II applies from a date the ministry sets)"
+   ],
+   "family_file": "lean/NoGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Stortingsvedtak om særavgifter 2025 (not fetched)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/NoGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Inntektsskatt for selskaper (skatt til staten)",
+   "statute": "Stortingets skattevedtak for inntektsåret 2025 (FOR-2024-12-13-3203) § 3-3 første ledd (22 pst.)",
+   "dated": "Stortingets skattevedtak, ikrafttredelse inntektsåret 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "fritaksmetoden (skatteloven § 2-38: dividends exempt with 3 % sjablong) not modelled",
+    "financial-sector rate 25 % (§ 3-3 annet ledd) not modelled"
+   ],
+   "family_file": "lean/NoGlobal/Corporate.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "1200",
+   "tax": "Kildeskatt (dividend, interest, royalty, services)",
+   "statute": "Stortingets skattevedtak for 2025 §§ 3-5, 3-6; skatteloven § 2-3 (1) i, j, §§ 10-80, 10-81",
+   "dated": "Lovdata, FOR-2024-12-13-3203 (`no/law/stv_skatt2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)",
+    "StateWht (2.4.0, recipient state)"
+   ],
+   "unsupported": [
+    "the exemption for EEA companies (skatteloven § 2-38) not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/NoGlobal/Corporate.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: trafikkforsikringsavgift (cars, vans, motorcycles) and engangsavgift on new electric cars modelled; engangsavgift on combustion-engine cars (NOx is not an input attribute), vektårsavgift and omregistreringsavgift not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: trafikkforsikringsavgift (cars, vans, motorcycles) and engangsavgift on new electric cars modelled; engangsavgift on combustion-engine cars (NOx is not an input attribute), vektårsavgift and omregistreringsavgift not modelled",
+   "unsupported": [
+    "would unlock: the car's NOx mg/km (engangsavgift § 3 a 2) and a rule for negative CO2 deductions below 70 g/km; Stortingsvedtak om vektårsavgift and om omregistreringsavgift 2025"
+   ],
+   "family_file": "lean/NoGlobal/Other.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5200",
+   "tax": "Trafikkforsikringsavgift",
+   "statute": "Stortingsvedtak om avgift på trafikkforsikringer for 2025 (FOR-2024-12-13-3212) § 1, § 2",
+   "dated": "Lovdata (`no/law/stv_tfa2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "tractors, mopeds, motor equipment and other groups",
+    "5200 trafikkforsikringsavgift: the insurance contract is taken as renewed on 1 January 2025 (column 'fra 1. mars 2024 t.o.m. februar 2025' all year); a renewal from March 2025 gives the lower last column (grade C for the split)",
+    "5200 trafikkforsikringsavgift: a diesel vehicle is taken as having a factory-fitted particle filter (group a, not b)"
+   ],
+   "family_file": "lean/NoGlobal/Other.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5200",
+   "tax": "Engangsavgift på motorvogner",
+   "statute": "Stortingsvedtak om engangsavgift på motorvogner mv. for 2025 (FOR-2024-12-13-3211) § 2, § 3, § 5",
+   "dated": "Lovdata (`no/law/stv_engangs2025.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "new cars with a combustion engine (§ 3 needs NOx), other groups",
+    "5200 engangsavgift: massKg is read as the egenvekt; the bruksfradrag for a used import (§ 4) is not applied"
+   ],
+   "family_file": "lean/NoGlobal/Other.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVNOR v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/NOR.csv`, SHA256SUMS; general government S13; 2025 not yet published): heading 6000 total 0 in 2021-2024",
+   "dated": "OECD Revenue Statistics 2021-2024 (2025 not yet published); no 6000 tax known in the national law read",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 2,
+   "family_file": "lean/NoGlobal/Other.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Dokumentavgift",
+   "statute": "Stortingets vedtak om dokumentavgift (2,5 % of market value)",
+   "dated": "PwC WWTS Corporate - Other taxes, 2025-05-15 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "share transfers and cooperative flats are outside (not separated)"
+   ],
+   "family_file": "lean/NoGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "Eigedomsskattelova (Oslo)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "eiendomsskatt is optional and set by each municipality (homes 1-4 per mille, a basic deduction may apply); Oslo's vedtak not read"
+   ],
+   "family_file": "lean/NoGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Arbeidsgiveravgift (sone I)",
+   "statute": "Stortingets vedtak om arbeidsgiveravgift 2025 § 3: Sone I 14,1 pst.",
+   "dated": "Stortingsvedtak 2025 (via the 1.x model)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/NoGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "Arveavgift (not levied)",
+   "statute": "Lov om avgift på arv og visse gaver (arveavgiftsloven) LOV-1964-06-19-14; lov 13 des 2013 nr. 110 [year in force 2025 (pass 17), unchanged-confirmed: Lovdata record: the act is repealed for gifts and inheritances from 1.1.2014 (lov 13.12.2013 nr. 110, its last change); PwC Norway, Individual - Other taxes, Internet Archive 2025-07-06 (no/law/pwc_indother_wb20250706.*): removed as of 1 January 2014]",
+   "dated": "lovdata (repealed from 1.1.2014); PwC Norway, Internet Archive 2025-07-06",
+   "grade": "A",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif17": "unchanged-confirmed",
+   "family_file": "lean/NoGlobal/Wealth.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4200",
+   "tax": "Formuesskatt (stat 0,475/0,575 %, kommune 0,525 %)",
+   "statute": "Stortingets skattevedtak 2025 §§ 2-1, 2-3 (allowance 1 760 000 kr, 3 520 000 kr for spouses taxed jointly; state 0,475 % to 20 700 000 kr, 0,575 % above; municipal at most 0,525 %, the maximum applying unless lower is resolved)",
+   "dated": "Stortingsvedtak 13.12.2024 for inntektsåret 2025 (lovdata STV/forskrift/2024-12-13-3203)",
+   "grade": "A",
+   "kernel_parts": [
+    "WealthTax"
+   ],
+   "unsupported": [
+    "asset values: the input's assessed value is taken as the formuesverdi; the skatteloven ch. 4 valuation discounts (home 25 %/70 %, shares and operating assets 80 %) are not applied to market values",
+    "spouses: the joint allowance 3 520 000 kr is applied, but the state band limit stays at 20 700 000 kr (41 400 000 kr jointly in § 2-1)"
+   ],
+   "family_file": "lean/NoGlobal/Wealth.lean",
+   "family_guards": 4
+  }
+ ],
+ "grades": {
+  "A": 8,
+  "B": 3,
+  "C": 3
+ },
+ "guards": 34,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

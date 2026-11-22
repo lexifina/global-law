@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Yhteisön tulovero",
+  "statute": "Tuloverolaki (1535/1992) 124 § 2 mom. (yhteisön tuloveroprosentti 20), 21.12.2016/1323",
+  "dated": "Finlex capture 2025-07-03 (124 § in the wording of 21.12.2016/1323)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "dividends received (EVL 6 a §) not modelled",
+   "losses carried forward 10 years (TVL 119 §), ownership-change rule (122 §) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Lähdevero rajoitetusti verovelvolliselle (dividend, interest, royalty, services)",
+  "statute": "lähdeverolaki 627/1978 3 §, 7 § 1 mom.; tuloverolaki 1535/1992 9 §",
+  "dated": "Finlex, Wayback captures 2025-05-21 / 2025-07-03 (`fi/law/lahdeverolaki_wb2025.txt`, `fi/law/tvl_wb20250703.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "services are taken as work done in Finland; the 10 f § release (prepayment register, tax card) is not applied; the 510 €/month deduction on 35 % income not applied",
+   "dividends exempt for EU/treaty parent companies (3 § 4 mom.) not separated",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

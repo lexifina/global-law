@@ -1,0 +1,211 @@
+{
+ "country": "MC",
+ "name": "Monaco",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 20:48:17"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "no personal income tax for residents (Monaco)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/McGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "French excise regime applied by convention (CIBS, Légifrance blocked)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not reached in the P1 pass",
+   "unsupported": [
+    "would unlock: the excise act's 2025 rate articles"
+   ],
+   "family_file": "lean/McGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée (Monaco)",
+   "statute": "Code des taxes sur le chiffre d'affaires (version du 1er janvier 2025) art. 51 (20 %), 52-0 (5,5 %), 56 (10 %), 59 et 95 (2,10 %), 87 I (franchise: 85 000 euros)",
+   "dated": "Legimonaco, Code des taxes sur le chiffre d'affaires, version du 1er janvier 2025, via the Internet Archive 2025-05-13 (`mc/law/code_taxes_ca_v20250101_wb20250513.xml`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "health, education, residential rent, financial services and insurance taken as exempt from the code's structure (the exemption articles were not read item by item)",
+    "medicines taken at 2,10 % (art. 59: reimbursable); non-reimbursable medicines are at 10 % (art. 53)",
+    "electricity and gas at 20 %: the 5,5 % of art. 52-0 B applies to the standing charge only, which the basket does not separate",
+    "the franchise threshold is the goods one (85 000 euros, previous year); the 37 500 euros services threshold and the current-year limits are not applied"
+   ],
+   "family_file": "lean/McGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad",
+   "statute": "statutory withholding on dividends, interest, royalties",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "legimonaco.mc not captured; pass 9: OS n° 3.152 (profits tax) read: it contains no withholding on payments abroad; no Monegasque text stating the absence of withholding was found",
+   "unsupported": [
+    "would unlock: the ISB ordinance in force 2025",
+    "would unlock: a Monegasque official text listing the taxes levied (Département des Finances) to cite the absence"
+   ],
+   "family_file": "lean/McGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impôt sur les bénéfices",
+   "statute": "Ordonnance Souveraine n° 3.152 du 19 mars 1964 art. 1 a), art. 21 (25 % from 1.1.2022) [year in force 2025 (pass 16), unchanged-confirmed: Legimonaco captures 2024-06-21 (mc/law/legimonaco_isb_wb20240621.*) and 2026-05-08 bracket 2025: art. 21 identical in both, last replaced by ordonnance n° 7.174 du 24 octobre 2018 (25 % from 2022)]",
+   "dated": "Legimonaco, Internet Archive capture 2026-05-08",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "the 25 % test is read on the exported share of the company's sales; royalty-collecting companies (art. 1 b)) and the option of other companies are not tested"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/McGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/McGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/McGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "droits d'enregistrement (Ordonnance 1919/1970 tariffs, 4,5 %-7,5 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rate articles (and the reference region's rate where regional)"
+   ],
+   "family_file": "lean/McGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "no recurrent property tax: absence not yet cited",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/McGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social contributions and payroll taxes",
+   "statute": "Caisses sociales de Monaco (CAR 60 % employeur, CCSS employeur 13,15 % in the 1.x model's CSM captures; ceilings not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P4 pass (no dated employer rates with quotes in the 1.x model or fetched texts)",
+   "unsupported": [
+    "would unlock: the act's 2025 employer rates and ceilings (official consolidation or the 1.x model's parameters with quotes)"
+   ],
+   "family_file": "lean/McGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "droits de succession (Ordonnance 1928 tariffs)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/McGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "none recorded",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/McGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 0,
+  "C": 10
+ },
+ "guards": 10,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

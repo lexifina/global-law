@@ -1,0 +1,50 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "IMT",
+  "statute": "CIMT art. 17.º n.º 1 a), c), d), e) (rates: redação Lei 82/2023 and DL 48-A/2024) with the 2025 limits of Lei 45-A/2024 art. 100.º (HPP 0/2/5/7/8 % marginal to EUR 648 022, then 6 % / 7,5 % on the whole value; other dwellings from 1 %; rústicos 5 %; other urban 6,5 %) [year in force 2025 (pass 16), re-cited 2025: Portal das Finanças art. 17.º captured 2025-06-21 (pt/law/cimt17_wb20250621.*): HPP 0/2/5/7/8 % to EUR 648 022, then 6 % to 1 128 287 and 7,5 % above (limits of Lei 45-A/2024, rates DL 48-A/2024 and Lei 82/2023), rústicos 5 %, other 6,5 %: as modelled; the 2026 limits (Lei 73-A/2025) and n.º 10 (DL 97/2026) are after 2025]",
+  "dated": "2025 limits: Lei 45-A/2024 art. 100.º; CIMT art. 17.º on Portal das Finanças, Internet Archive 2025-06-21",
+  "grade": "A",
+  "kernel_parts": [
+   "charge per Purchase (marginal then whole-value rate)"
+  ],
+  "unsupported": [
+   "IMT Jovem",
+   "VPT floor on the base",
+   "imposto do selo verba 1.1"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "4100",
+  "tax": "Imposto municipal sobre imóveis (prédios urbanos, Lisboa)",
+  "statute": "Código do IMI art. 112.º n.º 1 c), n.º 5 (redação da Lei n.º 7-A/2016); Município de Lisboa: 0,3 % for 2025 [year in force 2025 (pass 16), unchanged-confirmed: pt/law/cimi112_portal.txt: last amending law Lei 56/2023; no 2025 or 2026 redação]",
+  "dated": "Portal das Finanças, códigos tributários, CIMI art. 112.º (fetched 2026-11-21, `pt/law/cimi112_portal.txt`); Lisbon's rate from the 2025 municipal budget as reported (rr.pt, 29.11.2024: the urban rate stays at 0,3 %)",
+  "grade": "B",
+  "kernel_parts": [
+   "PropertyTax"
+  ],
+  "unsupported": [
+   "IMI: the asset's value is taken as the valor patrimonial tributário; the own-home exemption (EBF art. 46.º), the art. 112.º-A family deduction and the AIMI are not applied",
+   "IMI on land: rústico (0,8 %) or terreno para construção (urban, 0,3 %) cannot be told apart from the input (grade C)"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "4100",
+  "tax": "Adicional ao imposto municipal sobre imóveis (AIMI)",
+  "statute": "Código do IMI art. 135.º-B, 135.º-C n.º 2 a), 135.º-D, 135.º-F n.º 1-3 (adicional ao IMI; redação da Lei n.º 71/2018 e da Lei n.º 56/2023) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/cimi135b/c/f_portal.txt: last amending laws Lei 56/2023 (135.º-B, -C) and Lei 71/2018 (135.º-F)]",
+  "dated": "Portal das Finanças, Código do IMI art. 135.º-A, -B, -C, -F, -I (fetched 2026-11-21; amendment notes: no change after Lei 56/2023, so in force throughout 2025)",
+  "grade": "A",
+  "kernel_parts": [
+   "WealthTax"
+  ],
+  "unsupported": [
+   "AIMI on companies (0,4 % without the deduction, art. 135.º-F n.º 1) not modelled: a company's urban property is not in the input as dwellings",
+   "AIMI: real estate other than the home is taken as residential (habitacional); commercial, industrial and service buildings are excluded by art. 135.º-B n.º 2 and cannot be told apart in the input",
+   "AIMI: land is left out (a terreno para construção is in the base, a rústico is not; the input does not say which)",
+   "AIMI: a married couple's dwellings are taken as owned in equal halves"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

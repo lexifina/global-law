@@ -1,0 +1,1 @@
+import VuGlobal.Model

@@ -1,0 +1,148 @@
+{
+ "country": "MW",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on conveyances or transfers on sale of any property (K3 per K100 of the consideration, charged on the purchaser)",
+   "statute": "Stamp Duties Act Cap. 43:01 s. 36 (conveyance on sale) and Schedule item 7, Schedule replaced by the Stamp Duties Order 2020 (G.N. 86 of 2020, Malawi Gazette Supplement 23 October 2020; commons.laws.africa copy via Wayback 2024-08-03, R4/fetch/p15/mw_stamp_order_gn86_2020.pdf, page 442 read on the page image); the 2014 consolidation (MalawiLII, R4/fetch/p15/mw_sda_2014.txt) had K1.50 per K100. Liability: 'the purchaser or transferee' (Schedule column)",
+   "dated": "-",
+   "unsupported": [
+    "'for any fractional part of K100' rounding up not applied (at most K3)",
+    "the fixed amounts for considerations up to K200",
+    "Stamp Duties Orders after 2020 not checked (flag)",
+    "conveyances of property other than land and buildings (shares: marketable securities items)",
+    "voluntary dispositions (s. 43) charged as conveyances on the value: gifts not modelled"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employer social security contributions (public fund)",
+   "statute": "Pension Act No. 6 of 2023 s. 12 (1) (held mw/law/w5/pension_act_6_2023.txt); US SSA, Social Security Programs Throughout the World (SSPTW), Africa 2019 — Malawi",
+   "dated": "-",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "MW has no public social-insurance fund: the Pension Act 2023 s. 12 (1) requires 'a minimum of ten per cent by the employer' to a mandatory occupational pension scheme, i.e. individual accounts in privately managed funds (SSPTW: 'Mandatory individual account system'); a compulsory payment to a private fund is not a tax (OECD) and is not modelled. Sickness, maternity and work injury are employer-liability systems through private carriers.",
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value added tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Value Added Tax Act Cap. 42:02 s. 9 (16.5 %; the Value Added Tax (Amendment) (No. 2) Act 2025, Act No. 37 of 2025, published 30 Dec 2025, deletes \"16.5\" and substitutes \"17.5\"); fuels exempt per the VAT column (column 11) of the Customs and Excise (Tariffs) Order [text version: VAT Act Cap. 42:02 s. 9 as read in Act No. 37 of 2025 (published 30 December 2025): 16.5 % until 29 December 2025 (applied all year; 17.5 % for two days not split)]",
+   "dated": "Taxation Act Cap. 41:01 Eleventh Schedule as replaced by Act No. 14 of 2020 and amended by Act No. 12 of 2024 (published 19 Apr 2024); Value Added Tax Act Cap. 42:02 s. 9 as read in Act No. 37 of 2025 (16.5 % until 29 Dec 2025, 17.5 % from publication on 30 Dec 2025); Customs and Excise (Tariffs) Order 2022 as updated by MRA for 2024-2025",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "First and Second Schedules of the VAT Act not held",
+    "17.5 % from 30 Dec 2025 not split by date"
+   ],
+   "guards": 10
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise duty",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Customs and Excise Act Cap. 42:01 s. 82 (d), 82A; Customs and Excise (Tariffs) Order 2022, Part III column 10 (excise rates), MRA's updated 2024-2025 edition: beer 40 %, wine 95 %, spirits 110 %, sweetened waters 10 %, motor spirit and diesel 10 %",
+   "dated": "Taxation Act Cap. 41:01 Eleventh Schedule as replaced by Act No. 14 of 2020 and amended by Act No. 12 of 2024 (published 19 Apr 2024); Value Added Tax Act Cap. 42:02 s. 9 as read in Act No. 37 of 2025 (16.5 % until 29 Dec 2025, 17.5 % from publication on 30 Dec 2025); Customs and Excise (Tariffs) Order 2022 as updated by MRA for 2024-2025",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc",
+    "Global2.Fx (fxFor at the line's fxRates.USD; fxUnknownLine)"
+   ],
+   "unsupported": [
+    "2025/26 tariff amendments not read",
+    "sachet / plastic-bottle rates",
+    "cigarettes on a line without fxRates.USD: listed (grade C)"
+   ],
+   "guards": 10
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Taxation Act Cap. 41:01 Eleventh Schedule para (c) as replaced by the Taxation (Amendment) Act 2020 (Act No. 14 of 2020: all companies 30 % of taxable income) and amended by the Taxation (Amendment) Act 2024 (Act No. 12 of 2024 s. 7 (a): additional tax of 10 % on taxable income above K10 billion)",
+   "dated": "Taxation Act Cap. 41:01 Eleventh Schedule as replaced by Act No. 14 of 2020 and amended by Act No. 12 of 2024 (published 19 Apr 2024); Value Added Tax Act Cap. 42:02 s. 9 as read in Act No. 37 of 2025 (16.5 % until 29 Dec 2025, 17.5 % from publication on 30 Dec 2025); Customs and Excise (Tariffs) Order 2022 as updated by MRA for 2024-2025",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "2023 amendment of paragraph (c) not read",
+    "changes of Act No. 36 of 2025 from 30 Dec 2025"
+   ],
+   "guards": 6
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Non-resident tax on payments abroad",
+   "status": "unsupported",
+   "grade": "C",
+   "statute": "not reached: tried R4/fetch/mw10 (Acts 14/2020, 4/2021, 6/2022, 12/2024, 36/2025 OCR); MalawiLII domain CDX (no Taxation Act capture); MRA Wayback stub",
+   "dated": "-",
+   "module": "",
+   "kernel_parts": [],
+   "unsupported": [
+    "the non-resident tax of Taxation Act s. 76A exists (Act 6/2022 Fourteenth Schedule note 7 (b): 'interest payable to a person, not being a person resident in Malawi, whose income is liable to non-resident tax under section 76A'; Act 12/2024 s. 4 amends s. 76A (1)) but its rate is not in the amending Acts held; no cited 0 (the tax exists)"
+   ],
+   "tried": "R4/fetch/mw10 (Acts 14/2020, 4/2021, 6/2022, 12/2024, 36/2025 OCR); MalawiLII domain CDX (no Taxation Act capture); MRA Wayback stub",
+   "guards": 0
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of Malawi as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Malawi for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C454&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/mw.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "COMESA free trade area (origin LY, SO): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "guards": 4
+  }
+ ],
+ "cases": 8,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

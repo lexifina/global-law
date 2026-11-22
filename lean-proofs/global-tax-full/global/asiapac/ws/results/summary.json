@@ -1,0 +1,197 @@
+{
+ "country": "WS",
+ "name": "Samoa",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 18:15:21"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Final withholding on interest paid to resident individuals (15 %); resident dividends exempt",
+   "statute": "Income Tax Act 2012 s. 94, s. 104, Schedule 2 Part A (1) (b)",
+   "dated": "text as amended to 2022",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "interest from payers other than licensed financial institutions taxed at the scale rates (not modelled)"
+   ],
+   "family_file": "lean/WsGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1100",
+   "tax": "Capital gains tax (10 % / 27 %)",
+   "statute": "Income Tax Act 2012 ss. 63-66, Schedule 1 (8)",
+   "dated": "text as amended to 2022",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "read: rates and the 5 % a year cost uplift (s. 65 (2)); would unlock: a gains rule with an indexation uplift by years held and the s. 66 exempt assets"
+   ],
+   "family_file": "lean/WsGlobal/Capital.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value added goods and services tax (15 %)",
+   "statute": "VAGST Act 2015 s. 8 (3), s. 9 (2), Schedule 2 cl. 1 (a), (c), (f), Schedule 3 Part 1 cl. 1 (j), (k), (l), (o)",
+   "dated": "official version as at 31 December 2018 (Ministry for Revenue, Wayback 2025-11-30); later amendments not read",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "amendments after 2018 not read"
+   ],
+   "family_file": "lean/WsGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "statute": "Excise Tax Rates Act 1984 Schedule (official version as at 31 December 2018), Excise Tax Rates Amendment Act 2019 (No. 28)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: the 2018 official version (Wayback revenue.gov.ws) gives e.g. cigarettes $244.31 per 1000 sticks, rising to $256.52 from 1 July 2019 (Amendment Act (No. 3) 2018); the 2019 Amendment Act No. 28 is a scanned PDF (not OCRed) and later amendments were not found: rates for 2025 unknown; would unlock: the Excise Tax Rates Act revised to 2024/2025 (samoalaws.gov.ws, unreachable from a second machine and the build server)"
+   ],
+   "family_file": "lean/WsGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "Income Tax Act 2012 Sch. 1 cl. (2)",
+   "dated": "2012 Act (rate unchanged in 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/WsGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Income Tax Act 2012 Sch. 1 cl. (4)",
+   "dated": "2012 Act (rate unchanged in 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "family_file": "lean/WsGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/WsGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property: not levied",
+   "statute": "none (customary land; no general property tax)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/WsGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/WsGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/WsGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on conveyances (1-4 % marginal by property value)",
+   "statute": "Stamp Duty Ordinance 1932 s. 3, Schedule item 10 (Stamp Duty Amendment Act 2012)",
+   "dated": "PacLII consolidation (CRS 2007 + amendments to 2017), Internet Archive capture 2025-01-17",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "liable party not printed for item 10: booked on the purchaser",
+    "voluntary conveyances and share transfers not modelled"
+   ],
+   "family_file": "lean/WsGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (provident fund, non-tax)",
+   "statute": "National Provident Fund Act 1972",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/WsGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 6,
+  "C": 2
+ },
+ "guards": 14,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

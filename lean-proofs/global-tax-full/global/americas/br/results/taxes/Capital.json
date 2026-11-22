@@ -1,0 +1,35 @@
+[
+ {
+  "oecd": "1100",
+  "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+  "statute": "1.x model (see its summary.json); kernel stackedTax",
+  "dated": "as the 1.x model (2025)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "stackedTax",
+   "addToRaw"
+  ],
+  "unsupported": [
+   "short-held listed shares",
+   "other income kinds"
+  ]
+ },
+ {
+  "oecd": "1100",
+  "tax": "Imposto sobre a renda: ganho de capital de pessoa física",
+  "statute": "Lei 8.981/1995 art. 21 (Lei 13.259/2016)",
+  "dated": "planalto compiled text fetched 2026-11-21 (rates from 2017)",
+  "grade": "B",
+  "package": "P3",
+  "kernel_parts": [
+   "Schedule",
+   "Family",
+   "charge"
+  ],
+  "unsupported": [
+   "Lei 9.250 art. 23, Lei 11.196 arts. 39-40 exemptions",
+   "cost updating"
+  ]
+ }
+]

@@ -1,0 +1,240 @@
+{
+ "country": "IS",
+ "name": "Iceland",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:14:54"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Fjármagnstekjuskattur af söluhagnaði",
+   "statute": "lög nr. 90/2003 um tekjuskatt (fjármagnstekjur 22 %; residential property owned over two years exempt)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-06-11 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "the two-year exemption is applied to all real estate (it is for residential property only)"
+   ],
+   "family_file": "lean/IsGlobal/Capital.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "5111",
+   "tax": "Virðisaukaskattur",
+   "statute": "Lög nr. 50/1988 um virðisaukaskatt 14. gr. (24 %, 11 %); 2. gr. 3. mgr. (undanþegið); 4. gr. 3. tölul. (2.000.000 kr.)",
+   "dated": "althingi.is via Internet Archive 2025-09-04",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food and non-alcoholic drinks at 11 % (14. gr. 2. mgr. item not quoted)"
+   ],
+   "family_file": "lean/IsGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Lög nr. 96/1995 um gjald af áfengi og tóbaki; lög nr. 87/2004 um olíugjald",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/IsGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Tekjuskattur lögaðila",
+   "statute": "Lög um tekjuskatt nr. 90/2003, 71. gr. 1. mgr. (20% for hlutafélög and einkahlutafélög)",
+   "dated": "Lagasafn 156b, 1 September 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "other legal entities 37,6 % (71. gr. 2. mgr.) not separated",
+    "dividends received deduction (31. gr. 1. mgr. 9. tölul.) not modelled"
+   ],
+   "family_file": "lean/IsGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Tekjuskattur aðila með takmarkaða skattskyldu (afdráttur) (dividend, interest, royalty, services)",
+   "statute": "Lög um tekjuskatt nr. 90/2003, 3. gr. 3., 6., 7. og 8. tölul.; 70. gr. 3., 6., 7. og 8. tölul.",
+   "dated": "Lagasafn 156b, 1 September 2025 (`is/law/tsl_wb.html`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as performed in Iceland (3. gr. 3. tölul.); recipients other than hf./ehf.-type companies bear 37,6% (70. gr. 3. tölul. c), not separated",
+    "the 300.000 kr. annual interest exemption for individuals (70. gr. 8. tölul. a) is not applied",
+    "the dividend deduction for EEA companies (31. gr. 1. mgr. 9. tölul.) is not applied",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/IsGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVISL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/ISL.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6100 6 794 and 6200 9 011 million ISK (2023; unnamed); not modelled",
+   "unsupported": [
+    "the statutes of the items named by the OECD table"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "gap_note": true,
+   "family_file": "lean/IsGlobal/Other.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 13: bifreiðagjald (lög 39/1988) on cars, vans, trucks and buses modelled; kílómetragjald on electric and plug-in hybrid cars (lög 101/2023, from 1.1.2024), vörugjald af ökutækjum on import and the motorcycle and trailer rows not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 13: bifreiðagjald (lög 39/1988) on cars, vans, trucks and buses modelled; kílómetragjald on electric and plug-in hybrid cars (lög 101/2023, from 1.1.2024), vörugjald af ökutækjum on import and the motorcycle and trailer rows not modelled",
+   "unsupported": [
+    "would unlock: lög nr. 101/2023 um kílómetragjald (km driven is not an input: kernel request candidate) and lög nr. 29/1993 (vörugjald af ökutækjum)"
+   ],
+   "family_file": "lean/IsGlobal/Other.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Bifreiðagjald",
+   "statute": "Lög nr. 39/1988 um bifreiðagjald, 2. gr. (fjárhæðir L. 127/2024, 4. gr.), 3. gr., 4. gr.; 3. gr. (gjaldtímabil 1.1-30.6 and 1.7-31.12, by days held)",
+   "dated": "althingi.is lagasafn útgáfa 156b (Íslensk lög 1. september 2025) via the Internet Archive 2025-11-30 (`is/law/bifreidagjald_l39_1988_utg156b_wb20251130.html`); the amounts are those of L. 127/2024, in force from 1.1.2025; L. 104/2024 (from 1.9.2025) changed only 4. gr. 1. mgr. a (who is exempt)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable",
+    "VehicleTax.dayPeriods (2.7.0)"
+   ],
+   "unsupported": [
+    "motorcycles, trailers and vehicles without registered CO2 (the 0,12 g/kg + 50 g rule needs the own weight)",
+    "5200 bifreiðagjald: the input's CO2 is read as WLTP for vehicles first registered from 2019 and as NEDC before (the act charges by the registered cycle); the first-registration year stands for the model year in the 25-year exemption",
+    "5200 kílómetragjald (lög 101/2023) on electric and plug-in hybrid cars not modelled: it is charged per km driven, not an input (grade C)"
+   ],
+   "family_file": "lean/IsGlobal/Other.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stimpilgjald (real estate)",
+   "statute": "lög nr. 138/2013 um stimpilgjald (0,8 % for individuals; 0,4 % for a first home) [year in force 2025 (pass 16), re-cited 2025: PwC Iceland capture 2025-06-13: 0.8 % for individuals, 0.4 % for a first home: as modelled]",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "the base is the registered value (fasteignamat): the price stands in; legal persons pay 1,6 % (not separated)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/IsGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "Lög nr. 4/1995 um tekjustofna sveitarfélaga (fasteignaskattur)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "fasteignaskattur set by each municipality; reference municipality's rate not read"
+   ],
+   "family_file": "lean/IsGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social contributions and payroll taxes",
+   "statute": "Lög nr. 113/1990 um tryggingagjald",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P4 pass (no dated employer rates with quotes in the 1.x model or fetched texts)",
+   "unsupported": [
+    "would unlock: the act's 2025 employer rates and ceilings (official consolidation or the 1.x model's parameters with quotes)"
+   ],
+   "family_file": "lean/IsGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, IS, Individual - Other taxes, accessed  (live page; `law/pwc_indother_wb2025.txt`) [year in force 2025 (pass 16), re-cited 2025: PwC Iceland, Individual - Other taxes, Internet Archive 2025-06-13 (is/law/pwc_indother_wb20250613.*): no net wealth taxes]",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/IsGlobal/Wealth.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "4300",
+   "tax": "Erfðafjárskattur",
+   "statute": "lög nr. 14/2004 um erfðafjárskatt (10 %; first ISK 6 498 129 untaxed; spouse exempt) [year in force 2025 (pass 16), fixed: PwC Iceland capture 2025-06-13: the untaxed first part in 2025 is ISK 6 498 129 (the live page's 6 789 790 is the 2026 amount); rate 10 % unchanged. Allowance changed 6 789 790 -> 6 498 129]",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "the allowance belongs to the estate; applied per recipient here; advance inheritances (10 % without allowance) not separated from gifts",
+    "gifts are income (1100) or advance inheritance: not modelled here"
+   ],
+   "yif16": "fixed",
+   "family_file": "lean/IsGlobal/Wealth.lean",
+   "family_guards": 10
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 4,
+  "C": 5
+ },
+ "guards": 43,
+ "sorry": 0,
+ "cases": 8,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

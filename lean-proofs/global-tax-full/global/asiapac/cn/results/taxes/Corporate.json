@@ -1,0 +1,30 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "企业所得税 (enterprise income tax)",
+  "statute": "企业所得税法 (2018) art. 4, art. 28; 财政部 税务总局公告2023年第12号 三, 五",
+  "dated": "2018-12-29 law; 2025-01-20 regulations; 公告2023年第12号 (2023-08-02, to 2027-12-31)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "small low-profit test on year-end values, not quarterly averages"
+  ]
+ },
+ {
+  "oecd": "1200/1100",
+  "tax": "Withholding tax on payments to non-residents",
+  "statute": "企业所得税法 arts. 3-4, 27 (5); 实施条例 arts. 7, 91; 个人所得税法 art. 3 (2018); 个人所得税法实施条例 art. 3 (2018)",
+  "dated": "2018-12-29 law; 2025-01-20 regulations",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "dividends from foreign-invested enterprises to foreign individuals (财税字〔1994〕020号) not distinguished",
+   "services performed in China by a non-resident enterprise (deemed-profit EIT) not modelled",
+   "royalties to non-resident individuals: each payment record is taken as one payment (每次); the year's payments to one person are not split"
+  ]
+ }
+]

@@ -1,0 +1,396 @@
+{
+ "country": "GT",
+ "name": "Guatemala",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 18:26:21"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "see the pass 11 entry below for disposals",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "tax": "Impuesto sobre ganancias de capital (10 %)",
+   "statute": "Decreto 10-2012 arts. 15, 87, 89, 91, 92",
+   "dated": "Decreto 10-2012 as reformed by Decreto 19-2013 (held text)",
+   "grade": "A",
+   "unsupported": [
+    "loss carry-forward (art. 91)"
+   ],
+   "oecd": "1100",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Capital.lean",
+   "guards": 4
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto al Valor Agregado",
+   "statute": "Ley del IVA (Decreto 27-92) art. 10 (Decreto 32-2001 art. 1)",
+   "dated": "Decreto 32-2001 (in force on publication, 2001); not reformed by Decreto 10-2012",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "art. 7 exemptions",
+    "pequeño contribuyente regime"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Consumption.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto a la distribución de petróleo crudo y combustibles derivados",
+   "statute": "Decreto 38-92 art. 12 A (Decreto 11-2003 art. 5)",
+   "dated": "Decreto 11-2003; later amendments of art. 12 A not identified",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "petrol read as regular"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Consumption.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto sobre la distribución de bebidas alcohólicas destiladas, cervezas y otras bebidas fermentadas",
+   "statute": "Decreto 21-2004 arts. 9-17",
+   "dated": "Decreto 21-2004 (scp.gob.gt copy); Decreto 4-2012 does not reform it",
+   "grade": "A",
+   "package": "P1",
+   "kernel_parts": [
+    "ExLine"
+   ],
+   "unsupported": [
+    "suggested price taken as the price paid"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Consumption.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto sobre tabacos y sus productos",
+   "statute": "Decreto 61-77 art. 27 (Decreto 4-2012 art. 69)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "pass 12: only the Decreto 4-2012 reform of the base paragraph held (WHO FCTC copy)",
+   "unsupported": [
+    "would unlock: Decreto 61-77 as in force 2025 (rate paragraph of art. 27)"
+   ],
+   "family_file": "lean/GtGlobal/Consumption.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 239",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 239: \"Corresponde con exclusividad al Congreso de la República, decretar impuestos ordinarios y extraordinarios\" (`gt/law/const_art-239.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Ley del IVA (Decreto 27-92) art. 10 (Decreto 32-2001 art. 1); Decreto 38-92 art. 12 A (Decreto 11-2003 art. 5); Decreto 21-2004 arts. 9-17; Decreto 10-2012 art. 36 (25 %); Decreto 10-2012 Libro I Título V arts. 97-99, 103-105 (art. 104 num. 1 d. repealed by Decreto 19-2013 art. 28); 1.x model (see its summary.json)).",
+   "family_file": "lean/GtGlobal/Consumption.lean",
+   "guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto sobre la renta (régimen sobre las utilidades)",
+   "statute": "Decreto 10-2012 art. 36 (25 %)",
+   "dated": "Decreto 10-2012 as enacted",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "régimen opcional simplificado (art. 44, % of gross income) not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents (rentas de no residentes sin establecimiento permanente)",
+   "statute": "Decreto 10-2012 Libro I Título V arts. 97-99, 103-105 (art. 104 num. 1 d. repealed by Decreto 19-2013 art. 28)",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P2",
+   "unsupported": [
+    "Decreto 10-2012 art. 104: the num. 2 a. exception for loans from regulated foreign banks, 3 % for news and films, 5 % for transport, insurance and telecoms, and 25 % on other unspecified income (num. 4) not modelled; services are taken as fees or technical advice (15 %)"
+   ],
+   "dated": "Decreto 10-2012 with Decreto 19-2013 notes (world/B12-latin-america/gt/src/d10_2012.txt); pass 8, 2026-11-21",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "family_file": "lean/GtGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment ignored; IGSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment ignored; IGSS of independents not computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GtGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Impuesto Único sobre Inmuebles (IUSI, Decreto 15-98: 2, 6, 9 per mil by value band)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Único sobre Inmuebles (IUSI, Decreto 15-98: 2, 6, 9 per mil by value band); text not in lexifina/guatemala-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Impuesto Único sobre Inmuebles (IUSI, Decreto 15-98: 2, 6, 9 per mil by value band); text not in lexifina/guatemala-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4100 = 2021:1462.7 2022:1603.0 2023:1630.5 2024:1747.0; named lines: 4120 Property municipal tax (2024: 1745.9); 4120 Property tax (2024: 1.2)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GtGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4200 (recurrent taxes on net wealth, Guide §51) in 2021-2024; 2025 not yet published, no 2025 wealth tax identified. The Impuesto de Solidaridad (Decreto 73-2008), proposed for 4200 in pass 15, is booked by the OECD under 6200 ('Solidarity tax'): it is the GT 6000 row",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GtGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución por mejoras (Código Municipal)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución por mejoras (Código Municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución por mejoras (Código Municipal). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GtGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+   "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/GtGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "impuesto sobre circulación de vehículos (Decreto 70-94)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre circulación de vehículos (Decreto 70-94). 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre circulación de vehículos (Decreto 70-94). 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 5200 = 2021:1011.1 2022:1070.7 2023:1160.4 2024:1251.6"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GtGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: the Impuesto de Solidaridad (ISO, Decreto 73-2008: 1 % of the greater of a quarter of total assets or of gross income, creditable against ISR) is booked by the OECD GT table under 6200 ('Solidarity tax' 7,941 in 2024): the right heading for it is 6000, not 4200; Decreto 73-2008 is not in lexifina/guatemala-law (codes only) and was not reached"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: the Impuesto de Solidaridad (ISO, Decreto 73-2008: 1 % of the greater of a quarter of total assets or of gross income, creditable against ISR) is booked by the OECD GT table under 6200 ('Solidarity tax' 7,941 in 2024): the right heading for it is 6000, not 4200; Decreto 73-2008 is not in lexifina/guatemala-law (codes only) and was not reached",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVGTM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/GTM.csv): general government heading 6000 = 2021:5398.6 2022:6130.4 2023:7268.4 2024:7947.4; named lines: 6200 Extraordinary and temporary solidarity tax (2022: 0.0); 6200 Extraordinary and temporary solidarity tax in support of peace agreements (2024: 6.3); 6200 Other indirect taxes (2024: 0.0); 6200 Solidarity tax (2024: 7941.1)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/GtGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "Decreto 431 (herencias, legados y donaciones)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "not read in this pass",
+   "unsupported": [
+    "would unlock: the act's 2025 text"
+   ],
+   "family_file": "lean/GtGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "IGSS contributions (employer)",
+   "statute": "IGSS Acuerdos 410 art. 62 a), 1002 art. 46 a), 1124 art. 40 a)",
+   "dated": "IGSS compilations rev. 2018 / 2021",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "aguinaldo and Bono 14 not split from the base"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "3000",
+   "tax": "INTECAP tasa patronal (1 %)",
+   "statute": "Decreto 17-72 (Ley Orgánica del INTECAP) arts. 28, 29",
+   "dated": "Decreto 17-72 text (1 % from 1974; no later change found)",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "3000",
+   "tax": "IRTRA (1 %)",
+   "statute": "Decreto 1528 art. 12 as amended by Decreto 43-92",
+   "dated": "Justia Guatemala summary of Decreto 43-92 (15 Jul 1992)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "Decreto 1528 text not read"
+   ],
+   "status": "modelled",
+   "family_file": "lean/GtGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Decreto 37-92 (timbres 3 %); IUSI (Decreto 15-98)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/GtGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 7,
+  "B": 5,
+  "C": 9
+ },
+ "guards": 20,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

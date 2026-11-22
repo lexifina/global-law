@@ -1,0 +1,322 @@
+{
+ "country": "KN",
+ "name": "Saint Kitts and Nevis",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 19:21:30"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/KnGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "statute": "VAT Act Cap. 18.47 s. 17, Scheds. 2, 3",
+   "dated": "Revised Laws revision date 31 Dec 2017 (Wayback 2024-08-07); later amendments not checked",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "post-2017 amendments",
+    "regulation-based electricity relief"
+   ],
+   "status": "modelled",
+   "family_file": "lean/KnGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "statute": "Excise Tax Act Cap. 20.11",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "Wayback CDX lists the 2017 revised PDF; no capture served",
+   "unsupported": [
+    "would unlock: Excise Tax Act Cap. 20.11 with 2025 schedule"
+   ],
+   "family_file": "lean/KnGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / consumption tax",
+   "statute": "none: Consumption Tax Act Cap. 20.02 repealed (VAT Regulations reg. 19 (1))",
+   "dated": "VAT Act Cap. 18.47 Revised Edition 2017",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "family_file": "lean/KnGlobal/Consumption.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporation tax",
+   "statute": "Income Tax Act Cap. 20.22 s. 32 (1) (b) (Act 5 of 2013): 'corporation tax of 33%'",
+   "dated": "Revised Laws, revision date 31 Dec 2017 (1.x builder's copy); Income Tax (Amendment) Act No. 12 of 2021 read (residence and PE only); later Acts not checked",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "status": "modelled",
+   "family_file": "lean/KnGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "ITA Cap. 20.22 s. 36 (1) (Act 2 of 2016): 15 % of the amount paid to a non-resident",
+   "dated": "Revised Edition to 31 Dec 2017 (world/B15-no-pit/kn/law/ita_ch20_22_2017.txt); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "amending Acts after 2017 (other than No. 12 of 2021) not checked for s. 36"
+   ],
+   "status": "modelled",
+   "family_file": "lean/KnGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed social security contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed social security contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "no OECD Revenue Statistics table for KN"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/KnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Property Tax Act (rates by use on market value)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (rates by use on market value); not in lexifina/saint-kitts-and-nevis-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (rates by use on market value); not in lexifina/saint-kitts-and-nevis-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "no OECD Revenue Statistics table for KN"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/KnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "no OECD table, no text",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: no OECD table, no text. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: no OECD table, no text. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "no OECD Revenue Statistics table for KN"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/KnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff",
+   "customs_note": "customs import duties (5123): CARICOM Common External Tariff (CET) as scheduled in the national Customs Act / Customs Tariff; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/KnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "vehicle licences",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): vehicle licences; no text. 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): vehicle licences; no text. 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "no OECD Revenue Statistics table for KN"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/KnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: no OECD table, no text"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: no OECD table, no text",
+   "evidence": [
+    "no OECD Revenue Statistics table for KN"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/KnGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "registry: none levied (not cited from a text)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "no statute read",
+   "unsupported": [
+    "would unlock: a text showing the abolition or absence"
+   ],
+   "family_file": "lean/KnGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Inland Revenue Department (sknird.com): list of taxes administered",
+   "dated": "Wayback copy dated 2025; pass 13, 2026-11-21",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R2-P13-CARIB (no tax-legality clause in the constitution: revenue authority's list of the taxes it administers + consolidated index of revenue Acts), pass 13): the Inland Revenue Department (sknird.com) list of the taxes it administers, `kn/law/ird_tax_laws_2025-03-22.*` (Wayback 2025-03-22), names: Property Tax, Value Added Tax, Corporate Income Tax, Driver's and Vehicle Licence; consolidated index of revenue Acts not held; none of them is a recurrent tax on net wealth.",
+   "family_file": "lean/KnGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Social Security (employer)",
+   "statute": "Social Security Act Cap. 22.10, Regulations Sched. 1 Part II, Sched. 2",
+   "dated": "Revised Edition 31 Dec 2017",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "1 % rate for under-16 and 62+"
+   ],
+   "status": "modelled",
+   "family_file": "lean/KnGlobal/Social.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "3000",
+   "tax": "Housing and Social Development Levy (employer)",
+   "statute": "HSDL Act Cap. 20.21 s. 3 (2)",
+   "dated": "Revised Edition 31 Dec 2017 with Acts 1/2024 and 14/2025",
+   "grade": "A",
+   "package": "P4",
+   "kernel_parts": [
+    "PayrollTax",
+    "payrollFamily"
+   ],
+   "status": "modelled",
+   "family_file": "lean/KnGlobal/Social.lean",
+   "guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Stamp Act; Property Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/KnGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 4,
+  "C": 9
+ },
+ "guards": 12,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

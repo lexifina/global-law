@@ -1,0 +1,163 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Value Added Tax",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Value Added Tax Act 2011 s. 24 (3) (rate set by the VAT Regulations); VAT (Rates) Regulations (LN 52 of 2012) reg. 3 (1) as replaced by the VAT (Rates) (Amendment) Regulations 2018 (LN 112 of 2018, from 1 August 2018): 15 %; First Schedule (exempt), Second Schedule (zero-rated)",
+  "dated": "VAT Act 2011 with the VAT (Rates) Regulations (LN 52 of 2012 as amended by LN 112 of 2018) and LN 130 of 2025; ERS guide pages (live 2026-11-21) for the company rate and withholding taxes",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "LN 270 of 2022 schedule changes (not held)",
+   "zero-rated basic foods (basket convention)",
+   "exempt residential lettings"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duties (SACU common excise tariff, Schedule No. 1 Part 2A)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Customs and Excise Act 1971 Schedule No. 1 Part 2A (SACU common excise tariff): the 2024/2025 SACU rates to 11 March 2025 and the 2025/2026 rates from 12 March 2025, per the ERS Excise guide (rates 'indicated on the SACU tariff schedule') and SACU Agreement 2002 (as amended 12 April 2013) art. 21 (1): the Ministers responsible for Finance of all Member States 'meet and agree on the rates of specific excise and ad valorem excise duties ... to be applied to goods grown, produced or manufactured in or imported into the Common Customs Area'; art. 22: similar legislation [text version: sacu.int SACU-Agreement.pdf, Wayback 20210517172146, R4/fetch/gap/sacu_agreement_wb20210517.pdf]; rates as in SA Act 45 of 2024 Part I and Act 3 of 2026 Sch. II (lilangeni at par with the rand)",
+  "dated": "VAT Act 2011 with the VAT (Rates) Regulations (LN 52 of 2012 as amended by LN 112 of 2018) and LN 130 of 2025; ERS guide pages (live 2026-11-21) for the company rate and withholding taxes",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc",
+   "ExciseRule (2.1, date windows: R4.Exc.toRule)",
+   "exciseRuleFamily"
+  ],
+  "unsupported": [
+   "Eswatini adopting notice not read",
+   "Alcohol and Tobacco Levy"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Corporate income tax",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Income Tax Order 1975 (company rate 27,5 % since 1 July 2013), per the Eswatini Revenue Service guide (official secondary)",
+  "dated": "VAT Act 2011 with the VAT (Rates) Regulations (LN 52 of 2012 as amended by LN 112 of 2018) and LN 130 of 2025; ERS guide pages (live 2026-11-21) for the company rate and withholding taxes",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "Income Tax (Amendment) Act 2023 (scanned, not read)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Withholding on payments to non-residents",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Income Tax Order 1975 (non-resident withholding taxes), per the ERS 'Withholding' guide (official secondary): royalties and management fees 15 %, services contracts 15 %, interest 10 %; twelfth pass: Income Tax Order 1975 s. 21 (2) (non-resident shareholders tax 15 %; the 12,5 % SACU proviso deleted by the Income Tax (Amendment) Act 2023 s. 10)",
+  "dated": "VAT Act 2011 with the VAT (Rates) Regulations (LN 52 of 2012 as amended by LN 112 of 2018) and LN 130 of 2025; ERS guide pages (live 2026-11-21) for the company rate and withholding taxes",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": []
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (SACU common external tariff, Schedule No. 1 Part 1)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Customs and Excise Act 1971 Schedule No. 1 Part 1 (Eswatini's tariff not held); rates: the SACU common external tariff; SACU Agreement 2002 (as amended 12 April 2013) art. 18 (1) (goods of the Common Customs Area free of customs duties between Member States) and art. 20 (1) (the Council approves the customs duties applied to goods imported into the Common Customs Area) [R4/fetch/gap/sacu_agreement_wb20210517.pdf]; common external tariff: Schedule No. 1 Part 1, 'Rate of Duty' columns General, EU/UK, EFTA, SADC, as printed in South Africa's consolidation dated 2025-04-04 (SARS Legal-LPrim-CE-Sch1P1Chpt1-to-99, Wayback 20250405095800, R4/fetch/gap/za_sch1p1_wb20250405095800.pdf) and Botswana's dated 01.07.2025 (BURS Tariff Volume I, R4/fetch/bw10/tariff_vol1_july2025.pdf): the same rates on every line below",
+  "dated": "SACU common external tariff as printed by South Africa (2025-04-04) and Botswana (01.07.2025); Eswatini's own tariff not held: grade B",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "SADC FTA, MERCOSUR and AfCFTA preference columns not applied (MFN charged for those origins)",
+   "rebates and suspensions (Schedules No. 3 and 4), anti-dumping and safeguard duties (Part 2B and Part 3)",
+   "lines of other HS headings (grade C)"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty on transfer deeds of immovable property (0,35 % up to E7 000, 0,85 % of the whole value above)",
+  "statute": "Stamp Duties Act, 1970 (Act 37 of 1970) s. 4 (duty per the Schedule), s. 4bis (Schedule amended by Gazette notice), s. 8 (m), Schedule item 24 'Transfer deed relating to immovable property' (eSwatiniLII consolidation at 1 December 1998 via Wayback 20230923031008, R4/fetch/p17/sz_sda1970_lii1998.html). B: the 1998 edition; notices under s. 4bis after 1998 (eSwatiniLII lists a 2000 Gazette citing the Act) were not read (flag). Charged in addition to the transfer duty (P5)",
+  "dated": "-",
+  "unsupported": [
+   "'for every E100 or part thereof': the value is not rounded up to the next E100 here",
+   "liability: s. 8 (m) names the person executing the instrument; charged on the purchase (the buyer) as in practice (flag)",
+   "exempt partition transfers and transfers that do not alter legal rights; other items (bonds 0,40 per E100, leases item 16) not modelled",
+   "Schedule changes by notice under s. 4bis after 1998 not checked"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.transferBandFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Eswatini National Provident Fund, employer contribution (5 % of wages up to E4 000 a month)",
+  "statute": "Eswatini National Provident Fund Order 1974; ENPF (Statutory Contributions) Regulations, Legal Notice No. 5 of 2025 reg. 2 (1) (a) (as reproduced by the Fund, held sz/law/w5/enpf_home_notice_LN5_2025.txt); rate 5 % + 5 % from the Fund's 'Statutory Contributions Calculations 2023' table (Wayback, R4/fetch/sz11)",
+  "dated": "-",
+  "unsupported": [
+   "the ceiling applies month by month (reg. 2 (2)); the annual cap 48 000 is exact for even monthly pay",
+   "public provident fund (individual accounts) treated as a social contribution, as UG and KE NSSF",
+   "the employee's 5 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Training levy (Industrial and Vocational Training Act, employer): not levied",
+  "statute": "Industrial and Vocational Training Act 16 of 1982 s. 11-13 (EswatiniLII, Wayback 2023-09-23, R4/fetch/p14/sz_ivta1982.txt); OECD Revenue Statistics detailed table for Eswatini (sdmx.oecd.org DSD_REV_AFRICA@DF_REVSWZ 2.0, fetched 2026-11-22, R4/fetch/swp/oecd_SWZ.csv)",
+  "dated": "-",
+  "unsupported": [
+   "an industry training levy order under s. 13 (if any) not located"
+  ],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "SZ: no payroll tax or training levy charged in 2025 (grade B). The 1982 Act lets the Minister impose a levy only by a training levy order for a given industry (s. 13 (1), below 1 % of pay, s. 13 (2) (c)); no such order was located, the revenue authority lists no skills levy, and the OECD Revenue Statistics table for Eswatini books 0 under heading 3000 in every year it publishes (2021, 2022, 2023; 2024 and 2025 not yet published). Not an absence proved from a text: an industry order could exist (flag)."
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Transfer duty on acquisitions of fixed property (2 % to E40 000, 4 % to E60 000, 6 % above)",
+  "statute": "Transfer Duty Act 8 of 1902 s. 3 as amended by Act 8 of 1985 (eSwatiniLII version at 1 December 1998, Wayback capture 2023-09-27, R4/fetch/p15/sz_tda1902_lii1998.txt). Edition 1998, no later amending Act in hand: B (flag). Liability: the person acquiring the property (s. 3 (a))",
+  "dated": "-",
+  "unsupported": [
+   "leases of fixed property (s. 3 (b), on the full value of the property)",
+   "mining and prospecting rights (27,5 / 37,5 %)",
+   "exemptions of s. 13 (Ngwenyama for the Swazi nation, partitions between co-owners)",
+   "donations (charged on the value): gifts not modelled",
+   "amendments after 1998 not checked (flag)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferBandFamily"
+  ]
+ }
+]

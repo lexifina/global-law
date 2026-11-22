@@ -1,0 +1,603 @@
+{
+ "MY": {
+  "name": "Malaysia",
+  "doc": "First pass (R3, 2026-11-21): Sales tax (Act 806) and service tax (Act 807) (grade C); Excise duty (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Malaysia not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5112",
+    "tax": "Sales tax (Act 806) and service tax (Act 807)",
+    "statute": "Sales Tax Act 2018; Service Tax Act 2018; Sales Tax (Rates of Tax) Order 2025; Service Tax Regulations 2018 First Schedule (scope widened 1 July 2025)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); lom.agc.gov.my did not answer from the build server; would unlock: the Acts and the 2025 Orders from lom.agc.gov.my or mysst.customs.gov.my via a second machine route"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise duty",
+    "statute": "Excise Act 1976; Excise Duties Order 2022",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: Excise Duties Order as amended to 2025"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "IN": {
+  "name": "India",
+  "doc": "First pass (R3, 2026-11-21): Goods and services tax (CGST + SGST/IGST) (grade C); Central excise on petrol and diesel; Maharashtra VAT on fuel and liquor (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of India not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Goods and services tax (CGST + SGST/IGST)",
+    "statute": "CGST Act 2017 s. 9; Notification 1/2017-Central Tax (Rate) to 21 Sep 2025, Notification 9/2025-Central Tax (Rate) from 22 Sep 2025; Maharashtra GST Act",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); the cbic-gst.gov.in rate page has no notification PDFs; would unlock: the two rate notifications (egazette.gov.in) and their Maharashtra SGST twins"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Central excise on petrol and diesel; Maharashtra VAT on fuel and liquor",
+    "statute": "Central Excise Tariff Act 1985 Eighth Schedule; Maharashtra VAT Act 2002 Schedules",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: the 2025 Eighth Schedule rates and the MVAT fuel schedule"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "PK": {
+  "name": "Pakistan",
+  "doc": "First pass (R3, 2026-11-21): Sales tax on goods (federal) and on services (Punjab) (grade C); Federal excise duty (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Pakistan not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Sales tax on goods (federal) and on services (Punjab)",
+    "statute": "Sales Tax Act 1990 s. 3 as amended by Finance Act 2025; Punjab Sales Tax on Services Act 2012",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the Finance Act 2025 gazette PDF on the build server is scanned (no text layer, 320 pages not OCR'd); would unlock: OCR of the Finance Act 2025 Sales Tax part, or the FBR consolidated Sales Tax Act 2025"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Federal excise duty",
+    "statute": "Federal Excise Act 2005 First Schedule as amended by Finance Act 2025",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: as above; would unlock: the FBR consolidated First Schedule 2025"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "LK": {
+  "name": "Sri Lanka",
+  "doc": "First pass (R3, 2026-11-21): Value added tax; Social Security Contribution Levy (turnover 2.5 %) (grade C); Excise duty (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Sri Lanka not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax; Social Security Contribution Levy (turnover 2.5 %)",
+    "statute": "VAT Act No. 14 of 2002 as amended (18 %); SSCL Act No. 25 of 2022",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only) (IRA amendments and EPF only); would unlock: the VAT (Amendment) Acts of 2023-2024 and the SSCL Act (documents.gov.lk, parliament.lk)"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise duty",
+    "statute": "Excise (Special Provisions) Act No. 13 of 1989 and gazette rate notices",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: the 2025 gazette rate notices"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "NP": {
+  "name": "Nepal",
+  "doc": "First pass (R3, 2026-11-21): Value added tax (grade C); Excise duty (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Nepal not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax",
+    "statute": "Value Added Tax Act 2052 (13 %)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only) (Income Tax Act and Finance Act pages); would unlock: VAT Act 2052 as amended (ird.gov.np, lawcommission.gov.np)"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise duty",
+    "statute": "Excise Duty Act 2058 and the Finance Act 2082 schedule",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: Finance Act 2082 excise schedule"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "MN": {
+  "name": "Mongolia",
+  "doc": "First pass (R3, 2026-11-21): Value added tax (10 %) (grade C); Excise tax (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Mongolia not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax (10 %)",
+    "statute": "Law on Value Added Tax (2015) as amended",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only) (PIT, health and social insurance laws); would unlock: the VAT law from legalinfo.mn"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise tax",
+    "statute": "Law on Excise Tax (2006) as amended",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: legalinfo.mn excise law"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "LA": {
+  "name": "Laos",
+  "doc": "First pass (R3, 2026-11-21): Value added tax (10 %) (grade C); Excise tax (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Laos not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax (10 %)",
+    "statute": "Law on VAT No. 48/NA (2018); Presidential Decree 003/PS (2024)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only) (PIT rescue folder); would unlock: the VAT law and decree from laoofficialgazette.gov.la"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise tax",
+    "statute": "Law on Excise Tax (2019)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "MM": {
+  "name": "Myanmar",
+  "doc": "First pass (R3, 2026-11-21): Commercial tax (5 % general) (grade C); Specific goods tax (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Myanmar not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5112",
+    "tax": "Commercial tax (5 % general)",
+    "statute": "Union Taxation Law 2025; Commercial Tax Law 1990",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only) (IRD PIT page); would unlock: Union Taxation Law 2025 (ird.gov.mm, mlis.gov.mm)"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Specific goods tax",
+    "statute": "Specific Goods Tax Law 2016; Union Taxation Law 2025 schedules",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "KH": {
+  "name": "Cambodia",
+  "doc": "First pass (R3, 2026-11-21): Value added tax (10 %) (grade C); Specific tax on certain goods and services (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Cambodia not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax (10 %)",
+    "statute": "Law on Taxation 2023, VAT chapter",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the Khmer OCR of the Law on Taxation 2023 on the build server (473 kB) not yet searched; would unlock: grep the OCR for the VAT and specific tax chapters (Khmer numerals)"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Specific tax on certain goods and services",
+    "statute": "Law on Taxation 2023",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "PG": {
+  "name": "Papua New Guinea",
+  "doc": "First pass (R3, 2026-11-21): Goods and services tax (10 %) (grade C); Excise duty (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Papua New Guinea not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Goods and services tax (10 %)",
+    "statute": "Goods and Services Tax Act 2003",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: PacLII answers 403 to scripts; the build server has only the Income Tax Act; would unlock: the GST Act from parliament.gov.pg or an archived PacLII copy"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise duty",
+    "statute": "Excise Tariff Act 1990 as amended",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: the Excise Tariff 2025"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "SB": {
+  "name": "Solomon Islands",
+  "doc": "First pass (R3, 2026-11-21): Goods tax (Cap. 122, 10 %) and sales tax (Cap. 125) (grade C); Excise duty (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Solomon Islands not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5112",
+    "tax": "Goods tax (Cap. 122, 10 %) and sales tax (Cap. 125)",
+    "statute": "Goods Tax Act Cap. 122; Sales Tax Act Cap. 125 (no VAT in 2025: the VAT Bill was introduced in 2025)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: PacLII 403; the build server has the Income Tax Act and NPF Acts; would unlock: the two Acts from the Ministry of Finance or an archived PacLII copy"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise duty",
+    "statute": "Excise Act Cap. 123",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "WS": {
+  "name": "Samoa",
+  "doc": "First pass (R3, 2026-11-21): Value added goods and services tax (15 %) (grade C); Excise tax (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Samoa not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added goods and services tax (15 %)",
+    "statute": "Value Added Goods and Services Tax Act 2015",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: not on the build server (Income Tax Act 2012, NPF and ACC Acts, MJCA legislation list); would unlock: the VAGST Act 2015 consolidation from samoalaws.gov.ws"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise tax",
+    "statute": "Excise Tax Rates Act 1984",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "TO": {
+  "name": "Tonga",
+  "doc": "First pass (R3, 2026-11-21): Consumption tax (15 %) (grade C); Excise tax (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Tonga not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Consumption tax (15 %)",
+    "statute": "Consumption Tax Act 2003",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: not on the build server (Income Tax Act, Regulations and gazettes); would unlock: the Consumption Tax Act consolidation from ago.gov.to"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise tax",
+    "statute": "Excise Tax Act 2007",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "KI": {
+  "name": "Kiribati",
+  "doc": "First pass (R3, 2026-11-21): Value added tax (12.5 %) (grade C); Excise tax (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Kiribati not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Value added tax (12.5 %)",
+    "statute": "Value Added Tax Act 2013",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: not on the build server (Income Tax Act only); would unlock: the VAT Act 2013 from the Kiribati legislation site"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Excise tax",
+    "statute": "Excise Tax Act 2013",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server law folders (1.x builder: PIT texts only); would unlock: as above"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "FM": {
+  "name": "Micronesia (Federated States)",
+  "doc": "First pass (R3, 2026-11-21): State sales taxes (no national VAT) (grade C); National import taxes on tobacco, alcohol, fuel (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Micronesia (Federated States) not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5112",
+    "tax": "State sales taxes (no national VAT)",
+    "statute": "state revenue codes (e.g. Pohnpei, Chuuk)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server has FSM Code Titles 53-54 (national income and gross revenue taxes); would unlock: the state revenue codes"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "National import taxes on tobacco, alcohol, fuel",
+    "statute": "FSM Code Title 54",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: Title 54 on the build server not yet searched for the import tax; would unlock: grep T54_Ch01_SubChpII_2014.txt for the import tax rates"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "MV": {
+  "name": "Maldives",
+  "doc": "First pass (R3, 2026-11-21): Goods and services tax (general 8 %, tourism 17 % from 1 July 2025) (grade C); Import duty on tobacco and alcohol (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Maldives not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "Goods and services tax (general 8 %, tourism 17 % from 1 July 2025)",
+    "statute": "Goods and Services Tax Act (Law 10/2011) as amended",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): mira.gov.mv 403, mof.gov.mv no answer, Wayback offline (2026-11-21); customs.gov.mv answers (tariff, not the GST Act); would unlock: the GST Act (Law 10/2011) consolidation with the 2025 tourism rate change"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Import duty on tobacco and alcohol",
+    "statute": "Import-Export Act tariff",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): customs.gov.mv answers (import duty tariff, not read this pass); would unlock: the 2025 tariff for tobacco and alcohol"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "MH": {
+  "name": "Marshall Islands",
+  "doc": "First pass (R3, 2026-11-21): Import duties; consumption tax (grade C); Import duties on tobacco, alcohol, fuel (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [],
+  "unsupported": "consumption taxes of Marshall Islands not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5112",
+    "tax": "Import duties; consumption tax",
+    "statute": "Import Duties Act (48 MIRC Ch. 2); Consumption Tax Act 2025 (commencement not read)",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): rmiparliament.org lists the Consumption Tax Act 2025 (2025-0047A) and Excise Tax Act 2025 (2025-0046), both 'Date Commenced 7 October 2025'; their PDFs answered 502 (2026-11-21); the Net Profit Tax Act 2025 of the same package applies from tax years beginning 1 Oct 2026 (s. 749 (2)), so the consumption tax may too; would unlock: the Consumption Tax Act 2025 text and its application date, and the Import Duties Act (48 MIRC Ch. 2) rates"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Import duties on tobacco, alcohol, fuel",
+    "statute": "Import Duties Act",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried (session 4): as above (Excise Tax Act 2025 PDF 502); would unlock: the Import Duties Act schedule in force in 2025"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "CN-HK": {
+  "name": "Hong Kong SAR",
+  "doc": "First pass (R3, 2026-11-21): VAT/GST/sales tax (not levied) (grade B); Duties on liquor above 30 %, tobacco, hydrocarbon oil, methyl alcohol (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [
+   [
+    "vat",
+    "no VAT, GST or general sales tax ordinance in Hong Kong (only the Dutiable Commodities Ordinance Cap. 109 taxes goods)"
+   ]
+  ],
+  "unsupported": "consumption taxes of Hong Kong SAR not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "VAT/GST/sales tax (not levied)",
+    "statute": "no sales or value added tax ordinance in the Laws of Hong Kong; Basic Law art. 108 (low tax policy)",
+    "grade": "B",
+    "kernel_parts": [
+     "Absent"
+    ],
+    "unsupported": [
+     "no provision states the absence"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Duties on liquor above 30 %, tobacco, hydrocarbon oil, methyl alcohol",
+    "statute": "Dutiable Commodities Ordinance (Cap. 109) Schedule 1",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: elegislation.gov.hk needs a browser check (script and laptop curl were redirected); no Wayback copy of the PDF; would unlock: the 2025 version of Cap. 109 Schedule 1 through a browser session"
+    ]
+   }
+  ],
+  "note": null
+ },
+ "NR": {
+  "name": "Nauru",
+  "doc": "First pass (R3, 2026-11-21): VAT/GST (not levied) (grade B); Import duties and excise on tobacco, alcohol, sugar (grade C). Statutes, what was tried and what would unlock each are in results/taxes/Consumption.json.",
+  "absent": [
+   [
+    "vat",
+    "no VAT or GST statute among the Laws of Nauru (registry 2026-11-21); revenue comes from the Employment and Services Tax Act 2014 and customs duties"
+   ]
+  ],
+  "unsupported": "consumption taxes of Nauru not modelled in the first pass (see results/taxes/Consumption.json)",
+  "taxes": [
+   {
+    "oecd": "5111",
+    "tax": "VAT/GST (not levied)",
+    "statute": "no VAT or GST statute among the Laws of Nauru (registry 2026-11-21)",
+    "grade": "B",
+    "kernel_parts": [
+     "Absent"
+    ],
+    "unsupported": [
+     "no provision states the absence; to cite: the revenue laws index of ronlaw.gov.nr"
+    ]
+   },
+   {
+    "oecd": "5121",
+    "tax": "Import duties and excise on tobacco, alcohol, sugar",
+    "statute": "Customs Act 2014 and tariff",
+    "grade": "C",
+    "status": "unsupported",
+    "kernel_parts": [],
+    "unsupported": [
+     "tried: the build server has the Employment and Services Tax Act and NSA laws only; would unlock: the Customs tariff 2025 (ronlaw.gov.nr)"
+    ]
+   }
+  ],
+  "note": null
+ }
+}

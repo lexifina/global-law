@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impuesto sobre la renta (régimen sobre las utilidades)",
+  "statute": "Decreto 10-2012 art. 36 (25 %)",
+  "dated": "Decreto 10-2012 as enacted",
+  "grade": "B",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "régimen opcional simplificado (art. 44, % of gross income) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents (rentas de no residentes sin establecimiento permanente)",
+  "statute": "Decreto 10-2012 Libro I Título V arts. 97-99, 103-105 (art. 104 num. 1 d. repealed by Decreto 19-2013 art. 28)",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P2",
+  "unsupported": [
+   "Decreto 10-2012 art. 104: the num. 2 a. exception for loans from regulated foreign banks, 3 % for news and films, 5 % for transport, insurance and telecoms, and 25 % on other unspecified income (num. 4) not modelled; services are taken as fees or technical advice (15 %)"
+  ],
+  "dated": "Decreto 10-2012 with Decreto 19-2013 notes (world/B12-latin-america/gt/src/d10_2012.txt); pass 8, 2026-11-21",
+  "kernel_parts": [
+   "Wht"
+  ]
+ }
+]

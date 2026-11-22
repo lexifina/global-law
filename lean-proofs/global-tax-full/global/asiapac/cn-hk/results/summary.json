@@ -1,0 +1,206 @@
+{
+ "country": "CN-HK",
+ "name": "Hong Kong SAR",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "no 1.x model: stub PIT line",
+ "adapter": {
+  "A": null,
+  "B": [
+   56,
+   56
+  ],
+  "C": null,
+  "time": "2026-11-22 00:07:16"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Property tax on rental income",
+   "statute": "IRO s. 5",
+   "dated": "2025/26",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "rates deduction"
+   ],
+   "family_file": "lean/CnhkGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on stock transfers",
+   "statute": "SDO Cap. 117 Sch. 1 head 2",
+   "dated": "from 2023-11-17",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnhkGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "VAT/GST/sales tax (not levied)",
+   "statute": "no sales or value added tax ordinance in the Laws of Hong Kong; Basic Law art. 108 (low tax policy)",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "no provision states the absence"
+   ],
+   "status": "not levied",
+   "family_file": "lean/CnhkGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Duties on liquor above 30 %, tobacco and hydrocarbon oil (Cap. 109)",
+   "statute": "Dutiable Commodities Ordinance (Cap. 109) Schedule 1 Part I para. 1-1C, Part II para. 1, Part III para. 1 (d), 1B (b)",
+   "dated": "2025: versions in force from 2024-10-16 and 2025-09-19 (same rates), read in lexifina/hong-kong-law `cap-109/sch-1.md` (git history of the Laws of Hong Kong; versions in force from 2024-10-16, L.N. 136 and 193 of 2024, and from 2025-09-19, Ordinance 39 of 2025 s. 9, which changes only the heading's section references); gap-closing session: C -> A",
+   "grade": "A",
+   "kernel_parts": [
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "bottle size not in the input: per-litre rule (para. 1B-1C)",
+    "s. 26A value approximated by the retail price net of the duty",
+    "cigars and other tobacco (no mass in the basket)",
+    "methyl alcohol"
+   ],
+   "family_file": "lean/CnhkGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Profits tax (corporations)",
+   "statute": "IRO (Cap. 112) s. 14 (1), (3) (b), s. 14AAC, Sch. 8B s. 2 (a)",
+   "dated": "HKLII consolidation version of 25 Jul 2025 (hklii.hk api getcapversiontoc id 51521; cn-hk/law/hk_cap112_hklii_v51521_20250725.json): year of assessment 2025/26",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "s. 14AAC: of connected entities only the one nominated gets the two-tiered rates (taken as nominated); offshore (non-Hong Kong-sourced) profits and the global minimum tax not modelled"
+   ],
+   "family_file": "lean/CnhkGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "IRO (Cap. 112) ss. 14, 15 (1), 20B, 21A, 26, Sch. 8A, 8B",
+   "dated": "HKLII consolidation version of 25 Jul 2025 (hklii.hk api getcapversiontoc id 51521; cn-hk/law/hk_cap112_hklii_v51521_20250725.json): year of assessment 2025/26",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "royalties: an associate (s. 21A (3)) is read as a recipient holding more than 50 % of the payer; the two-tiered rates are applied to the payment alone (s. 14AAC connected entities and the recipient's other Hong Kong profits not known)",
+    "interest and services: cited zeros assume the recipient carries on no business in Hong Kong"
+   ],
+   "family_file": "lean/CnhkGlobal/Corporate.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "4100",
+   "tax": "Rates and government rent",
+   "statute": "Cap. 116 s. 19; Cap. 515 s. 8",
+   "dated": "2025/26",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "progressive domestic rates above $550,000"
+   ],
+   "family_file": "lean/CnhkGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4400",
+   "tax": "Ad valorem stamp duty (Scale 2)",
+   "statute": "SDO Cap. 117 Sch. 1 head 1 (1AAB)",
+   "dated": "2025, split at 26 February 2025 by the purchase's date (IRD AVD FAQ, Internet Archive 2025-01-06 and 2025-06-30)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "undated purchases $3,000,001-$4,323,779: grade C"
+   ],
+   "family_file": "lean/CnhkGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4300",
+   "tax": "Estate duty: abolished 2006",
+   "statute": "Revenue (Abolition of Estate Duty) Ordinance 2005",
+   "dated": "from 2006-02-11",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnhkGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnhkGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social security: none (MPF is a private compulsory saving, non-tax)",
+   "statute": "MPF Schemes Ordinance Cap. 485 (5 % to private trustees)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnhkGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnhkGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 9,
+  "C": 0
+ },
+ "guards": 28,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

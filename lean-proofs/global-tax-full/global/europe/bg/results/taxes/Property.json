@@ -1,0 +1,32 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Real-estate transfer and stamp duties",
+  "statute": "ЗМДТ чл. 44-47 (данък при придобиване, 0,1-3 % по общини)",
+  "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 6: national law read for the frame only",
+  "unsupported": [
+   "данък при придобиване на имущество: 0,1-3 % as each municipality sets (ЗМДТ); Sofia rate not read"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Данък върху недвижимите имоти",
+  "statute": "ЗМДТ чл. 22 (the municipal council sets the tax at 0,1-4,5 per mille of the tax assessment), чл. 20-21 (tax assessment, приложение № 2), чл. 25 ал. 1 (the main home: 50 % reduction); rate: Столична община 1,875 per mille (TEDB tax 1761, situation 01/01/2025)",
+  "dated": "ЗМДТ consolidated to ДВ бр. 81/2024 (in force 24.09.2024; lexifina/bulgaria-law zakon/1997/dv117-zmdt/full-text.md); Sofia's rate: EC Taxes in Europe Database (TEDB), tax 1761, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "other municipalities: localRates.propertyTax (0,1-4,5 per mille); an asset with a region other than Sofia and no rate: grade C",
+   "the 75 % reduction for an owner with reduced working capacity (чл. 25 ал. 2) and the exemptions of чл. 24: not modelled",
+   "the 50 % reduction is applied to the assessment (a rounding difference of at most 1 lev against reducing the tax)",
+   "the 5 % discount for paying the year by 30 April (чл. 28 ал. 2) is a payment term: not modelled"
+  ],
+  "lfw": 1
+ }
+]

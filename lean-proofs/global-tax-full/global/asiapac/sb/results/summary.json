@@ -1,0 +1,201 @@
+{
+ "country": "SB",
+ "name": "Solomon Islands",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 19:09:11"
+ },
+ "taxes": [
+  {
+   "oecd": "5112",
+   "tax": "Sales tax (Cap. 125) on telecommunications, restaurants and fuel",
+   "statute": "Sales Tax Act (Cap. 125) s. 3 (1), Schedule One items 1, 2, 12, 13",
+   "dated": "Reprint as in force at 5 February 2024 (IRD, STATUS: CURRENT)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat",
+    "Excise"
+   ],
+   "unsupported": [
+    "per-ticket and professional-service items of Schedule One not modelled",
+    "no 2025-dated text: amendments after 5 February 2024 not checked"
+   ],
+   "family_file": "lean/SbGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5112",
+   "tax": "Goods tax (Cap. 122)",
+   "statute": "Goods Tax Act (Cap. 122) s. 69, Second Schedule (L.N. 73 of 2019): imported goods 15 %, prescribed local manufactures 10 %, rice 5 %",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "rates read in the Reprint as in force 5 February 2024; the base is the wholesale sale value (s. 69, 130 % of cost rules), which the canonical basket does not carry; would unlock: a wholesale-value field or a margin rule"
+   ],
+   "family_file": "lean/SbGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duty",
+   "statute": "Customs and Excise Act (Cap. 121) and its tariff",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: IRD legislation page (no excise tariff; Customs and Excise Amendment (No. 2) Act 2012 only), PacLII via Wayback (consolidation 1996); would unlock: the Customs and Excise tariff as in force 2025 (customs.gov.sb)"
+   ],
+   "family_file": "lean/SbGlobal/Consumption.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies (30 %)",
+   "statute": "Income Tax Act (Cap. 123) s. 33 (1)",
+   "dated": "Reprint as in force at 5 February 2024; later amendments not checked",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "companies not incorporated in Solomon Islands 35 % (s. 33 (2)) and approved mining companies not modelled"
+   ],
+   "family_file": "lean/SbGlobal/Corporate.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding on payments to non-residents (dividends 30 %, interest and royalties 15 %, professional services 20 %)",
+   "statute": "Income Tax Act (Cap. 123) ss. 34, 36 (1) (b), Sixth Schedule",
+   "dated": "Reprint as in force at 5 February 2024",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "management services 35 cents taken under services at the professional-services rate 20 %"
+   ],
+   "family_file": "lean/SbGlobal/Corporate.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "Income Tax Act (Cap. 123): dividends, interest, rent WHT; no CGT",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade A (the build server): "
+   ],
+   "family_file": "lean/SbGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SbGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property (partly)",
+   "statute": "provincial/Honiara City Council property rates",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (bg): "
+   ],
+   "family_file": "lean/SbGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SbGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SbGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on transfers of property (2 / 3 / 4 % by bracket)",
+   "statute": "Stamp Duties Act (Cap. 126) s. 3 (1), Schedule item 11",
+   "dated": "official reprint as in force 5 February 2024, published by IRD as the current Act (October 2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "rate by bracket on the whole consideration; booked on the transferee",
+    "shares, leases and other instruments not modelled"
+   ],
+   "family_file": "lean/SbGlobal/Property.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (provident fund, non-tax)",
+   "statute": "National Provident Fund Act (Cap. 109)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SbGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 5,
+  "C": 4
+ },
+ "guards": 12,
+ "sorry": 0,
+ "cases": 1,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

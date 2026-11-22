@@ -1,0 +1,279 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 06.01.06, 06.01.12",
+  "dated": "CGI suivant LFI 2025",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "domestic water/electricity allowance (10 m3 / 100 kWh)",
+   "maize, kerosene exemptions (no basket line)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Droit d'accises (boissons, cigarettes)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 03.01.01, 03.01.04, annex 2",
+  "dated": "CGI suivant LFI 2025",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "ExciseRule (kernel 2.1, valueBase .beforeTax)",
+   "exciseRuleFamily"
+  ],
+  "unsupported": [
+   "per-litre lines of the annex not mapped",
+   "whisky 275 %, rum Ar 500/L",
+   "fuel taxes (not in the table read)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Impôt sur les revenus (personnes morales) + minimum de perception",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 01.01.10, 01.01.14",
+  "dated": "CGI suivant LFI 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRule (kernel 2.1)",
+   "MinimumTax (OHADA floor/cap)",
+   "step 1 000"
+  ],
+  "unsupported": [
+   "loss age (5 years)",
+   "investment reduction (art. 01.01.14 C)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Retenues non-résidents (10 %) and IRCM (20 %)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "CGI art. 01.01.14 II, 01.04.04",
+  "dated": "CGI suivant LFI 2025",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "treaties"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les revenus des capitaux mobiliers (dividendes)",
+  "statute": "CGI art. 01.04.04 (20 %, libératoire) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les revenus des capitaux mobiliers (intérêts)",
+  "statute": "CGI art. 01.04.04 (20 %) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "scope exemptions not checked"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Impôt sur les plus-values immobilières",
+  "statute": "CGI art. 01.05.04 (gain = price − 75 % of the price), art. 01.05.07 (20 %): 5 % of the price [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "administrative minimum value"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.gainsFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "CNaPS employer contributions (pensions, work accidents, family benefits: 13 %)",
+  "statute": "CLEISS 'Les cotisations à Madagascar' (1 Jan 2026, R4/fetch/cleiss11/madagascar.html); the rate decree is not held; dating for 2025: the same employer rate (general scheme 13 %, employee 1 %) on the CNaPS page 'Les taux de cotisation' of 2011 (Wayback 20110525032402, R4/fetch/p16/cnaps_taux_wb20110525.html) and on the CLEISS 2026 page; SME 262 680 MGA since 1 March 2024, so the 8 x SME ceiling of the 2026 page (2 101 440) also held in 2025; no amending text located",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "the 8 x SME ceiling is footnoted on the employee share only: the employer share is applied to the whole wage (flag)",
+   "the employee's 1 %",
+   "optional CNaPS supplementary pension"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4100",
+  "tax": "Impôt foncier sur la propriété bâtie",
+  "statute": "CGI art. 10.02.10 (5 % of the rental value; minimum Ar 5 000) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "IFT (communal tariffs)",
+   "Ar 5 000 minimum"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.propertyFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Droit de vente d'immeubles",
+  "statute": "CGI art. 02.02.39 1° (5 %) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4300",
+  "tax": "Droits de mutation à titre gratuit",
+  "statute": "CGI art. 02.03.25 (successions: fixed duties, collection suspended; gifts 5 %, direct descendants a fixed Ar 40 000) [text version: CGI, édition 2025 incorporating the LFI 2025 (Loi de finances initiale 2025)]",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "fixed Ar 40 000 duty for direct descendants"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Transfers.lean",
+  "kernel_parts": [
+   "R4.estateFlatFamily"
+  ]
+ },
+ {
+  "package": "P6",
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "CGI LFI 2025 (whole code)",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "Absent.lean",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "MG CGI (LFI 2025, complete code): no tax on net wealth; 'fortune' occurs only in the family-income and information-duty provisions"
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Code général des impôts suivant LFI 2025 (and LFI 2026)",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.impots.mg (laptop only))",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (impôt synthétique (IS) for small taxpayers; IRSA on wages; provision not located by keyword in the reachable text)",
+  "statute": "Code général des impôts suivant LFI 2025 (and LFI 2026)",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "triage minor: impôt synthétique: presumptive tax on small businesses, not on households. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "local copy (https://www.impots.mg (laptop only))",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Zakat (as a tax)",
+  "statute": "cdi_lfi2026.txt (whole code)",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [],
+  "status": "not levied",
+  "grade": "-",
+  "module": "",
+  "kernel_parts": [],
+  "why": "MG: the general tax code held (cdi_lfi2026.txt, 771k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Inter-company medical service (OSTIE / SMIE), employer contribution (5 %)",
+  "statute": "CLEISS 'Les cotisations à Madagascar', 2020 edition ('Taux de cotisation au 1er janvier 2020'; Wayback 20220819023952, R4/fetch/p19/mg_cleiss_wb20220819.html): maladie, maternité 5 % employer, 1 % employee, paid to the inter-company medical service the employer joins (OSTIE listed first); the 1 January 2026 edition (R4/fetch/cleiss11/madagascar.html) gives the same 5 % / 1 %, so the rate is taken as unchanged through 2025 (no 2021-2025 edition captured; no amending text located: flag)",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "rates differ by medical service (OSTIE is the Antananarivo one)",
+   "classification: compulsory payment to an inter-company body, treated as SSC (flag)",
+   "no edition dated 2021-2025 held: 2025 rate bracketed by the 2020 and 2026 editions (flag)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Fonds malgache de formation professionnelle (1 %)",
+  "statute": "Loi n°2017-025 (contribution financière des entreprises au développement de la formation professionnelle continue), Décret n°2018-1509 du 13 novembre 2018 and Arrêté n°911/2019 (collection from 1 January 2019), as stated on the FMFP page 'Règlement des cotisations sociales par les entreprises' (29 March 2019; Wayback 20221230103048, R4/fetch/p19/mg_fmfp_reglement_wb20221230.html): 1 % of the capped gross payroll, collected with the CNaPS return; the CLEISS 1 January 2026 edition gives the same 1 % (corroboration only; no amending text located: flag)",
+  "dated": "Code général des impôts, LFI 2025",
+  "unsupported": [
+   "the law, decree and arrêté themselves not read (FMFP page)",
+   "the payroll ceiling ('masse salariale brute plafonnée'; the page does not state it) is not applied: 1 % of the whole payroll (flag)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ }
+]

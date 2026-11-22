@@ -1,0 +1,229 @@
+{
+ "country": "SM",
+ "name": "San Marino",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:29:54"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Legge 166/2013 (IGR) redditi di capitale",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/SmGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "VAT",
+   "statute": "Imposta generale sulle importazioni / imposta monofase (Legge 22 dicembre 1972 n. 40 and later)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "consigliograndeegenerale.sm not fetched; Global law (the 1.x source) not used (coordinator, 2026-11-21); pass 9: San Marino has no VAT: imports bear the single-stage imposta monofase; its act was not fetched",
+   "unsupported": [
+    "would unlock: the imposta monofase law and its rate decrees"
+   ],
+   "family_file": "lean/SmGlobal/Consumption.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "imposte speciali di consumo",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not reached in the P1 pass",
+   "unsupported": [
+    "would unlock: the excise act's 2025 rate articles"
+   ],
+   "family_file": "lean/SmGlobal/Consumption.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "1200",
+   "tax": "Imposta generale sui redditi (persone giuridiche)",
+   "statute": "Legge 16 dicembre 2013 n.166 art. 43 c. 1 (17%) [year in force 2025 (pass 18), unchanged-confirmed: testo coordinato with notes, aggiornato al 12.12.2025 (sm/law/igr_166_2013_coord_connote.*): art. 43 c. 1 (17 %) carries no amendment; the 18 % of L. 12.11.2025 n. 141 art. 54 c. 6 is for the periods 2026-2030, and art. 54 c. 1-2 apply that law's changes from the 2026 period only; L. 22.12.2025 n. 158 does not touch art. 43]",
+   "dated": "testo coordinato con note (12.12.2025): art. 43 c. 1 unamended; L. 141/2025 art. 54 c. 1-2, 6 (from 2026)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "new-business reductions (50 % rate cut for the first five periods) and the reinvested-profit relief (art. 61) are not applied"
+   ],
+   "yif18": "unchanged-confirmed",
+   "family_file": "lean/SmGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Ritenute alla fonte su redditi corrisposti a non residenti (dividend, interest, services)",
+   "statute": "Legge 16 dicembre 2013 n.166 art. 5, 102, 103 [year in force 2025 (pass 18), unchanged-confirmed: testo coordinato with notes (12.12.2025): art. 148 c. 8 states the wording of art. 102 and 103 applying until 31.12.2025: art. 102 c. 1 20 %, c. 2 3 %; art. 103 c. 1 13 %, c. 6 5 % on profits paid to individuals and none to others, as modelled; art. 5 as amended by L. 141/2025 art. 2 applies from 2026 (art. 54 c. 1-2)]",
+   "dated": "testo coordinato con note (12.12.2025), art. 148 c. 8 (2025 wording of art. 102-103); L. 141/2025 art. 54 c. 1-2",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "services are taken as self-employed or assimilated services (art. 27); the 3 % rate for listed services is not applied",
+    "interest is taken as paid by a non-financial company (art. 103 c. 1); bank interest follows c. 2",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif18": "unchanged-confirmed",
+   "family_file": "lean/SmGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Ritenuta sui redditi di lavoro autonomo (royalty) (royalty)",
+   "statute": "Legge 16 dicembre 2013 n. 166 art. 7 c. 2 b), art. 27 c. 6 b), art. 102 c. 1 [year in force 2025 (pass 18), unchanged-confirmed: testo coordinato with notes (12.12.2025): art. 27 c. 6 b) is in the original 2013 text (amended only by D.D. 127/2015, which adds b-bis, and by L. 141/2025 art. 11 from 2026); art. 102 c. 1 (20 %) in the 2025 wording of art. 148 c. 8]",
+   "dated": "testo coordinato con note (12.12.2025): art. 27 c. 6 b) original wording; art. 148 c. 8",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "royalties are taken as paid by a San Marino operator (art. 7 c. 2 b)); the 3 % rate of art. 102 c. 2 (artistic, cultural, sporting services) does not concern royalties",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif18": "unchanged-confirmed",
+   "family_file": "lean/SmGlobal/Corporate.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/SmGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/SmGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "imposta sugli immobili",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/SmGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Imposta di registro e di trascrizione (trasferimenti di immobili)",
+   "statute": "Legge 29 ottobre 1981 n. 85 Tabella A n. 1 par. 1 (2,5 % per gli atti dal 1.1 al 31.12.2025, Legge 20 dicembre 2024 n. 202 art. 1 c. 3); Legge 29 ottobre 1981 n. 83 art. 13 tariffa (trascrizione 1 %)",
+   "dated": "texts updated to 3.6.2025 (lexifina/san-marino-law); the reduced registration rate applies to deeds of 2025 (L. 202/2024)",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "the fixed 70 EUR transcription charge and the mortgage tax (0,5 %) not modelled"
+   ],
+   "family_file": "lean/SmGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social contributions and payroll taxes",
+   "statute": "contributi sociali a carico del datore di lavoro (ISS)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P4 pass (no dated employer rates with quotes in the 1.x model or fetched texts)",
+   "unsupported": [
+    "would unlock: the act's 2025 employer rates and ceilings (official consolidation or the 1.x model's parameters with quotes)"
+   ],
+   "family_file": "lean/SmGlobal/Social.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "imposta di successione",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/SmGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "none recorded",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/SmGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 0,
+  "C": 9
+ },
+ "guards": 13,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

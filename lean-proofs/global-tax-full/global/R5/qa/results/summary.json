@@ -1,0 +1,408 @@
+{
+ "country": "QA",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Individuals capital income and gains",
+   "statute": "no personal income tax on residents (1.x no-PIT stub, with its citation)",
+   "dated": "2025",
+   "grade": "B",
+   "status": "not levied",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "non-resident or business income of individuals (e.g. SA non-Saudi individuals in business, art. 7(a)(2)) not modelled"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "الضريبة على الدخل (income tax)",
+   "statute": "ITL 24/2018 art. 4, 9",
+   "dated": "MoJ Al Meezan current text; pass 3q year-in-force audit: re-cited: MoJ record law-2018-24 dates art. 9 to 13/12/2018 (no amendment) and art. 4 to 22/12/2022 (FT reviewer 7)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRule (2.1, shareKey exemptShareBp, complement)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "exempt Qatari/GCC share as input",
+    "loss time limit (Regulations)",
+    "Pillar Two top-up"
+   ],
+   "withholding": {
+    "grade": "A",
+    "rules": "royalty, interest, services 5 % final (ITL art. 9(2)); dividend 0 % cited (art. 4(8))",
+    "pass": "3i (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "الاستقطاع (withholding 5 %)",
+   "statute": "ITL 24/2018 art. 9(2)",
+   "dated": "as above; pass 3q year-in-force audit: re-cited: MoJ record: art. 9 dated 13/12/2018, no amendment",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "guards": 1,
+   "unsupported": []
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "GRSIA employer contribution (Qatari employees)",
+   "statute": "Social Insurance Law 1/2022 art. 11 (14 %, QAR 100,000 a month)",
+   "dated": "Al Meezan (1.x law folder); pass 3q year-in-force audit: re-cited: MoJ API record ff5e6696 (fetched 2026-11-21): art. 11 not amended, no previous version, no related legislation; CD 3/2025 is the executive regulation",
+   "grade": "A",
+   "kernel_parts": [
+    "R5Common.employerOn"
+   ],
+   "guards": 0,
+   "unsupported": [
+    "GCC nationals: home scheme"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "رسوم رخص العمل (work-permit fee per foreign worker)",
+   "statute": "Cabinet Decision 36/2006 art. 1(1) (QAR 100 for each year of a work permit; repealed 20/08/2025 per the MoJ record), Cabinet Decision 38/2007 (art. 3 only); Minister of Labour Decision 32/2025 art. 1 (QAR 100 a year), art. 4 (Qataris, children of Qatari mothers, GCC nationals exempt), in force 26/09/2025",
+   "dated": "api.moj.gov.qa/api/v1/Legislation/{6095bed3-2e13-45a1-b137-2b41b4ad322f, 781674a8-8e81-40d8-8352-2a74fc1029ae, d0fb0e98-400e-4741-af84-8508f1cc1288} (fetched 2026-11-21)",
+   "grade": "A",
+   "kernel_parts": [
+    "company line: 100 x company.expatWorkers",
+    "household (nationality expatriate): 100 per adult with wages, bearer employer; kernel 2.6.0 employerSector: given = private employer, absent = presumed (noted in the statute string)"
+   ],
+   "guards": 1,
+   "unsupported": [
+    "without company.expatWorkers: grade C line",
+    "public-sector employers (outside both decisions) not an input",
+    "recruitment-agency licences and attestations: not per worker, not booked"
+   ],
+   "pass": "3p"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Transfer and registration taxes on immovable property",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "registration fee: Al Meezan is a JavaScript SPA; fee decision not reached; only secondary sources (pass 3j-3m)",
+    "pass 3p: Qatar MoJ legislation API title list (all 9 753 records, `mena3p_dl/qa_all_titles.tsv`): Law 14/1964 on real-estate registration and its regulation (Amiri Decision 12/1966, amended by CD 12/1993; read via the API) mention the registration fee without an amount; no fee decision for registration found by title. Kept C."
+   ],
+   "pass": "3m (split from the combined 4400/4100 entry)"
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "الضريبة الانتقائية (excise)",
+   "statute": "Law 25/2018 art. 4 and the table of excise goods (tobacco 100 %, carbonated drinks 50 %, energy drinks 100 %, special-nature goods 100 %)",
+   "dated": "Official Gazette 1/2019 (17/01/2019) pp. 35-55, MoJ scan law/qa_og_2019_01_law25_2018.pdf; MoJ API record (2026-11-21) dates every amendment (Law 2/2026) from 2026-07-07, so the 2018 table governs 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule x4 (beforeTax, vatBp 0)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "standard price list floor (art. 4) not applied",
+    "special-nature goods (alcohol, pork) not itemised in the law: not computed",
+    "Executive Regulations (price excluding excise) not read: beforeTax reading of art. 4 (B)"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Qatar as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Qatar for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C634&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/qa.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, customsFamily)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 220300000000 (MFN duty 'Special goods': specific or compound duty, unit/currency not mapped); 220421000000 (MFN duty 'Special goods': specific or compound duty, unit/currency not mapped); 220830000000 (MFN duty 'Special goods': specific or compound duty, unit/currency not mapped)",
+    "GCC customs union (origin BH, KW, OM, SA, AE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)",
+    "Pan-Arab free trade area (GAFTA) (origin BH, EG, IQ, JO, KW, LB, LY, MA, OM, PS, SA, SD, SY, TN, AE, YE): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "module": "Customs.lean"
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4100",
+   "why": "4100: no recurrent property tax: Permanent Constitution of the State of Qatar (2003) art. 43: taxes are imposed only by a law (Constitute Project English text, law/cp_Qatar_2003.txt); no law levies it; tax laws read (MoJ Al Meezan): Income Tax Law 24/2018, Excise Tax Law 25/2018. convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Permanent Constitution of the State of Qatar (2003) art. 43: taxes are imposed only by a law (Constitute Project English text, law/cp_Qatar_2003.txt); no law levies it; tax laws read (MoJ Al Meezan): Income Tax Law 24/2018, Excise Tax Law 25/2018. convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "4300",
+   "why": "4300: no inheritance, estate or gift tax: Permanent Constitution of the State of Qatar (2003) art. 43: taxes are imposed only by a law (Constitute Project English text, law/cp_Qatar_2003.txt); no law levies it; tax laws read (MoJ Al Meezan): Income Tax Law 24/2018, Excise Tax Law 25/2018. convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "6000",
+   "why": "6000: no zakat or other tax outside the taxes listed: Permanent Constitution of the State of Qatar (2003) art. 43: taxes are imposed only by a law (Constitute Project English text, law/cp_Qatar_2003.txt); no law levies it; tax laws read (MoJ Al Meezan): Income Tax Law 24/2018, Excise Tax Law 25/2018. convention R5-3k-G (Gulf state, no closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3k).",
+   "source": "statute",
+   "grade": "A"
+  },
+  {
+   "oecd": "5111",
+   "why": "5111: no VAT: Permanent Constitution art. 43 (taxes only by a law; the article is unchanged by the 2024 amendments: lexifina/qatar-law, versions of 9/6/2005 and 6/11/2024); no VAT law in force: the Ministry of Justice legislation API title list (all 9 753 records, pass 3p) has no VAT act (its two 'value added' titles are a tax treaty and a telecoms regulation); tax acts in force: Income Tax Law 24/2018, Excise Tax Law 25/2018. The GCC VAT Agreement binds only once a member enacts its own law. convention R5-3k-G; grade A (gap-closing pass, was B)",
+   "grade": "A",
+   "source": "statute"
+  }
+ ],
+ "cases": [
+  {
+   "id": "qa-h1",
+   "total": 26200,
+   "byOecd": {
+    "1100": 0,
+    "2100": 8400,
+    "2200": 16800,
+    "5121": 1000
+   },
+   "borne": {
+    "consumer": 1000,
+    "employer": 16800,
+    "entity": 8400,
+    "withheld": 0
+   },
+   "net": 321600,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": [
+    "tobacco excise: the standard price list floor (Law 25/2018 art. 4) not applied",
+    "alcohol: 'السلع ذات الطبيعة الخاصة' 100 % (Law 25/2018 table) is not itemised in the law; not computed"
+   ]
+  },
+  {
+   "id": "qa-c1",
+   "total": 73500,
+   "byOecd": {
+    "1200": 73500
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 70000,
+    "withheld": 3500
+   },
+   "net": 730000,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": [
+    "domestic minimum top-up tax (Pillar Two, 2025 amendment) not modelled",
+    "3000 work-permit fee (QAR 100 a year per foreign worker): company.expatWorkers not given (grade C)"
+   ]
+  },
+  {
+   "id": "qa-h2",
+   "total": 252000,
+   "byOecd": {
+    "1100": 0,
+    "2100": 84000,
+    "2200": 168000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 168000,
+    "entity": 84000,
+    "withheld": 0
+   },
+   "net": 1416000,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "qa-c3",
+   "total": 60000,
+   "byOecd": {
+    "1200": 60000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 60000,
+    "withheld": 0
+   },
+   "net": 940000,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": [
+    "domestic minimum top-up tax (Pillar Two, 2025 amendment) not modelled",
+    "3000 work-permit fee (QAR 100 a year per foreign worker): company.expatWorkers not given (grade C)"
+   ]
+  },
+  {
+   "id": "qa-h3",
+   "total": 2500,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5121": 2500
+   },
+   "borne": {
+    "consumer": 2500,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": [
+    "tobacco excise: the standard price list floor (Law 25/2018 art. 4) not applied"
+   ]
+  },
+  {
+   "id": "qa-w1",
+   "total": 40000,
+   "byOecd": {
+    "1100": 15000,
+    "1200": 25000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 10000,
+    "withheld": 30000
+   },
+   "net": 90000,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": [
+    "domestic minimum top-up tax (Pillar Two, 2025 amendment) not modelled",
+    "3000 work-permit fee (QAR 100 a year per foreign worker): company.expatWorkers not given (grade C)"
+   ]
+  },
+  {
+   "id": "qa-p1",
+   "total": 21200,
+   "byOecd": {
+    "1200": 20000,
+    "3000": 1200
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 21200,
+    "withheld": 0
+   },
+   "net": 178800,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": [
+    "domestic minimum top-up tax (Pillar Two, 2025 amendment) not modelled"
+   ]
+  },
+  {
+   "id": "qa-p2",
+   "total": 12800,
+   "byOecd": {
+    "1100": 0,
+    "2100": 12600,
+    "3000": 200
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 200,
+    "entity": 12600,
+    "withheld": 0
+   },
+   "net": 167400,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": []
+  },
+  {
+   "id": "qa-p3",
+   "total": 14000,
+   "byOecd": {
+    "1100": 0,
+    "2100": 14000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 14000,
+    "withheld": 0
+   },
+   "net": 186000,
+   "notModelled": [
+    "2300",
+    "4400",
+    "4500",
+    "5200"
+   ],
+   "unsupported": [
+    "GCC national: home state's scheme (not modelled)"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 11,
+ "theorems": 1
+}

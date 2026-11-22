@@ -1,0 +1,18 @@
+name = "SeGlobal"
+version = "0.1.0"
+defaultTargets = ["SeGlobal", "seglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); SETax = the 1.x model, vendored from cmp20/nordic/se/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "SETax"
+
+[[lean_lib]]
+name = "SeGlobal"
+
+[[lean_exe]]
+name = "seglobal"
+root = "SeGlobal.Main"

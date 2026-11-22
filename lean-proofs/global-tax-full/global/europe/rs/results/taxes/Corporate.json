@@ -1,0 +1,48 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Porez na dobit pravnih lica",
+  "statute": "Zakon o porezu na dobit pravnih lica čl. 39 (15 %) [year in force 2025 (pass 16), re-cited 2025: paragraf.rs text captured by the Internet Archive 2025-06-24 (rs/law/pdpl_wb20250624.*): čl. 39 \"iznosi 15%\", word for word the text used]",
+  "dated": "official consolidation in force in 2025 (via lexifina/serbia-law, commit a90dae4616)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "porez na dobit po odbitku (čl. 40, 20 %) not modelled",
+   "loss carry-forward (5 years) not modelled"
+  ],
+  "yif16": "re-cited 2025",
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments abroad",
+  "statute": "Zakon o porezu na dobit pravnih lica čl. 40 (20 %; 25 % to listed tax havens)",
+  "dated": "Zakon o porezu na dobit pravnih lica čl. 40 st. 1 (20 %), st. 5 (25 % to preferential-tax jurisdictions), version in force in 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "Porez po odbitku (usluge) (services)",
+  "statute": "Zakon o porezu na dobit pravnih lica čl. 40 (withholding)",
+  "dated": "Zakon o porezu na dobit pravnih lica čl. 40 st. 1 (20 % on market research, accounting, audit and other legal and business consulting services), version in force in 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services are taken as the listed consulting/audit services; the 25 % tax-haven rate is not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "gap": 6
+ }
+]

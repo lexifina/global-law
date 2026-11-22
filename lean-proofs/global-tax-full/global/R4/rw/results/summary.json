@@ -1,0 +1,215 @@
+{
+ "country": "RW",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Law Nº 049/2023 of 05/09/2023 art. 4 (b) (18 %); Law Nº 009/2025 of 27/05/2025 does not change the rate",
+   "dated": "Law Nº 027/2022 of 20/10/2022 on income taxes, as amended by Law Nº 051/2023 of 05/09/2023 and Law Nº 014/2025 of 27/05/2025",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "zero-rated and exempt supplies"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise duty",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Law Nº 011/2025 of 27/05/2025 art. 4 and annex (in force on publication; Law Nº 050/2023 before), art. 6 (b) (base: selling price)",
+   "dated": "Law Nº 027/2022 of 20/10/2022 on income taxes, as amended by Law Nº 051/2023 of 05/09/2023 and Law Nº 014/2025 of 27/05/2025",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "local-content 40 % rates",
+    "spirits, tobacco and fuel lines",
+    "Law 050/2023 for the months before publication"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Law 027/2022 art. 48 (1) as amended by Law 051/2023 (28 %, rounded down to FRW 1 000)",
+   "dated": "Law Nº 027/2022 of 20/10/2022 on income taxes, as amended by Law Nº 051/2023 of 05/09/2023 and Law Nº 014/2025 of 27/05/2025",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "listed-company and incentive rates",
+    "loss rules not read"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding tax (art. 60)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Law 027/2022 art. 60 (15 %)",
+   "dated": "Law Nº 027/2022 of 20/10/2022 on income taxes, as amended by Law Nº 051/2023 of 05/09/2023 and Law Nº 014/2025 of 27/05/2025",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "5 % on listed securities",
+    "treaties"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (trading licence tax (districts))",
+   "statute": "Law n° 75/2018 of 07/09/2018 determining the sources of revenue and property of decentralised entities (immovable property tax, rental income tax, trading licence tax)",
+   "dated": "-",
+   "unsupported": [
+    "triage minor: trading licence tax (districts): local business licence. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "not reached",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Withholding tax on dividends (15 %)",
+   "statute": "Law n° 027/2022 of 20/10/2022 on income tax, art. 60 1° (not amended by laws 051/2023 and 014/2025)",
+   "dated": "-",
+   "unsupported": [
+    "finality for individuals not stated in law 027/2022 (treated as the final tax on the payment)",
+    "dividends under art. 47 (2) and collective investment distributions"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Withholding tax on interest (15 %)",
+   "statute": "Law n° 027/2022 art. 60 2° [text version: Law n° 027/2022 of 20/10/2022 as published, not amended on this point by Laws 051/2023 and 014/2025]",
+   "dated": "-",
+   "unsupported": [
+    "interest on deposits of at least one year is exempt (art. 60 2° a): not distinguished",
+    "finality not stated"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Mandatory pension scheme, employer share (6 % = half of 12 %)",
+   "statute": "Prime Minister's Order n° 086/2024 art. 1 (a) (12 % from 1 January 2025; repeals PMO 009/2016) and Law n° 05/2015 art. 8 (employer and employee contribute equally) [text version: Prime Minister's Order n° 086/2024 as published (12 % from 1 January 2025); Law n° 05/2015 as published]",
+   "dated": "-",
+   "unsupported": [
+    "occupational hazards and maternity leave contributions (not modelled)",
+    "employee share 6 % (2100, outside this package)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Maternity leave benefits scheme, employer share (0,3 % of gross salary)",
+   "statute": "Law n° 003/2016 establishing and governing maternity leave benefits scheme (Official Gazette n° Special of 20/04/2016) art. 6-7; Law n° 049/2024 of 04/06/2024 amends registration, audit, benefit calculation, payment and reimbursement, not the rate of art. 7 [text version: Law n° 003/2016 as published (Official Gazette n° Special of 20/04/2016), with Law n° 049/2024 of 04/06/2024]",
+   "dated": "-",
+   "unsupported": [
+    "the employee's 0,3 %"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Occupational hazards scheme, employer contribution (2 % of salary)",
+   "statute": "RSSB page 'Occupational Hazards' (Wayback 2013-07-09, R4/fetch/p14/rw_rssb_oh_2013.html): 'A contribution of 2% of salary is paid on behalf of mandatory members by employers'; Law n° 06/2003 of 22/03/2003 (RSSB copy, damaged: art. 1-5 OCR'd, the rate articles lost) not usable; edition 2013 flagged",
+   "dated": "-",
+   "unsupported": [
+    "official page of 2013 (older than 2025; no later instrument located that changes the rate)"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 3
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (EAC Common External Tariff)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "East African Community Customs Management Act 2004 (charging provisions not read) and the EAC CET; EAC Common External Tariff 2022 Version (Annex 1 to the Protocol on the Establishment of the East African Community Customs Union), edition 'CET 2022 VERSION updated June 2025' (eac.int, Wayback 20260303052110, R4/fetch/gap/eac_cet2022_upd_jun2025_wb20260303052110.pdf): Legal Notice No. EAC/117/2022 para 1 (four bands 0, 10, 25 and 35 per centum) and 2 (in force 1 July 2022); the amending Legal Notices printed at its end (EAC/129/2023, 81/2024, 147/2024, 298/2024, 32/2025, 171/2025) touch none of the lines below",
+   "dated": "CET 2022 version as updated to June 2025 (lines unchanged by the 2023-2025 amending notices): the whole of 2025",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "stays of application and duty remissions by partner state (EAC Gazette notices for 2024/25 and 2025/26) not read",
+    "COMESA / AfCFTA / EPA preferences not applied (CET charged)",
+    "national import levies (KE Import Declaration Fee and Railway Development Levy, UG/TZ/RW/BI equivalents) not modelled",
+    "lines of other HS headings (grade C)"
+   ],
+   "guards": 6
+  }
+ ],
+ "cases": 6,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

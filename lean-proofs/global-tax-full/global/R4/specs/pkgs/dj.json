@@ -1,0 +1,111 @@
+{
+ "cc": "DJ",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "unsupported",
+   "name": "Stamp duty",
+   "statute": "Code général des impôts + lois de finances (Journal officiel, texte-juridique pages; LF 2025)",
+   "why": "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.journalofficiel.dj)",
+   "triage": "minor"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (patente / contribution des patentes or contribution des licences (CGI); provision not located by keyword in the reachable text)",
+   "statute": "Code général des impôts + lois de finances (Journal officiel, texte-juridique pages; LF 2025)",
+   "why": "triage moderate: patente: business licence on traders and professions, not a household tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://www.journalofficiel.dj)",
+   "triage": "moderate"
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnss",
+   "level": "social",
+   "rateBp": 1570,
+   "grade": "B",
+   "name": "CNSS employer contributions (family 5,5 %, health and work accidents 6,2 %, pensions 4 %)",
+   "statute": "CNSS Djibouti, page 'Déclaration et versement des cotisations' (published 4 Dec 2016; Internet Archive capture 2024-07-13; held copy dj/law/w5/dj_cnss_declaration_2016.html)",
+   "doc": "CNSS: 'Les cotisations sociales représentent 21.7 % des rémunérations totales versées. Dont : 5.5 % pour le régime des prestations familiales, 8.2 % pour le régime de soins et accident de travail, 8 % pour le régime de retraite ... retraite ... employeur (4 %) et salarié (4 %). Pour le régime des soins, les cotisations sont respectivement 5 % pour l'employeur et de 2 % pour le salarié'; base: 'l'ensemble des rémunérations'. Employer: 21,7 - 4 - 2 = 15,7 %.",
+   "unsupported": [
+    "page dated 2016 (flag: no later rate decree held)",
+    "the employee's 6 %"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyBands",
+   "fam": "cfpb",
+   "grade": "B",
+   "kinds": [
+    "home",
+    "realEstate"
+   ],
+   "bands": [
+    [
+     1120000,
+     1000
+    ],
+    [
+     3840000,
+     1800
+    ]
+   ],
+   "top": 2500,
+   "marginal": true,
+   "onAnnual": true,
+   "abateBp": 2000,
+   "testValues": [
+    1000000,
+    5000000
+   ],
+   "expect": [
+    80000,
+    641600
+   ],
+   "name": "Contribution foncière sur les propriétés bâties (10 / 18 / 25 % of rent or rental value less 20 %)",
+   "statute": "CGI (refonte, Loi n° 42/AN/08/6ème L, journalofficiel.dj text, R4/fetch/dj9) art. 137-144; later finance laws not read (flag) [text version: the 2008 refonte (Loi n° 42/AN/08/6ème L) as published on journalofficiel.dj (R4/fetch/dj9/cgi2008.txt), without later finance laws (flag)]",
+   "doc": "art. 142: base = annual rents for let property, rental value otherwise, 'Il est appliqué un abattement de 20 % sur cette base imposable'; art. 144: 'de 0 à 1.120.000 FD : 10 % de 1.120.001 à 3.840.000 FD : 18 % au delà de 3.840.000 FD : 25 %' (read as marginal bands, flag); art. 140: no exemption for an owner-occupied home.",
+   "unsupported": [
+    "band reading (marginal vs whole-base) not settled by the text: marginal used",
+    "urban properties only (art. 137); new buildings exempt for five years (art. 141)",
+    "land (contribution foncière non bâtie 25 %, art. 157) not modelled",
+    "amendments 2009-2025 not read"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "mutImm",
+   "grade": "B",
+   "rateBp": 1000,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Droit d'enregistrement on sales of immovables (10 %)",
+   "statute": "CGI (refonte 2008) art. 499-500 (amendments 2009-2025 not read, flag)",
+   "doc": "art. 499: 'sont soumises au droit de 10 %, les ventes d'immeubles et de droits immobiliers de toute nature ...'; art. 500: 7 % for a first acquisition by an individual of a dwelling for exclusive residential use (up to 1 000 m2).",
+   "unsupported": [
+    "7 % first-home rate (art. 500): needs the buyer's first-purchase status"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI refonte 2008 (Loi n° 42/AN/08/6ème L, whole text, R4/fetch/dj9/cgi2008.txt)",
+   "why": "DJ CGI 2008 recast (complete text): no tax on net wealth; the only occurrence of 'fortune' is in a penal provision (helping to hide 'la fortune d'autrui' from tax); no 'patrimoine net' (later finance laws not read)"
+  }
+ ]
+}

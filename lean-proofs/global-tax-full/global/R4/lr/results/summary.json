@@ -1,0 +1,189 @@
+{
+ "country": "LR",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Goods and services tax (goods tax and services tax)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Liberia Revenue Code s. 1000 (b) (3) (goods tax) and s. 1021 (b) (1) (services tax) as amended by the Tax Amendment Act of 2024 (Chapters 8 and 10), in force on publication 20 Dec 2024: 12 %; s. 1022 (a) list of taxable services; s. 1001 (e) exempt supplies",
+   "dated": "Liberia Revenue Code (amended 2020) and Tax Amendment Act of December 2024 (approved 17 Dec 2024, in force on publication 20 Dec 2024)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "telecommunications rate after the 2024 amendment not stated (15 % used)",
+    "retail margins outside the goods tax"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "LRC Chapter 11 Schedule 1 as replaced by the Tax Amendment Act of December 2024 (approved 17 December 2024; schedule read on the page image, p. 12) [text version: the Act of December 2024 as printed (world/B10-anglophone-africa/lr/law/TAX-AMENDMENT-ACT-OF-DECEMBER-2024-...pdf); the Tax Amendment Act of December 2025 applies from 2026]: beer, wine and other fermented beverages US$0.80 a litre imported, US$0.30 local; spirits US$1.50 imported, US$0.50 local; converted at the line's fxRates.USD (kernel 2.7.0 Fx)",
+   "dated": "Liberia Revenue Code (amended 2020) and Tax Amendment Act of December 2024 (approved 17 Dec 2024, in force on publication 20 Dec 2024)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc",
+    "Global2.Fx (fxFor at the line's fxRates.USD; fxUnknownLine)"
+   ],
+   "unsupported": [
+    "a line without fxRates.USD: beer, wine and spirits listed (grade C); no declared rate (no official 2025 CBL rate publication reached)",
+    "tobacco and the other lines of the 2020 Schedule not read"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Income tax (legal persons)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "LRC s. 200 rates (C) (25 % or 2 % of gross income, whichever is greater), confirmed by the Tax Amendment Act of December 2024",
+   "dated": "Liberia Revenue Code (amended 2020) and Tax Amendment Act of December 2024 (approved 17 Dec 2024, in force on publication 20 Dec 2024)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "minimum-tax carry-forward credit",
+    "loss rules"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Withholding on payments to nonresidents",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "LRC s. 906 (nonresident services 15 %); twelfth pass: LRC s. 806 (b) (15 %, payments to nonresidents); LRC s. 806 (b) (15 %, payments to nonresidents); LRC s. 806 (b) (15 %, royalties and license fees to nonresidents)",
+   "dated": "Liberia Revenue Code (amended 2020) and Tax Amendment Act of December 2024 (approved 17 Dec 2024, in force on publication 20 Dec 2024)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [],
+   "guards": 8
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty / transfer duty",
+   "statute": "Liberia Revenue Code 2000 as amended to 2020 s. 3 (c)-(d) and s. 4 (world/B10-anglophone-africa/lr/law/REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt); Tax Amendment Acts 2024 and the LRC Amendment of December 2025 (OCR) add no stamp or transfer duty",
+   "dated": "REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "LR: no stamp duty or transfer duty. LRC s. 4 lists the taxes in effect (income tax and royalties, GST, excise, customs duties, real property tax, government agency fees); s. 3 (c)-(d): all changes to taxation are made by amendments to the Code and taxation may not be included in non-tax legislation. Chapter 20 (real property tax) s. 2005 only requires registrars of deeds to report conveyances. Deed registration and probate charges are fees, not modelled.",
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (as a tax)",
+   "statute": "REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt (whole code)",
+   "dated": "REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "why": "LR: the general tax code held (REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt, 742k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')",
+   "guards": 0
+  },
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt (whole code)",
+   "dated": "REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt",
+   "unsupported": [],
+   "status": "not levied",
+   "grade": "-",
+   "module": "Absent.lean",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "LR: the general tax code held (REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt) has no charging provision on net wealth (full-text search 'impôt sur la fortune / le patrimoine', 'patrimoine net'); edition as held, later finance laws not all checked",
+   "guards": 1
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Withholding on interest, dividends and rent paid to residents",
+   "statute": "Liberia Revenue Code (as amended 2020) s. 905(b), (d)",
+   "dated": "REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt",
+   "unsupported": [],
+   "status": "reclassified",
+   "grade": "-",
+   "module": "",
+   "kernel_parts": [],
+   "classification": "duplicate (collection of the personal income tax)",
+   "oecdGuide": "OECD Interpretative Guide (Revenue Statistics 2026, Annex A; R4/fetch/gap/oecd_guide.txt) §30 ('The way that a tax is levied or collected ... does not affect classification') and §28 (heading 1100)",
+   "why": "Liberia Revenue Code (as amended 2020) s. 905 (b) (15 % on non-exempt interest and dividends paid to residents) and s. 905 (d) (10 % on rent of 70 000 or more a year) are withholdings with no finality provision in the Code: they are credited against the resident's personal income tax, so the tax is the personal income tax (1100) on that income, computed by the 1.x model, collected in part at source. Not a separate tax.",
+   "was": "grade C (s. 905(b): 15 % on non-exempt interest and dividends paid to residents; s. 905(d): 10 % on rent where annual rent is 70 000 or more — the Code makes neither withholding final (no finality provision fo)",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "NASSCORP employer contributions (pension 4 % + employment injury 2 %)",
+   "statute": "Executive Law Chapter 89 (Act approved 27 Dec 2016, published 13 Feb 2017) § 89.16 (a); NASSCORP General Regulations 2023 reg. 15 (rates in Schedule I) (R4/fetch/lr11) [text version: Executive Law Chapter 89 as approved 27 December 2016 and published 13 February 2017; NASSCORP General Regulations 2023 as issued (R4/fetch/lr11)]",
+   "dated": "REVENUE-CODE-LIBERIA-REVENUE-CODE-AMENDEMENT-2020-min.txt",
+   "unsupported": [
+    "Schedule I of the 2023 Regulations not checked against the Act",
+    "the employee's 4 %"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "customs tariff of Liberia as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Liberia for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C430&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/lr.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+   ],
+   "guards": 3
+  }
+ ],
+ "cases": 8,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

@@ -1,0 +1,22 @@
+name = "AmGlobal"
+version = "0.1.0"
+defaultTargets = ["AmGlobal", "amglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); AmTax = the 1.x model, vendored from cmp20/world/B05-former-ussr/am/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "AmTax"
+
+[[lean_lib]]
+name = "AmGlobal"
+
+[[lean_exe]]
+name = "amglobal"
+root = "AmGlobal.Main"
+
+[[require]]
+name = "R5Common"
+path = "../../common"

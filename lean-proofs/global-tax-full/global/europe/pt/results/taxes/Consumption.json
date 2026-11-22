@@ -1,0 +1,35 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Imposto sobre o valor acrescentado",
+  "statute": "CIVA art. 18.º n.º 1 a) 6 % (lista I), b) 13 % (lista II), c) 23 %; art. 9.º (isenções) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/civa18.txt: the only 2025 change (DL 33/2025, 24 March) revokes n.º 6 and rewrites n.º 10 (art objects); n.º 1 a)-c) (6/13/23 %) carry no later redação note]",
+  "dated": "Portal das Finanças current text (continental rates)",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "small-business exemption (art. 53.º) not read: no threshold applied",
+   "continental rates (Açores and Madeira lower) ; lists I and II by category"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Código dos Impostos Especiais de Consumo (CIEC, DL 73/2010) art. 78 (cerveja), 87 (álcool), 92-93 (ISP), 103 (tabaco); Portarias fixing the ISP unit rates, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "beer: banded by degree Plato (12.06-33.85 EUR per hl); the kernel's Plato rule is linear: not modelled",
+   "ISP on petrol and gas oil includes the carbon component (ISP + CO2)",
+   "fuel: the TEDB gives the same amounts at 1.1, 1.7 and 31.12.2025; portarias changing the ISP unit rates between those dates are not excluded",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ }
+]

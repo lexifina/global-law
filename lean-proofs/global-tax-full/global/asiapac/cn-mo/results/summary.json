@@ -1,0 +1,214 @@
+{
+ "country": "CN-MO",
+ "name": "Macao SAR",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "no 1.x model: stub PIT line",
+ "adapter": {
+  "A": null,
+  "B": [
+   56,
+   56
+  ],
+  "C": null,
+  "time": "2026-11-22 00:41:53"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "VAT/GST/sales tax (not levied)",
+   "statute": "no VAT or general sales tax in Macao; the consumption tax regulation (Lei n.o 4/99/M) taxes tobacco and alcohol only",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [
+    "Imprensa Oficial bo.io.gov.mo did not answer"
+   ],
+   "family_file": "lean/CnmoGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5121",
+   "tax": "Imposto de consumo (tobacco, alcohol above 30 %)",
+   "statute": "Regulamento do Imposto de Consumo (Lei n.o 4/99/M) and its tables",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried: bo.io.gov.mo gave no answer from the build server or a second machine; would unlock: the table of the Regulamento from bo.io.gov.mo"
+   ],
+   "family_file": "lean/CnmoGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200",
+   "tax": "Imposto complementar de rendimentos",
+   "statute": "Lei n.º 21/78/M, tabela; Lei do Orçamento 2025 (exemption to MOP 600,000)",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "text not fetched: bo.io.gov.mo would unlock"
+   ],
+   "family_file": "lean/CnmoGlobal/Corporate.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200/1100",
+   "kernel_parts": [],
+   "unsupported": [
+    "session 7: bo.io.gov.mo and images.io.gov.mo give no answer from a second machine; Wayback holds the Boletim Oficial 1978 n.º 36 as published (lei21.asp, 2025-10-15), not a consolidation: grade C"
+   ],
+   "tax": "Withholding on payments to non-residents",
+   "statute": "Regulamento do Imposto Complementar de Rendimentos (Lei n.º 21/78/M) as amended; Regulamento do Imposto Profissional",
+   "dated": "not reached",
+   "grade": "C",
+   "family_file": "lean/CnmoGlobal/Corporate.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Macao, China as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Macao, China for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C446&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/mo.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+   ],
+   "family_file": "lean/CnmoGlobal/Customs.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "Regulamento do Imposto Profissional (Lei n.º 2/78/M) (7-12%, 30% abatement); Regulamento da Contribuição Predial Urbana (Lei n.º 19/78/M) (10% rent, 6% owner-occupied, exemptions by annual budget law); Regulamento do Imposto Complementar de Rendimentos (Lei n.º 21/78/M)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (none): "
+   ],
+   "family_file": "lean/CnmoGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnmoGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnmoGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none (succession and gift duty abolished 2001)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnmoGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties)",
+   "statute": "Regulamento do Imposto do Selo (Lei n.º 17/88/M) (property transfer 1-3% + 5% surcharge; special stamp duty on residential resale)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (none): "
+   ],
+   "family_file": "lean/CnmoGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/CnmoGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Contribuição Predial Urbana (own use 6 % of 90 % of the ratable value; let 8 % of the rent in 2025; less MOP 3,500)",
+   "statute": "Lei n.º 19/78/M and Budget Law 2025 (not read); PwC Worldwide Tax Summaries, Macau SAR, Corporate - Other taxes, property tax section, last reviewed 9 June 2025 (Wayback capture 2025-10-11, asiapac/cn-mo/law/pwc_mo_corpother_wb20251011.txt)",
+   "dated": "2025: guide reviewed 9 June 2025 gives the 2025 Budget measures (8 % let rate, MOP 3,500 reduction); secondary-source sweep C -> B",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "exemption periods for new buildings not modelled",
+    "repairs allowance on let property (on application) not applied",
+    "a building's annualValue is read as the ratable value (own use) or the year's rent (let)",
+    "non-residents' exclusion from the MOP 3,500 reduction not modelled"
+   ],
+   "family_file": "lean/CnmoGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Social Security Fund contribution, employer (MOP 60 a month per resident employee)",
+   "statute": "Lei n.º 4/2010 (not read); PwC Worldwide Tax Summaries, Macau SAR, Individual - Other taxes, last reviewed 9 June 2025 (Wayback capture 2025-12-15, asiapac/cn-mo/law/pwc_mo_indother_wb20251215.txt)",
+   "dated": "2025: guide reviewed 9 June 2025; secondary-source sweep C -> B",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "part-time and non-resident workers not distinguished",
+    "the law not read (grade B)"
+   ],
+   "family_file": "lean/CnmoGlobal/Social.lean",
+   "family_guards": 2
+  }
+ ],
+ "grades": {
+  "A": 0,
+  "B": 8,
+  "C": 5
+ },
+ "guards": 10,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

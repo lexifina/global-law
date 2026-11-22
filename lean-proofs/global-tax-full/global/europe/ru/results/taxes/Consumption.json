@@ -1,0 +1,30 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Налог на добавленную стоимость",
+  "statute": "Налоговый кодекс РФ ст. 164 п. 2 (10 %), п. 3 (20 %); п. 8 (5 % / 7 %, УСН, from 1.1.2025, 176-ФЗ) [year in force 2025 (pass 17), upgraded: НК РФ ст. 164 in the redaction of 31.07.2025 (legalacts.ru, Internet Archive 2025-09-16: ru/law/nkrf164_legalacts_wb20250916.*): п. 2 10 % (listed food, children's goods, medicines ...), п. 3 20 % otherwise, as modelled (the 22 % of 2026 is not in this redaction)]",
+  "dated": "НК РФ ст. 164, ред. от 31.07.2025 (legalacts.ru, Internet Archive 2025-09-16)",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt supplies taken from the EU-style structure the source describes (health, education, finance, insurance, residential rent), not quoted item by item",
+   "food at 10 % (some basic foods only: the 10 % list of п. 2 not read item by item)",
+   "exemption of ст. 145 (revenue thresholds) and the 5 % / 7 % simplified-regime rates of п. 8 not modelled: every company line taxed at 20 %",
+   "ст. 164 itself not read (consultant.ru is script-built); rates from PwC"
+  ],
+  "yif17": "upgraded"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties",
+  "statute": "Налоговый кодекс РФ гл. 22 (not read)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "unsupported": [
+   "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+  ]
+ }
+]

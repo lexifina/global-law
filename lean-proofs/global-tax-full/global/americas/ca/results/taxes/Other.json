@@ -1,0 +1,103 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "CPP contributions on self-employed earnings",
+  "statute": "Canada Pension Plan s. 10 (ca/lean/CaTax/Model.lean, output cppSelfEmployedCents)",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "covered: the vendored 1.x model computes CPP contributions on self-employed earnings, both shares (CPP Act s. 10) and the ITA s. 60 (e) deduction; EI for the self-employed is opt-in (EI Act Part VII.1): voluntary, not a tax (Guide §11)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 2300 = 2021:4612.0 2022:5058.1 2023:5877.1 2024:6278.1; named lines: 2300 Canada pension plan (2024: 5247.4); 2300 Quebec pension plan (2024: 1030.6)"
+  ],
+  "p7_triage_pass": "2026-11-21",
+  "covered_by": "1.x model (CaTax cppSelfEmployedCents)"
+ },
+ {
+  "oecd": "4200",
+  "tax": "Part VI tax on capital of financial institutions",
+  "statute": "Income Tax Act (Canada) Part VI s. 190.1 (not read)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: the OECD CA table books 570 (2024) under 4200: the federal tax on the taxable capital of financial institutions (Income Tax Act Part VI, s. 190.1; Ontario's capital tax ended 1 July 2010); applies to banks and insurers with capital above $1 billion: entity type not an input"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: the OECD CA table books 570 (2024) under 4200: the federal tax on the taxable capital of financial institutions (Income Tax Act Part VI, s. 190.1; Ontario's capital tax ended 1 July 2010); applies to banks and insurers with capital above $1 billion: entity type not an input",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 4200 = 2021:498.0 2022:573.0 2023:556.0 2024:570.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "local improvement charges and special assessments (OECD CA 4520 'Special assessments and charges local government' 11,674 in 2024",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: local improvement charges and special assessments (OECD CA 4520 'Special assessments and charges local government' 11,674 in 2024; Ontario Municipal Act Part XII). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: local improvement charges and special assessments (OECD CA 4520 'Special assessments and charges local government' 11,674 in 2024; Ontario Municipal Act Part XII). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 4500 = 2021:11263.0 2022:11511.5 2023:11952.8 2024:11673.9; named lines: 4520 Special assessments and charges local government (2024: 11673.9)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5112",
+  "tax": "Retail sales tax (provincial)",
+  "statute": "Retail Sales Tax Act (Ontario), not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: provincial retail sales taxes (OECD CA 5112 3,269 in 2024) are levied in BC, SK, MB, not in Ontario (HST); Ontario's Retail Sales Tax Act still taxes private sales of used vehicles and insurance premiums (the latter 5126): no private vehicle purchase input"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: provincial retail sales taxes (OECD CA 5112 3,269 in 2024) are levied in BC, SK, MB, not in Ontario (HST); Ontario's Retail Sales Tax Act still taxes private sales of used vehicles and insurance premiums (the latter 5126): no private vehicle purchase input",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 5112 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5200",
+  "tax": "use of goods (vehicles) (5200)",
+  "statute": "Ontario vehicle permit fees (licence-plate sticker fees abolished from 13 Mar 2022) and other licences (OECD CA 5220 licences and permits)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Ontario vehicle permit fees (licence-plate sticker fees abolished from 13 Mar 2022) and other licences (OECD CA 5220 licences and permits). 2025 schedule not read; needs a VehicleTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Ontario vehicle permit fees (licence-plate sticker fees abolished from 13 Mar 2022) and other licences (OECD CA 5220 licences and permits). 2025 schedule not read; needs a VehicleTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 5200 = 2021:13703.2 2022:15455.9 2023:12963.5 2024:12753.2; named lines: 5220 Licences and permits local government (2024: 1263.0); 5220 Licences and permits provincial government (2024: 5692.7)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD CA 6200 'Miscellaneous local government' (1,406 in 2024): not identified for Toronto"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD CA 6200 'Miscellaneous local government' (1,406 in 2024): not identified for Toronto",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_OECD@DF_REVCAN, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CAN.csv): general government heading 6000 = 2021:1015.0 2022:1304.0 2023:1396.0 2024:1406.0; named lines: 6200 Miscellaneous local government (2024: 1406.0)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

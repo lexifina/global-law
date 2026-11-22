@@ -1,0 +1,348 @@
+{
+ "country": "JM",
+ "name": "Jamaica",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:36:37"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "real estate, unlisted shares and short-held gains rules",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/JmGlobal/Capital.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "5111",
+   "tax": "General Consumption Tax",
+   "statute": "General Consumption Tax Act: standard rate, First Schedule Part II, Third Schedule (via TAJ guide, rate history and 12/2020 list)",
+   "dated": "TAJ rate history (15 % from April 2020), Form 4A amended 3 June 2025, threshold from 1 April 2025",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "150 kWh residential zero rate",
+    "processed food taxable"
+   ],
+   "status": "modelled",
+   "family_file": "lean/JmGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Special consumption tax",
+   "statute": "GCT Act Schedule; Customs",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "kernel_parts": [],
+   "tried": "TAJ GCT pages read; SCT rate schedule not fetched",
+   "unsupported": [
+    "would unlock: the SCT schedule in force 2025"
+   ],
+   "family_file": "lean/JmGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5120",
+   "tax": "Import duty (CET) and environmental levy",
+   "statute": "Customs Tariff (JCA integrated tariff, HS 2022, effective 25 Sep 2024 and 6 Oct 2025): import duty 1006.30 25 %, 2202.10 20 %, 2402.20 40 %, 4901.99 0, 6109.10 20 %, 6203.42 20 %, 8471.30 0, 8517.13 20 %, 8528.72 20 %; environmental levy 0.5 % on each; CARICOM-origin goods free of import duty",
+   "dated": "jm/law/jm_tariff_eff2024-09-25.pdf (Wayback 20250405105733 of jca.gov.jm, in force 1 Jan 2025) and jm_tariff_eff2025-10-06.pdf (Wayback 20260122190520); every line used identical in both (script gapAM/jmx.py); gap pass 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P7",
+   "kernel_parts": [
+    "TariffRule",
+    "customsFamily",
+    "consumptionC"
+   ],
+   "unsupported": [
+    "only the listed HS lines are modelled (beer, wine, spirits, fuel and motor vehicles carry mixed duties, additional stamp duty and age/engine/importer splits: no tariff line, grade C)",
+    "the standard compliance fee (0.3 %) and the customs administrative fee are not booked (fees for a service, OECD Interpretative Guide §12)",
+    "additional stamp duty (ASD) is nil on the lines modelled",
+    "CARICOM bilateral agreements (DO, CR, CU, CO, VE) not modelled"
+   ],
+   "gap_pass": "2026-11-21 approach 1 (customs, kernel 2.8.0)",
+   "family_file": "lean/JmGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax (companies)",
+   "statute": "Income Tax Act s. 30 as amended by the Fiscal Incentives (Miscellaneous Provisions) Act (from 1 Jan 2014): unregulated companies 25 %",
+   "dated": "TAJ Technical Advisory 2014/09/IT (July 2014), Wayback capture 2024-07-19; later changes not checked",
+   "grade": "B",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "regulated companies 33 1/3 %, building societies 30 %, life assurance 15 % not modelled (the regulator is not an input); minimum business tax not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/JmGlobal/Corporate.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "ITA s. 40 (1) (MOJ consolidation, Wayback 2025-02-04)",
+   "dated": "ITA consolidation held by the 1.x builder (world/B13-caribbean/jm/law/ita.txt, OCR of ITA_moj_wayback_20250204.pdf); pass 7, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "s. 40 rates read from pages authorised by L.N. 2008-2011 of the consolidation: a later change to s. 40 not checked"
+   ],
+   "status": "modelled",
+   "family_file": "lean/JmGlobal/Corporate.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on dividends to non-residents",
+   "statute": "not reached: Income Tax Act provision not found; the rate changed during 2025 (PwC reviewed 3 Mar 2025: 33 1/3 % / 25 %; reviewed 12 Aug 2025: 15 %), the amending provision and its date not read",
+   "dated": "PwC Worldwide Tax Summaries Jamaica, corporate withholding taxes: Internet Archive captures 2025-08-03 (reviewed 2025-03-03) and 2025-12-16 (reviewed 2025-08-12); FT review 7",
+   "grade": "C",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "2025 rate not established (changed during the year)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/JmGlobal/Corporate.lean",
+   "guards": 7
+  },
+  {
+   "oecd": "2300",
+   "tax": "self-employed social security (2300)",
+   "statute": "National Insurance Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/JmGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "recurrent property (4100)",
+   "statute": "Property Tax Act (unimproved value bands",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (unimproved value bands; OECD JM 4110 'Municipal property tax'); not in lexifina/jamaica-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Property Tax Act (unimproved value bands; OECD JM 4110 'Municipal property tax'); not in lexifina/jamaica-law. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4100 = 2021:9546.0 2022:9716.2 2023:9449.4 2024:9892.2; named lines: 4110 Municipal property tax (2024: 9892.2)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/JmGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4200 (recurrent taxes on net wealth, Guide §51) in 2021-2024; 2025 not yet published, no 2025 wealth tax identified",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/JmGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "Non-recurrent taxes on property",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the OECD table books no revenue under 4500 (non-recurrent taxes on property, Guide §54) in 2021-2024 and no betterment or capital levy is known in national law; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/JmGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales tax (single stage)",
+   "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 5112 = ?",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "not levied (cited absence)",
+   "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 5112 = ?"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/JmGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5200",
+   "tax": "use of goods (vehicles) (5200)",
+   "statute": "Road Traffic Act licence fees by engine size",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Road Traffic Act licence fees by engine size. 2025 schedule not read; needs a VehicleTax family"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): Road Traffic Act licence fees by engine size. 2025 schedule not read; needs a VehicleTax family",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 5200 = 2021:8419.3 2022:8797.0 2023:6774.0 2024:7498.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/JmGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: Contractors Levy (Contractors Levy Act, 2 % of payments to construction contractors; OECD JM 6200 'Contractors levy' 2,827 in 2024): payments to contractors are not an input; text not read"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: Contractors Levy (Contractors Levy Act, 2 % of payments to construction contractors; OECD JM 6200 'Contractors levy' 2,827 in 2024): payments to contractors are not an input; text not read",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVJAM, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/JAM.csv): general government heading 6000 = 2021:1967.4 2022:2551.3 2023:2752.3 2024:2827.1; named lines: 6200 Contractors levy (2024: 2827.1)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/JmGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "registry: none levied (not cited from a text)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P6",
+   "kernel_parts": [],
+   "tried": "no statute read",
+   "unsupported": [
+    "would unlock: a text showing the abolition or absence"
+   ],
+   "family_file": "lean/JmGlobal/Property.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "NIS and NHT employer contributions",
+   "statute": "NIS Act; NHT Act (via TAJ Table #5)",
+   "dated": "TAJ guide (2025 ceiling $5,000,000)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily"
+   ],
+   "status": "modelled",
+   "family_file": "lean/JmGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "3000",
+   "tax": "Education Tax and HEART (employer)",
+   "statute": "Education Tax Act; HEART Act (via TAJ Table #5)",
+   "dated": "TAJ guide",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "PayrollTax"
+   ],
+   "unsupported": [
+    "statutory income base"
+   ],
+   "status": "modelled",
+   "family_file": "lean/JmGlobal/Social.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer, stamp and recurrent property taxes",
+   "statute": "Transfer Tax Act; Stamp Duty Act; Property Tax Act",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P5",
+   "kernel_parts": [],
+   "tried": "not read in this pass (texts not local)",
+   "unsupported": [
+    "would unlock: the acts and the 2025 municipal rates"
+   ],
+   "family_file": "lean/JmGlobal/Transfers.lean",
+   "guards": 0
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 9,
+  "C": 8
+ },
+ "guards": 21,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -1,0 +1,233 @@
+{
+ "country": "SG",
+ "name": "Singapore",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:55:03"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "Goods and services tax",
+   "statute": "GST Act 1993 s. 16, Second Schedule para. 1, Fourth Schedule Part 1",
+   "dated": "SSO historical version in force 1/7/2025 - 8/12/2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "overseas vendor and reverse-charge rules",
+    "Fourth Schedule items beyond paras. 1-2"
+   ],
+   "family_file": "lean/SgGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (motor spirit, diesel, liquor, tobacco)",
+   "statute": "Customs Act 1960; Customs (Duties) Order (rates per Singapore Customs' List of Dutiable Goods, HS 2203, 2204, 2208, 2402, 2710)",
+   "dated": "List of Dutiable Goods last updated 15 Jan 2025 and 4 Jul 2025 (Internet Archive), same rates",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [
+    "the Customs (Duties) Order itself not read (SSO schedule not fetched)",
+    "customs duty on imported beer not modelled",
+    "cigarette sticks over 1 g"
+   ],
+   "family_file": "lean/SgGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5200",
+   "tax": "Road tax on cars (engine capacity or EV power rating, × 0.782; EV flat component)",
+   "statute": "Road Traffic Act 1961; Road Traffic (Motor Vehicles, Registration and Licensing) Rules (rates per LTA Vehicle Tax Structure)",
+   "dated": "LTA OneMotoring Vehicle Tax Structure page, fetched 2026-11-21 (undated: applied to 2025); session 11 year-in-force audit: re-cited: LTA Vehicle Tax Structure page, Internet Archive 2025-01-15, 2025-07-06, 2025-12-23: the same EC and PR tables and AFC ($700 a year) all year (sg/law/sg_lta_tax_structure_wb*.html)",
+   "grade": "B",
+   "kernel_parts": [
+    "VehicleTax"
+   ],
+   "unsupported": [
+    "EV power rating read in whole kW (the 7.5 kW limit taken as 7)",
+    "diesel special tax",
+    "petrol-electric higher-of rule",
+    "surcharge for cars over 10 years",
+    "motorcycles and goods vehicles"
+   ],
+   "family_file": "lean/SgGlobal/Consumption.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "statute": "ITA 1947 s. 43 (1) (a), s. 43 (6)",
+   "dated": "YA 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SgGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "ITA 1947 (2020 Rev. Ed.) s. 12 (6)-(7), s. 13 (1) (za), s. 43 (3), (3A), s. 45, s. 45A",
+   "dated": "SSO informal consolidation in force 1-14 Nov 2024 (Wayback 20241206192918, sg/law/sg_ita1947_20241101_wb.pdf): YA 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "technical assistance under s. 12 (7) (b) is at 10 % with royalties; services are taken as management fees (s. 12 (7) (c)); services performed outside Singapore not distinguished"
+   ],
+   "family_file": "lean/SgGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Singapore as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Singapore for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C702&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/sg.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 22030011 (MFN duty 'S$16.00 per litre of alcohol': specific or compound duty, unit/currency not mapp); 22030019 (MFN duty 'S$16.00 per litre of alcohol': specific or compound duty, unit/currency not mapp); 22030091 (MFN duty 'S$16.00 per litre of alcohol': specific or compound duty, unit/currency not mapp); 22030099 (MFN duty 'S$16.00 per litre of alcohol': specific or compound duty, unit/currency not mapp)",
+    "ASEAN free trade area (ATIGA) (origin BN, KH, ID, LA, MY, MM, PH, TH, VN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+   ],
+   "family_file": "lean/SgGlobal/Customs.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4100",
+   "tax": "Property tax (non-residential)",
+   "statute": "Property Tax Act 1960 s. 9",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "residential scales (C)"
+   ],
+   "family_file": "lean/SgGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Buyer's and additional buyer's stamp duty (residential)",
+   "statute": "Stamp Duties Act 1929 First Schedule art. 3",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "seller's stamp duty",
+    "shares 0.2 %"
+   ],
+   "family_file": "lean/SgGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "3000",
+   "tax": "Skills development levy",
+   "statute": "SDL Act 1979 s. 4",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "minimum S$2",
+    "foreign worker levy"
+   ],
+   "family_file": "lean/SgGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (CPF is a non-tax compulsory saving)",
+   "statute": "CPF Act 1953 First Schedule",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SgGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "Estate duty abolished 2008",
+   "statute": "Estate Duty (Abolition) Act 2008",
+   "dated": "from 2008-02-15",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SgGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SgGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1100",
+   "tax": "No tax on individuals' dividends, bank interest or capital gains",
+   "statute": "ITA 1947 s. 13 (1) (za), (zh)",
+   "dated": "YA 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/SgGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 2,
+  "B": 11,
+  "C": 0
+ },
+ "guards": 24,
+ "sorry": 0,
+ "cases": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -1,0 +1,60 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Porez na dobit pravnih lica",
+  "statute": "Zakon o porezu na dobit pravnih lica (progressive 9 % / 12 % / 15 %)",
+  "dated": "čl. 28 in force from 1.1.2022, unchanged in 2025 (Sl. list CG, via lexifina/montenegro-law)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "loss carry-forward not modelled"
+  ],
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "withholding tax on payments abroad",
+  "statute": "Zakon o porezu na dobit pravnih lica: 15 % (statute read, gap pass); 15 % (statute read, gap pass); 15 % (statute read, gap pass)",
+  "dated": "čl. 29 as amended by Sl. list CG 125/2023 (from 1.1.2024), in force in 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "30 % rate for payments to listed tax havens not modelled",
+   "treaty rates out of scope (statutory, treaty-free)"
+  ],
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "Porez po odbitku (usluge) (services)",
+  "statute": "Zakon o porezu na dobit pravnih lica (porez po odbitku)",
+  "dated": "čl. 29 as amended by Sl. list CG 125/2023 (from 1.1.2024), in force in 2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services are taken as consulting, market research or audit services (others bear none)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "gap": 6
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on services to individuals paid abroad (none without a fixed base)",
+  "statute": "Zakon o porezu na dohodak fizičkih lica (PwC 2025: non-residents are taxed on income of a fixed base or permanent establishment in Montenegro and on royalties, interest and rent of property there)",
+  "grade": "B",
+  "dated": "PwC Worldwide Tax Summaries, Montenegro, its page on taxes on personal income (individuals), Internet Archive 2025-03-22 (`me/law/pwc_indpit_wb20250322.*`)",
+  "kernel_parts": [
+   "Wht (WhtRule zero, toCompany := some false)"
+  ],
+  "unsupported": [
+   "the individual is taken as having no fixed base or permanent place of business in the country (not an input)",
+   "the personal income tax act itself not read (B)"
+  ]
+ }
+]

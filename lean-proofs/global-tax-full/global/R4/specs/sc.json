@@ -1,0 +1,216 @@
+{
+ "cc": "SC",
+ "name": "Seychelles",
+ "dated": "Value Added Tax Act 2010 (Cap 244) with its Schedules as replaced by S.I. 4 of 2014 (rate in the Third Schedule) and later amendments to 2025; Business Tax Act 2009 (Cap 20) First Schedule as replaced by S.I. 27 of 2010 and amended to S.I. 107 of 2024 (from 1 Jan 2025); Excise Tax (Rates) Regulations 2023 (S.I. 110 of 2023, from 1 Jan 2024) as amended by S.I. 31 and 56 of 2024; sugar tax S.I. 55 of 2023",
+ "sources": "Pass 10: official instruments from the Seychelles Revenue Commission legislation page (src.gov.sc / staging.src.gov.sc `wp-content/uploads/...`, links listed in `world/B09-southern-africa/sc/law/leg.html`), saved in `R4/fetch/sc10/` (SHA256SUMS; Business Tax schedule amendments in `R4/fetch/sc10/bt/`). Scanned gazettes were OCRed (tesseract eng; the VAT Act 2010 scan is landscape with one page per half: `tools/ocr10_halves.sh`) or read on the page image (S.I. 27 of 2010).",
+ "vat": {
+  "name": "Value added tax",
+  "standard": 1500,
+  "classes": {
+   "financial": "exempt",
+   "education": "exempt",
+   "health": "exempt",
+   "insurance": "exempt",
+   "rent": "exempt",
+   "water": "exempt",
+   "electricity": "exempt"
+  },
+  "grade": "A",
+  "statute": "Value Added Tax Act 2010 s. 6 (1)-(3) and Third Schedule (\"The rate of VAT for the purposes of section 6 is 15%\") as substituted by the Value Added Tax (Amendment of Schedules) Regulations 2014 (S.I. 4 of 2014); First Schedule Part II exempt supplies [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+  "doc": "VAT Act 2010 s. 6: \"(1) Subject to this Act, value added tax at the rate specified in subsection (3) is levied on— (a) taxable supplies made by a taxable person; (b) taxable imports. ... (3) The rate of VAT is— (a) in the case of a taxable supply that is a zero-rated supply, zero percent; or (b) in any other case, the rate specified in the Fourth Schedule.\" S.I. 4 of 2014 reg. 2 repeals the Schedules and substitutes new ones: \"THIRD SCHEDULE RATE OF VAT The rate of VAT for the purposes of section 6 is 15%. FOURTH SCHEDULE REGISTRATION THRESHOLD ...\" (the 15 % rate was first set by S.I. 49 of 2011 from 1 July 2012). First Schedule Part II: exempt supplies of \"(a) financial services ...; (b) education services ...; (d) life insurance premiums, health insurance premiums ...; (e) hospital, medical and dental services ...; (i) fresh bread; (j) public utility services; ...\" and \"4. The leasing or renting of premises for the sole purpose of residential dwelling.\" Later instruments amend the First, Second and Fourth Schedules only (S.I. 108 of 2014 and S.I. 97 of 2024: registration threshold SCR 2,000,000; S.I. 13 of 2015, S.I. 20 and 56 of 2025: exemptions); the VAT (Amendment) Act 2024 (Act 16 of 2024, from 1 Jan 2025) amends ss. 3, 7-9, 12, 13, 23, 24 (no rate change).",
+  "notes": [
+   "the rate schedule moved from the Fourth to the Third Schedule with S.I. 4 of 2014; no later instrument in the SRC list amends the Third Schedule (S.I. 16 of 2013 is the only illegible one and concerns business tax)",
+   "only life and health insurance premiums are exempt (other insurance is taxable); public utility services (water, electricity) are exempt; zero-rated and exempt imported foods are inside the processed-food basket line (taxed)"
+  ],
+  "unsupported": [
+   "exempt food imports (First Schedule Part I para 6, basket convention)",
+   "general insurance taxable"
+  ]
+ },
+ "excise": {
+  "name": "Excise tax",
+  "grade": "A",
+  "statute": "Excise Tax Act 2022 (Act 27 of 2022) s. 84; Excise Tax (Rates) Regulations 2023 (S.I. 110 of 2023, from 1 Jan 2024) Schedule, as amended by S.I. 31 of 2024 (2205.1021, cars) and S.I. 56 of 2024 (chassis); Excise Tax (Imposition of Sugar Tax on Drinks) Regulations 2023 (S.I. 55 of 2023) reg. 3 [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+  "doc": "S.I. 110 of 2023 Schedule (HS code, description, taxable base, rate): \"2203.0033 - - - - [Beer having an alcoholic strength not exceeding 8% vol] In immediate bottle made of glass l/bot. SCR 23.08/l\"; \"2204.2112 - - - - [Other wine ... in containers holding 2 l or less, having an alcoholic strength exceeding 8% but not exceeding 16% vol.] In immediate containers made of glass l/bot. SCR 48.40/l\"; \"- Rum and other spirits obtained by distilling fermented sugar-cane products 2208.4020 - - - In immediate bottle made of glass l/bot. SCR 158.40/l\" (whiskies and gin SCR 268.40/l, vodka SCR 158.40/l); \"2402.2000 - Cigarettes containing tobacco No./kg SCR 734 per 200 cigarettes\"; \"2710.1220 - - - Motor Gasoline l SCR 8.5/l\"; \"2710.1921 - - - - Gasoil (Diesel) kg/l SCR 8.5/l\". S.I. 55 of 2023 reg. 3: \"All beverages specified in the Schedule, of which the sugar content exceeds 5 grams per 100 ml, shall be subject to a sugar tax of SCR 4/Litre.\" S.I. 31 and 56 of 2024 amend only HS 2205.1021, 8703.40 and 87.06.",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Excise tax (beer not exceeding 8 % vol, HS 2203.0033)",
+    "maxAbvBp": 800,
+    "perUnitNum": 23080,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "S.I. 110 of 2023, HS 2203.0031-0039: SCR 23.08 per litre"
+   },
+   {
+    "good": "wine",
+    "name": "Excise tax (wine 8-16 % vol in containers of 2 l or less, HS 2204.21)",
+    "minAbvBp": 800,
+    "maxAbvBp": 1600,
+    "perUnitNum": 48400,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "S.I. 110 of 2023, HS 2204.2111-2119: SCR 48.40 per litre"
+   },
+   {
+    "good": "spirits",
+    "name": "Excise tax (rum, HS 2208.40)",
+    "perUnitNum": 158400,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "S.I. 110 of 2023, HS 2208.4010-4090: SCR 158.40 per litre"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Excise tax (cigarettes, HS 2402.2000)",
+    "perUnitNum": 3670,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "S.I. 110 of 2023, HS 2402.2000: SCR 734 per 200 cigarettes (SCR 3.67 per cigarette)"
+   },
+   {
+    "good": "nonAlcoholic",
+    "name": "Sugar tax on drinks",
+    "perUnitNum": 4000,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "S.I. 55 of 2023 reg. 3: SCR 4 per litre of a scheduled beverage with more than 5 g of sugar per 100 ml"
+   },
+   {
+    "good": "petrol",
+    "name": "Excise tax (motor gasoline, HS 2710.1220)",
+    "perUnitNum": 8500,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "S.I. 110 of 2023, HS 2710.1220: SCR 8.5 per litre"
+   },
+   {
+    "good": "diesel",
+    "name": "Excise tax (gasoil, HS 2710.1921)",
+    "perUnitNum": 8500,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "S.I. 110 of 2023, HS 2710.1921: SCR 8.5 per litre"
+   }
+  ],
+  "notes": [
+   "the spirits line is charged at the rum / vodka rate (SCR 158.40/l); whiskies, gin and 'other' spirits pay SCR 268.40/l, grape brandy SCR 224.40/l",
+   "beer above 8 % vol (SCR 48.40/l) and above 16 % (SCR 105.60/l) not separated beyond the strength band of the line; stout SCR 16.67/l",
+   "the non-alcoholic basket line is treated as scheduled sugary drinks above 5 g/100 ml (sugar tax); juices and waters without added sugar are outside it"
+  ],
+  "unsupported": [
+   "sugar content of the non-alcoholic line (assumed above 5 g/100 ml)",
+   "spirits other than rum/vodka"
+  ]
+ },
+ "cit": {
+  "name": "Business tax (entities)",
+  "rate": 2500,
+  "upper": [
+   [
+    1000000,
+    1500
+   ]
+  ],
+  "grade": "A",
+  "statute": "Business Tax Act 2009 (Cap 20) s. 6 and First Schedule item 1 (a) as substituted by the Business Tax (Amendment of Schedules) Regulations 2021 (S.I. 108 of 2021, from 1 Jan 2022): entities 15 % on the first SCR 1,000,000 of taxable income and 25 % on the remainder [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+  "doc": "S.I. 108 of 2021 reg. 2 (in operation 1 January 2022) substitutes Item 1 (a) and (b) of the First Schedule to the Business Tax Act (rates on taxable income under section 6): an entity, government body or trustee under section 40 (5) pays \"15% on the first SCR 1,000,000 of taxable income\" and 25 % on the remainder; any other person 0 % up to SCR 102,666, 15 % from SCR 102,666 to SCR 1,000,000 and 25 % above; Items 1 (d) and 4 are repealed. Later First Schedule amendments: S.I. 107 of 2024 (interest withholding tables, items 3 (e) and 5 (2)).",
+  "notes": [
+   "item 1 (c) by company.sector (S.I. 66 of 2012; S.I. 108 of 2021 replaced items 1 (a)-(b) and repealed 1 (d), not 1 (c)): 'telecom', 'bank', 'insurer', 'alcoholManufacturing', 'tobaccoManufacturing' 25 % on the first SCR 1,000,000 and 33 % on the remainder; another sector or none given: item 1 (a) (declared)",
+   "corporate social responsibility tax and tourism marketing tax (0.5 % of turnover, Seventh Schedule) are separate levies, not modelled here"
+  ],
+  "unsupported": [
+   "turnover levies of the Seventh Schedule"
+  ],
+  "sectors": [
+   {
+    "sectors": [
+     "telecom",
+     "bank",
+     "insurer",
+     "alcoholManufacturing",
+     "tobaccoManufacturing"
+    ],
+    "rate": 3300,
+    "upper": [
+     [
+      1000000,
+      2500
+     ]
+    ],
+    "statute": "Business Tax Act First Schedule item 1 (c) as added by S.I. 66 of 2012 (telecommunications service providers, banks, insurance companies, alcohol and tobacco manufacturers: 25 % on the first SCR 1,000,000, 33 % on the remainder); not repealed by S.I. 108 of 2021"
+   }
+  ],
+  "ifAbsent": "general",
+  "sectorTests": [
+   {
+    "line": {
+     "id": "s18-sc-bank",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 30000000,
+      "profit": 3000000,
+      "lossesForward": 0,
+      "sector": "bank"
+     }
+    },
+    "expect": [
+     910000
+    ]
+   },
+   {
+    "line": {
+     "id": "s18-sc-none",
+     "schema": "global/2.0",
+     "entity": "company",
+     "company": {
+      "turnover": 30000000,
+      "profit": 3000000,
+      "lossesForward": 0
+     }
+    },
+    "expect": [
+     650000
+    ]
+   }
+  ]
+ },
+ "wht": {
+  "name": "Business tax on payments to non-residents (s. 8)",
+  "grade": "A",
+  "statute": "Business Tax Act 2009 s. 8 and First Schedule item 3 (S.I. 27 of 2010 as amended by S.I. 92 of 2010, S.I. 66 of 2012 and S.I. 107 of 2024): dividend, royalty, natural resource amount or technical service fee 15 %; interest paid by a non-financial institution to a non-financial institution 15 % (2025 table) [text version: the Act and regulations as published, with the S.I. listed (to S.I. 107 of 2024, in force 1 January 2025)]",
+  "doc": "S.I. 27 of 2010 (First Schedule substituted), item 3 (read on the page image): \"The rate of business tax payable by a non-resident person under section 8 (a) in the case of a dividend, royalty, natural resource amount or technical service fee is 15%; (b) in the case of an insurance premium is 5%; or (c) in the case of interest, the rates shall be as follows— ...\" S.I. 66 of 2012 reg. 2 (e): \"by repealing in item 3(a) the figure '15%;' and inserting between item (a) and (b) the following— (i) 15%; or (ii) The rate applicable under a taxation agreement ...\". S.I. 107 of 2024 (from 1 January 2025) substitutes the table under item 3 (e): \"Interest payment by a person being a non-financial institution to a person not being a financial institution 15%\" (current account 5 %, fixed deposit 0 % individuals / 5 % otherwise, savings 0 %, government securities 0 %).",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "First Schedule item 3 (a) (i): 15 %"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "First Schedule item 3 (a) (i): 15 %"
+   },
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "First Schedule item 3 (a) (i): technical service fee 15 %"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "First Schedule item 3 (e) table (S.I. 107 of 2024): interest paid by a non-financial institution to a person not being a financial institution 15 %"
+   }
+  ],
+  "notes": [
+   "only technical service fees are within s. 8 among service payments; managerial fees paid by financial institutions 33 % (S.I. 92 of 2010) not modelled",
+   "treaty rates (item 3 (a) (ii)) not applied (statutory rates)",
+   "S.I. 16 of 2013 and S.I. 63 of 2010 could not be read (rotated scans); S.I. 38 of 2013, which amends S.I. 16 of 2013, concerns the corporate social responsibility tax"
+  ],
+  "unsupported": [
+   "managerial fees paid by financial institutions (33 %)",
+   "bank-deposit interest tables"
+  ]
+ }
+}

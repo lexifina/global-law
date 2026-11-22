@@ -1,0 +1,397 @@
+{
+ "country": "PE",
+ "name": "Peru",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R2 Americas)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:17:29"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Income tax on additional interest, dividends, rent and listed-share gains (stacked)",
+   "statute": "1.x model (see its summary.json); kernel stackedTax",
+   "dated": "as the 1.x model (2025)",
+   "grade": "B",
+   "package": "P3",
+   "kernel_parts": [
+    "stackedTax",
+    "addToRaw"
+   ],
+   "unsupported": [
+    "capitalGains ignored by the 1.x model (gains are charged by the family below)",
+    "other income kinds"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PeGlobal/Capital.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "1100",
+   "tax": "Impuesto a la renta de segunda categoría: ganancias de capital (6.25 % of 80 % = 5 %)",
+   "statute": "LIR TUO arts. 2, 21.1, 36, 52-A",
+   "dated": "SUNAT consolidated LIR (chapters fetched 2026-11-21), in force 2025",
+   "grade": "A",
+   "package": "P3",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "real estate acquired before 2004",
+    "habitualidad (third category)",
+    "pre-2009 share valuation"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PeGlobal/Capital.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5111",
+   "tax": "Impuesto General a las Ventas + Impuesto de Promoción Municipal",
+   "statute": "TUO Ley del IGV e ISC art. 17, Apéndices I-II; D. Leg. 776 art. 76",
+   "dated": "SUNAT text with amendment notes to Ley 32387 (16.6.2025, effective 2026)",
+   "grade": "B",
+   "package": "P1",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "IPM from the 1993 text of D. Leg. 776 (TUO 2004 not read)"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PeGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo (combustibles, otros tabacos, bebidas azucaradas)",
+   "statute": "TUO Título II, Nuevo Apéndice III, Apéndice IV literal A",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P1",
+   "unsupported": [
+    "SUNAT's Apéndice III text dated 3.4.2022 (later fuel decrees not read); sugared-drink and other-tobacco rows of literal A not read"
+   ],
+   "family_file": "lean/PeGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Impuesto Selectivo al Consumo (cigarrillos, cervezas, vinos y licores)",
+   "statute": "TUO Ley del IGV e ISC Título II; Nuevo Apéndice IV literals B and D (D.S. 093-2018-EF, 181-2019-EF, 115-2024-EF; R.M. 021-2022-EF/15)",
+   "dated": "SUNAT updated appendix texts fetched 2026-11-21 (beer row from 1.7.2024); pass 10, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "ExciseRule",
+    "exciseRuleFamily"
+   ],
+   "unsupported": [
+    "al valor base read from the consumer price",
+    "pisco rate not distinguished",
+    "strength defaults"
+   ],
+   "family_file": "lean/PeGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "5112",
+   "tax": "General sales / turnover tax (other than VAT)",
+   "statute": "Constitución art. 74",
+   "dated": "lexifina repository text; pass 12, 2026-11-21",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P1",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 74: \"Los tributos se crean, modifican o derogan, o se establece una exoneración, exclusivamente por ley o decreto legislativo\" (`pe/law/const_art-074.md`). no law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: TUO Ley del IGV e ISC art. 17, Apéndices I-II; TUO Ley del IGV e ISC Título II; TUO LIR art. 55 (29,5 %); TUO LIR art. 56 a), d), e), f); 1.x model (see its summary.json); LIR TUO arts. 2, 21.1, 36, 52-A).",
+   "family_file": "lean/PeGlobal/Consumption.lean",
+   "guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impuesto a la renta (tercera categoría)",
+   "statute": "TUO LIR art. 55 (29,5 %)",
+   "dated": "SUNAT text (1.x builder copy, 2026)",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "RMT and RER regimes for small companies not modelled"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PeGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments to non-residents",
+   "statute": "TUO LIR art. 56 a), d), e), f); art. 76",
+   "dated": "SUNAT TUO LIR capítulos VII, X (world/B12-latin-america/pe/src); pass 8, 2026-11-21",
+   "grade": "A",
+   "package": "P2",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "TUO LIR: services are taken as technical assistance used in Peru (art. 56 f), 15 %); services performed in Peru and digital services used in Peru (art. 56 j), 30 %) and services performed abroad that are not Peruvian-source (art. 9) not distinguished"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PeGlobal/Corporate.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "2300",
+   "tax": "Pension and health contributions of independent workers (voluntary affiliation)",
+   "statute": "TUO Ley del SPP (D.S. 054-97-EF) art. 33; Decreto Ley 19990 art. 4 a); Ley 26790 art. 3, art. 6 c)",
+   "grade": "R",
+   "status": "reclassified: not a tax (voluntary contributions; OECD Guide §11, §42)",
+   "package": "P7",
+   "unsupported": [],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employment taxed as cuarta categoría; no contribution computed\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+   "evidence": [
+    "lexifina/peru-law ley-sistema-privado-pensiones/art-033.md (4 versions 2023-05-03 to 2025-09-21; art. 33: 0 changes; official source diariooficial.elperuano.pe idNorma=44) and decreto-ley-sistema-nacional-pensiones/art-004.md (official source diariooficial.elperuano.pe idNorma=45) read",
+    "Ley 26790 (Ley de Modernización de la Seguridad Social en Salud), El Peruano 17 May 1997 p. 149283, leyes.congreso.gob.pe/Documentos/Leyes/26790.pdf fetched 2026-11-22 (scan, OCR: americas/gap2/law/pe_ley26790_congreso.*) arts. 3, 6 c): original text; later amendments of art. 3 not read",
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 2300 = 2021:48.3 2022:53.6 2023:58.7 2024:62.1"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "gap2_outcome": "(c) not a tax",
+   "gap2_note": "not a tax: an independent worker joins a pension system only voluntarily: TUO de la Ley del Sistema Privado de Administración de Fondos de Pensiones art. 33 'El trabajador independiente puede afiliarse al Sistema Nacional de Pensiones (SNP) o al Sistema Privado de Administración de Fondos de Pensiones (SPP) voluntariamente' (unchanged through 2025: Ley 32123, in force 2025-09-06, amended arts. 1, 18-A, 24, 40, 42 and others, not art. 33); Decreto Ley 19990 art. 4: 'Podrán asegurarse facultativamente en el Sistema Nacional de Pensiones ... a) Las personas que realicen actividad económica independiente'; health: Ley 26790 art. 3 (regular affiliates are dependent workers and pensioners; 'Todas las personas no comprendidas en el párrafo anterior se afilian bajo la modalidad de asegurados potestativos'), art. 6 c) (their contribution is that of the plan each chooses). Interpretative Guide §11 and §42: voluntary contributions are not taxes and are excluded from heading 2000.",
+   "gap_pass2": "2026-11-22",
+   "family_file": "lean/PeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "3000",
+   "tax": "SENATI contribution",
+   "statute": "Ley 26272 (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: SENATI contribution 0.75 % of payroll of industrial (CIIU section C) employers (OECD PE 3000 'Contributions to SENATI'); Ley 26272 not read and the employer's CIIU activity not used"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: SENATI contribution 0.75 % of payroll of industrial (CIIU section C) employers (OECD PE 3000 'Contributions to SENATI'); Ley 26272 not read and the employer's CIIU activity not used",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 3000 = 2021:100.6 2022:112.9 2023:114.7 2024:126.1; named lines: 3000 Contributions to SENATI (2024: 125.5); 3000 Extraordinary solidarity tax (IES) (2024: 0.6); 3000 IES refunds (2024: -0.0)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4500",
+   "tax": "other property (4500)",
+   "statute": "contribución especial de obras públicas (TUO Ley de Tributación Municipal arts. 62-65",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "kept at C: contribución especial de obras públicas (TUO Ley de Tributación Municipal arts. 62-65; the MAP's art. 13-A is the predial minimum, off-target). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+   ],
+   "triage": "(e) kept at C",
+   "triage_note": "kept at C: contribución especial de obras públicas (TUO Ley de Tributación Municipal arts. 62-65; the MAP's art. 13-A is the predial minimum, off-target). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 4500 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "5120",
+   "tax": "other goods and services (5120)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "other taxes on specific services (insurance, gambling, customs duties) not read"
+   ],
+   "triage": "model-next",
+   "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+   "tariff_source": "national Arancel de Aduanas (NANDINA, Andean Community)",
+   "customs_note": "customs import duties (5123): national Arancel de Aduanas (NANDINA, Andean Community); not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule",
+   "family_file": "lean/PeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "other (6000)",
+   "statute": "not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "re-filed in part; kept at C: the ITF (Ley 28194, 0.005 %) named in the earlier triage is a 4400 tax (Guide §53; OECD PE 4400 'Financial transactions tax'): re-filed as its own 4400 C row (the PE 4400 alcabala entry does not model it). Under 6000: the Nuevo RUS (D.Leg. 937; OECD 6100 'Single simplified regime') and others: kept at C (NRUS category quotas need a small-business input)"
+   ],
+   "triage": "(b) re-filed / covered",
+   "triage_note": "re-filed in part; kept at C: the ITF (Ley 28194, 0.005 %) named in the earlier triage is a 4400 tax (Guide §53; OECD PE 4400 'Financial transactions tax'): re-filed as its own 4400 C row (the PE 4400 alcabala entry does not model it). Under 6000: the Nuevo RUS (D.Leg. 937; OECD 6100 'Single simplified regime') and others: kept at C (NRUS category quotas need a small-business input)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 6000 = 2021:5461.3 2022:3573.1 2023:3453.8 2024:4679.6; named lines: 6100 Single simplified regime (2024: 119.0); 6200 Other (2024: 1673.8); 6200 Other tax refunds (2024: -60.3); 6200 Tax Instalment payments (2024: 2947.0)"
+   ],
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Impuesto a las Transacciones Financieras (ITF, 0.005 %)",
+   "statute": "Ley 28194 arts. 9-10, not read",
+   "grade": "C",
+   "status": "unsupported",
+   "package": "P7",
+   "unsupported": [
+    "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)"
+   ],
+   "triage": "(b) re-filed / covered",
+   "triage_note": "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)",
+   "evidence": [
+    "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVPER, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/PER.csv): general government heading 4400 = ?"
+   ],
+   "refiled_from": "6000",
+   "p7_triage_pass": "2026-11-21",
+   "family_file": "lean/PeGlobal/Other.lean",
+   "guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, gift and wealth taxes",
+   "statute": "none: no estate, inheritance or gift tax (OECD Revenue Statistics table, heading 4300 = 0 in 2021-2024)",
+   "grade": "B",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (grade B, gap pass 2, 2026-11-22): the OECD Revenue Statistics detailed table for Peru (DSD_REV_LAC@DF_REVPER v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PER.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; Interpretative Guide §52 (4300 = taxes on estates, inheritances and gifts). No estate, inheritance or gift tax is known in the national law. Peru has had no inheritance tax since its repeal in 1979 (no text held for the repeal itself). 2025 revenue statistics not yet published.",
+   "dated": "OECD Revenue Statistics detailed table for Peru (DSD_REV_LAC@DF_REVPER v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PER.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line; 2025 not yet published",
+   "evidence": [
+    "OECD Revenue Statistics detailed table for Peru (DSD_REV_LAC@DF_REVPER v2.1, sdmx.oecd.org, fetched 2026-11-21 with a plain research user-agent, copy americas/p7t/oecd/PER.csv): general government heading 4300 (estate, inheritance and gift taxes) = 0.0 in 2021, 2022, 2023 and 2024, no 4310 or 4320 line"
+   ],
+   "gap_pass2": "2026-11-22 approach 2 (OECD Revenue Statistics: absence, grade B)",
+   "family_file": "lean/PeGlobal/Property.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "5200",
+   "tax": "Impuesto al Patrimonio Vehicular",
+   "statute": "D.Leg. 776 arts. 30-33; UIT 2025 D.S. 260-2024-EF",
+   "dated": "1993 text (Congreso scan); TUO D.S. 156-2004-EF not held; pass 12, 2026-11-21",
+   "grade": "B",
+   "status": "modelled",
+   "package": "P1",
+   "kernel_parts": [
+    "VehicleTax",
+    "vehicleTaxFamily"
+   ],
+   "unsupported": [
+    "value read as the original acquisition value",
+    "first three years read as registration 2022-2024",
+    "trucks and buses not computed"
+   ],
+   "family_file": "lean/PeGlobal/Property.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "Constitución art. 74; Ley 28424 arts. 1-2, 4, 8; Ley 28929 art. 8; D.Leg. 976",
+   "dated": "constitution: lexifina repository text (pass 12); asset-tax texts fetched 2026-11-21 (pass 15)",
+   "grade": "A",
+   "status": "not levied",
+   "package": "P6",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "why": "Not levied (convention R5-3k-G, pass 15): Constitución art. 74: \"Los tributos se crean, modifican o derogan, o se establece una exoneración, exclusivamente por ley o decreto legislativo\" (`pe/law/const_art-074.md`). The Impuesto Temporal a los Activos Netos (Ley 28424, Congreso text `pe/law/congreso_ley28424_itan.*`, OCR) falls on the net assets of third-category (business) income earners in the general regime (arts. 1, 2, 4), and the amount paid is a credit against the income tax's monthly advance payments and the annual settlement, refundable on a loss (art. 8): an advance income tax on businesses (heading 1200), not a tax on net wealth. Its term was extended to 2007 by Ley 28929 art. 8 (`pe/law/congreso_ley28929.*`) and D.Leg. 976 (`pe/law/congreso_dleg976.*`) set 0.4 % above S/ 1,000,000 from 2009; the later law keeping it in force and any later wording of art. 8 were not read: whichever reading holds in 2025, no tax on net wealth is levied. No law read in this build levies a recurrent tax on net wealth (laws read include: TUO Ley del IGV e ISC art. 17, Apéndices I-II; TUO Ley del IGV e ISC Título II; TUO LIR art. 55 (29,5 %); TUO LIR art. 56 a), d), e), f); 1.x model (see its summary.json); LIR TUO arts. 2, 21.1, 36, 52-A).",
+   "family_file": "lean/PeGlobal/Property.lean",
+   "guards": 2
+  },
+  {
+   "oecd": "2200",
+   "tax": "ESSALUD (employer)",
+   "statute": "Ley 26790 art. 6 a)",
+   "dated": "El Peruano 17 May 1997 (original text)",
+   "grade": "B",
+   "package": "P4",
+   "kernel_parts": [
+    "employerFamily",
+    "Contribution"
+   ],
+   "unsupported": [
+    "RMV floor of the base"
+   ],
+   "status": "modelled",
+   "family_file": "lean/PeGlobal/Social.lean",
+   "guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Impuesto predial",
+   "statute": "TUO de la Ley de Tributación Municipal (D.S. 156-2004-EF) art. 11 (base: total value of the contributor's predios in each district), art. 13 (escala progresiva acumulativa: to 15 UIT 0.2 %, 15-60 UIT 0.6 %, above 60 UIT 1.0 %); UIT 2025 S/ 5,350 (D.S. 260-2024-EF art. 1)",
+   "dated": "lexifina/peru-law ley-tributacion-municipal (El Peruano text of the TUO, D.S. 156-2004-EF; arts. 11, 13, 21-25 unchanged since the 2022 baseline); pe/law/dleg776.pdf (D.Leg. 776); UIT from D.S. 260-2024-EF as read by the 1.x builder; pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P5",
+   "kernel_parts": [
+    "Schedule",
+    "charge"
+   ],
+   "unsupported": [
+    "municipal minimum, art. 19 deduction, art. 13-A rate not applied",
+    "one district assumed",
+    "company real estate not computed"
+   ],
+   "family_file": "lean/PeGlobal/Transfers.lean",
+   "guards": 5
+  },
+  {
+   "oecd": "4400",
+   "tax": "Impuesto de alcabala",
+   "statute": "TUO LTM art. 21 (alcabala on transfers of real estate), art. 24 (base: transfer value, not below the autoavalúo), art. 25: 3 %, borne by the buyer, the first 10 UIT not taxed; UIT 2025 S/ 5,350",
+   "dated": "lexifina/peru-law ley-tributacion-municipal (El Peruano text of the TUO, D.S. 156-2004-EF; arts. 11, 13, 21-25 unchanged since the 2022 baseline); pe/law/dleg776.pdf (D.Leg. 776); UIT from D.S. 260-2024-EF as read by the 1.x builder; pass 9, 2026-11-21",
+   "grade": "A",
+   "status": "modelled",
+   "package": "P5",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "art. 24 autoavalúo floor not applied",
+    "construction-company first sale not distinguished"
+   ],
+   "family_file": "lean/PeGlobal/Transfers.lean",
+   "guards": 5
+  }
+ ],
+ "grades": {
+  "A": 8,
+  "B": 5,
+  "C": 6
+ },
+ "guards": 29,
+ "sorry": 0,
+ "cases": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

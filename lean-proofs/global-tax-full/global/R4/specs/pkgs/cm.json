@@ -1,0 +1,391 @@
+{
+ "cc": "CM",
+ "dated": "CGI 2024 (édition held)",
+ "entries": [
+  {
+   "package": "P6",
+   "oecd": "4200",
+   "kind": "absent",
+   "name": "Net wealth tax",
+   "statute": "CGI 2024 (édition held) (whole code)",
+   "why": "CM CGI 2024 (édition held) (complete code held): no tax on net wealth; full-text search for 'impôt sur la fortune', 'impôt sur le patrimoine', 'patrimoine net' finds no charging provision"
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "purchaseFixedBands",
+   "fam": "timbreGradue",
+   "grade": "B",
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "bands": [
+    [
+     1000000,
+     25000
+    ],
+    [
+     20000000,
+     50000
+    ],
+    [
+     50000000,
+     75000
+    ],
+    [
+     100000000,
+     150000
+    ],
+    [
+     500000000,
+     250000
+    ]
+   ],
+   "top": 400000,
+   "testValues": [
+    800000,
+    30000000,
+    600000000
+   ],
+   "expect": [
+    25000,
+    75000,
+    400000
+   ],
+   "name": "Droit de timbre gradué on the land title of an immovable bought (25 000 to 400 000 F by value)",
+   "statute": "CGI edition 2024 art. 585-586 (unchanged in the 2026 edition; the DGI circular on LF 2025 has no change to art. 586)",
+   "doc": "art. 585: deeds that must be registered and state a value but bear no proportional duty are subject to the graduated stamp duty, in particular land titles and land books (value of the immovable estimated by the land registrar), loan and credit agreements; art. 586: per copy, by the highest value stated: up to 1 M 25 000 F; 1-20 M 50 000; 20-50 M 75 000; 50-100 M 150 000; 100-500 M 250 000; above 500 M 400 000. Each purchase of an immovable is taken to give one land title valued at the higher of price and assessed value.",
+   "unsupported": [
+    "one copy per deed; loan and credit agreements (art. 585) are not in the input",
+    "the dimension stamp duty due in addition (art. 587)"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "licence",
+   "fam": "patente",
+   "grade": "B",
+   "name": "Contribution des patentes (rate on turnover by enterprise size, with floor and cap)",
+   "statute": "CGI édition 2024, Livre II (fiscalité locale) art. C 10, C 13 (nouveau); same text in the 2026 edition",
+   "doc": "art. C 13: 0,159 % of the last closed year's turnover for large enterprises (floor 5 000 000 F, cap 2,5 bn), 0,283 % for medium (floor 141 500, cap 4 500 000), 0,494 % for small (floor 50 000, cap 140 000); the amount includes the principal, the local development tax, the chambers' additional centimes and the broadcasting fee (C 13 (2)). Size classes: small below 50 M (regime threshold, art. 93 quater), large from 3 bn (large-taxpayer threshold set by ministerial decision, not printed in the CGI): flagged.",
+   "unsupported": [
+    "class boundaries (3 bn) set outside the CGI (ministerial decision on the tax centres' competence)",
+    "activities taxable whatever the turnover (annexe II), one-year exemption of new businesses (art. C 12), licence duties (contribution des licences)",
+    "other local taxes listed by the registry (centimes additionnels communaux on IS/IRPP, taxe de développement local) not modelled"
+   ],
+   "lic": {
+    "tiers": [
+     [
+      49999999,
+      4940,
+      50000,
+      140000
+     ],
+     [
+      2999999999,
+      2830,
+      141500,
+      4500000
+     ]
+    ],
+    "top": [
+     1590,
+     5000000,
+     2500000000
+    ]
+   },
+   "tests": [
+    {
+     "turnover": 3000000000,
+     "expect": [
+      5000000
+     ]
+    },
+    {
+     "turnover": 12000000000,
+     "expect": [
+      19080000
+     ]
+    },
+    {
+     "turnover": 1000000000,
+     "expect": [
+      2830000
+     ]
+    },
+    {
+     "turnover": 20000000,
+     "expect": [
+      98800
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "notLevied",
+   "name": "Zakat (as a tax)",
+   "statute": "cgi2026.txt (whole code)",
+   "why": "CM: the general tax code held (cgi2026.txt, 2326k chars) has no zakat provision (full-text search 'zakat/zakât/zakah')"
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "vehicle",
+   "fam": "timbreAuto",
+   "grade": "A",
+   "name": "Droit de timbre automobile (annual, by fiscal horsepower; vehicles other than public transport)",
+   "statute": "CGI art. 597 1) B, 598 (same text in the 2024 and 2026 editions)",
+   "doc": "art. 597 B (vehicles other than public transport of persons and goods): 2-7 CV 30 000 F, 8-13 CV 50 000, 14-20 CV 75 000, above 20 CV 200 000; collected by insurers with the third-party policy (art. 598).",
+   "unsupported": [
+    "public transport tariff 15 000-150 000 F on a transport licence (art. 597 1 A)",
+    "motorcycles (art. 598 ter-quinquies)"
+   ],
+   "bands": [
+    [
+     7,
+     30000
+    ],
+    [
+     13,
+     50000
+    ],
+    [
+     20,
+     75000
+    ]
+   ],
+   "top": 200000,
+   "tests": [
+    {
+     "hps": [
+      9,
+      25
+     ],
+     "expect": [
+      50000,
+      200000
+     ]
+    },
+    {
+     "hps": [
+      12
+     ],
+     "company": true,
+     "expect": [
+      50000
+     ]
+    }
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmDiv",
+   "grade": "A",
+   "income": "dividend",
+   "rateBp": 1650,
+   "name": "IRCM on dividends (15 % final + 10 % communal additional centimes)",
+   "statute": "CGI art. 70 (1), 71 (editions 2024 and 2026 identical)",
+   "doc": "art. 70 (1): final rate of 15 % on capital income; art. 71: the tax is increased by 10 % communal additional centimes (16,5 % in all).",
+   "unsupported": [
+    "30 % on income paid to tax-haven residents (art. 70 (1))"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "ircmInt",
+   "grade": "A",
+   "income": "interest",
+   "rateBp": 1650,
+   "name": "IRCM on interest (15 % final + 10 % CAC)",
+   "statute": "CGI art. 70 (1), 71 (editions 2024 and 2026)",
+   "unsupported": [
+    "exemptions of savings interest under the CGI's IRCM exemption list (not applied)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "cfcFne",
+   "grade": "B",
+   "rateBp": 250,
+   "name": "Employer contributions to the Crédit Foncier (1,5 %) and the Fonds National de l'Emploi (1 %)",
+   "statute": "Law on the CFC and FNE contributions as annexed to the CGI 2024 (art. 6: CFC 1 % employee / 1,5 % employer, FNE 1 %)",
+   "doc": "art. 6 of the annexed law: CFC employer 1,5 % and FNE 1 % of gross wages (2,5 % in all; an older annexed version prints CFC employer 2,5 % without FNE: same total).",
+   "unsupported": [
+    "two versions of art. 6 annexed (later version used)",
+    "base rounded down to the thousand",
+    "CNPS employer contributions (rates outside the CGI)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "mutBati",
+   "grade": "A",
+   "rateBp": 1000,
+   "kinds": [
+    "home",
+    "realEstate"
+   ],
+   "name": "Registration duty on transfers of urban built property (intermediate rate 10 %)",
+   "statute": "CGI art. 340, 543 b) (editions 2024 and 2026)",
+   "doc": "art. 543: intermediate rate 10 % on acts and transfers of urban built property; average rate 5 % on urban unbuilt and rural built property; reduced 2 % on rural unbuilt property and share transfers."
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "mutNonBati",
+   "grade": "A",
+   "rateBp": 500,
+   "kinds": [
+    "land"
+   ],
+   "name": "Registration duty on transfers of urban unbuilt land (average rate 5 %)",
+   "statute": "CGI art. 543 c) (editions 2024 and 2026)",
+   "unsupported": [
+    "rural unbuilt land 2 % (art. 543 d)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyValue",
+   "fam": "foncier",
+   "grade": "B",
+   "rateBp": 10,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Taxe sur la propriété foncière (0,1 % of the declared value of land and buildings)",
+   "statute": "CGI 2024 art. 577, 580, 581 (1); the 2026 edition moves it to art. C 53 with a progressive schedule above 500 M (date of that change not established)",
+   "doc": "art. 581 (1): 0,1 %; art. 580: on the value of land and buildings declared by the owner (administrative value if none or understated); due in the chief towns of administrative units and serviced areas (art. 577).",
+   "unsupported": [
+    "exemptions (art. 578: public bodies, schools, industrial plant buildings, agricultural land)",
+    "progressive schedule above 500 M FCFA in the 2026 edition (art. C 53 (2))"
+   ]
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "succession",
+   "grade": "A",
+   "onlyKind": "inheritance",
+   "name": "Droits de mutation par décès (progressive 2 / 3 / 5 %)",
+   "statute": "CGI art. 348, 544 B b) 1) (editions 2024 and 2026)",
+   "doc": "art. 544 B b): bracket 0-2 000 000 2 %; 2 000 001-5 000 000 3 %; above 5 000 000 5 %, whatever the relationship.",
+   "classes": [],
+   "default": {
+    "bands": [
+     [
+      2000000,
+      200
+     ],
+     [
+      5000000,
+      300
+     ]
+    ],
+    "top": 500
+   },
+   "testValue": 100000000
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "kind": "estateBands",
+   "fam": "donation",
+   "grade": "A",
+   "onlyKind": "gift",
+   "name": "Droits de mutation entre vifs à titre gratuit (5 / 10 / 20 % by relationship)",
+   "statute": "CGI art. 349, 544 B c) (editions 2024 and 2026)",
+   "doc": "art. 544 B c): direct line and between spouses 5 %; between brothers and sisters 10 %; other relatives beyond the second degree and non-relatives 20 %.",
+   "classes": [
+    {
+     "rels": [
+      "child",
+      "parent",
+      "grandchild",
+      "spouse"
+     ],
+     "bands": [],
+     "top": 500
+    },
+    {
+     "rels": [
+      "sibling"
+     ],
+     "bands": [],
+     "top": 1000
+    }
+   ],
+   "default": {
+    "bands": [],
+    "top": 2000
+   },
+   "testValue": 10000000
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnpsPf",
+   "grade": "B",
+   "rateBp": 700,
+   "cap": 9000000,
+   "level": "social",
+   "name": "CNPS family benefits, employer (7 % up to 750 000 F a month)",
+   "statute": "Décret n° 2016/072 du 15 février 2016 art. 2 a), 4, 7 (CNPS compilation 2022; rates 'revisable every two years' (art. 11): no later decree held, flagged)",
+   "doc": "art. 2 a): family benefits 7 % of contributory wages (general scheme incl. domestic staff; 5,65 % agricultural, 3,7 % private education); art. 4: on wages up to 750 000 F a month (9 000 000 F a year); the family-benefit and work-accident branches are borne by the employer alone.",
+   "unsupported": [
+    "agricultural (5,65 %) and private-education (3,7 %) schemes",
+    "SMIG floor on the contributory wage"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnpsPvid",
+   "grade": "B",
+   "rateBp": 420,
+   "cap": 9000000,
+   "level": "social",
+   "name": "CNPS old-age, invalidity and death pensions, employer share (4,2 % up to 750 000 F a month)",
+   "statute": "Décret n° 2016/072 art. 3, 4 (CNPS compilation 2022, flagged as above)",
+   "doc": "art. 3: pensions 8,4 % of contributory wages, 4,2 % borne by the employer and 4,2 % by the worker; art. 4: ceiling 750 000 F a month.",
+   "unsupported": [
+    "the worker's 4,2 % (2100) is not modelled here"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "cnpsAt",
+   "grade": "B",
+   "rateBp": 175,
+   "level": "social",
+   "name": "CNPS work accidents and occupational diseases, employer (1,75 %, risk group A)",
+   "statute": "Décret n° 2016/072 art. 7-8 (CNPS compilation 2022, flagged as above)",
+   "doc": "art. 8: 1,75 % of wages for risk group A (low), 2,5 % group B, 5 % group C, on all remuneration less business expenses (no ceiling). Companies are taken to be in group A.",
+   "unsupported": [
+    "risk groups B (2,5 %) and C (5 %): the risk class is not in the input"
+   ]
+  }
+ ]
+}

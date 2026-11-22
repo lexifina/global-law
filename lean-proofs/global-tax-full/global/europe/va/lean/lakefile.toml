@@ -1,0 +1,18 @@
+name = "VaGlobal"
+version = "0.1.0"
+defaultTargets = ["VaGlobal", "vaglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); VaTax = the 1.x model, vendored from cmp20/world/B15-no-pit/va/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "VaTax"
+
+[[lean_lib]]
+name = "VaGlobal"
+
+[[lean_exe]]
+name = "vaglobal"
+root = "VaGlobal.Main"

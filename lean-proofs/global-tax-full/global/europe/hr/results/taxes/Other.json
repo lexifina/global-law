@@ -1,0 +1,43 @@
+[
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: porez na cestovna motorna vozila (cars, motorcycles) modelled; posebni porez na motorna vozila (registration) and the annual road-use fee not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: porez na cestovna motorna vozila (cars, motorcycles) modelled; posebni porez na motorna vozila (registration) and the annual road-use fee not modelled",
+  "unsupported": [
+   "would unlock: Zakon o posebnom porezu na motorna vozila (CO2 table and price) with the price of a new car; the Pravilnik on the godišnja naknada za uporabu javnih cesta"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Porez na cestovna motorna vozila",
+  "statute": "Zakon o lokalnim porezima (NN 115/16, 101/17, 114/22, 114/23, 152/24) čl. 11, 12",
+  "dated": "consolidated text in force from 1 January 2024 (zakon.hr via the Internet Archive 2025-06-15, `hr/law/zlp_zakonhr_wb20250615.txt`); original NN 115/2016 (`hr/law/nn2016_115_2524_zlp.txt`)",
+  "grade": "B",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "quadricycles, vehicles other than cars and motorcycles",
+   "5200 porez na cestovna motorna vozila: the age is read in calendar years since first registration (2 / 5 / 10-year boundaries fall in the lower column)"
+  ]
+ },
+ {
+  "oecd": "6000",
+  "tax": "Other taxes (6000) (none levied)",
+  "statute": "European Commission TEDB, HR: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 3181, 3201-3213, 3221, 3222) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": [],
+  "gap": 5
+ }
+]

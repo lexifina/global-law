@@ -1,0 +1,517 @@
+{
+ "country": "LB",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail)",
+   "statute": "PIT law of the country",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "the 1.x model does not tax capital gains and the gain provisions were not read this round; interest/dividend/rent treatment is the 1.x model s"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "ضريبة الأرباح (المادة 32): capital companies 17 %, persons scale 4-25 %",
+   "statute": "Decree-Law 144/1959 art. 32 as replaced by Budget Law 324/2024 art. 46 (capital companies 17 %; others 4/7/12/16/21/25 % on LBP 540 m / 1,440 m / 3,240 m / 6,240 m / 13,500 m); art. 31 allowance LBP 450 m (Law 324/2024 art. 49)",
+   "dated": "Budget Law 324/2024 of 12/02/2024 (OG 7 of 15/02/2024; art. 96 in force on publication); legiliban.ul.edu.lb amended-articles list of law 185603: art. 32 version 7 (Law 324/2024) is the latest; law/legiliban_budget324_2024_art46-50.txt; the 2025 budget (Decree 56/2025, OG 11 of 13/03/2025) amends ITL art. 63 only, not art. 32 (law/legiliban_budget2025_decree56.txt)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge .cit: 17 % flat (capital companies) or Schedule.ofUpper art. 32 scale after the art. 31 allowance (flag personsCompany); base stepped down to LBP 10,000"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "losses (art. 17), dividend distribution tax (art. 72), non-resident withholding (art. 41) not computed",
+    "exempt income taken as given",
+    "royalties paid abroad: grade C (art. 42 classes only goods and services)",
+    "interest abroad taken as art. 70/72 10 %; art. 69 bank-deposit and bond interest (7 %) not distinguished"
+   ],
+   "withholding": {
+    "grade": "A",
+    "rules": "services 8,5 % (DL 144/1959 art. 41, 42 as replaced by Budget Law 324/2024 art. 54: 50 % of the gross taxed at 17 %); dividends 10 % (art. 72 bis, Law 64/2017); interest 10 % (art. 70, 72); royalties grade C (art. 42 names goods and services only)",
+    "dated": "legiliban.ul.edu.lb ITL law 185603 sections 273626, 273634-273636 (law/legiliban_itl_art41_72.txt) and amended-articles list (law/legiliban_itl_amended_articles.html); Budget Law 324/2024 art. 17, 54 (law/legiliban_budget324_2024_sections.html)",
+    "pass": "3k (kernel 2.3.0 R-FT2-1)"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "NSSF contributions (employer): sickness/maternity, family allowances, end-of-service",
+   "statute": "Social Security Code (Decree 13955/1963) art. 68, 71, 73; Decree 5101/2001 art. 2 (sickness 7 % employer of 9 %); Decree 5102/2001 art. 2 (family 6 %); Decree 2951/1965 art. 1 (end-of-service 8.5 %); ceilings Decree 12962/2024 (5 x minimum wage = LBP 90 m/month, memo 754), Decree 887/2025 (120 m from 2025-08-01, memo 805), Decree 12772/2023 (family 12 m), Decree 422/2025 (family 18 m from 2025-07-01, memo 793); Law 319/2023 art. 12 (end-of-service kept until the pension decrees)",
+   "dated": "decrees as published in the Official Gazette (legiliban.ul.edu.lb texts, law/legiliban_*.html); 2025 ceilings from NSSF memos 754, 793, 801, 805 (law/); the 9 % sickness rate is matched by the NSSF 2024-2025 drivers tables",
+   "grade": "B",
+   "kernel_parts": [
+    "employerOn 7 % (cap 1,230 m/yr)",
+    "employerOn 6 % (cap 180 m/yr)",
+    "employerOn 8.5 % (no cap)"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "monthly ceilings applied as yearly caps for an even monthly wage",
+    "Decree 2951/1965 art. 2 reduced 8 % end-of-service rate and art. 72 flat-rate categories not applied",
+    "no consolidated 2025 statement of the 2001 rate decrees (B)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Per-worker fees on employers (work permits of foreign workers)",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "3000 taxes on payroll and workforce: work-permit fees for foreign workers (Ministry of Labour; amounts by decree and budget laws, not read); no payroll tax in the laws read (DL 144/1959, Social Security Code). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ],
+   "pass": "3l"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "built property tax law of 17/09/1962: legiliban law id not found (pass 3m); municipal rental-value fee not read",
+    "pass 3n: Budget 2025 art. 21 amends only art. 31 of the built property tax law of 17/09/1962 (lease registration: fiscal stamp LBP 200 000 per contract); the rate articles were not found"
+   ],
+   "pass": "3m (split from the combined 4400/4100 entry)"
+  },
+  {
+   "package": "P6",
+   "oecd": "4300",
+   "tax": "رسم الانتقال (inheritance duty)",
+   "statute": "Decree-Law 146/1959: annexed table as replaced by Budget Law 324/2024 art. 50 (five heir classes, slices 1.8/3.6/6/12/21 bn LBP, 3-45 %); art. 9(5) exempt part as replaced by Decree 56/2025 art. 23 (2,400 m / 960 m / 480 m)",
+   "dated": "legiliban.ul.edu.lb: Budget Law 324/2024 (OG 7 of 15/02/2024), 2025 budget Decree 56/2025 (OG 11 of 13/03/2025, in force on publication; arts 22-26 amend DL 146 arts 1, 9(5), 16, 19, 36, 43, not the table); law/legiliban_budget2025_decree56.txt",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax: 5 classes, allowance + Schedule.ofUpper slices per heir share"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "the pre-13/03/2025 allowances (a quarter) not applied: transfer date not in the kernel",
+    "add-ons for minor, disabled or dependent heirs not computed",
+    "gift duty (art. 16) not read"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "رسم الفراغ (proportional land-registry transfer fee on sales)",
+   "statute": "DL 20/1939 art. 1 and art. 3 (as replaced by Law 10/2022 art. 76: built property at rental value x 30 where higher); DL 148/1959 table 2 item 1 as replaced by Budget Law 10/2022 art. 92 (in force 15/11/2022): 3 % Lebanese / 5 % non-Lebanese buyers; Budget Law 324/2024 and Decree 56/2025 leave item 1 unchanged",
+   "dated": "legiliban.ul.edu.lb law ids 187892, 185599, 307720 (art. 92 table image), 330076, 334856 (read 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty flat 3 % / 5 % on purchases (home, realEstate, land), base max(price, assessed), bearer the buyer; rate by the 1.x nationality field"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "legiliban is an unofficial reprint (flagged); Official Gazette not read",
+    "company buyers at 3 % (nationality of a company not an input)",
+    "fixed registry fees per act (Budget 2025 art. 32-34): not booked",
+    "payer not named in the decrees read: the purchaser is charged"
+   ],
+   "pass": "3p"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "الضريبة على القيمة المضافة",
+   "statute": "Law 379/2001 art. 25 (11 %, Law 64/2017), art. 16 (exempt activities, Law 6/2020), art. 17 (exempt goods, Law 144/2019)",
+   "dated": "legiliban.ul.edu.lb article versions: art. 25 from 20/10/2017, art. 16 from 05/03/2020, art. 17 from 31/07/2019; no later version listed",
+   "grade": "A",
+   "kernel_parts": [
+    "Vat (11 %, exempt classes)"
+   ],
+   "guards": 4,
+   "unsupported": [
+    "food: all taken exempt (art. 17(a)-(b) basic foods only)",
+    "transport taken as shared passenger transport (art. 16(6))",
+    "registration threshold (art. 36 / Budget Law 324/2024) not read"
+   ]
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "رسم الاستهلاك الداخلي (internal consumption duty: alcohol, energy drinks)",
+   "statute": "Decree 56/2025 (2025 budget) art. 44 (LD 133/1933 art. 2: domestic alcohol per litre: beer 45,000, arak and wine 60,000, champagne-type 90,000, cognac-type and whisky 12+ years 390,000, other spirits 300,000 LBP) and art. 48 (energy drinks LBP 15,000 a litre)",
+   "dated": "OG 11 of 13/03/2025 (in force on publication); legiliban law id 334856 (law/legiliban_budget2025_decree56.txt)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule per litre, imported := some false, validFrom 2025-03-13, firstOnly by sub"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "rates before 13/03/2025 not modelled",
+    "imported products (customs tariff tables) not computed",
+    "tobacco (Régie monopoly) and fuel duties not modelled"
+   ]
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "4200: no net wealth tax: Constitution of Lebanon (1926, as amended 2004) art. 81: no tax can be established or levied except by a comprehensive law applied to all the Lebanese territory; art. 82: no tax may be amended or eliminated except by a law (Constitute Project English text, law/cp_Lebanon_2004.txt); no law levies it; tax laws read: Decree-Law 144/1959 (income tax), Decree-Law 146/1959 (inheritance and gifts), VAT Law 379/2001, Budget Laws 324/2024 and Decree 56/2025. convention R5-3k-G (extended in pass 3l to states without a closed list of taxes): the constitution reserves taxes to law and no law in force levies this tax (the state's tax laws read in this build are listed); grade A for the clause (text read), the negative rests on that convention (pass 3l).",
+   "source": "statute",
+   "grade": "A"
+  }
+ ],
+ "cases": [
+  {
+   "id": "lb-c1",
+   "total": 368000,
+   "byOecd": {
+    "1200": 148000,
+    "5111": 220000
+   },
+   "borne": {
+    "consumer": 220000,
+    "employer": 0,
+    "entity": 136000,
+    "withheld": 12000
+   },
+   "net": 664000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 36, Budget Law 324/2024) not read: no threshold applied",
+    "losses brought forward: carry-forward rule not read; not offset",
+    "royalties paid abroad: art. 42 (Law 324/2024 art. 54) sets the base for goods (20 %) and services (50 %) only; royalties not classified (grade C)",
+    "interest paid abroad taken as art. 70/72 (10 %); bank-deposit and bond interest (art. 69, 7 %) not distinguished",
+    "3000 taxes on payroll and workforce: work-permit fees for foreign workers (Ministry of Labour; amounts by decree and budget laws, not read); no payroll tax in the laws read (DL 144/1959, Social Security Code). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l).",
+    "1200 withholding on payment 2 (royalty) abroad: no rule read (grade C)"
+   ]
+  },
+  {
+   "id": "lb-c2",
+   "total": 170000000,
+   "byOecd": {
+    "1200": 170000000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 170000000,
+    "withheld": 0
+   },
+   "net": 830000005,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 36, Budget Law 324/2024) not read: no threshold applied",
+    "3000 taxes on payroll and workforce: work-permit fees for foreign workers (Ministry of Labour; amounts by decree and budget laws, not read); no payroll tax in the laws read (DL 144/1959, Social Security Code). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "lb-c3",
+   "total": 53800000,
+   "byOecd": {
+    "1200": 53800000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 53800000,
+    "withheld": 0
+   },
+   "net": 1396200000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 36, Budget Law 324/2024) not read: no threshold applied",
+    "3000 taxes on payroll and workforce: work-permit fees for foreign workers (Ministry of Labour; amounts by decree and budget laws, not read); no payroll tax in the laws read (DL 144/1959, Social Security Code). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "lb-h1",
+   "total": 775497,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "2200": 25800,
+    "4400": 24000,
+    "5111": 792,
+    "5121": 724905
+   },
+   "borne": {
+    "consumer": 725697,
+    "employer": 25800,
+    "entity": 24000,
+    "withheld": 0
+   },
+   "net": 306000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT: food taken as exempt (art. 17(a)-(b) basic foods); processed foods outside that list are taxable at 11 %",
+    "consumption duty: rates of Decree 56/2025 from 13/03/2025 only (earlier 2025 rates not modelled); imported products (customs tariff tables) not computed; lines need quantity in litres",
+    "NSSF employer: monthly ceilings applied as yearly caps for an even monthly wage; work-injury branch not in force; Decree 2951/1965 art. 2 reduced 8 % end-of-service rate and art. 72 flat-rate categories not applied; the employee's 2 % is not an employer charge"
+   ]
+  },
+  {
+   "id": "lb-h4",
+   "total": 409200000,
+   "byOecd": {
+    "1100": 108300000,
+    "2100": 0,
+    "2200": 300900000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 300900000,
+    "entity": 108300000,
+    "withheld": 0
+   },
+   "net": 2291700000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "NSSF employer: monthly ceilings applied as yearly caps for an even monthly wage; work-injury branch not in force; Decree 2951/1965 art. 2 reduced 8 % end-of-service rate and art. 72 flat-rate categories not applied; the employee's 2 % is not an employer charge"
+   ]
+  },
+  {
+   "id": "lb-h5",
+   "total": 1320000,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 1320000
+   },
+   "borne": {
+    "consumer": 1320000,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT: food taken as exempt (art. 17(a)-(b) basic foods); processed foods outside that list are taxable at 11 %"
+   ]
+  },
+  {
+   "id": "lb-x1",
+   "total": 896755,
+   "byOecd": {
+    "1100": 0,
+    "2100": 0,
+    "5111": 356755,
+    "5121": 540000
+   },
+   "borne": {
+    "consumer": 896755,
+    "employer": 0,
+    "entity": 0,
+    "withheld": 0
+   },
+   "net": 0,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "consumption duty: rates of Decree 56/2025 from 13/03/2025 only (earlier 2025 rates not modelled); imported products (customs tariff tables) not computed; lines need quantity in litres"
+   ]
+  },
+  {
+   "id": "lb-w1",
+   "total": 21700000,
+   "byOecd": {
+    "1100": 1850000,
+    "1200": 19850000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 17000000,
+    "withheld": 4700000
+   },
+   "net": 83000000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 36, Budget Law 324/2024) not read: no threshold applied",
+    "royalties paid abroad: art. 42 (Law 324/2024 art. 54) sets the base for goods (20 %) and services (50 %) only; royalties not classified (grade C)",
+    "interest paid abroad taken as art. 70/72 (10 %); bank-deposit and bond interest (art. 69, 7 %) not distinguished",
+    "3000 taxes on payroll and workforce: work-permit fees for foreign workers (Ministry of Labour; amounts by decree and budget laws, not read); no payroll tax in the laws read (DL 144/1959, Social Security Code). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l).",
+    "1200 withholding on payment 3 (royalty) abroad: no rule read (grade C)"
+   ]
+  },
+  {
+   "id": "lb-t1",
+   "total": 579600000,
+   "byOecd": {
+    "1100": 22800000,
+    "2100": 0,
+    "2200": 196800000,
+    "4400": 360000000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 196800000,
+    "entity": 382800000,
+    "withheld": 0
+   },
+   "net": 817200000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "NSSF employer: monthly ceilings applied as yearly caps for an even monthly wage; work-injury branch not in force; Decree 2951/1965 art. 2 reduced 8 % end-of-service rate and art. 72 flat-rate categories not applied; the employee's 2 % is not an employer charge"
+   ]
+  },
+  {
+   "id": "lb-t2",
+   "total": 811100000,
+   "byOecd": {
+    "1100": 10800000,
+    "2100": 0,
+    "2200": 150300000,
+    "4400": 650000000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 150300000,
+    "entity": 660800000,
+    "withheld": 0
+   },
+   "net": 239200000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "NSSF employer: monthly ceilings applied as yearly caps for an even monthly wage; work-injury branch not in force; Decree 2951/1965 art. 2 reduced 8 % end-of-service rate and art. 72 flat-rate categories not applied; the employee's 2 % is not an employer charge"
+   ]
+  },
+  {
+   "id": "lb-t3",
+   "total": 1450000000,
+   "byOecd": {
+    "1200": 850000000,
+    "4400": 600000000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 1450000000,
+    "withheld": 0
+   },
+   "net": 3550000000,
+   "notModelled": [
+    "2300",
+    "3000",
+    "4100",
+    "4500",
+    "5112",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "VAT registration threshold (art. 36, Budget Law 324/2024) not read: no threshold applied",
+    "3000 taxes on payroll and workforce: work-permit fees for foreign workers (Ministry of Labour; amounts by decree and budget laws, not read); no payroll tax in the laws read (DL 144/1959, Social Security Code). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l).",
+    "4400 رسم الفراغ: company buyer charged at the Lebanese rate (3 %); a non-Lebanese company pays 5 % (nationality of a company not an input)"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 19,
+ "theorems": 1
+}

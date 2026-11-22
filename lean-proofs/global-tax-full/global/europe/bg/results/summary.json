@@ -1,0 +1,256 @@
+{
+ "country": "BG",
+ "name": "Bulgaria",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 01:04:42"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Данък върху капиталовите печалби",
+   "statute": "ЗДДФЛ чл. 33, 48 (10 %)",
+   "dated": "PwC WWTS Individual - Income determination, 2025-05-31 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Disposal.gain",
+    "Schedule"
+   ],
+   "unsupported": [
+    "real estate gains (exemptions for one home and two other properties held five years) not modelled",
+    "gains on shares traded on EU/EEA regulated markets are exempt (not applied)"
+   ],
+   "family_file": "lean/BgGlobal/Capital.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5111",
+   "tax": "Данък върху добавената стойност",
+   "statute": "ЗДДС чл. 66 ал. 1 (20 %), чл. 66а (9 %); чл. 38-50 (освободени доставки); чл. 96 (регистрация) [year in force 2025 (pass 16), unchanged-confirmed: bg/law/zdds.txt: чл. 66 изм. ДВ 52/2022 (в сила 01.07.2022), чл. 66а изм. ДВ 102/2022 (в сила 01.01.2023), no later note; чл. 96 изм. ДВ 115/2025 в сила от 01.01.2026 (EUR 51 130 threshold): the model applies no registration threshold, so the 2026 change does not reach it]",
+   "dated": "lex.bg current text; arts. 66, 66a unchanged since 2022/2023 per their notes",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "registration threshold (чл. 96) read only in its 2026 wording (EUR): not applied for 2025"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/BgGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Закон за акцизите и данъчните складове (ЗАДС) чл. 29-39, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/BgGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties whose 2025 rate changed during the year (cigarettes)",
+   "statute": "Закон за акцизите и данъчните складове (ЗАДС) чл. 29-39; TEDB situations 1.1, 1.7 and 31.12.2025",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: the lexifina/bulgaria-law index holds no 2025 amendment of the ЗАДС; the TEDB record 4053 states dates only for tobacco substitutes and e-liquids (1.5.2025), not for cigarettes",
+   "unsupported": [
+    "would unlock: the day the rate changed, from the act or decree (then dated kernel 2.1 ExciseRule rules, validFrom / validTo, as IT fuel)"
+   ],
+   "gap_note": true,
+   "family_file": "lean/BgGlobal/Consumption.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Корпоративен данък",
+   "statute": "Закон за корпоративното подоходно облагане чл. 20 (10 на сто) [year in force 2025 (pass 16), unchanged-confirmed: bg/law/zkpo.txt: чл. 20 carries no amendment note (wording of the 2006 act, in force since 1.1.2007)]",
+   "dated": "lex.bg current text (2026-11); чл. 20 has no amendment note",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "loss carry-forward (5 years, чл. 70) not modelled",
+    "withholding on dividends to non-residents (чл. 194, 5 %) not read"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/BgGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad",
+   "statute": "ЗКПО чл. 194-195, 200 (dividends 5 %, interest and royalties 10 %)",
+   "dated": "PwC WWTS Corporate - Withholding taxes, 2025-04-19 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "EU parent-subsidiary / interest-royalty exemptions and the higher tax-haven rates not modelled",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/BgGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "1200",
+   "tax": "Данък при източника (технически услуги) (services)",
+   "statute": "ЗКПО чл. 12 (5) т. 4, чл. 195 (1), § 1 т. 9 ДР; rate 10 % as for the other чл. 195 income [year in force 2025 (pass 16), unchanged-confirmed: bg/law/zkpo.txt: чл. 195 (1) last доп. ДВ 94/2010 (в сила 01.01.2011); чл. 200 (1) изм. ДВ 110/2007; no 2024-2026 note]",
+   "dated": "ЗКПО as on lex.bg (`bg/law/zkpo.txt`); rate: PwC Worldwide Tax Summaries, Bulgaria, Corporate - Withholding taxes, accessed 2025-04-19 (Wayback capture; `law/pwc_wht_wb2025.txt`)",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as technical services (§ 1 т. 9 ДР); other services bear none",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "unchanged-confirmed",
+   "family_file": "lean/BgGlobal/Corporate.lean",
+   "family_guards": 7
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/BgGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "European Commission TEDB, BG: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 58, 739, 1761, 4503, 743) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/BgGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "ЗМДТ чл. 44-47 (данък при придобиване, 0,1-3 % по общини)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "данък при придобиване на имущество: 0,1-3 % as each municipality sets (ЗМДТ); Sofia rate not read"
+   ],
+   "family_file": "lean/BgGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "4100",
+   "tax": "Данък върху недвижимите имоти",
+   "statute": "ЗМДТ чл. 22 (the municipal council sets the tax at 0,1-4,5 per mille of the tax assessment), чл. 20-21 (tax assessment, приложение № 2), чл. 25 ал. 1 (the main home: 50 % reduction); rate: Столична община 1,875 per mille (TEDB tax 1761, situation 01/01/2025)",
+   "dated": "ЗМДТ consolidated to ДВ бр. 81/2024 (in force 24.09.2024; lexifina/bulgaria-law zakon/1997/dv117-zmdt/full-text.md); Sofia's rate: EC Taxes in Europe Database (TEDB), tax 1761, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+   "grade": "B",
+   "kernel_parts": [
+    "LocalTax (2.8.0)"
+   ],
+   "unsupported": [
+    "other municipalities: localRates.propertyTax (0,1-4,5 per mille); an asset with a region other than Sofia and no rate: grade C",
+    "the 75 % reduction for an owner with reduced working capacity (чл. 25 ал. 2) and the exemptions of чл. 24: not modelled",
+    "the 50 % reduction is applied to the assessment (a rounding difference of at most 1 lev against reducing the tax)",
+    "the 5 % discount for paying the year by 30 April (чл. 28 ал. 2) is a payment term: not modelled"
+   ],
+   "lfw": 1,
+   "family_file": "lean/BgGlobal/Property.lean",
+   "family_guards": 5
+  },
+  {
+   "oecd": "2200",
+   "tax": "Осигурителни вноски (работодател)",
+   "statute": "КСО чл. 6, ал. 3; ЗБДОО 2025 чл. 9, 14, 15: 18,92 % (lowest work-accident group); max 3 750 / 4 130 лв. a month",
+   "dated": "ЗБДОО 2025 (via the 1.x model)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BgGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Bulgaria, Individual - Other taxes, accessed 2025-05-31 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-05-31 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BgGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Данък върху наследствата и даренията",
+   "statute": "Закон за местните данъци и такси (ЗМДТ) чл. 29-38 (данък върху наследствата) and чл. 44-48 (данък при придобиване на имущества по дарение)",
+   "dated": "minfin.bg English text of the ЗМДТ, upload 51250 (Internet Archive 2024-09-12, `bg/law/zmdt_en_minfin_wb20240912.pdf`)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 14: the ЗМДТ frame read (spouse and lineal heirs exempt; statutory ranges); the Sofia ordinance fixing the rates not reached (403, no Archive copy)",
+   "unsupported": [
+    "ЗМДТ read in the Ministry of Finance's English text (minfin.bg, as amended to SG 8/2022; Internet Archive 2024-09-12): the surviving spouse and lineal heirs pay no inheritance tax (чл. 31 ал. 2); siblings and their children pay 0,4 to 0,8 % and all others 3,3 to 6,6 % of each share above BGN 250 000 (чл. 36); gifts: 0,4 to 0,8 % between siblings and their children and 3,3 to 6,6 % otherwise, on the assessed value (чл. 47 ал. 1), none between spouses or lineal relatives (чл. 44 ал. 6). The rate inside each range is fixed by the municipal council's ordinance (чл. 1 ал. 2): the Sofia ordinance (Наредба за определянето и администрирането на местните данъци на територията на Столична община) was not reached: sofia.bg and council.sofia.bg answer 403 to a non-browser client and no Internet Archive copy was found. Amendments after SG 8/2022 to чл. 31, 36, 44 and 47 not checked"
+   ],
+   "unlock": "the Sofia municipal ordinance on local taxes in its 2025 wording (rates under чл. 36 and 47)",
+   "family_file": "lean/BgGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 9,
+  "C": 4
+ },
+ "guards": 24,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

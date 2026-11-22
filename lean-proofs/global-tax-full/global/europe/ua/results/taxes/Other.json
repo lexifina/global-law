@@ -1,0 +1,43 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes",
+  "statute": "none recorded by the registry",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "registry row: no other notable tax; no provision read",
+  "unsupported": [
+   "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+  ],
+  "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes"
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: транспортний податок (ПКУ ст. 267) modelled; no other annual vehicle tax on households",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: транспортний податок (ПКУ ст. 267) modelled; no other annual vehicle tax on households",
+  "unsupported": [
+   "would unlock: the ministry's 2025 list of cars with an average market value above 375 minimum wages (the input's value stands for it)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Транспортний податок",
+  "statute": "Податковий кодекс України ст. 267 (п. 267.2.1, 267.4); Закон про Державний бюджет України на 2025 рік ст. 8",
+  "dated": "ПКУ via the Internet Archive 2025-06-20 (`ua/law/ptk_wb20250620.txt`); budget law via the Internet Archive 2025-05-31 (`ua/law/budget2025_4059.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "vehicles other than passenger cars (not objects of the tax)",
+   "5200 транспортний податок: the vehicle's value stands for the ministry's average market value and its first-registration year for the year of manufacture"
+  ]
+ }
+]

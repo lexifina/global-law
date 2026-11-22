@@ -1,0 +1,29 @@
+name = "UsGlobal"
+version = "0.1.0"
+defaultTargets = ["UsGlobal", "usglobal"]
+
+# kernel-2.0 project for the United States (cmp20/global/DESIGN.md §6). TaxCode (the Form 1040 model) and
+# Compare.{Canon,Us} (the contract adapter that `cmptax us` runs) are vendored unchanged from cmp/compare/lean
+# (sha256 in ../VENDORED_FROM_cmp_compare.sha256); the PIT enters through GlobalModel.ofLine.
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"
+
+[[lean_lib]]
+name = "TaxCode"
+globs = ["TaxCode.+"]
+
+[[lean_lib]]
+name = "Compare"
+globs = ["Compare.+"]
+
+[[lean_lib]]
+name = "UsGlobal"
+
+[[lean_exe]]
+name = "usglobal"
+root = "UsGlobal.Main"

@@ -1,0 +1,189 @@
+{
+ "country": "FJ",
+ "name": "Fiji",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:21:07"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "statute": "VAT Act 1991 s. 14 (1), 15 (1) (15 %, Act 6 of 2023 from 1 August 2023); Value Added Tax (Budget Amendment) Act 2025 ss. 1 (2), 4, 5, 9",
+   "dated": "Act No. 10 of 2025 (in force 1 August 2025): read; principal Act ss. 14 (1), 15 (1) read in lexifina/fiji-law (laws.gov.fj consolidation of 2023-08-01; gap-closing session); its Schedules 1-2 not read: stays B",
+   "grade": "B",
+   "kernel_parts": [
+    "DatedVat (kernel 2.1)"
+   ],
+   "unsupported": [
+    "registration threshold",
+    "zero-rated basic items and other Schedule 1 exemptions of the principal Act"
+   ],
+   "family_file": "lean/FjGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duty (beer, spirits, wine)",
+   "statute": "Excise Act 1986 Schedule 2 Part 1 items 3.01-3.02, 4.03-4.05, 5.02 (Act No. 9 of 2024, from 1 August 2024)",
+   "dated": "2025: laws.gov.fj consolidation of 2026-10-21 (Table of Amendments: none after Act No. 9 of 2024), read in lexifina/fiji-law; gap-closing session: C -> A",
+   "grade": "A",
+   "kernel_parts": [
+    "Family",
+    "charge"
+   ],
+   "unsupported": [
+    "cigarettes and other tobacco (origin of the tobacco, weight)",
+    "soft drinks, sweetened beverages and the food items of Schedule 1 items 7-11",
+    "wine taken as still wine",
+    "imports: import excise under the Customs Tariff Act 1986 not read (every line taken as excisable)"
+   ],
+   "family_file": "lean/FjGlobal/Consumption.lean",
+   "family_guards": 10
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "Income Tax Act 2015 Schedule (as amended by the 2023 budget)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FjGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Non-resident withholding tax (interest 10 %, royalties, management and professional fees 15 %; dividends exempt)",
+   "statute": "Income Tax Act 2015; Income Tax (Rates of Tax and Levies) Regulations 2016 reg 10 (5); Income Tax (Exempt Income) Regulations 2016 Sch. Part 5",
+   "dated": "consolidations in force from 1 Aug 2022 (laws.gov.fj; local copy of the 1.x builder, cmp20/world/B14-pacific/fj/law/gl_rates_regs.txt, gl_exempt_sch.txt); no later change in the 2023-2026 Budget Acts read",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "insurance premiums 3 % (reg 10 (5) (d)) not a payment kind"
+   ],
+   "family_file": "lean/FjGlobal/Corporate.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "Income Tax Act 2015 (as amended by the 2025 Budget Act No. 9 of 2025): dividends exempt for individuals, bank interest exemption edge (lesson B14 F3), capital gains tax, rental at scale; rates in the Income Tax (Rates of Tax and Levies) Regulations 2016 Schedule incl. Social Responsibility Tax",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade A (the build server): "
+   ],
+   "family_file": "lean/FjGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FjGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property",
+   "statute": "Local Government Act 1972 (town rates)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade B (bg): "
+   ],
+   "family_file": "lean/FjGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FjGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes: not levied",
+   "statute": "none (estate and gift duties abolished)",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FjGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stamp duty on property transfers: not levied (repealed from 1 August 2020)",
+   "statute": "Stamp Duties (Repeal) Act 2020 ss. 1 (2), 2, 3",
+   "dated": "repeal in force 2020-08-01; laws.gov.fj act list 2026 has no stamp duty act",
+   "grade": "A",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "status": "not levied",
+   "family_file": "lean/FjGlobal/Property.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "No employer social security tax (provident fund, non-tax)",
+   "statute": "Fiji National Provident Fund Act 2011",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/FjGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 3,
+  "B": 6,
+  "C": 2
+ },
+ "guards": 17,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

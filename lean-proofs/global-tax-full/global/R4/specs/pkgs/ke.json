@@ -1,0 +1,178 @@
+{
+ "cc": "KE",
+ "dated": "Kenya Law consolidations at 2025-07-01",
+ "entries": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "divWht",
+   "income": "dividend",
+   "rateBp": 1500,
+   "grade": "A",
+   "name": "Withholding tax on dividends (resident)",
+   "statute": "ITA Third Schedule Head B para 5 (a) (15 %)",
+   "doc": "Head B para 5: \"The resident withholding tax rates shall be- (a) in respect of a dividend, fifteen per cent of the amount payable; (b) in respect of interest ... (i) bearer instrument ... twenty-five per cent; (ii) Government Bearer Bond of at least two years duration and other sources, fifteen per cent\".",
+   "unsupported": []
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "intWht",
+   "income": "interest",
+   "rateBp": 1500,
+   "grade": "A",
+   "name": "Withholding tax on interest (resident)",
+   "statute": "ITA Third Schedule Head B para 5 (b) (ii) (15 %)",
+   "notes": [
+    "ITA Head B para 5 (b): bearer instruments 25 %, 10-year bearer bonds 10 %: household interest taken as 'other sources' (15 %)"
+   ],
+   "unsupported": [
+    "bearer instruments"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "rentTax",
+   "income": "rent",
+   "rateBp": 750,
+   "grade": "B",
+   "name": "Residential rental income tax",
+   "statute": "ITA s. 6A; Third Schedule Head B para 10 (7,5 % of gross rent)",
+   "doc": "s. 6A (1): \"a tax to be known as residential rental income tax shall be payable ... by any resident person from income ... for the use or occupation of residential property, and which is in excess of two hundred and eighty-eight thousand shillings but does not exceed fifteen million shillings during any year of income\"; Head B para 10: \"The rate of tax in respect of residential rental income shall be seven point five percent of the gross rental receipts\". The 288 000 / 15 000 000 band is not applied (rent items assumed inside it): grade B.",
+   "notes": [
+    "ITA s. 6A: the household's rent items are assumed to lie in the 288 000 - 15 000 000 Sh band"
+   ],
+   "unsupported": [
+    "band test 288 000 - 15 000 000 Sh",
+    "commercial rent"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "cgt",
+   "rateBp": 1500,
+   "kinds": [
+    "realEstate",
+    "land",
+    "unlistedShares"
+   ],
+   "grade": "A",
+   "name": "Capital gains tax",
+   "statute": "ITA s. 3 (2) (f); Third Schedule Head B para 14 (15 %, final)",
+   "doc": "Head B para 14: \"The rate of tax in respect of capital gains charged under section 3(2)(f) shall be fifteen per cent which shall be a final tax\". Gain = proceeds less cost and costs (Eighth Schedule adjusted cost not read in detail).",
+   "notes": [
+    "CGT: homes and listed shares are not taxed here (Eighth Schedule exemptions not read)"
+   ],
+   "unsupported": [
+    "Eighth Schedule exemptions (private residence, listed securities)",
+    "adjusted cost rules"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payroll",
+   "fam": "ahl",
+   "rateBp": 150,
+   "level": "central",
+   "grade": "A",
+   "name": "Affordable Housing Levy (employer)",
+   "statute": "Affordable Housing Act 2024 s. 4 (2), 5 (1) (b) (1.5 %)",
+   "doc": "AHA 2024 s. 4 (2): \"The Levy shall be at the rate of one point five percent of- (a) the gross salary of an employee\"; s. 5 (1): \"An employer shall- (a) deduct and remit ... and (b) remit an amount equivalent to the amount deducted under section 4(2)(a)\".",
+   "unsupported": []
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "nssf",
+   "grade": "B",
+   "rateBp": 600,
+   "cap": 828000,
+   "level": "social",
+   "name": "NSSF Tier I + Tier II employer contribution (6 % of pensionable earnings up to the Upper Earnings Limit)",
+   "statute": "National Social Security Fund Act 2013 (Cap. 258) s. 20, Third Schedule (Table: year 2 UEL = 1 × National Average Earnings, year 3 LEL 8 000 / UEL = 2 × NAE); year 3 runs from February 2025",
+   "doc": "s. 20: the employer pays Tier I contributions (6 % of earnings up to the Lower Earnings Limit) and Tier II contributions (6 % of earnings between the LEL and the Upper Earnings Limit), matching the employee; pensionable earnings are the lower of monthly wages and the UEL. Third Schedule: year 2 (February 2024 - January 2025) UEL = 1 × NAE, year 3 (February 2025 - January 2026) UEL = 2 × NAE. NAE = 36 000 Kshs, inferred from the NSSF year-4 notice (UEL 108 000 = 3 × NAE) — the year-3 notice itself is not held. For 2025: January at 6 % of up to 36 000, February-December at 6 % of up to 72 000, i.e. an annual ceiling of 36 000 + 11 × 72 000 = 828 000 per employee.",
+   "unsupported": [
+    "the annual ceiling is exact for constant monthly wages up to 36 000 or from 69 000; in between the January month is slightly over-counted",
+    "contracting out of Tier II (s. 21)",
+    "the employee's matching 6 %"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "stamp",
+   "rateBp": 400,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "grade": "B",
+   "name": "Stamp duty on conveyances of immovable property (municipality)",
+   "statute": "Stamp Duty Act Schedule item 12A (Sh. 40 per Sh. 1 000: 4 %)",
+   "doc": "Schedule item 12A: \"Conveyance or Transfer on sale of any immovable property ... situated in any municipality ... for every Sh. 1,000, and also for any fractional part of Sh. 1,000, in excess of Sh. 2.000 ... Sh. 40\"; item 11 (other property, i.e. outside municipalities): Sh. 20 per Sh. 1 000; item 12B: transfers between spouses nil. Consolidation date of the Kenya Law copy not established: grade B.",
+   "notes": [
+    "Stamp Duty Act item 12A: 4 % (municipal property) applied; 2 % outside municipalities (item 11) and the rounding up to Sh. 1 000 not applied"
+   ],
+   "unsupported": [
+    "2 % outside municipalities",
+    "rounding per Sh. 1 000"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "unsupported",
+   "name": "County property rates",
+   "statute": "county Rating Acts",
+   "why": "county rating legislation not held",
+   "tried": "-"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "kind": "unsupported",
+   "name": "Other notable taxes (significant economic presence tax (replaced DST from Dec 2024); provision not located by keyword in the reachable text)",
+   "statute": "Income Tax Act Cap. 470 (Kenya Law consolidations 2025-07-01, 2026-01-01; archived new.kenyalaw.org)",
+   "why": "triage outOfScope: significant economic presence tax applies to non-resident digital service providers. listed by the registry (background (unverified)); charging provision not read/modelled in this pass",
+   "tried": "local copy (https://new.kenyalaw.org/akn/ke/act/1973/16 (archived))",
+   "triage": "outOfScope"
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "kind": "payrollHead",
+   "fam": "nita",
+   "perYear": 600,
+   "level": "central",
+   "grade": "A",
+   "name": "Industrial training levy (NITA), KES 600 per employee per year",
+   "statute": "Industrial Training Act (Cap. 237) s. 5A; Industrial Training (Training Levy) Order, L.N. 113 of 2007, para. 4 (1) as amended by L.N. 10 of 2020 and L.N. 62 of 2021 (Kenya Law revised edition 31 Dec 2022, Wayback 2025-10-28, R4/fetch/p14/ke_nita_order.txt)",
+   "doc": "Para. 4 (1): 'At the end of each financial year ... an employer shall remit to the Director a levy of six hundred shillings per employee per year or pro rata for their term of service.' 'employee' includes apprentices, temporary, seasonal and casual workers (para. 2). Fourteenth pass (FT reviewer 4 gap).",
+   "notes": [
+    "NITA levy: a company line with a payroll but no employee count gets no charge (the count is not guessed)"
+   ],
+   "unsupported": [
+    "pro rata for part-year service not modelled (each employee counted for the full year)",
+    "para. 3A (new employers with fewer than 100 employees, 12 months from registration) concerns registration; not applied"
+   ]
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "kind": "notLevied",
+   "name": "Annual motor vehicle licence fee (no fee prescribed for vehicles registered in Kenya)",
+   "statute": "Traffic Act (Cap. 403) s. 15, 19 (1) (Kenya Law version of 26 April 2024 via Wayback 20261002153541, R4/fetch/p17/ke_traffic_act_2024-04-26.html): vehicle licences 'upon payment of such fees as may be prescribed'; Traffic Rules First Schedule Part I 'Fees' (Rev. 2012, last amended by L.N. 56/2006 per the Schedule's note; Kenya Law PDF via Wayback 20150807001257, R4/fetch/p17/ke_traffic_cap403_rev2012.pdf)",
+   "why": "the fee schedule prescribes registration fees (one-off, by engine capacity: KSh 1 700 to 8 300), dealer's general licences and licences for foreign private vehicles, but no annual licence fee for vehicles registered in Kenya; the Act's ss. 15 and 19 are unchanged in the 2024 version. Flag: the Rules are read in the 2012 revision (no later consolidation reached); the one-off registration fee and the ITA s. 12A advance tax on commercial vehicles (an income-tax prepayment) are not 5200 charges modelled here"
+  }
+ ]
+}

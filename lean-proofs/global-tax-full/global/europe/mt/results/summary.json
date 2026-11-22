@@ -1,0 +1,276 @@
+{
+ "country": "MT",
+ "name": "Malta",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:16:02"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Income Tax Act Cap. 123 art. 5; property transfers (Cap. 123 art. 5A)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/MtGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "statute": "VAT Act (Cap. 406) art. 19 (18 %); Eighth Schedule (7 % accommodation, 5 % electricity ...); Fifth Schedule Part One items 9-11 (food, pharmaceutical goods, scheduled passenger transport: exempt with credit), Part Two item 15 (water by a public authority: exempt) [year in force 2025 (pass 17), upgraded: PwC Malta, Corporate - Other taxes, Internet Archive 2025-06-23 (mt/law/pwc_corpother_wb20250623.*): standard 18 %, 7 % on eligible accommodation, 5 % on electricity and other listed supplies, as modelled; the Fifth Schedule exemptions still not dated against 2025]",
+   "dated": "PwC Malta other taxes, Internet Archive 2025-06-23 (rates); legislation.mt Cap. 406",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "books (5 %), newspapers and restaurant rates not read item by item: taken at 18 %; transport read as scheduled passenger transport (Fifth Schedule Part One item 11; taxis and other transport are taxable)",
+    "small undertaking exemption (art. 11) not read: no threshold applied"
+   ],
+   "yif16": "downgraded",
+   "yif17": "upgraded",
+   "family_file": "lean/MtGlobal/Consumption.lean",
+   "family_guards": 15
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Excise Duty Act (Cap. 382) First Schedule, rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/MtGlobal/Consumption.lean",
+   "family_guards": 15
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax (companies)",
+   "statute": "Income Tax Act (Cap. 123) art. 56 (6) (a) (thirty-five cents on every euro) [year in force 2025 (pass 17), upgraded: PwC Malta, Corporate - Taxes on corporate income, Internet Archive 2025-04-20 (mt/law/pwc_cit_wb20250420.*): flat 35 %, as modelled]",
+   "dated": "Cap. 123 art. 56(6), consolidation of 17.4.2025 (legislation.mt via lexifina/malta-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "shareholder refunds under the full imputation system (6/7, 5/7, 2/3; Income Tax Management Act art. 48) not modelled: the 35 % is the company's charge before refunds"
+   ],
+   "yif16": "downgraded",
+   "yif17": "upgraded",
+   "gap": 6,
+   "family_file": "lean/MtGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on payments abroad (interest, royalties) (interest, royalty)",
+   "statute": "Income Tax Act (Cap. 123) art. 12 (1) (c) (i) [year in force 2025 (pass 17), upgraded: PwC Malta, Corporate - Withholding taxes, Internet Archive 2025-05-27 (mt/law/pwc_wht_wb20250527.*): interest and royalties of non-residents exempt where not connected with a Maltese PE, as modelled]",
+   "dated": "Cap. 123 art. 12(1)(c)(i), consolidation in force in 2025 (legislation.mt via lexifina/malta-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "downgraded",
+   "yif17": "upgraded",
+   "gap": 6,
+   "family_file": "lean/MtGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on services paid abroad",
+   "statute": "not read",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 8: no statute or official/secondary source on disk states the rule for these kinds; pass 9: Cap. 123 read for withholding on payments to non-residents: only investment income (art. 41) and the art. 12 (1) (c) exemptions; a non-resident's Malta-source service income is taxed by return (art. 4), no deduction at source found; pass 12: Cap. 123 (`mt/law/cap123.txt`) re-read: the only deduction at source on a non-resident's fees for services is art. 23 (5) (a), petroleum Contractors paying non-resident sub-contractors at the art. 56 (13) (b) rate; any other non-resident's Malta-source service income is charged by return (art. 4), so a generic company deducts nothing",
+   "unsupported": [
+    "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\"",
+    "would unlock: the Final Settlement System rules (S.L. 123.13) on payments to non-residents, to confirm that no deduction applies",
+    "would unlock (pass 12): a Commissioner for Tax and Customs guide or the FSS rules (S.L. 123.13) stating that no other deduction applies, to cite the 0 as A"
+   ],
+   "family_file": "lean/MtGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on dividends (none) (dividend)",
+   "statute": "Income Tax Act (Cap. 123): full imputation, no tax on distributions",
+   "dated": "2025-05-27",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/MtGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/MtGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "European Commission TEDB, MT: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 425, 431-433, 671-673, 678, 680, 1901, 4427) read against the OECD Revenue Statistics Interpretative Guide (Revenue Statistics 2021 edition, Internet Archive 2022-12-15, `tools/in_gap/oecd_interpretative_guide_wb20221215.pdf`) § 85 (6000: taxes on bases other than those of headings 1000-5000)",
+   "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 5,
+   "family_file": "lean/MtGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "no recurrent property tax: absence not yet cited",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/MtGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Duty on documents and transfers (sole residence)",
+   "statute": "Duty on Documents and Transfers Act (Cap. 364) art. 32 (1) (EUR 5 per EUR 100 of the higher of price and value); art. 32 (4) (a) (EUR 3.50 per EUR 100 on the first EUR 200 000 for the buyer's sole ordinary residence) [year in force 2025 (pass 17), unchanged-confirmed: the 2025 acts in Cap. 364 amend art. 19 (IX.2025.37) and add art. 68 (XXX.2025.7); art. 32 carries no 2025 note; PwC Malta, Corporate - Other taxes, Internet Archive 2025-06-23: 5 % on transfers of immovable property]",
+   "dated": "legislation.mt Cap. 364 (art. 32 unchanged in 2025); PwC Malta, Internet Archive 2025-06-23",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "a home is taken as the buyer's sole ordinary residence (art. 32 (4)); the first-time buyer exemption on the first EUR 200 000 (subsidiary legislation, transfers to 31.12.2025) is not applied; the per-EUR 100 rounding up and the higher-of-value base are not applied (the price stands in)"
+   ],
+   "yif17": "unchanged-confirmed",
+   "family_file": "lean/MtGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Duty on documents and transfers",
+   "statute": "Duty on Documents and Transfers Act (Cap. 364) art. 32 (1) (EUR 5 per EUR 100 of the higher of price and value); art. 32 (4) (a) (EUR 3.50 per EUR 100 on the first EUR 200 000 for the buyer's sole ordinary residence) [year in force 2025 (pass 17), unchanged-confirmed: as the sole-residence entry: no 2025 amendment of art. 32; PwC Malta 2025: 5 %]",
+   "dated": "legislation.mt Cap. 364 (art. 32 unchanged in 2025); PwC Malta, Internet Archive 2025-06-23",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "base: the higher of price and value (the price stands in); duty on shares (art. 47-50) not modelled"
+   ],
+   "yif17": "unchanged-confirmed",
+   "family_file": "lean/MtGlobal/Property.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Social security contribution, Class 1 (employer share)",
+   "statute": "Social Security Act (Cap. 318), Class 1 contributions; 2025 rates and weekly maxima as reported to the TEDB",
+   "dated": "TEDB record 429, situation 1.1.2025 (still the version on 1.7.2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "employees born before 1 January 1962 (weekly maximum 45.19 EUR) not separated",
+    "the weekly minimum (22.18 EUR for a basic weekly wage up to 221.78) and student categories not applied",
+    "Cap. 318 itself not read (TEDB, grade B)"
+   ],
+   "gap": 1,
+   "cap_check": "gap pass 2: 53,23 EUR = 2024 maximum (L.N. 10 of 2025, Tenth Schedule from 1.1.2024); 2025 maximum 54,43 EUR from the TEDB kept (B)",
+   "family_file": "lean/MtGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Malta, Individual - Other taxes, accessed 2025-07-08 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-07-08 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/MtGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Malta, Individual - Other taxes, accessed 2025-07-08 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-07-08 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/MtGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 7,
+  "C": 4
+ },
+ "guards": 31,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

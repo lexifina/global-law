@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Statlig inkomstskatt för juridiska personer",
+  "statute": "Inkomstskattelagen (1999:1229) 65 kap. 10 § (20,6 procent), Lag (2018:1206)",
+  "dated": "65 kap. 10 § unchanged since Lag (2018:1206) (in force for years from 2021)",
+  "grade": "A",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "näringsbetingade andelar (24 kap. 13-17 §§: tax-free dividends) not modelled",
+   "periodiseringsfond (30 kap.) not modelled",
+   "underskott: no cap, but ownership-change limits (40 kap.) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Kupongskatt (dividend)",
+  "statute": "kupongskattelag (1970:624) 5 § [year in force 2025 (pass 16), unchanged-confirmed: se/law/sfs-1970-624.txt: 5 § (\"trettio procent\") carries no amendment note (1970 wording); the 2026 change (Lag 2026:840) is in 4 and 4 a §§ (exemptions), not used]",
+  "dated": "data.riksdagen.se, fetched 2026-11-21 (`se/law/sfs-1970-624.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "the exemptions for EU/treaty parent companies (4 §) not applied",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "unchanged-confirmed"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on interest, royalties, services (interest, royalty, services)",
+  "statute": "inkomstskattelagen (deemed PE for royalties; no tax on interest and service fees)",
+  "dated": "2025-06-17",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht",
+   "WhtRule.zero (cited)"
+  ],
+  "unsupported": [
+   "royalties are assessed on the recipient (deemed PE), not withheld: booked as a withheld charge",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

@@ -1,0 +1,86 @@
+{
+ "cc": "ST",
+ "name": "Sao Tome and Principe",
+ "dated": "Lei n.º 13/2019 (Código do IVA, D.R. I Série n.º 71 of 6 Nov 2019), Lei n.º 10/2009 (Código do IRC) and Decreto-Lei n.º 6/2016 (contribuição mínima) as amended by the OGE 2024 law (art. 8 n.º 10; its tax changes stay in force until the next OGE law); the OGE 2025 law is not held: grade B",
+ "sources": "Pass 10: Direcção dos Impostos legislation downloads (`impostos.financas.gov.st/index.php/legislacao/leg-tributaria/category/<cat>?download=<id>:<slug>`, ids 173 IRC, 172 CMT, 180 IVA, 179 IEC) and the OGE 2024 law (`financas.gov.st/phocadownload/Orcamento/oge/A-2024/OGE2024-APROVADO/…`), via Wayback, in `R4/fetch/st10/` (SHA256SUMS; the CMT decree OCRed). The IEC decree (Decreto-Lei n.º 27/2021) is held but its Anexo I rate table pages are blank in the published copy.",
+ "vat": {
+  "name": "Imposto sobre o Valor Acrescentado (IVA)",
+  "standard": 1500,
+  "classes": {
+   "financial": "exempt",
+   "insurance": "exempt",
+   "rent": "exempt"
+  },
+  "grade": "B",
+  "statute": "Lei n.º 13/2019 (Código do IVA) art. 16.º n.º 1 (taxa 15 %) and art. 17.º (isenções nas operações internas: seguros e resseguros de vida, intermediação financeira, locação de imóveis para fins residenciais)",
+  "doc": "Lei n.º 13/2019, \"Artigo 16.º Taxa 1. A taxa do imposto é de 15%. 2. Os produtos constantes do anexo I, quando vendidos no mercado nacional, ficam sujeitos ao regime especial de aplicação do IVA, sendo que a taxa do IVA em vigor incidi sobre 50% do valor total da factura.\" \"Artigo 17.º Isenções nas operações internas. Estão isentas do imposto: a) A prestação de seguros e resseguros de vida; b) As operações de intermediação financeira, incluindo aquelas listadas no Anexo II, mas exceptuando aquelas em que uma taxa, ou contraprestação, específica é cobrada pelo serviço; c) A transmissão de ouro para investimento; d) A transmissão do direito de propriedade de bens imóveis, à exclusão da primeira transmissão, destinados a fins residenciais ...; e) A locação de bens imóveis destinados a fins residenciais ...\".",
+  "notes": [
+   "health and education are not in the art. 17.º exemption list and are taxed at 15 %",
+   "the Anexo I products taxed on 50 % of the invoice (an effective 7.5 %) were not identified (the annex was not read): no basket line is moved to it",
+   "only life insurance is exempt; amendments after 2019 other than the OGE 2024 law were not read (OGE 2025 not held)"
+  ],
+  "unsupported": [
+   "Anexo I special regime (50 % base) not read",
+   "OGE 2025 not held"
+  ]
+ },
+ "excise": {
+  "status": "unsupported",
+  "name": "Imposto Especial sobre o Consumo (IEC)",
+  "why": "the rates are in Anexo I of Decreto-Lei n.º 27/2021 (art. on 'Taxas aplicáveis': 'As taxas ... correspondem às constantes da tabela anexa'), and the annex pages (D.R. n.º 87 of 11 Nov 2021, pp. 1299-1300) are blank in the published PDF",
+  "tried": "R4/fetch/st10/iec2021.pdf (text and page images); impostos.financas.gov.st ISC decrees (2016, 2019) not fetched",
+  "statute": "Decreto-Lei n.º 27/2021"
+ },
+ "cit": {
+  "name": "Imposto sobre o Rendimento das Pessoas Colectivas (IRC)",
+  "rate": 2500,
+  "min": {
+   "fixed": 2544
+  },
+  "grade": "B",
+  "statute": "Código do IRC (Lei n.º 10/2009) art. 81.º n.º 1 (taxa geral 25 %); contribuição mínima, Decreto-Lei n.º 6/2016 art. 1.º and 3.º n.º 2 as amended by the OGE 2024 law art. 8 n.º 10 (Dbs 2.544,00)",
+  "doc": "CIRC \"Artigo 81.º Taxas 1. A taxa geral do IRC é de 25%. 2. São tributados em 20% os rendimentos sujeitos à retenção na fonte nos termos do artigo 86.º.\" Decreto-Lei n.º 6/2016 art. 1.º: subject to the minimum contribution are \"os sujeitos passivos de IRC cujo imposto anual liquidado ... seja inferior ao valor mínimo fixado no artigo 3.º\". OGE 2024 law art. 8: \"10. É alterado o n.º 2 do artigo 3.º do Decreto-Lei n.º 6/2016, de 31 de Outubro, que passa a ter a seguinte redacção: «O valor mínimo fixado para o IRC é de Dbs: 2.544,00». ... 14. Todas as alterações constantes na presente Lei manter-se-ão em vigor até aprovação e publicação da Lei do Orçamento Geral do Estado do ano seguinte.\"",
+  "notes": [
+   "the OGE 2024 changes are applied to 2025 (they stay in force until the next OGE law; the OGE 2025 law is not held)",
+   "the 'selo de conhecimento e cobrança' added to the minimum (Dbs 72.000 old dobras in 2016) is not modelled"
+  ],
+  "unsupported": [
+   "OGE 2025 not held",
+   "stamp surcharge on the minimum contribution"
+  ]
+ },
+ "wht": {
+  "name": "IRC withholding on non-residents (final)",
+  "grade": "B",
+  "statute": "Código do IRC art. 86.º n.º 1 a), c), g), n.º 3-4 and art. 81.º n.º 2: royalties, capital income (dividends, interest) and services performed in São Tomé 20 %, final for non-residents without a permanent establishment",
+  "doc": "CIRC art. 86.º \"1. O IRC é objecto de retenção na fonte relativamente aos seguintes rendimentos obtidos em território são-tomense ...: a) Rendimentos provenientes da propriedade intelectual ou industrial ...; c) Rendimentos de aplicação de capitais tal como são definidos para efeitos de IRS; ... g) Rendimentos provenientes da realização de trabalhos ou serviços para um cliente no território são-tomense ... 3. As retenções na fonte têm a natureza de imposto por conta, excepto quando o titular dos rendimentos seja entidade não residente que não tenha estabelecimento estável ..., caso em que a retenção na fonte tem carácter definitivo. 4. As retenções na fonte ... são efectuadas à taxa prevista no n.º 2 do artigo 81.º\" (20 %).",
+  "rules": [
+   {
+    "kind": "royalty",
+    "rateBp": 2000,
+    "statute": "CIRC art. 86.º n.º 1 a), art. 81.º n.º 2: 20 %"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 2000,
+    "statute": "CIRC art. 86.º n.º 1 c), art. 81.º n.º 2: 20 %"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 2000,
+    "statute": "CIRC art. 86.º n.º 1 c), art. 81.º n.º 2: 20 %"
+   },
+   {
+    "kind": "services",
+    "rateBp": 2000,
+    "statute": "CIRC art. 86.º n.º 1 g), art. 81.º n.º 2: 20 %"
+   }
+  ],
+  "notes": [
+   "the 2009 code text is used; amendments other than the OGE 2024 law were not read (flagged)"
+  ],
+  "unsupported": [
+   "amendments 2010-2023 and OGE 2025 not read"
+  ]
+ }
+}

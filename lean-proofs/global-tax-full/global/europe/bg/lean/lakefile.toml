@@ -1,0 +1,18 @@
+name = "BgGlobal"
+version = "0.1.0"
+defaultTargets = ["BgGlobal", "bgglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); BgTax = the 1.x model, vendored from cmp20/southeast/bg/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "BgTax"
+
+[[lean_lib]]
+name = "BgGlobal"
+
+[[lean_exe]]
+name = "bgglobal"
+root = "BgGlobal.Main"

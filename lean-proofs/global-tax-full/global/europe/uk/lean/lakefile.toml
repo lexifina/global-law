@@ -1,0 +1,19 @@
+name = "UkGlobal"
+version = "0.1.0"
+defaultTargets = ["UkGlobal", "ukglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); UkTax = the 1.x model (cmp/uk/lean, not built on the kernel),
+# vendored; its Main.lean is UkTax/Legacy.lean with `main` renamed `legacyMain`.
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "UkTax"
+
+[[lean_lib]]
+name = "UkGlobal"
+
+[[lean_exe]]
+name = "ukglobal"
+root = "UkGlobal.Main"

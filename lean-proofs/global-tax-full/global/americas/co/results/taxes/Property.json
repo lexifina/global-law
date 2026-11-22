@@ -1,0 +1,31 @@
+[
+ {
+  "oecd": "4200",
+  "tax": "Impuesto al patrimonio (individuals)",
+  "statute": "ET arts. 292-3, 294-3, 295-3, 296-3 (Ley 2277 de 2022 arts. 35-38)",
+  "dated": "Secretaría del Senado ET consolidation updated 15 Nov 2026; 1.5 % band for 2023-2026",
+  "grade": "A",
+  "package": "P6",
+  "kernel_parts": [
+   "WealthTax",
+   "charge"
+  ],
+  "unsupported": [
+   "spouses not split",
+   "ET 295-3 par. 3 valuation rules"
+  ]
+ },
+ {
+  "oecd": "4300",
+  "tax": "Inheritances and gifts (ganancia ocasional)",
+  "statute": "ET arts. 302-307 (ganancia ocasional on herencias, legados y donaciones)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P6",
+  "kernel_parts": [],
+  "tried": "ET art. 302 read: inheritances are taxed as ganancias ocasionales of the heir within the income tax (no separate inheritance tax); the 1.x model does not route transfers",
+  "unsupported": [
+   "would unlock: routing transfers received into the ganancia ocasional (ET arts. 302-307, 314: 15 %)"
+  ]
+ }
+]

@@ -1,0 +1,342 @@
+{
+ "country": "IT",
+ "name": "Italy",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged; its exe's line function (ofLine)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:14:56"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "TUIR art. 67-68; D.Lgs. 461/1997 (26 %)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/ItGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Imposta sul valore aggiunto",
+   "statute": "DPR 633/1972 art. 16 (22 %; 4, 5, 10 % per tabella A parti II, II-bis, III); art. 10 (esenzioni)",
+   "dated": "Normattiva vigente al 2025-07-01",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "food at 10 % (tabella A parte III); bread, milk, fresh produce and other parte II items are 4 %: tabella A not read item by item",
+    "no VAT registration threshold (the regime forfettario is an income-tax regime, not modelled)"
+   ],
+   "family_file": "lean/ItGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5121",
+   "tax": "Accisa sui prodotti energetici (benzina, gasolio carburante)",
+   "statute": "D.Lgs. 504/1995 All. I; DM 14 maggio 2025 art. 1-2",
+   "dated": "normattiva vigente 2025-07-01; two periods (to 14.5.2025: 728,40 / 617,40; from 15.5.2025: 713,40 / 632,40 EUR per 1 000 l)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule (validFrom/validTo, kernel 2.1)"
+   ],
+   "unsupported": [
+    "GPL, metano, heating uses",
+    "D.Lgs. 43/2025 2026 changes (outside 2025)"
+   ],
+   "family_file": "lean/ItGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5121",
+   "tax": "Accisa sui tabacchi lavorati (sigarette)",
+   "statute": "D.Lgs. 504/1995 art. 39-octies c. 3, 10; All. I Tabacchi lavorati c)",
+   "dated": "normattiva vigente 2025-07-01 (29,50 EUR / 1 000 'a decorrere dall'anno 2025')",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule (specific + ad valorem + minimum)"
+   ],
+   "unsupported": [
+    "onere fiscale minimo (c. 6-8) needs the PMP-sigarette",
+    "other tobacco products"
+   ],
+   "family_file": "lean/ItGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5121",
+   "tax": "Accisa sulla birra",
+   "statute": "D.Lgs. 504/1995 All. I; L. 234/2021 art. 1 c. 986 [year in force 2025 (pass 18), unchanged-confirmed: D.Lgs. 504/1995 in the normattiva text vigente al 1.7.2025 (it/law/tua504_akn20250701.*): the notes to All. I list the last change of the beer rate as L. 234/2021 art. 1 c. 986 (as amended): 2,99 euro per hl and degree Plato from 1.1.2024, no later change to D.Lgs. 43/2025; L. 207/2024 (normattiva, vigente 1.7.2025, it/law/l207_2024_vig20250701.*) art. 1 c. 72-73 touch only the reduced rates of art. 35 (small breweries)]",
+   "dated": "normattiva TUA vigente al 1.7.2025 (2,99 from 1.1.2024; no 2025 change); L. 207/2024 c. 72-73 (art. 35 only)",
+   "grade": "A",
+   "kernel_parts": [
+    "ExciseRule (per degree Plato, kernel 2.1)"
+   ],
+   "unsupported": [
+    "small breweries"
+   ],
+   "yif18": "unchanged-confirmed",
+   "family_file": "lean/ItGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5121",
+   "tax": "Accisa sul vino",
+   "statute": "D.Lgs. 504/1995 All. I (Vino: lire zero)",
+   "dated": "normattiva vigente 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [],
+   "status": "rate zero (cited)",
+   "unsupported": [],
+   "family_file": "lean/ItGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5121",
+   "tax": "Accisa sull'alcole etilico",
+   "statute": "D.Lgs. 504/1995 (TUA) art. 32-33 e allegato I (alcole etilico), rate as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/ItGlobal/Consumption.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "1200",
+   "tax": "Imposta sul reddito delle società (IRES)",
+   "statute": "TUIR (DPR 917/1986) art. 77 (24 %), art. 84 c. 1 (perdite: 80 % del reddito), art. 89 c. 2 (utili esclusi per il 95 %)",
+   "dated": "normattiva vigente 2025-07-01",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "IRAP (D.Lgs. 446/1997, regional, 3,9 %) not modelled",
+    "IRES premiale 20 % (L. 207/2024 art. 1 c. 436-444) not modelled",
+    "losses of the first three periods usable in full (art. 84 c. 2) not modelled"
+   ],
+   "family_file": "lean/ItGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200",
+   "tax": "Ritenuta (lavoro autonomo) (services)",
+   "statute": "DPR 600/1973 art. 25 c. 1",
+   "dated": "normattiva vigente 2025-07-01 (`it/law/dpr600_art25.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as professional services performed in Italy (art. 25: none on work performed abroad)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/ItGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200",
+   "tax": "Ritenuta (dividendi, interessi, canoni) (dividend, interest, royalty)",
+   "statute": "DPR 600/1973 art. 25 c. 4, 26 c. 5, 27 c. 3 (rate 26 %: D.L. 66/2014 art. 3)",
+   "dated": "2025-08-03",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/ItGlobal/Corporate.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes recorded by the registry",
+   "statute": "IRAP (D.Lgs. 446/1997) recorded under CIT; imposta di bollo on financial statements (DPR 642/1972)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVITA v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/ITA.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6100 29 088 million EUR (2023; unnamed; IRAP's non-wage part is booked by the OECD under 6100); not modelled",
+   "unsupported": [
+    "the statutes of the items named by the OECD table"
+   ],
+   "triage": "minor here: IRAP recorded under CIT (P2); imposta di bollo on documents small",
+   "gap_note": true,
+   "family_file": "lean/ItGlobal/Other.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "Other taxes on use of goods (rest)",
+   "statute": "not reached: pass 11: tassa automobilistica (bollo) on cars for Regione Lazio modelled; superbollo, IPT (provincial registration tax), motorcycles and other classes not modelled",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 11: tassa automobilistica (bollo) on cars for Regione Lazio modelled; superbollo, IPT (provincial registration tax), motorcycles and other classes not modelled",
+   "unsupported": [
+    "would unlock: D.L. 98/2011 art. 23 c. 21 (superbollo 20 EUR per kW above 185 kW, by age); D.Lgs. 446/1997 art. 56 and the Città metropolitana di Roma's IPT tariff; the motorcycle rows of the tariffario"
+   ],
+   "family_file": "lean/ItGlobal/Other.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "5200",
+   "tax": "Tassa automobilistica regionale (bollo)",
+   "statute": "D.P.R. 39/1953; D.Lgs. 504/1992 art. 23-24; L. 296/2006 art. 1 c. 321; Regione Lazio, Determinazione G16786 dell'11.12.2024 (tariffario 2025)",
+   "dated": "tariffario 2025, valid from 1 January 2025 (`it/law/lazio_dd_g16786.txt`, `it/law/lazio_tariffario2025_g16786.pdf`; the table is an image, read by OCR: `lazio_tariffario2025_g16786_ocr.txt`)",
+   "grade": "B",
+   "kernel_parts": [
+    "VehicleTax (2.4.0)",
+    "QtyTable"
+   ],
+   "unsupported": [
+    "motorcycles, mopeds, lorries, buses and other classes (other rows of the tariffario)",
+    "5200 bollo: the region of Roma (Lazio) is taken; the year of first registration stands for the year of construction (30-year exemption); amounts in whole euros (rounded down)",
+    "5200 bollo: a hybrid first registered in 2022 may still be in Lazio's three-year exemption (tariffario, esenzioni 5)): taxed at the Euro-class tariff",
+    "5200 superbollo (D.L. 98/2011 art. 23 c. 21, 20 EUR per kW above 185 kW) not modelled (grade C)"
+   ],
+   "family_file": "lean/ItGlobal/Other.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4100",
+   "tax": "Imposta municipale propria (IMU, Roma)",
+   "statute": "L. 27 dicembre 2019 n. 160 art. 1 c. 740, 745, 746, 754, 755; Deliberazione Assemblea Capitolina n. 182 del 19.12.2024 (prospetto aliquote 2025)",
+   "dated": "normattiva vigente al 2025-07-01; prospetto aliquote anno 2025 published by the MEF on 24.1.2025",
+   "grade": "A",
+   "kernel_parts": [
+    "charge (rendita x 1,05 x moltiplicatore x aliquota)"
+   ],
+   "unsupported": [
+    "catastal category not in the input: realEstate taken as gruppo A, home as non-luxury abitazione principale",
+    "rendita catastale is an input (asset.annualValue)",
+    "reduced Roma rates and agevolazioni (c. 760 canone concordato 75 %, comodato 50 %)",
+    "terreni agricoli"
+   ],
+   "family_file": "lean/ItGlobal/Property.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "4400",
+   "tax": "Imposta di registro (trasferimenti immobiliari)",
+   "statute": "DPR 131/1986 Tariffa parte I art. 1 (9 %; 2 % prima casa, nota II-bis)",
+   "dated": "normattiva vigente al 2025-07-01 (Tariffa parte I art. 1, `it/law/tur131_vig20250701_art1_1.txt`)",
+   "grade": "A",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "base: the price (the prezzo-valore rule on cadastral value for homes, L. 266/2005 c. 497, not applied); minimum EUR 1 000 (D.Lgs. 23/2011 art. 10, not read); imposte ipotecaria/catastale EUR 50 + 50; agricultural land 15 %; sales by builders under IVA (registro EUR 200) not separated"
+   ],
+   "family_file": "lean/ItGlobal/Property.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contributo IVS al Fondo pensioni lavoratori dipendenti (quota datore di lavoro)",
+   "statute": "INPS, Aliquote contributive (updated 27.9.2024): IVS for the FPLD (AGO) 33 %; INPS circolare 88/2023: the AGO split, 23,81 % employer and 9,19 % employee (D.Lgs. 166/1997 art. 1); massimale 120 607 EUR for 2025 (L. 335/1995 art. 2 c. 18; INPS circolare 26/2025)",
+   "dated": "INPS page updated 2024-09-27; circolari 88/2023 and 26/2025; D.Lgs. 148/2015 art. 23 vigente 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ItGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contributo ordinario CIGS (quota impresa)",
+   "statute": "D.Lgs. 148/2015 art. 23 c. 1, 1-bis (text in force from 1.1.2022, read at 1.1.2025): 0,90 % of which 0,60 % on the employer, for employers with more than fifteen employees",
+   "dated": "INPS page updated 2024-09-27; circolari 88/2023 and 26/2025; D.Lgs. 148/2015 art. 23 vigente 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ItGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "2200",
+   "tax": "Contributo ordinario CIGO (imprese industriali fino a 50 dipendenti)",
+   "statute": "D.Lgs. 148/2015 art. 13 c. 1 a) (vigente al 1.7.2025): 1,70 per cento della retribuzione imponibile ai fini previdenziali, imprese industriali fino a 50 dipendenti",
+   "dated": "INPS page updated 2024-09-27; circolari 88/2023 and 26/2025; D.Lgs. 148/2015 art. 23 vigente 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ItGlobal/Social.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4200",
+   "tax": "General net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Italy, Individual - Other taxes, accessed 2025-07-21 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-07-21 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/ItGlobal/Wealth.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "4300",
+   "tax": "Imposta sulle successioni e donazioni",
+   "statute": "D.Lgs. 346/1990 art. 7 c. 1 lett. a)-d) (4 % above EUR 1 000 000 per beneficiary; 6 % above EUR 100 000; 6 %; 8 %)",
+   "dated": "normattiva, art. 7 testo in vigore dal 3-10-2024 (applies to successions from 1.1.2025)",
+   "grade": "A",
+   "kernel_parts": [
+    "InheritanceTax",
+    "TaxClass"
+   ],
+   "unsupported": [
+    "gifts: art. 56 (same letters a)-d), cited through art. 56-bis c. 2) not read; the art. 7 rates and franchigie are applied; the coacervo of earlier gifts (art. 57) is not applied",
+    "imposte ipotecaria e catastale (2 % + 1 %) on inherited real estate, the disabled-beneficiary franchigia (art. 7 c. 2), exempt beneficiaries (art. 3: public bodies, ONLUS) and reductions (arts. 25-26) not modelled"
+   ],
+   "family_file": "lean/ItGlobal/Wealth.lean",
+   "family_guards": 8
+  }
+ ],
+ "grades": {
+  "A": 9,
+  "B": 8,
+  "C": 3
+ },
+ "guards": 57,
+ "sorry": 0,
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -1,0 +1,18 @@
+name = "HrGlobal"
+version = "0.1.0"
+defaultTargets = ["HrGlobal", "hrglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); HrTax = the 1.x model, vendored from cmp20/central/hr/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "HrTax"
+
+[[lean_lib]]
+name = "HrGlobal"
+
+[[lean_exe]]
+name = "hrglobal"
+root = "HrGlobal.Main"

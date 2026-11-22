@@ -1,0 +1,43 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Belasting over de Toegevoegde Waarde (BTW)",
+  "statute": "Wet BTW 2022 (S.B. 2022 no. 121) art. 4, 21; bijlagen 2, 3, 4 (S.B. 2022 no. 148; S.B. 2023 no. 126)",
+  "dated": "S.B. 2023 no. 126 (5 September 2023; bijlage 2 from 1 Oct 2023, bijlage 4 from 1 Nov 2023), in force throughout 2025",
+  "grade": "B",
+  "package": "P1",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "food relief limited to listed staples",
+   "small landlords below the art. 21 threshold"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Accijnzen",
+  "statute": "Wet Accijnzen",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P1",
+  "kernel_parts": [],
+  "tried": "belastingdienst.sr wetgeving page lists the BTW texts only",
+  "unsupported": [
+   "would unlock: the Wet Accijnzen tariffs in force 2025"
+  ]
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales / turnover tax (other than VAT)",
+  "statute": "Grondwet art. 155",
+  "dated": "lexifina repository text; pass 13, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P1",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 13): Grondwet art. 155 lid 1: \"Belastingen worden geheven krachtens de wet\" (`sr/law/const_art-155.md`). No law read in this build levies a general sales or turnover tax beside the VAT of the 5111 row (laws read include: Wet BTW 2022 (S.B. 2022 no. 121) art. 4, 21; Wet Inkomstenbelasting art. 47 lid 1: 36 percent; Wet Inkomstenbelasting 1922 art. 1 lid 3, art. 27 lid 2 (S.B. 2024 no. 3): not a binnenlandse bron of a non-resident: no tax, none withheld; Wet Dividendbelasting 1973 arts. 1-6 (S.B. 1981 no. 184, S.B. 1984 no. 109); 1.x model (see its summary.json); Wet Algemeen Pensioen 2014 (S.B. 2014 no. 113, 9 Sep 2014) art. 8: lid 1 3 % of the bijdragegrondslag)."
+ }
+]

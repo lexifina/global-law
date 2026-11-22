@@ -1,0 +1,26 @@
+{
+"ZM": {
+ "dated": "ZRA tax information pages (official secondary: live 2026-11-21 and Wayback 2025-05-16); Income Tax (Amendment) Acts 2023-2025 held",
+ "sources": "Zambia Revenue Authority, 'Tax information' page (`cmp20/global/R4/fetch/zm8/`, live copy of 2026-11-21 and Wayback capture of 2025-05-16, SHA256SUMS); Income Tax (Amendment) Acts 2023-2025 (`cmp20/world/B09-southern-africa/zm/law/`). The consolidated Income Tax, VAT and Customs and Excise Acts are not held.",
+ "vat": {
+  "name": "Value Added Tax",
+  "standard": 1600,
+  "classes": {},
+  "grade": "B",
+  "statute": "Value Added Tax Act Cap. 331 (standard rate 16 %), per the Zambia Revenue Authority guide (official secondary; the same sentence in the Wayback capture of 2025-05-16 and the live page)",
+  "doc": "ZRA, Tax information, Value Added Tax: \"STANDARD RATED SUPPLIES: These are supplies that attract VAT at the prescribed standard rate 16%. ZERO RATED SUPPLIES: These are supplies that attract VAT at 0%. EXEMPT SUPPLIES: These are supplies that do not attract any VAT at all.\" Grade B: the Act was not read.",
+  "notes": ["zero-rated and exempt supplies are not listed in the guide: not applied"],
+  "unsupported": ["zero-rated and exempt schedules (not read)"]
+ },
+ "cit": {
+  "name": "Corporate income tax",
+  "rate": 3000,
+  "step": 1,
+  "grade": "B",
+  "statute": "Income Tax Act Cap. 323 Charging Schedule (company rate 30 %), per the Zambia Revenue Authority guide (official secondary, live page 2026-11-21); the Income Tax (Amendment) Acts 2023 and 2024 amend only sector items of the Charging Schedule",
+  "doc": "ZRA, Tax information, Income Tax (worked example): \"K1,250,000.00 @ 30% applicable rate: K375,000.00 ... subjecting the taxable income to 30% Income tax rate. However, not all businesses are subjected to 30% income tax rate e.g. For Agriculture Sector, the income tax rate is 10%. Refer to the Charging Schedule for other specific tax rates\". The Income Tax (Amendment) Act 2024 s. 15 amends paragraph 5 of the Charging Schedule for sector items (e.g. copper-cathode products 20 %), not the general rate. Grade B: guide, not the Act; the sentence is on the live page (2026), not in the 2025-05-16 capture.",
+  "notes": ["sector rates (agriculture 10 %, mining, manufacturing of copper products, banks) and the turnover tax regime are not modelled"],
+  "unsupported": ["sector rates of the Charging Schedule", "loss carry-forward limits"]
+ }
+}
+}

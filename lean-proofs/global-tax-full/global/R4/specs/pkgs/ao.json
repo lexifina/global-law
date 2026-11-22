@@ -1,0 +1,174 @@
+{
+ "cc": "AO",
+ "dated": "-",
+ "entries": [
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "seloImoveis",
+   "grade": "B",
+   "rateBp": 30,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Imposto do Selo on the acquisition of immovable property (Tabela verba 1: 0,3 % of the value, on the acquirer)",
+   "statute": "Código do Imposto do Selo approved by Decreto Legislativo Presidencial n.º 3/14 (Diário da República I série n.º 191 of 21 October 2014; MINFIN copy minfin052863.pdf, scanned: R4/fetch/p16/ao_cis_minfin052863.pdf, OCR .ocr.txt) art. 3.º n.º 1 a) (charge on the acquirer) and Tabela anexa verba 1 (0,3 %, figure re-read on the page image, p. 4498). Lei n.º 20/20 (Código do Imposto Predial) keeps it alongside the 2 % Imposto Predial on transfers (its exemption clause names 'Imposto de Selo e ... Imposto Predial sobre as Transmissões'); the OGE 2025 law (Lei n.º 18/24) refers to verbas 7.3 and 16 of the same Tabela. B: the 2014 text with later amending laws only partly checked (flag)",
+   "doc": "Tabela verba 1: 'Aquisição onerosa ou gratuita do direito de propriedade ou de figuras parcelares desse direito, sobre imóveis, bem como a resolução, invalidade ou extinção, por mútuo consenso, dos respectivos contratos - sobre o valor: 0,3 %'; art. 3.º n.º 1 a): the charge falls on the acquirer. ao-p1: Kz 10 000 000 home -> 30 000 (plus Imposto Predial 2 % = 200 000, P5). Sixteenth pass.",
+   "unsupported": [
+    "the value of immovable property is fixed by the Imposto Predial Urbano valuation tables (Código, article on the taxable value, OCR l. 703-706): the price is used",
+    "gratuitous acquisitions (gifts, inheritance) of immovable property under the same verba: not modelled",
+    "other verbas (credit use 0,1-0,5 %, receipts, leases 0,1 / 0,4 %, company acts) not modelled",
+    "amendments to the Tabela after 2014 by the annual budget laws not fully checked"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "kind": "payroll",
+   "fam": "inss",
+   "level": "social",
+   "rateBp": 800,
+   "grade": "A",
+   "name": "INSS employer contribution (8 %)",
+   "statute": "Decreto Presidencial n.º 227/18 de 27 de Setembro art. 12.º n.º 1 (files.lex.ao gazette scan, OCR por, R4/fetch/ao11) [text version: Decreto Presidencial n.º 227/18 as published in the Diário da República, I Série, 27 September 2018 (files.lex.ao gazette scan, R4/fetch/ao11/dp227_18.pdf); no later rate decree located (flag)]",
+   "doc": "art. 12.º (Fixação e actualização da taxa contributiva) 1: 'A taxa contributiva é fixada em 8 % para a Entidade Empregadora e 3 % para o trabalhador, do total das remunerações' (no ceiling).",
+   "unsupported": [
+    "the worker's 3 %",
+    "retired workers still employed (8 % worker rate, n.º 2)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyAnnual",
+   "fam": "ipRenda",
+   "grade": "A",
+   "rateBp": 2500,
+   "abateBp": 4000,
+   "kinds": [
+    "realEstate"
+   ],
+   "name": "Imposto Predial on let buildings (25 % of rent less 40 %)",
+   "statute": "Código do Imposto Predial, Lei n.º 20/20 de 9 de Julho art. 9 n.º 4, 16.º n.º 4 (files.lex.ao scan, OCR por, table read on the page image; R4/fetch/ao11) [text version: Lei n.º 20/20 de 9 de Julho as published in the Diário da República, I Série n.º 101 (9 July 2020; files.lex.ao gazette scan, R4/fetch/ao11/lei20_20.pdf); no later amendment of these articles located (flag)]",
+   "doc": "art. 16.º 4: 'A taxa do Imposto Predial aplicável aos prédios arrendados é de 25 % do rendimento colectável'; rendimento colectável = 'rendas efectivamente recebidas, líquidas de 40 % correspondentes a despesas relacionadas com a conservação e manutenção do imóvel'.",
+   "unsupported": [
+    "the holding tax on non-let urban buildings (art. 16.º 1: 0,1 % up to Kz 5 000 000, Kz 5 000 fixed to 6 000 000, 0,5 % on the excess over 5 000 000) needs a per-holding banded value family: not modelled (the home is not taxed in the model)",
+    "land for building 0,6 % (art. 16.º 2) and rustic land per hectare",
+    "50 % surcharge on vacant property (art. 17.º)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "kind": "transfer",
+   "fam": "ipTransmissao",
+   "grade": "A",
+   "rateBp": 200,
+   "kinds": [
+    "home",
+    "realEstate",
+    "land"
+   ],
+   "name": "Imposto Predial on the transfer of immovable property (2 %)",
+   "statute": "Código do Imposto Predial, Lei n.º 20/20 art. 15.º, 18.º [text version: Lei n.º 20/20 de 9 de Julho as published in the Diário da República, I Série n.º 101 (9 July 2020; files.lex.ao gazette scan, R4/fetch/ao11/lei20_20.pdf); no later amendment of these articles located (flag)]",
+   "doc": "art. 18.º: 'A taxa do Imposto Predial aplicável à transmissão de bem imóvel é de 2 %'; art. 15.º: on the higher of the transfer value and the registered value.",
+   "unsupported": [
+    "exemption of a first purchase up to Kz 3 000 000 for the buyer's own permanent home (exemptions article, al. e))",
+    "gratuitous transfers (P6)"
+   ]
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "kind": "propertyBands",
+   "fam": "ipDetencao",
+   "grade": "A",
+   "kinds": [
+    "home"
+   ],
+   "bands": [
+    [
+     5000000,
+     10
+    ],
+    [
+     6000000,
+     0
+    ]
+   ],
+   "top": 50,
+   "marginal": true,
+   "onAnnual": false,
+   "testValues": [
+    3000000,
+    5500000,
+    10000000
+   ],
+   "expect": [
+    3000,
+    5000,
+    25000
+   ],
+   "name": "Imposto Predial on holding a non-let urban building (0,1 % to Kz 5 m; Kz 5 000 to 6 m; 0,5 % of the excess over 5 m)",
+   "statute": "Código do Imposto Predial, Lei n.º 20/20 de 9 de Julho art. 16.º n.º 1 (table read on the page image, I Série n.º 101, R4/fetch/ao11) [text version: Lei n.º 20/20 de 9 de Julho as published in the Diário da República, I Série n.º 101 (9 July 2020; files.lex.ao gazette scan, R4/fetch/ao11/lei20_20.pdf); no later amendment of these articles located (flag)]",
+   "doc": "art. 16.º 1, table: 'Até 5 000 000,00: 0,1 %'; 'de 5 000 001,00 a 6 000 000,00: Valor Fixo Kz 5 000,00'; 'Superior a 6 000 000,00 sobre o excesso de 5 000 000,00: 0,5 %'. As marginal bands (0,1 % to 5 m, 0 % to 6 m, 0,5 % above) this equals the table at every value (0,5 % x 1 m = 5 000).",
+   "unsupported": [
+    "registered (matriz) value: the household's statutory value is used",
+    "let buildings are taxed on rent instead (separate family)",
+    "vacant-property surcharge (art. 17.º)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "iacDiv",
+   "grade": "B",
+   "income": "dividend",
+   "rateBp": 1000,
+   "name": "Imposto sobre a Aplicação de Capitais on dividends (10 %)",
+   "statute": "Código do IAC (Decreto Legislativo Presidencial 2/14) art. 9.º n.º 1 a), 27.º n.º 2 (ucm.minfin.gov.ao copy, OCR, R4/fetch/ao9); later amendments not checked [text version: Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro as published in the Diário da República, I Série (2014 gazette copy on ucm.minfin.gov.ao, R4/fetch/ao9/ucm_ciac_minfin052583.pdf: the republished Código of 2014); later amendments not checked (flag)]",
+   "doc": "art. 27.º 2: 'A taxa de imposto para os rendimentos previstos no n.º 1 do artigo 9.º é de 10 %' (except alíneas e), o) and p): 15 %); art. 9.º 1 a): 'Os lucros ... atribuídos aos sócios ou accionistas'.",
+   "unsupported": [
+    "5 % for shares admitted to a regulated market (art. 27.º 3 b), five years only)"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "finalWht",
+   "fam": "iacInt",
+   "grade": "B",
+   "income": "interest",
+   "rateBp": 1000,
+   "name": "Imposto sobre a Aplicação de Capitais on bank deposit interest (10 %)",
+   "statute": "Código do IAC art. 9.º n.º 1 j), 27.º n.º 2 [text version: Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro as published in the Diário da República, I Série (2014 gazette copy on ucm.minfin.gov.ao, R4/fetch/ao9/ucm_ciac_minfin052583.pdf: the republished Código of 2014); later amendments not checked (flag)]",
+   "doc": "art. 9.º 1 j): 'Os juros dos depósitos à ordem e dos depósitos a prazo constituídos junto das instituições financeiras'; art. 27.º 2: 10 %.",
+   "unsupported": [
+    "current-account interest balances (alínea e)) 15 %",
+    "Treasury bills/bonds (alínea k)) 5 % when listed with 3+ years maturity"
+   ]
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "kind": "gains",
+   "fam": "iacGains",
+   "grade": "B",
+   "rateBp": 1000,
+   "kinds": [
+    "listedShares",
+    "unlistedShares"
+   ],
+   "name": "Imposto sobre a Aplicação de Capitais on gains from shares (10 %)",
+   "statute": "Código do IAC art. 9.º n.º 1 n), 27.º n.º 2 [text version: Decreto Legislativo Presidencial n.º 2/14 de 20 de Outubro as published in the Diário da República, I Série (2014 gazette copy on ucm.minfin.gov.ao, R4/fetch/ao9/ucm_ciac_minfin052583.pdf: the republished Código of 2014); later amendments not checked (flag)]",
+   "doc": "art. 9.º 1 n): 'O saldo positivo, apurado em cada ano, entre as mais-valias e menos-valias realizadas decorrentes da alienação de participações sociais ...' (outside a trade); art. 27.º 2: 10 %.",
+   "unsupported": [
+    "netting of gains and losses within the year (each disposal taxed on its own gain)"
+   ]
+  }
+ ]
+}

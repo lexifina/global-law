@@ -1,0 +1,45 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Impôt des sociétés",
+  "statute": "CIR 92 art. 215, al. 1 (25 p.c.), as replaced by the Loi du 25 décembre 2017 art. 54, 1° and 3° (in force for exercice d'imposition 2021 onwards, art. 86 B2) [year in force 2025 (pass 17), re-cited 2025: PwC Belgium, Corporate - Taxes on corporate income, Internet Archive 2025-07-08 (be/law/pwc_cit_wb20250708.*): standard rate 25 % in 2025, as modelled (the 20 % SME bracket is not modelled); the CIR 92 consolidation of 2025 itself still not read]",
+  "dated": "PwC Belgium CIT page, Internet Archive 2025-07-08 (2025 rate); amending act of 25.12.2017 read",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "read from the amending act of 2017, not from the 2025 consolidated CIR 92",
+   "PME rate 20 p.c. on the first 100 000 EUR (art. 215, al. 2; petite société under the Code des sociétés art. 15 and the al. 3 conditions, e.g. a director's remuneration) not applied",
+   "minimum taxable base (art. 207, al. 5-7 loss and deduction caps) and the Pillar Two minimum tax not modelled"
+  ],
+  "yif17": "re-cited 2025"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on services paid abroad",
+  "statute": "not read",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 8: no statute or official/secondary source on disk states the rule for these kinds; pass 9: no Belgian provision on service fees paid to non-residents is on disk (CIR 92 art. 228 § 3 and the précompte professionnel on non-residents' service income, art. 248, 270)",
+  "unsupported": [
+   "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\"",
+   "would unlock: CIR 92 art. 228 § 3, 248 and 270 (Justel / Fisconetplus text)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Précompte mobilier (dividend, interest, royalty)",
+  "statute": "CIR 92 art. 261, 269 (précompte mobilier)",
+  "dated": "2025-08-02",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ }
+]

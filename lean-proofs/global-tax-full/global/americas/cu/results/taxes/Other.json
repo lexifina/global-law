@@ -1,0 +1,102 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed (trabajadores por cuenta propia): Ley 174 art. 65 scale and quotas not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed (trabajadores por cuenta propia): Ley 174 art. 65 scale and quotas not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "impuesto sobre la propiedad o posesión de tierras / viviendas (Ley 113)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre la propiedad o posesión de tierras / viviendas (Ley 113); OECD CU 4100 not available. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): impuesto sobre la propiedad o posesión de tierras / viviendas (Ley 113); OECD CU 4100 not available. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 4100 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "no OECD 4500 data",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: no OECD 4500 data. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: no OECD 4500 data. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 4500 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "Arancel de Aduanas de la República de Cuba",
+  "customs_note": "customs import duties (5123): Arancel de Aduanas de la República de Cuba; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "5200",
+  "tax": "use of goods (vehicles) (5200)",
+  "statute": "impuesto sobre la propiedad o posesión de vehículos (Ley 113)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre la propiedad o posesión de vehículos (Ley 113); OECD CU 5200 = 0. 2025 schedule not read; needs a VehicleTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: vehicle licence taxes are taxes (Guide §12, §14, §81): impuesto sobre la propiedad o posesión de vehículos (Ley 113); OECD CU 5200 = 0. 2025 schedule not read; needs a VehicleTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 5200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD CU 6000 31,551 (2024), unnamed (contribución territorial para el desarrollo local, Ley 113, not read)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD CU 6000 31,551 (2024), unnamed (contribución territorial para el desarrollo local, Ley 113, not read)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCUB, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CUB.csv): general government heading 6000 = 2021:11292.9 2022:26068.9 2023:20358.9 2024:31551.5"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

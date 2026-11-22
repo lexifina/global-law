@@ -1,0 +1,36 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "Impuesto predial",
+  "statute": "TUO de la Ley de Tributación Municipal (D.S. 156-2004-EF) art. 11 (base: total value of the contributor's predios in each district), art. 13 (escala progresiva acumulativa: to 15 UIT 0.2 %, 15-60 UIT 0.6 %, above 60 UIT 1.0 %); UIT 2025 S/ 5,350 (D.S. 260-2024-EF art. 1)",
+  "dated": "lexifina/peru-law ley-tributacion-municipal (El Peruano text of the TUO, D.S. 156-2004-EF; arts. 11, 13, 21-25 unchanged since the 2022 baseline); pe/law/dleg776.pdf (D.Leg. 776); UIT from D.S. 260-2024-EF as read by the 1.x builder; pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P5",
+  "kernel_parts": [
+   "Schedule",
+   "charge"
+  ],
+  "unsupported": [
+   "municipal minimum, art. 19 deduction, art. 13-A rate not applied",
+   "one district assumed",
+   "company real estate not computed"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "Impuesto de alcabala",
+  "statute": "TUO LTM art. 21 (alcabala on transfers of real estate), art. 24 (base: transfer value, not below the autoavalúo), art. 25: 3 %, borne by the buyer, the first 10 UIT not taxed; UIT 2025 S/ 5,350",
+  "dated": "lexifina/peru-law ley-tributacion-municipal (El Peruano text of the TUO, D.S. 156-2004-EF; arts. 11, 13, 21-25 unchanged since the 2022 baseline); pe/law/dleg776.pdf (D.Leg. 776); UIT from D.S. 260-2024-EF as read by the 1.x builder; pass 9, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P5",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "art. 24 autoavalúo floor not applied",
+   "construction-company first sale not distinguished"
+  ]
+ }
+]

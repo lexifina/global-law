@@ -1,0 +1,255 @@
+{
+ "country": "PH",
+ "name": "Philippines",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:06:17"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Final taxes on interest and dividends",
+   "statute": "NIRC s. 24 (B) (1), (2) as amended by RA 10963 (to 30 June 2025) and RA 12214 s. 4 (from 1 July 2025, s. 28)",
+   "dated": "2025: RA 10963 text (official copy, OCR ph/law/train/p04.txt) to 30 June; RA 12214 s. 4 read (lexifina/philippines-law (git history of the official texts; source recorded per act: elibrary.judiciary.gov.ph thebookshelf/showdocs/2/99213 for RA 12214, /2/86333 for RA 11199, /2/19155 for RA 9679)) from 1 July: interest 20 %, dividends 10 % in both halves (gap-closing session: B -> A)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "FCDU interest 15 % and the long-term deposit exemption (to 30 June 2025)"
+   ],
+   "family_file": "lean/PhGlobal/Capital.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1100",
+   "tax": "Capital gains taxes (unlisted shares 15 %, real property 6 %)",
+   "statute": "NIRC s. 24 (C) (RA 10963; RA 12214 s. 4: 15 %), s. 24 (D) (1) (6 %)",
+   "dated": "2025: s. 24 (C) 15 % read in RA 10963 (ph/law/train/p04) and RA 12214 s. 4 (lexifina/philippines-law (git history of the official texts; source recorded per act: elibrary.judiciary.gov.ph thebookshelf/showdocs/2/99213 for RA 12214, /2/86333 for RA 11199, /2/19155 for RA 9679)); s. 24 (D) (1) 6 % not amended by either and its text not read (stays B); session 11 year-in-force audit: re-cited: to 30 June 2025: s. 24 (C) as amended by RA 10963 (ph/law/train/p04): 15 %; RA 12214 from 1 July (registry): 15 %",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "principal residence exemption"
+   ],
+   "family_file": "lean/PhGlobal/Capital.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4400",
+   "tax": "Stock transaction tax (0.6 % to 30 June 2025, 0.1 % from 1 July 2025)",
+   "statute": "NIRC s. 127 (A) as amended by RA 10963 (6/10 of 1 %) and RA 12214 s. 17 (1/10 of 1 %, from 1 July 2025, s. 28)",
+   "dated": "2025, split at 1 July 2025 by the disposal's date: RA 10963 official text and RA 12214 ss. 17, 28 read (lexifina/philippines-law (git history of the official texts; source recorded per act: elibrary.judiciary.gov.ph thebookshelf/showdocs/2/99213 for RA 12214, /2/86333 for RA 11199, /2/19155 for RA 9679); gap-closing session: B -> A)",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "undated listed-share sales: grade C"
+   ],
+   "family_file": "lean/PhGlobal/Capital.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5111",
+   "tax": "Value-added tax",
+   "statute": "NIRC Secs. 106 (A), 108, 109 (1) (AA), (BB) as amended by RA 10963",
+   "dated": "RA 10963 official text; no later rate change",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "other Sec. 109 exemptions not read",
+    "RA 12023 digital services"
+   ],
+   "family_file": "lean/PhGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise tax on gasoline and diesel",
+   "statute": "NIRC Sec. 148 (f), (i) as amended by RA 10963 (rates from 1 January 2020)",
+   "dated": "RA 10963 official text",
+   "grade": "A",
+   "kernel_parts": [
+    "Excise"
+   ],
+   "unsupported": [
+    "tobacco (RA 11346/11467), alcohol (RA 11467), sweetened beverages, vehicles not modelled"
+   ],
+   "family_file": "lean/PhGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "5200",
+   "tax": "Motor Vehicle User's Charge (private cars by GVW: P1,600 / P3,600 / P8,000; motorcycles P240)",
+   "statute": "Republic Act No. 8794 (2000) ss. 2, 3 (b)",
+   "dated": "Act of 2000, rates final from its fourth year; no CPI adjustment order located (President's power, s. 3, at most once in five years)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax"
+   ],
+   "unsupported": [
+    "massKg read as GVW",
+    "cars registered before 2001 (s. 3 (a)), utility vehicles, SUVs, vehicles for hire not modelled",
+    "no CPI adjustment order located (flag)"
+   ],
+   "family_file": "lean/PhGlobal/Consumption.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200",
+   "tax": "Corporate income tax",
+   "statute": "NIRC s. 27 (A) as amended by RA 11534 s. 6 and RA 12066 s. 1",
+   "dated": "2025: RA 12066 s. 1 (in force 2024-12-03; the s. 27 (A) text in force in 2025) read in lexifina/philippines-law ra/2024/12066 (official source elibrary.judiciary.gov.ph showdocs/2/98085): 25 %, 20 % for small corporations; gap-closing session: B -> A",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PhGlobal/Corporate.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "NIRC s. 25 (B) (RA 12214 s. 5), s. 28 (B) (1) (RA 12214 s. 7), (5) (b) (RA 11534 s. 7), (5) (a) (not read)",
+   "dated": "2025: 25 % (s. 25 (B), s. 28 (B) (1)) and 15 % (s. 28 (B) (5) (b)) read in lexifina/philippines-law; the 20 % on interest on foreign loans (s. 28 (B) (5) (a)) not read: stays B",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "nonresident aliens engaged in trade or business (s. 25 (A)) not distinguished"
+   ],
+   "family_file": "lean/PhGlobal/Corporate.lean",
+   "family_guards": 6
+  },
+  {
+   "oecd": "4100",
+   "tax": "Real property tax (Metro Manila)",
+   "statute": "RA 7160 ss. 218, 233, 235",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "PropertyTax"
+   ],
+   "unsupported": [
+    "commercial assessment levels"
+   ],
+   "family_file": "lean/PhGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4400",
+   "tax": "Documentary stamp tax and local transfer tax",
+   "statute": "NIRC s. 196; RA 7160 s. 135",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PhGlobal/Property.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer SSS (social security part) and PhilHealth",
+   "statute": "RA 11199 s. 4 (a) (2), (9); RA 11223 s. 10",
+   "dated": "2025: RA 11199 schedule (2025 row) and s. 4 (a) (2) read (lexifina/philippines-law (git history of the official texts; source recorded per act: elibrary.judiciary.gov.ph thebookshelf/showdocs/2/99213 for RA 12214, /2/86333 for RA 11199, /2/19155 for RA 9679)); PhilHealth (RA 11223 s. 10) not read: B. Gap-closing fix: the SSS Provident Fund part (MSC above 20,000) and Pag-IBIG (RA 9679, read) are provident funds, not taxes (OECD guide §43): removed",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "employees' compensation (EC) premium",
+    "PhilHealth income floor (10,000 a month)",
+    "MSC brackets (wages taken as the MSC)"
+   ],
+   "family_file": "lean/PhGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PhGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4300",
+   "tax": "Estate tax (6 %)",
+   "statute": "NIRC ss. 84, 86",
+   "dated": "2025; session 11 year-in-force audit: confirmed, version stamped: NIRC s. 84 as amended by RA 10963 (official copy, OCR ph/law/train/p11): 6 % (version stamped)",
+   "grade": "B",
+   "kernel_parts": [
+    "estateCharge"
+   ],
+   "unsupported": [
+    "family home deduction",
+    "claims"
+   ],
+   "family_file": "lean/PhGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Donor's tax (6 %)",
+   "statute": "NIRC s. 99",
+   "dated": "2025; session 11 year-in-force audit: confirmed, version stamped: NIRC s. 99 as amended by RA 10963 (official copy, OCR ph/law/train/p14): 6 % (version stamped)",
+   "grade": "B",
+   "kernel_parts": [
+    "estateCharge"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PhGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: none",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/PhGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 10,
+  "C": 0
+ },
+ "guards": 26,
+ "sorry": 0,
+ "cases": 2,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

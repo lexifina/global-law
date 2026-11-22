@@ -1,0 +1,32 @@
+S = {'cc': 'PT', 'fam': 'Consumption', 'family_name': '5111 Imposto sobre o valor acrescentado', 'doc': '# PT 2025: Imposto sobre o valor acrescentado (5111); excises not modelled in this pass\n\nSource: Código do IVA, Portal das Finanças (Autoridade Tributária, official), article page `pt/law/civa18.html` (current text); sha256 in `law/SHA256SUMS`.\n* art. 18.º 1: "a) Para as importações, transmissões de bens e prestações de serviços constantes da lista I anexa a este diploma, a taxa de 6%"\n* "b) ... constantes da lista II ..., a taxa de 13%"\n', 'vat': {'name': 'Imposto sobre o valor acrescentado', 'standard': 2300, 'threshold': 0, 'statute': 'CIVA art. 18.º n.º 1 a) 6 % (lista I), b) 13 % (lista II), c) 23 %; art. 9.º (isenções)', 'classes': {'food': 'superReduced', 'water': 'superReduced', 'books': 'superReduced', 'newspapers': 'superReduced', 'medicines': 'superReduced', 'hotels': 'superReduced', 'transport': 'superReduced', 'restaurants': 'reduced', 'health': 'exempt', 'education': 'exempt', 'financial': 'exempt', 'insurance': 'exempt', 'rent': 'exempt'}, 'reduced': 1300, 'superReduced': 600}, 'notes': ['PT 5111: Portal das Finanças current text (continental rates)'], 'unsupported': [('g.entity == .company', 'small-business exemption (art. 53.º) not read: no threshold applied'), ('!g.consumption.isEmpty', 'continental rates (Açores and Madeira lower) ; lists I and II by category'), ('g.consumption.any (fun s => s.good == .petrol || s.good == .diesel || s.good == .cigarettes || s.good == .beer || s.good == .wine || s.good == .spirits)', 'excise (Código dos Impostos Especiais de Consumo (DL 73/2010)) not modelled in this pass')], 'guards': ['vat.embedded { good := .clothing, amount := 12300 } == 2300', 'vat.embedded { good := .restaurants, amount := 11300 } == 1300', 'vat.embedded { good := .food, amount := 10600 } == 600'], 'taxes': [{'oecd': '5111', 'tax': 'Imposto sobre o valor acrescentado', 'statute': 'CIVA art. 18.º n.º 1 a) 6 % (lista I), b) 13 % (lista II), c) 23 %; art. 9.º (isenções)', 'dated': 'Portal das Finanças current text (continental rates)', 'grade': 'B', 'kernel_parts': ['Vat'], 'unsupported': ['small-business exemption (art. 53.º) not read: no threshold applied', 'continental rates (Açores and Madeira lower) ; lists I and II by category']}, {'oecd': '5121', 'tax': 'Excise duties', 'statute': 'Código dos Impostos Especiais de Consumo (DL 73/2010)', 'grade': 'C', 'status': 'unsupported', 'kernel_parts': [], 'unsupported': ["not read in the P1 pass: would unlock with the act's 2025 rate articles"]}]}
+
+# ---- pass 16 (R1 Europe, 2026-11-21): year-in-force audit (tools/p16_rows.py, tools/yif16_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+p16_rows(S)
+p6_finish(S)
+
+# ---- gap pass (R1 Europe, 2026-11-21): gap-closing pass (tools/pgap_rows.py, tools/gap_rows.json) ----
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p6lib.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p8_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p9_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p10_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p11_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p12_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p13_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p14_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p15_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p16_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p17_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/p18_rows.py")).read())
+exec(open(__import__("os").path.expanduser("cmp20/global/europe/tools/pgap_rows.py")).read())
+pgap_rows(S)
+p6_finish(S)

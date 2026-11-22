@@ -1,0 +1,160 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Goods and Services Tax",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Goods and Services Tax Act 2009 s. 14 (3) (b) (15 %), Second Schedule items 4-10 (exempt supplies), NRA compilation to 2016; s. 14 not amended by the Finance Acts 2017-2025",
+  "dated": "Income Tax Act 2000 as amended to the Finance Act 2017, with the Finance Acts 2018-2025 (FA 2025 in force 1 Jan 2025) read for the provisions modelled; FA 2026 changes (from 2026) not applied",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "item descriptions' limits",
+   "Second Schedule additions after 2016"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duty",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Excise Act 1982 First Schedule as amended by the Finance Act 2024 s. 4 (headings 2204, 27.10, from 1 Jan 2024) and the Finance Act 2025 s. 6 (b) (24.02 cigarettes, from 1 Jan 2025)",
+  "dated": "Income Tax Act 2000 as amended to the Finance Act 2017, with the Finance Acts 2018-2025 (FA 2025 in force 1 Jan 2025) read for the provisions modelled; FA 2026 changes (from 2026) not applied",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc"
+  ],
+  "unsupported": [
+   "beer (conflicting print)",
+   "spirits (table not in the text)",
+   "local-content beverages (FA 2025 22.09)",
+   "other tobacco and e-cigarettes"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Corporate income tax",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Income Tax Act 2000 s. 5 (1) and First Schedule Part III as amended by the Finance Act 2020 (30 % replaced by 25 %); not amended by the Finance Acts 2021-2025 (FA 2026 restores 30 % from 2026)",
+  "dated": "Income Tax Act 2000 as amended to the Finance Act 2017, with the Finance Acts 2018-2025 (FA 2025 in force 1 Jan 2025) read for the provisions modelled; FA 2026 changes (from 2026) not applied",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax"
+  ],
+  "unsupported": [
+   "minimum alternate tax for loss companies (s. 7A, 2 % of turnover)",
+   "loss carry-forward limits",
+   "sector rates (s. 21)"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Withholding on payments to non-residents",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Income Tax Act 2000 Second Schedule Part II as replaced by the Finance Act 2024 s. 12 (b) (in force 1 Jan 2024; FA 2025 does not amend it): dividends, interest, management/professional fees, rents and royalties 15 %",
+  "dated": "Income Tax Act 2000 as amended to the Finance Act 2017, with the Finance Acts 2018-2025 (FA 2025 in force 1 Jan 2025) read for the provisions modelled; FA 2026 changes (from 2026) not applied",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "minimum alternate tax 2 % of turnover for non-resident companies (Second Schedule Part I, FA 2024)"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty on conveyances and other assignments of property other than financial instruments (1 % of the consideration)",
+  "statute": "Stamp Duty Act Cap. 274 Schedule A, Conveyance Section, paragraph (i) as amended by the Finance Act 2024 s. 2 (in force 1 January 2024; the Finance Act 2023 s. 2 had set 2 %); Finance Acts 2025 and 2026 read: no stamp duty change (R4 world copies world/B10-anglophone-africa/sl/law/The_Finance_Act_2024_0d6d83e684.txt). The Act Cap. 274 itself (charging and liability sections) not held: B. Liability: charged on the purchaser (grantee) as the model's buyer; not verified in Cap. 274",
+  "dated": "-",
+  "unsupported": [
+   "financial instruments 0,2 % (share transfers): no purchase kind for shares in this family",
+   "mortgages and debentures at the same rate",
+   "the party liable under Cap. 274 not read (flag)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Final withholding tax on dividends paid to residents (15 %)",
+  "statute": "Income Tax Act 2000 (as amended to FA 2017) s. 118, 124; First Schedule Part IV as replaced by the Finance Act 2024 (FA 2018-2023 and FA 2025 checked: s. 118, 124 not amended)",
+  "dated": "-",
+  "unsupported": [
+   "dividends to resident companies and complying retirement funds are outside (s. 118(2))"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Final withholding tax on interest paid to residents (15 %)",
+  "statute": "Income Tax Act 2000 s. 119, 124; First Schedule Part IV (Finance Act 2024)",
+  "dated": "-",
+  "unsupported": [
+   "interest paid to resident banks and on Government Development Stocks is outside (s. 119(2))"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "NASSIT employer contribution (10 %)",
+  "statute": "NASSIT, page 'Contributions' (nassit.org.sl, fetched 2026-11-21, R4/fetch/sl11); National Social Security and Insurance Trust Act 2001 not read",
+  "dated": "-",
+  "unsupported": [
+   "the employee's 5 %",
+   "any earnings ceiling (none stated)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Sierra Leone as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Sierra Leone for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C694&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/sl.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+  ]
+ }
+]

@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Porez na dodanu vrijednost",
+  "statute": "Zakon o PDV-u čl. 38 st. 1-3 (25 %, 5 %, 13 %; NN 39/22), st. 4-5 (NN 35/24: to 31.3.2025); čl. 90 st. 1 (60.000,00 eura; NN 152/24)",
+  "dated": "NN 39/2022 as amended by NN 113/2022, 35/2024, 152/2024 (in force 1.1.2025)",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+   "food at 5 %: the staples of čl. 38 (2) (bread, milk, oils, fresh meat, fish, fruit, vegetables, eggs, baby food); other processed food is 25 %",
+   "gas and district heating at 5 % to 31.3.2025 (st. 4-5), then 13 %: not a household category here"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Zakon o trošarinama (NN 106/18 i izmjene) čl. 77, 79, 83, 87, 95 and the Vlada's uredbe o visini trošarine na energente, rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "fuel: the TEDB gives the same amounts at 1.1, 1.7 and 31.12.2025; government decrees changing them between those dates are not excluded",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Trošarina na cigarete (stope od 1.7.2025.)",
+  "statute": "Zakon o trošarinama (cigarette rates set by government decision); EC TEDB record 4044",
+  "dated": "change on 1.7.2025 as stated by the TEDB record",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRule (validFrom/validTo, kernel 2.1)"
+  ],
+  "unsupported": [
+   "the government decision fixing the 1.7.2025 rates not read (TEDB only)"
+  ],
+  "gap": 2
+ }
+]

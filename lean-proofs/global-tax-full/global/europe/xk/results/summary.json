@@ -1,0 +1,235 @@
+{
+ "country": "XK",
+ "name": "Kosovo",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:33:36"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Ligji për tatimin në të ardhurat personale",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/XkGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Tatimi mbi vlerën e shtuar",
+   "statute": "Ligji Nr. 05/L-037 për TVSH (18 %, 8 %; registration above EUR 30 000)",
+   "dated": "Ligji 05/L-037 neni 26 as enacted (in force 1.9.2015, via lexifina/kosovo-law); later amendments not excluded",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the EU-style structure the source describes (health, education, finance, insurance, residential rent), not quoted item by item",
+    "food at the standard rate: the reduced rate covers only grain products, oils, dairy, salt and eggs (8 %) (not separable in the basket's food line)",
+    "the act's own text not reached: rates from PwC Worldwide Tax Summaries (reliable secondary host)",
+    "medicines (2.12) and serial publications (2.9) at 8 %; books at 8 % only for school and library books (2.9, 2.10): all books taken at 8 %"
+   ],
+   "gap": 6,
+   "family_file": "lean/XkGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Ligji për akcizat (not read)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/XkGlobal/Consumption.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "1200",
+   "tax": "Tatimi në të ardhurat e korporatave",
+   "statute": "Ligji Nr. 06/L-105 për tatimin në të ardhurat e korporatave (10 %)",
+   "dated": "Ligji 06/L-105 neni 7 (10 %), in force in 2025 (via lexifina/kosovo-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "gross-income regime of small taxpayers (3 % / 9 %) not modelled"
+   ],
+   "gap": 6,
+   "family_file": "lean/XkGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "withholding tax on payments abroad",
+   "statute": "Ligji për tatimin në të ardhurat e korporatave: 10 % (statute read, gap pass); 10 % (statute read, gap pass)",
+   "dated": "Ligji 06/L-105: interest and royalties 10 %, in force in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "rent 9 % and non-resident services 5 % not modelled (payment kinds outside the line)",
+    "no withholding line for dividends in Ligji 06/L-105"
+   ],
+   "gap": 6,
+   "family_file": "lean/XkGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding tax (dividends, services) (dividend, services)",
+   "statute": "Ligji për tatimin në të ardhurat e korporatave (withholding on non-residents)",
+   "dated": "Ligji 06/L-105: non-resident services 5 %, no dividend line, in force in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht",
+    "WhtRule.zero (cited)"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "gap": 6,
+   "family_file": "lean/XkGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/XkGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/XkGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "Ligji për tatimin në pronë (Prishtinë)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "property tax set by each municipality; Prishtina rate not read"
+   ],
+   "family_file": "lean/XkGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "Ligji për tatimin në pronë (no transfer tax)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "property transaction fee at municipal level, EUR 150 per unit (100 m2 of building, 1 ha of land): area inputs are not in the model"
+   ],
+   "family_file": "lean/XkGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Kontributet pensionale të punëdhënësit (5 %)",
+   "statute": "Ligji nr. 04/L-101 për fondet pensionale të Kosovës neni 6.2 (Gazeta Zyrtare 30.3.2012)",
+   "dated": "law as enacted, in force 30.3.2012, no amendment of neni 6 in the repository by 2025 (via lexifina/kosovo-law)",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "health insurance contribution (04/L-249 neni 37, 3,5 % employer): its start act not read, not modelled",
+    "minimum base (5 % of the minimum wage) not applied"
+   ],
+   "gap": 1,
+   "family_file": "lean/XkGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Kosovo, Individual - Other taxes, accessed 2025-05-24 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-05-24 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/XkGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax (not levied)",
+   "statute": "PwC Worldwide Tax Summaries, Kosovo, Individual - Other taxes, accessed 2025-05-24 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+   "dated": "PwC WWTS Individual - Other taxes, 2025-05-24 (Wayback capture)",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/XkGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 4,
+  "B": 3,
+  "C": 6
+ },
+ "guards": 14,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

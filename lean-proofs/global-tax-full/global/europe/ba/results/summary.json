@@ -1,0 +1,248 @@
+{
+ "country": "BA",
+ "name": "Bosnia and Herzegovina",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 23:29:49"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "Zakon o porezu na dohodak FBiH/RS",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/BaGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Porez na dodanu vrijednost",
+   "statute": "Zakon o porezu na dodanu vrijednost BiH (17 %, no reduced rate; registration above BAM 100 000)",
+   "dated": "PwC, last reviewed 6 February 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the EU-style structure the source describes (health, education, finance, insurance, residential rent), not quoted item by item",
+    "the act's own text not reached: rates from PwC Worldwide Tax Summaries (reliable secondary host)"
+   ],
+   "family_file": "lean/BaGlobal/Consumption.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties",
+   "statute": "Zakon o akcizama BiH (PwC: tobacco 42 % of retail price + BAM 0.75 a pack; not modelled)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "not read in the P1 pass: would unlock with the act's 2025 rate articles"
+   ],
+   "family_file": "lean/BaGlobal/Consumption.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "1200",
+   "tax": "Porez na dobit (Federacija BiH)",
+   "statute": "Zakon o porezu na dobit (FBiH; also Republika Srpska and Brčko District): 10 % [year in force 2025 (pass 16), re-cited 2025: PwC's page on corporate income tax in Bosnia and Herzegovina (review date 6.2.2025), Internet Archive 2025-07-15 (ba/law/pwc_cit_wb20250715.*): 10 % in each of the three entities]",
+   "dated": "PwC CIT page reviewed 6 February 2025 (Internet Archive 2025-07-15); WHT page reviewed February 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "the entity acts' own text not reached (secondary host)",
+    "the Federation's rules taken (RS and Brčko also 10 %; RS withholding 10 % on dividends not separated)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/BaGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "withholding tax on payments abroad",
+   "statute": "Zakon o porezu na dobit FBiH: 5 % on dividends (PwC 2025); 10 % (PwC 2025); 10 % (PwC 2025) [year in force 2025 (pass 16), re-cited 2025: CIT page now the 2025 capture (above); the withholding rates already came from the WHT page reviewed February 2025]",
+   "dated": "PwC CIT page reviewed 6 February 2025 (Internet Archive 2025-07-15); WHT page reviewed February 2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "treaty rates out of scope (statutory, treaty-free)"
+   ],
+   "yif16": "re-cited 2025",
+   "family_file": "lean/BaGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Porez po odbitku (usluge, FBiH) (services)",
+   "statute": "Zakon o porezu na dobit Federacije BiH (porez po odbitku)",
+   "dated": "2025-07-18",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services are taken as management, technical or consulting services (other services only for non-treaty residents)",
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/BaGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on services to individuals paid abroad (none without a fixed base)",
+   "statute": "Zakon o porezu na dohodak FBiH (PwC 2025: a non-resident pays FBiH income tax on independent activity only through a permanent place of business there; dependent activity in FBiH and income from property, royalties and capital investments in FBiH are taxed)",
+   "grade": "B",
+   "dated": "PwC Worldwide Tax Summaries, Bosnia and Herzegovina, its page on taxes on personal income (individuals), Internet Archive 2025-02-16 (`ba/law/pwc_indpit_wb20250216.*`)",
+   "kernel_parts": [
+    "Wht (WhtRule zero, toCompany := some false)"
+   ],
+   "unsupported": [
+    "the individual is taken as having no fixed base or permanent place of business in the country (not an input)",
+    "the personal income tax act itself not read (B)"
+   ],
+   "family_file": "lean/BaGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/BaGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes",
+   "statute": "none recorded by the registry",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "registry row: no other notable tax; no provision read",
+   "unsupported": [
+    "would unlock: a statement in the statute or the tax authority's list of taxes for 2025"
+   ],
+   "triage": "minor: no other national tax recorded by the registry; to confirm against the country's list of taxes",
+   "family_file": "lean/BaGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "porez na imovinu (kantonalni)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "property tax set by each FBiH canton (per m2 or value); Sarajevo Canton law not read (RS: 0,20 %, BD: 0,05-1 %)"
+   ],
+   "family_file": "lean/BaGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4400",
+   "tax": "Real-estate transfer and stamp duties",
+   "statute": "Zakon o porezu na promet nekretnina (kantonalni)",
+   "dated": "pass 6 note (PwC WWTS 2025 captures on disk)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 6: national law read for the frame only",
+   "unsupported": [
+    "FBiH transfer tax set by each canton, at most 5 %; Sarajevo Canton law not read (none in RS and BD)"
+   ],
+   "family_file": "lean/BaGlobal/Property.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "2200",
+   "tax": "Doprinosi na teret poslodavca (Federacija BiH)",
+   "statute": "Zakon o doprinosima FBiH (Sl. novine FBiH 35/98 ... 14/08) čl. 10; Zakon o izmjenama 33/25 čl. 4 i 7 (od 1.7.2025)",
+   "dated": "two periods in 2025: to 30.6.2025 (14/08 text) and from 1.7.2025 (33/25); acts as published via lexifina/bosnia-federation-law",
+   "grade": "A",
+   "kernel_parts": [
+    "Contribution"
+   ],
+   "unsupported": [
+    "wages taken as earned evenly over 2025 (10,5 % on the first half, 5 % on the second)",
+    "Republika Srpska (no employer-borne contributions) and Brčko District not modelled",
+    "amendment 99/19 not checked"
+   ],
+   "gap": 1,
+   "family_file": "lean/BaGlobal/Social.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "Zakon o porezu na nasljeđe i darove (kantonalni)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/BaGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "none recorded",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/BaGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 1,
+  "B": 5,
+  "C": 8
+ },
+ "guards": 12,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

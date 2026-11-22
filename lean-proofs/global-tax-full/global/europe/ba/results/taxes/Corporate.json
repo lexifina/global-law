@@ -1,0 +1,59 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Porez na dobit (Federacija BiH)",
+  "statute": "Zakon o porezu na dobit (FBiH; also Republika Srpska and Brčko District): 10 % [year in force 2025 (pass 16), re-cited 2025: PwC's page on corporate income tax in Bosnia and Herzegovina (review date 6.2.2025), Internet Archive 2025-07-15 (ba/law/pwc_cit_wb20250715.*): 10 % in each of the three entities]",
+  "dated": "PwC CIT page reviewed 6 February 2025 (Internet Archive 2025-07-15); WHT page reviewed February 2025",
+  "grade": "B",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "the entity acts' own text not reached (secondary host)",
+   "the Federation's rules taken (RS and Brčko also 10 %; RS withholding 10 % on dividends not separated)"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "1200",
+  "tax": "withholding tax on payments abroad",
+  "statute": "Zakon o porezu na dobit FBiH: 5 % on dividends (PwC 2025); 10 % (PwC 2025); 10 % (PwC 2025) [year in force 2025 (pass 16), re-cited 2025: CIT page now the 2025 capture (above); the withholding rates already came from the WHT page reviewed February 2025]",
+  "dated": "PwC CIT page reviewed 6 February 2025 (Internet Archive 2025-07-15); WHT page reviewed February 2025",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "treaty rates out of scope (statutory, treaty-free)"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Porez po odbitku (usluge, FBiH) (services)",
+  "statute": "Zakon o porezu na dobit Federacije BiH (porez po odbitku)",
+  "dated": "2025-07-18",
+  "grade": "B",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services are taken as management, technical or consulting services (other services only for non-treaty residents)",
+   "treaty rates and EU directives out of scope (statutory, treaty-free)"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on services to individuals paid abroad (none without a fixed base)",
+  "statute": "Zakon o porezu na dohodak FBiH (PwC 2025: a non-resident pays FBiH income tax on independent activity only through a permanent place of business there; dependent activity in FBiH and income from property, royalties and capital investments in FBiH are taxed)",
+  "grade": "B",
+  "dated": "PwC Worldwide Tax Summaries, Bosnia and Herzegovina, its page on taxes on personal income (individuals), Internet Archive 2025-02-16 (`ba/law/pwc_indpit_wb20250216.*`)",
+  "kernel_parts": [
+   "Wht (WhtRule zero, toCompany := some false)"
+  ],
+  "unsupported": [
+   "the individual is taken as having no fixed base or permanent place of business in the country (not an input)",
+   "the personal income tax act itself not read (B)"
+  ]
+ }
+]

@@ -1,0 +1,26 @@
+name = "FrGlobal"
+version = "0.1.0"
+defaultTargets = ["FrGlobal", "frglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6). The French 1.x model is `cmptax fr` of the Compare project
+# (cmp/compare/lean, not built on the kernel): FrTax, TaxCode and Compare vendored unchanged; Compare/Main.lean is
+# Compare/Legacy.lean with `main` renamed `legacyMain`.
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "TaxCode"
+
+[[lean_lib]]
+name = "FrTax"
+
+[[lean_lib]]
+name = "Compare"
+
+[[lean_lib]]
+name = "FrGlobal"
+
+[[lean_exe]]
+name = "frglobal"
+root = "FrGlobal.Main"

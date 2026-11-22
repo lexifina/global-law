@@ -1,0 +1,302 @@
+{
+ "country": "SD",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building",
+ "pit": "1.x model vendored unchanged; adapter A/B/C 56/56 (R5/tools/check_r5.py)",
+ "taxes": [
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Capital income and gains of individuals (detail)",
+   "statute": "PIT law of the country",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "the 1.x model does not tax capital gains and the gain provisions were not read this round; interest/dividend/rent treatment is the 1.x model s"
+   ]
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Business profits tax (companies)",
+   "statute": "Income Tax Act 1986 s. 29(1), Schedule III Sector (A)(c): 15 % companies, 10 % industrial, 0 % agriculture, 35 % oil and gas, 30 % tobacco and banks",
+   "dated": "Ministry of Justice English consolidation with amendment footnotes to Act 34/2015 (law/sd_income_tax_act_1986_moj_en.txt); later Finance Acts not read; pass 3q year-in-force audit: re-cited: the same MoJ consolidation is the Act the Taxation Chamber publishes on tax.gov.sd/laws (upload February 2025, 1.x SdTax); Finance Acts after 2015 not reached (grade B kept)",
+   "grade": "B",
+   "kernel_parts": [
+    "charge .cit at the Schedule III (A)(c) rate by company flag"
+   ],
+   "guards": 3,
+   "unsupported": [
+    "Finance Acts 2016-2025 not read",
+    "communication companies (printed 2.5 %) not computed",
+    "losses and other base rules not read"
+   ],
+   "withholding": {
+    "grade": "C",
+    "rules": "no rule (kernel 2.3.0 lists each payment abroad as grade C)",
+    "why": "Income Tax Act 1986 (MoJ consolidation to 2015) has no withholding at source on payments abroad; a non-resident's income is assessed on the agent (s. 34); later Finance Acts not read: no cited zero",
+    "pass": "3i"
+   }
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "Employer social insurance contributions",
+   "statute": "social insurance law of the country (see registry)",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "Pension and Social Insurance Act 2016 text not reached (only secondary sources: ISSA profile, employer 17 %): not computed",
+    "pass 3d: nsif.gov.sd Act PDF capture (2018) is an HTML error page; no other copy reached",
+    "pass 3l: 3000 split out (separate grade-C entry); Pension and Social Insurance Act 2016 still not reached (tax.gov.sd CDX lists no social-insurance text)"
+   ]
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Per-worker fees on employers (work permits of foreign workers)",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "3000 taxes on payroll and workforce: fees for work permits of foreign workers (Labour Act 1997; not read); no payroll tax in the laws read (Income Tax Act 1986, VAT Act 2000). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ],
+   "pass": "3l"
+  },
+  {
+   "package": "P5",
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "state (wilaya) property rates (العوائد): no text reached"
+   ],
+   "pass": "3m (split from the combined 4400/4100 entry)"
+  },
+  {
+   "package": "P5",
+   "oecd": "4400",
+   "tax": "Transfer and registration taxes on immovable property",
+   "statute": "not read",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "stamp duty and real-estate transfer texts: tax.gov.sd Wayback holds 2017 `stamp law.pdf`, `Real Estate2.docx` (pass 3k list); not read (pass 3m)"
+   ],
+   "pass": "3m (split from the combined 4400/4100 entry)"
+  },
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "الضريبة على القيمة المضافة (VAT)",
+   "statute": "VAT Act 2000 art. 14(1) (15 %; 17 % by Council of Ministers order of 19/06/2012 under art. 15), 14(2) (telecommunications 30 %), Council order of 07/05/2015 (cigarettes 30 %), art. 36(1) exemptions",
+   "dated": "Taxation Chamber consolidation to Act 35/2015 (tax.gov.sd/documents/VAT law.pdf, created 24/07/2016, Wayback 2017-01-02; law/sd_vat_act2000_tc2016.*); later Finance Acts not read; pass 3q year-in-force audit: downgraded: Taxation Chamber consolidation of 2016 (to Act 35/2015); later Finance Acts not read",
+   "grade": "C",
+   "kernel_parts": [
+    "Vat basket (17 % / 30 % / exempt)"
+   ],
+   "guards": 2,
+   "unsupported": [
+    "pass 3q year-in-force audit: downgraded to C: Taxation Chamber consolidation of 2016 (to Act 35/2015); later Finance Acts not read",
+    "Council orders (17 %, cigarettes 30 %) known from the consolidation's footnotes only",
+    "food taken as exempt (processed food not separated)",
+    "Finance Acts 2016-2025 not read"
+   ],
+   "pass": "3k",
+   "status": "unsupported"
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Zakat (Zakat Act 2001)",
+   "statute": "Zakat Act 2001",
+   "dated": "-",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "guards": 0,
+   "unsupported": [
+    "text not reached"
+   ]
+  }
+ ],
+ "notLevied": [
+  {
+   "oecd": "4200",
+   "why": "not levied per the R5 registry statute map (registry/AFRICA_MENA.json, 2026-11-21: Net wealth tax); grade B (no statute text read for the negative)",
+   "grade": "B",
+   "source": "registry"
+  },
+  {
+   "oecd": "4300",
+   "why": "not levied per the R5 registry statute map (registry/AFRICA_MENA.json, 2026-11-21: Inheritance/estate and gift tax); grade B (no statute text read for the negative)",
+   "grade": "B",
+   "source": "registry"
+  }
+ ],
+ "cases": [
+  {
+   "id": "sd-h1",
+   "total": 16612,
+   "byOecd": {
+    "1100": 16612,
+    "2100": 0
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 16612,
+    "withheld": 0
+   },
+   "net": 313388,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "5111 VAT grade C (year-in-force audit, pass 3q): the VAT Act 2000 consolidation to Act 35/2015 (Taxation Chamber, 2016) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "VAT: food taken as exempt (art. 36(1)(a): natural agricultural products, meat, fish, dairy, flour, bread; processed food not separated); excise duties not read; Finance Acts after 2015 not read"
+   ]
+  },
+  {
+   "id": "sd-c1",
+   "total": 120000,
+   "byOecd": {
+    "1200": 120000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 120000,
+    "withheld": 0
+   },
+   "net": 680000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "losses brought forward: carry-forward rule not read; not offset",
+    "business profits tax: Finance Acts after 2015 not read (rates as consolidated to Act 34/2015)",
+    "3000 taxes on payroll and workforce: fees for work permits of foreign workers (Labour Act 1997; not read); no payroll tax in the laws read (Income Tax Act 1986, VAT Act 2000). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l).",
+    "1200 withholding on payment 1 (dividend) abroad: no rule read (grade C)",
+    "1200 withholding on payment 2 (royalty) abroad: no rule read (grade C)",
+    "1200 withholding on payment 3 (interest) abroad: no rule read (grade C)"
+   ]
+  },
+  {
+   "id": "sd-c2",
+   "total": 150000,
+   "byOecd": {
+    "1200": 150000
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 150000,
+    "withheld": 0
+   },
+   "net": 850000,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "business profits tax: Finance Acts after 2015 not read (rates as consolidated to Act 34/2015)",
+    "3000 taxes on payroll and workforce: fees for work permits of foreign workers (Labour Act 1997; not read); no payroll tax in the laws read (Income Tax Act 1986, VAT Act 2000). Coordinator decision of pass 3l: OECD 3000 covers taxes paid by employers as a fixed amount per person employed, so a per-worker fee levied by law on employers belongs here and the heading is not cited absent until the fee text is read; a one-off permit issuance charge that does not scale with the workforce is not a tax (note only). No company input carries the workforce by nationality. Grade C (pass 3l)."
+   ]
+  },
+  {
+   "id": "sd-v1",
+   "total": 88612,
+   "byOecd": {
+    "1100": 88612,
+    "2100": 0
+   },
+   "borne": {
+    "consumer": 0,
+    "employer": 0,
+    "entity": 88612,
+    "withheld": 0
+   },
+   "net": 511388,
+   "notModelled": [
+    "1300",
+    "2200",
+    "2300",
+    "3000",
+    "4100",
+    "4400",
+    "4500",
+    "5111",
+    "5112",
+    "5121",
+    "5120",
+    "5200",
+    "6000"
+   ],
+   "unsupported": [
+    "5111 VAT grade C (year-in-force audit, pass 3q): the VAT Act 2000 consolidation to Act 35/2015 (Taxation Chamber, 2016) is the version read; its 2025 version or amendment history was not reached, so the rule is not applied",
+    "VAT: food taken as exempt (art. 36(1)(a): natural agricultural products, meat, fish, dairy, flour, bread; processed food not separated); excise duties not read; Finance Acts after 2015 not read"
+   ]
+  }
+ ],
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0,
+ "guards_total": 5,
+ "theorems": 1
+}

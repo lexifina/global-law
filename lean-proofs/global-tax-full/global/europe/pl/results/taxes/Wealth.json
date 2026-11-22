@@ -1,0 +1,29 @@
+[
+ {
+  "oecd": "4300",
+  "tax": "Podatek od spadków i darowizn",
+  "statute": "ustawa o podatku od spadków i darowizn art. 4a ust. 1, art. 9 ust. 1-2, art. 14 ust. 3, art. 15 ust. 1",
+  "dated": "t.j. Dz.U. 2024 poz. 1837 (amended by Dz.U. 2025 poz. 769, 1064: not the rates or allowances)",
+  "grade": "A",
+  "kernel_parts": [
+   "InheritanceTax",
+   "TaxClass"
+  ],
+  "unsupported": [
+   "art. 4a exemption assumes the 6-month report is made; otherwise grupa I; otherRelative taken as grupa II (in-laws are I, cousins III); the scale's fixed amounts are rounded (308,30 zł vs 3 % of 10 278 = 308,34); look-back taken as 6 years"
+  ]
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax (not levied)",
+  "statute": "European Commission TEDB, PL: list of the taxes in force on 1.7.2025 (types other direct and other indirect; taxIds 461, 687, 458, 460, 2983, 6060, 4090, 452, 878, 879)",
+  "dated": "TEDB searches for the situation on 1.7.2025 (held as `tools/in_gap/tedb/search_*`)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": [],
+  "gap": 2
+ }
+]

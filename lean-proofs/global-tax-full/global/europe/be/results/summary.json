@@ -1,0 +1,248 @@
+{
+ "country": "BE",
+ "name": "Belgium",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R1 Europe)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:13:31"
+ },
+ "taxes": [
+  {
+   "oecd": "1100",
+   "tax": "Gains of individuals on shares and property (disposals)",
+   "statute": "CIR 92 art. 90 1° et 9° (plus-values privées)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "the gains provisions were not read in the P3 pass (the 1.x model may tax the household's own `capitalGains`; the extra disposals are not routed)",
+   "unsupported": [
+    "would unlock: the act's gains articles as in force 2025 (holding periods, main-home exemption, rate or routing into the 1.x model)"
+   ],
+   "family_file": "lean/BeGlobal/Capital.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée",
+   "statute": "Code de la TVA art. 37 et AR n° 20 tableaux A (6 %) et B (12 %) as listed by PwC 2025 (21 %, 12 %: restaurant and catering services without drinks; 6 %: food, pharmaceuticals, piped water, printed and electronic publications, passenger transport, hotels, electricity and natural gas for non-business use); art. 56bis (régime de la franchise, 25 000 euros)",
+   "dated": "SPF Finances pages captured 2025-05-17 / 2025-07-08; rate lists: PwC Worldwide Tax Summaries, Belgium, Corporate - Other taxes, Internet Archive 2025-05-26 (`be/law/pwc_corpother_wb2025.*`), facts only",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+    "6 % and 12 % lists from PwC 2025 (B), not from the AR n° 20 tableaux themselves",
+    "restaurants at 12 %: the drinks served (21 %) are not separated",
+    "books and newspapers at 6 % (PwC: some printed and electronic publications)",
+    "non-alcoholic drinks, recreation, communication, clothing and heating oil at 21 % (not on the 6 % or 12 % lists given)"
+   ],
+   "family_file": "lean/BeGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+   "statute": "Loi du 22 décembre 2009 (régime général d'accise); loi du 7 janvier 1998 (alcool); loi du 3 avril 1997 (tabacs); loi-programme du 27 décembre 2004 (énergie), rates as reported to the TEDB",
+   "dated": "TEDB situation on 1.7.2025",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRate (pure alcohol, minimum)"
+   ],
+   "unsupported": [
+    "petrol taken as unleaded below 98 octane; gas oil with at most 10 mg/kg sulphur",
+    "heating gas oil at the non-business rate (Belgium's banded energy contribution not separated)",
+    "rates from the Commission's TEDB (grade B), the national act itself not read",
+    "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+   ],
+   "gap": 2,
+   "family_file": "lean/BeGlobal/Consumption.lean",
+   "family_guards": 13
+  },
+  {
+   "oecd": "1200",
+   "tax": "Impôt des sociétés",
+   "statute": "CIR 92 art. 215, al. 1 (25 p.c.), as replaced by the Loi du 25 décembre 2017 art. 54, 1° and 3° (in force for exercice d'imposition 2021 onwards, art. 86 B2) [year in force 2025 (pass 17), re-cited 2025: PwC Belgium, Corporate - Taxes on corporate income, Internet Archive 2025-07-08 (be/law/pwc_cit_wb20250708.*): standard rate 25 % in 2025, as modelled (the 20 % SME bracket is not modelled); the CIR 92 consolidation of 2025 itself still not read]",
+   "dated": "PwC Belgium CIT page, Internet Archive 2025-07-08 (2025 rate); amending act of 25.12.2017 read",
+   "grade": "B",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "read from the amending act of 2017, not from the 2025 consolidated CIR 92",
+    "PME rate 20 p.c. on the first 100 000 EUR (art. 215, al. 2; petite société under the Code des sociétés art. 15 and the al. 3 conditions, e.g. a director's remuneration) not applied",
+    "minimum taxable base (art. 207, al. 5-7 loss and deduction caps) and the Pillar Two minimum tax not modelled"
+   ],
+   "yif17": "re-cited 2025",
+   "family_file": "lean/BeGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Withholding on services paid abroad",
+   "statute": "not read",
+   "dated": "",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "pass 8: no statute or official/secondary source on disk states the rule for these kinds; pass 9: no Belgian provision on service fees paid to non-residents is on disk (CIR 92 art. 228 § 3 and the précompte professionnel on non-residents' service income, art. 248, 270)",
+   "unsupported": [
+    "kernel 2.3.0 lists each such payment as \"no rule read (grade C)\"",
+    "would unlock: CIR 92 art. 228 § 3, 248 and 270 (Justel / Fisconetplus text)"
+   ],
+   "family_file": "lean/BeGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "1200",
+   "tax": "Précompte mobilier (dividend, interest, royalty)",
+   "statute": "CIR 92 art. 261, 269 (précompte mobilier)",
+   "dated": "2025-08-02",
+   "grade": "B",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "treaty rates and EU directives out of scope (statutory, treaty-free)"
+   ],
+   "family_file": "lean/BeGlobal/Corporate.lean",
+   "family_guards": 8
+  },
+  {
+   "oecd": "5200",
+   "tax": "Taxes on use of goods (motor vehicle taxes)",
+   "statute": "the country's motor-vehicle tax act",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P7 pass",
+   "unsupported": [
+    "would unlock: the vehicle tax act and the 2025 rates (no vehicle field in the canonical entity: an asset of kind vehicle with an annual value would carry it)"
+   ],
+   "triage": "blocked: the canonical input has no vehicle attributes (CO2, engine kW / cm3, mass, fuel, first registration); kernel request filed (R1 Europe pass 7); national vs municipal frame to be recorded with the act",
+   "family_file": "lean/BeGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "6000",
+   "tax": "Other taxes (6000) (none levied)",
+   "statute": "OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVBEL v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/BEL.csv`, SHA256SUMS; general government S13; 2025 not yet published): heading 6000 total 0 in 2021-2024; the only non-zero figure is -0,2 million EUR in 2021 (a correction of an earlier year)",
+   "dated": "OECD Revenue Statistics 2021-2024 (2025 not yet published); no 6000 tax known in the national law read",
+   "grade": "B",
+   "status": "absent",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "gap": 2,
+   "family_file": "lean/BeGlobal/Other.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent property tax",
+   "statute": "précompte immobilier (Bruxelles)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P5 pass",
+   "unsupported": [
+    "would unlock: the act and the reference municipality's 2025 rate (registry choice)"
+   ],
+   "family_file": "lean/BeGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4400",
+   "tax": "Droits d'enregistrement (Région de Bruxelles-Capitale)",
+   "statute": "Code des droits d'enregistrement (Bruxelles) art. 44 (12,5 %)",
+   "dated": "PwC WWTS Corporate - Other taxes, 2025-05-26 (Wayback capture)",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "Brussels taken as the reference region; the abattement for a sole home and Flemish/Walloon rates not modelled; base = higher of price and market value (the price stands in)"
+   ],
+   "family_file": "lean/BeGlobal/Property.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "2200",
+   "tax": "Cotisation patronale de base (secteur privé, catégorie 1)",
+   "statute": "ONSS instructions 2025/1: cotisation patronale de base 19,88 % (catégories 1 et 3 de la réduction structurelle, from 2018: loi 26.12.2015, loi 16.5.2016)",
+   "dated": "ONSS instructions, quarter 2025/1",
+   "grade": "B",
+   "kernel_parts": [
+    "charge (hand-written schedule)"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BeGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "2200",
+   "tax": "Cotisation de modération salariale",
+   "statute": "ONSS instructions 2025/1: 4,27 % de la rémunération augmentée de 4,27 % des cotisations patronales dues (catégorie 1)",
+   "dated": "ONSS instructions, quarter 2025/1",
+   "grade": "B",
+   "kernel_parts": [
+    "charge (hand-written schedule)"
+   ],
+   "unsupported": [],
+   "family_file": "lean/BeGlobal/Social.lean",
+   "family_guards": 4
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance and gift tax",
+   "statute": "Code des droits de succession (Région de Bruxelles-Capitale)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 classes, allowances and tariff (or a provision showing the tax is not levied)"
+   ],
+   "family_file": "lean/BeGlobal/Wealth.lean",
+   "family_guards": 0
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax",
+   "statute": "taxe annuelle sur les comptes-titres (CDTD art. 151 ff.)",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "tried": "not read in the P6 pass",
+   "unsupported": [
+    "would unlock: the act's 2025 rates and allowances (or a provision showing no wealth tax is levied)"
+   ],
+   "family_file": "lean/BeGlobal/Wealth.lean",
+   "family_guards": 0
+  }
+ ],
+ "grades": {
+  "A": 0,
+  "B": 8,
+  "C": 6
+ },
+ "guards": 28,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

@@ -1,0 +1,101 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "Ley 24.241 art. 2 b); Ley 24.977 (monotributo)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed: deducción especial art. 30 (c) 1 and autonomous contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"self-employed: deducción especial art. 30 (c) 1 and autonomous contributions not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 2300 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "3000",
+  "tax": "Taxes on payroll and workforce",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 3000 = ?",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 3000 (taxes on payroll and workforce, Guide §47) in any of 2021-2024; 2025 not yet published, no 2025 payroll tax identified",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 3000 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribución de mejoras (provincial/municipal ordinances)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribución de mejoras (provincial/municipal ordinances); OECD AR 4500: 0.008 in 2024, arrears of the one-off Aporte Solidario y Extraordinario (Ley 27.605, 2020-2021). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribución de mejoras (provincial/municipal ordinances); OECD AR 4500: 0.008 in 2024, arrears of the one-off Aporte Solidario y Extraordinario (Ley 27.605, 2020-2021). Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 4500 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "MERCOSUR Arancel Externo Común (NCM) with national exception lists",
+  "customs_note": "customs import duties (5123): MERCOSUR Arancel Externo Común (NCM) with national exception lists; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "re-filed in part; kept at C: the bank debits and credits tax named in the earlier triage is a 4400 tax (Guide §53: 'taxes on cheques and other forms of payment'; the OECD AR table books 'Bank accounts' credits and debits' under 4400): re-filed as its own 4400 C row. What remains under 6000 is real: the Régimen Simplificado (monotributo impositivo, Ley 24.977 Anexo; OECD 6100 'Simplified system for small taxpayers'), 'Other provincial level' and tax-debt payments: kept at C (monotributo category amounts, revised each semester in 2025, and the taxpayer's category not inputs)"
+  ],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "re-filed in part; kept at C: the bank debits and credits tax named in the earlier triage is a 4400 tax (Guide §53: 'taxes on cheques and other forms of payment'; the OECD AR table books 'Bank accounts' credits and debits' under 4400): re-filed as its own 4400 C row. What remains under 6000 is real: the Régimen Simplificado (monotributo impositivo, Ley 24.977 Anexo; OECD 6100 'Simplified system for small taxpayers'), 'Other provincial level' and tax-debt payments: kept at C (monotributo category amounts, revised each semester in 2025, and the taxpayer's category not inputs)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 6000 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4400",
+  "tax": "Impuesto sobre los créditos y débitos en cuentas bancarias (Ley 25.413)",
+  "statute": "Ley 25.413 art. 1 (0.6 % on credits and on debits), not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)"
+  ],
+  "triage": "(b) re-filed / covered",
+  "triage_note": "re-filed from the 6000 triage note (Guide §53); needs bank-account flows (not in the canon)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVARG, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/ARG.csv): general government heading 4400 = ?"
+  ],
+  "refiled_from": "6000",
+  "p7_triage_pass": "2026-11-21"
+ }
+]

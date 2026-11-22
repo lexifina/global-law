@@ -1,0 +1,46 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "消費税・地方消費税",
+  "statute": "消費税法 第6条, 第9条, 第29条, 別表第一, 別表第二; 地方税法 第72条の83",
+  "dated": "e-Gov asof 2025-07-01 (revision 363AC0000000108_20250620)",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "simplified taxation (簡易課税), the 2割特例 for invoice registrants",
+   "invoice-registrant exemption limits"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "揮発油税・地方揮発油税・軽油引取税・たばこ税 (国・道府県・市町村)・酒税 (wine, spirits)",
+  "statute": "租特法 第88条の8; 地方税法 附則第12条の2の8, 第74条の5, 第468条; たばこ税法 第11条; 酒税法 第23条",
+  "dated": "e-Gov asof 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [
+   "Excise",
+   "charge"
+  ],
+  "unsupported": [
+   "beer and other sparkling liquor (transitional rate not in e-Gov)",
+   "石油石炭税, 航空機燃料税, 自動車重量税 (5200)"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "自動車税種別割 (prefectural) and 軽自動車税種別割 (municipal) on private passenger cars",
+  "statute": "地方税法 第177条の7 第1項第1号ロ, 第177条の10, 第463条の15 第1項第2号ハ(1)(ii)",
+  "dated": "e-Gov text as at 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax"
+  ],
+  "unsupported": [
+   "standard rates (ordinance rates of the prefecture/municipality not read)",
+   "cars registered before 2020 (kei: before 2016) and electric cars not computed (grade C lines)",
+   "自動車重量税 and 環境性能割 not modelled"
+  ]
+ }
+]

@@ -1,0 +1,34 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Varainsiirtovero (kiinteistö)",
+  "statute": "Varainsiirtoverolaki 931/1996 6 § 1 mom. (3 % of the price, L 1185/2023 from 1.1.2024); 20 § 1 mom. (1,5 % on securities)",
+  "dated": "Finlex ajantasa, Wayback capture 2025-06-25 (`fi/law/vvl_wb2025.txt`)",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "a home bought as housing-company shares (asunto-osake) bears 1,5 % (20 §), a detached house 3 % (6 §): the input does not say which; 3 % applied",
+   "no first-home exemption: 11 § repealed from 1.1.2024 (L 1185/2023)"
+  ]
+ },
+ {
+  "oecd": "4100",
+  "tax": "Kiinteistövero",
+  "statute": "Kiinteistöverolaki (654/1992): the municipal council sets the rates each year within the statutory limits: permanent residences 0,41-1,00 %, general rate for buildings 0,93-2,00 % (also other residential buildings), general rate for land 1,30-2,00 %, of the taxable value",
+  "dated": "Act on Real Property Tax 654/1992 as applicable 2025; EC Taxes in Europe Database (TEDB), tax 262, situation 01/01/2025 (rest-api/tax/rate and legalBase, harvested 2026-11-21)",
+  "grade": "B",
+  "kernel_parts": [
+   "LocalTax (2.8.0)"
+  ],
+  "unsupported": [
+   "no capital-city rates declared: Helsinki's 2025 decision was not reached",
+   "the land under a home is part of the home asset here: give it as a land asset to tax it at the land rate",
+   "power plants (up to 3,1 %), vacant building sites (2,00-6,00 %) and non-profit buildings: not modelled"
+  ],
+  "lfw": 1,
+  "status": "framework (local rate input)",
+  "local_rate": "the municipality's rates are inputs: localRates.propertyTax (permanent residence), propertyTaxOtherBuildings, propertyTaxLand"
+ }
+]

@@ -1,0 +1,234 @@
+{
+ "country": "AU",
+ "name": "Australia",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-22 00:06:48"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "Goods and services tax",
+   "statute": "GST Act 1999 ss. 9-70, 23-15, 38-2, 38-3, 38-7, 38-85, 40-5, 40-35",
+   "dated": "compilation C94 (15 Feb - 31 Oct 2025)",
+   "grade": "B",
+   "kernel_parts": [
+    "Vat"
+   ],
+   "unsupported": [
+    "the $75,000 threshold is in the GST Regulations (not read)",
+    "GST-free vs taxable food lines beyond s. 38-3"
+   ],
+   "family_file": "lean/AuGlobal/Consumption.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "5121",
+   "tax": "Excise and excise-equivalent customs duty (fuel, beer, spirits, tobacco; indexed 2025 rates)",
+   "statute": "Excise Tariff Act 1921 Schedule items 1, 2, 3, 5, 10; ss. 6A-6AA indexation; Customs Tariff Act 1995 (equivalent customs duty)",
+   "dated": "ATO rate tables for 2025 (fuel and alcohol: 3 Feb and 4 Aug 2025; tobacco: 1 Mar and 1 Sep 2025), Internet Archive captures 2025-01-25 to 2025-12-08",
+   "grade": "B",
+   "kernel_parts": [
+    "ExciseRule"
+   ],
+   "unsupported": [
+    "wine equalisation tax (wholesale value) not modelled",
+    "draught beer rates not applied",
+    "tobacco by weight needs the line's mass"
+   ],
+   "family_file": "lean/AuGlobal/Consumption.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "5200",
+   "tax": "Motor vehicle registration duty (NSW; $3 per $100, $5 per $100 above $45,000 for passenger cars)",
+   "statute": "Duties Act 1997 (NSW) ss. 261, 263, 265, 266",
+   "dated": "NSW legislation text as at 30 April 2025 (Internet Archive)",
+   "grade": "A",
+   "kernel_parts": [
+    "VehicleTax"
+   ],
+   "unsupported": [
+    "cars only; s. 267 exemptions not applied",
+    "annual motor vehicle weight tax (Motor Vehicles Taxation Act 1988) and registration fees not modelled"
+   ],
+   "family_file": "lean/AuGlobal/Consumption.lean",
+   "family_guards": 12
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on companies",
+   "statute": "ITRA 1986 s. 23 (2), ss. 23AA-23AB",
+   "dated": "Compilation No. 65 (28 March 2025), in force on 2025-07-01 (legislation.gov.au C2004A03348)",
+   "grade": "A",
+   "kernel_parts": [
+    "CorpRegime"
+   ],
+   "unsupported": [
+    "aggregated turnover = the entity's own turnover (no connected entities or affiliates); passive income = portfolio dividends only"
+   ],
+   "family_file": "lean/AuGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Income Tax (Dividends, Interest and Royalties Withholding Tax) Act 1974 s. 7 (a)-(c); ITAA 1936 s. 128B (4), (5), (5A)",
+   "dated": "compilation C2007C00596 (legislation.gov.au), in force from 2007-09-24 with no later compilation: the text in force in 2025",
+   "grade": "A",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "services to non-residents: no final withholding read; foreign resident withholding (TAA 1953 Sch. 1 s. 12-315) covers only payments prescribed by regulation (works, entertainment and sport, casino junkets); other Australian-source services income is taxed by assessment on the recipient (ITAA 1997 s. 6-5 (3)): kept grade C, not a cited zero"
+   ],
+   "family_file": "lean/AuGlobal/Corporate.lean",
+   "family_guards": 9
+  },
+  {
+   "oecd": "5123",
+   "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+   "statute": "customs tariff of Australia as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Australia for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C036&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/au.json)",
+   "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+   "grade": "B",
+   "kernel_parts": [
+    "TariffRule"
+   ],
+   "unsupported": [
+    "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+    "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+    "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+    "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+    "lines left out (grade C): 271600 (no national line in the notification)"
+   ],
+   "family_file": "lean/AuGlobal/Customs.lean",
+   "family_guards": 3
+  },
+  {
+   "oecd": "4100",
+   "tax": "Land tax (NSW)",
+   "statute": "Land Tax Act 1956 (NSW)",
+   "dated": "2025 land tax year",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "council rates",
+    "foreign surcharge land tax"
+   ],
+   "family_file": "lean/AuGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "4400",
+   "tax": "Transfer duty (NSW)",
+   "statute": "Duties Act 1997 (NSW) ss. 32, 32A, 33AC, 78A (1), 104U (1)",
+   "dated": "2025, split at 1 July 2025 by the purchase's date: 2024-25 and 2025-26 indexed thresholds (Revenue NSW page, Internet Archive 2025-06-21 and 2025-09-15); s. 104U 9 %",
+   "grade": "B",
+   "kernel_parts": [
+    "TransferDuty"
+   ],
+   "unsupported": [
+    "s. 78A (2) concession formula",
+    "undated purchases above $36,000: grade C"
+   ],
+   "family_file": "lean/AuGlobal/Property.lean",
+   "family_guards": 11
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll tax (NSW)",
+   "statute": "Payroll Tax Act 2007 (NSW) s. 8, Sch. 1 cl. 1",
+   "dated": "2025: legislation.nsw.gov.au current version, Internet Archive 2025-02-14 and 2025-10-13: R 5.45 % from 1 July 2022, threshold $1.2 m from 2020-21: the same in 2024-25 and 2025-26 (no split); session 12 year in force",
+   "grade": "A",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "grouping",
+    "mental health levy (Vic)"
+   ],
+   "family_file": "lean/AuGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "No social security contributions (super guarantee is non-tax)",
+   "statute": "Superannuation Guarantee (Administration) Act 1992",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/AuGlobal/Social.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1100",
+   "tax": "Capital gains tax of individuals (net capital gain in assessable income, 50 % discount)",
+   "statute": "ITAA 1997 ss. 102-5 (1), 115-25 (1), 115-100 (a) (i), 118-5 (a), 118-110 (1); Income Tax Rates Act 1986 via the 1.x model",
+   "dated": "ITAA 1997 compilation in force 2025-07-01 (legislation.gov.au C2004A05138); income year 2024-25",
+   "grade": "A",
+   "kernel_parts": [
+    "StackRule"
+   ],
+   "unsupported": [
+    "carried-forward capital losses, the order of losses against discount gains, Div 152 small business concessions, foreign and temporary residents not modelled"
+   ],
+   "family_file": "lean/AuGlobal/Stack.lean",
+   "family_guards": 2
+  },
+  {
+   "oecd": "4300",
+   "tax": "No estate or gift duty (abolished 1979)",
+   "statute": "Estate Duty Assessment Amendment Act 1978",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/AuGlobal/Transfers.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "No net wealth tax",
+   "statute": "-",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/AuGlobal/Transfers.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 5,
+  "B": 8,
+  "C": 0
+ },
+ "guards": 40,
+ "sorry": 0,
+ "cases": 4,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

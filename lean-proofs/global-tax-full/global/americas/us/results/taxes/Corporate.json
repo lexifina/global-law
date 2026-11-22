@@ -1,0 +1,41 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Federal corporate income tax",
+  "statute": "26 U.S.C. § 11 (b): 21 %",
+  "dated": "current US Code (rate since Pub. L. 115-97, 2017)",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "California franchise tax (R&TC § 23151, 8.84 %) and the corporate AMT (§ 55, 15 % of adjusted financial statement income above $1 billion) not modelled"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "California corporation franchise tax",
+  "statute": "R&TC § 23151",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P2",
+  "unsupported": [
+   "leginfo blocked; would unlock: an archived R&TC § 23151"
+  ]
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "26 U.S.C. §§ 881 (a), 1442; § 862 (a) (3)",
+  "dated": "LII copies of §§ 862, 881 (us/law/usc26_862.html, usc26_881.html, fetched 2026-11-21); pass 7, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "services performed in the United States by the foreign recipient (30 %, §§ 881 (a), 1442) not distinguished: payments abroad for services taken as performed abroad"
+  ]
+ }
+]

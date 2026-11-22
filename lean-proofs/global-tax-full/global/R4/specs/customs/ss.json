@@ -1,0 +1,82 @@
+{
+ "cc": "SS",
+ "bloc": "eac",
+ "name": "Customs import duty (EAC Common External Tariff)",
+ "grade": "B",
+ "statute": "East African Community Customs Management Act 2004 (charging provisions not read) and the EAC CET (South Sudan, a Partner State since 2016)",
+ "dated": "CET 2022 version as updated to June 2025 (lines unchanged by the 2023-2025 amending notices): the whole of 2025",
+ "country": "SS",
+ "vatBp": 1800,
+ "tests": [
+  {
+   "why": "beer from the US: net 1 000, value 1 000 / 1,35 = 740, 35 % = 259",
+   "good": "beer",
+   "hs": "2203.00.90",
+   "amount": 1180,
+   "quantity": 1000,
+   "abvBp": 500,
+   "origin": "US",
+   "expect": [
+    259
+   ]
+  },
+  {
+   "why": "beer from another EAC Partner State: free",
+   "good": "beer",
+   "hs": "2203.00.90",
+   "amount": 1180,
+   "quantity": 1000,
+   "abvBp": 500,
+   "origin": "UG",
+   "expect": [
+    0
+   ]
+  },
+  {
+   "why": "cotton T-shirt from China: value 800, 25 % = 200",
+   "good": "clothing",
+   "hs": "6109.10.00",
+   "amount": 1180,
+   "origin": "CN",
+   "expect": [
+    200
+   ]
+  },
+  {
+   "why": "spirits from the UK: value 1 000 / 1,35 = 740, 35 % = 259",
+   "good": "spirits",
+   "hs": "2208.30",
+   "amount": 1180,
+   "quantity": 1000,
+   "abvBp": 4000,
+   "origin": "GB",
+   "expect": [
+    259
+   ]
+  },
+  {
+   "why": "petrol from the UAE: 0 %",
+   "good": "petrol",
+   "hs": "2710.12.20",
+   "amount": 1180,
+   "quantity": 1000,
+   "origin": "AE",
+   "expect": [
+    0
+   ]
+  },
+  {
+   "why": "rice (sensitive item, US$ alternative): grade C, no charge",
+   "good": "food",
+   "hs": "1006.30.00",
+   "amount": 1180,
+   "origin": "PK",
+   "expect": []
+  }
+ ],
+ "notes": [
+  "SS: VAT 18 % used to take the value out of a tax-inclusive price (duty in the VAT base)",
+  "grade B: the CET rates are read (instrument text); the intra-EAC preference rests on the Customs Union Protocol (not held) and the partner-state stays of application are not read"
+ ],
+ "unsupported": []
+}

@@ -1,0 +1,249 @@
+[
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Value Added Tax",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "VAT Act 1998 s. 10, Fourth Schedule (15 %)",
+  "dated": "MRA consolidation (endnotes to Finance Act 2025)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt / zero-rated schedule membership not resolved"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duty (beer, spirits, cigarettes, gas oil)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "Excise Act 1994 First Schedule",
+  "dated": "MRA consolidation (to Finance Act 2025)",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "R4.Exc (specific)"
+  ],
+  "unsupported": [
+   "wines",
+   "sugar-sweetened drinks per gram of sugar",
+   "Rs 2 per can"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Income tax (companies)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "ITA 1995 First Schedule Part IV [text version: MRA consolidation up to Finance Act 2026 (world/B09-southern-africa/mu/law/ITAConsolidated.txt); the endnotes show no change after FA 2017 to First Schedule Part IV and none by FA 2024-2026 to Sixth Schedule items 1, 2 and 8, and the Finance Acts 2024, 2025 and 2026 (held) do not amend them: 2025 wording]",
+  "dated": "MRA consolidation",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime"
+  ],
+  "unsupported": [
+   "CCR levy, Fair Share Contribution",
+   "Part II/III reduced rates"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Tax deduction at source (interest, royalties, services); dividends exempt (cited 0 %)",
+  "status": "modelled",
+  "grade": "A",
+  "statute": "ITA s. 111B-111C, Sixth Schedule items 1, 2 (b), 8; Second Schedule Part II Sub-Part B item 1 (a) (twelfth and thirteenth passes) [text version: MRA consolidation up to Finance Act 2026 (world/B09-southern-africa/mu/law/ITAConsolidated.txt); the endnotes show no change after FA 2017 to First Schedule Part IV and none by FA 2024-2026 to Sixth Schedule items 1, 2 and 8, and the Finance Acts 2024, 2025 and 2026 (held) do not amend them: 2025 wording (the 15 % on interest has no amending endnote: flag)]",
+  "dated": "MRA consolidation",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "treaties",
+   "interest 15 %: amending note not located (flag)"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Contribution Sociale Généralisée (employer)",
+  "statute": "Social Contribution and Social Benefits Act 2021 s. 4 (1) (a) (ii), (b) (ii); First Schedule Part II (Rs 50 000)",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "domestic employees",
+   "end-of-year bonus as a separate month"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollNotchFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "National Savings Fund, employer contribution (2,5 % of the basic wage up to Rs 18 740 a month)",
+  "statute": "National Savings Fund Act 1995 s. 5 (1) and First Schedule item 2 (c) (employer 2,5 %; as replaced by Act 37 of 2011, amended by Act 7 of 2020), s. 2 'basic wage or salary' capped at the maximum of the National Pensions Act 1976 Fifth Schedule (a) (Rs 18 740 a month, last replaced w.e.f. 1 July 2019); MRA/AG consolidations held (world/B09-southern-africa/mu/law/w5/mu_nsf_act1995.txt, mu_npa1976.txt)",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "the ceiling applies monthly; the model applies 12 × Rs 18 740 to the annual payroll",
+   "public officers and local-authority staff (item 1) not distinguished",
+   "basic wage excludes allowances, bonus and overtime: the model uses the whole payroll (flag)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Registration duty on the transfer of immovable property (5 %)",
+  "statute": "Registration Duty Act (consolidated to Act 14 of 2026) s. 3, First Schedule Part I paras I and J (last amended by Act 37 of 2011, cio 15/12/11); Finance Act 2025 (Act 18 of 2025) and Finance Act 2026 checked: they do not amend paras I-J",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "first-time buyer and other exemptions of s. 3",
+   "non-citizen schemes (para K)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.transferDutyFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty",
+  "statute": "Stamp Duty Act 1990",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "triage minor: stamp duty under the Stamp Duty Act is per instrument; land transfers are carried by the registration duty (P5, modelled 5 %). listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "https://www.mra.mu/download/TheStampDutyAct1990.pdf (not fetched) (not fetched)",
+  "triage": "minor"
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (individual fair share contribution (ITA s. 16C), solidarity levy, CCR levy)",
+  "statute": "Income Tax Act s. 16B-16C (Finance (Miscellaneous Provisions) Act 2025); ITA Part IV Sub-parts AC, AE",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "individual fair share contribution 15 % of leviable income above Rs 12 m (stacks on the 1.x PIT), solidarity levy and Corporate Climate Responsibility levy: not modelled (company fair share contribution modelled separately, twelfth pass)"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "mu/law/FinanceAct2025.txt",
+  "triage": "moderate"
+ },
+ {
+  "package": "P5",
+  "oecd": "4400",
+  "tax": "Land transfer tax on the transfer of immovable property (5 %, paid by the transferor)",
+  "statute": "Land (Duties and Taxes) Act 1984 s. 4 (1), (4) (a)-(b) and Second Schedule Part A (2), MRA consolidation with amendments to Act 14 of 2026 (registry/afm_data/fetch/MU/TheLandAct.pdf.txt). 2025 wording: s. 4 (4) carries no amendment note (the paragraphs amended since 2012 all carry one) and the Second Schedule was last replaced by Act 26 of 2013 (1 January 2014) and amended by Act 15 of 2018 (15 April 2019, para (1) only), so the 5 % on the transferor holds all 2025. Split at 9 August 2025: s. 29 of Act 18 of 2025 added s. 4 (9) (repealed by Act 14 of 2026 from 13 August 2026; its text is not printed in the consolidation) and s. 4 (10) (a document transferring immovable with movable property without valuing each movable item: the tax on the aggregate value), both at the 10 % of Seventh Schedule Part III; s. 4 (11) (additional 10 % duty on non-citizen transfers) runs from 13 August 2026 only. Liability: the transferor (seller); charged on each disposal of the entity's land or buildings (event 'disposal i')",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "base = the disposal's proceeds (the Act's value of the property, s. 4 (1), not an input)",
+   "reliefs and exemptions (transfers between ascendants and descendants, first-time buyers' schemes, s. 4 (4A) re-sales within 3 years)",
+   "from 9 August 2025: s. 4 (9) at 10 % (Seventh Schedule Part III; text not held: the 2026 consolidation prints only its repeal) and s. 4 (10) at 10 % on immovable property sold with unvalued movables: not modelled (the disposal record carries neither fact)",
+   "Seventh Schedule Part IV additional duty on non-citizen transfers (s. 4 (11), from 13 August 2026: not in force in 2025)"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Property.lean",
+  "kernel_parts": [
+   "R4.disposalDutyFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "1200",
+  "tax": "Fair share contribution on companies (5 % of chargeable income where supplies and chargeable income exceed Rs 24 million)",
+  "statute": "Value Added Tax Act Part XC s. 53M-53N, inserted by the Finance (Miscellaneous Provisions) Act 2025 (held mu/law/FinanceAct2025.txt)",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "the 2 % rate for Part II companies, banks (5 % + 2,5 % additional) and the 35 % caps for telecoms and banks",
+   "VAT registration as an alternative to the supplies test",
+   "chargeable income read as the line's profit",
+   "the individual fair share contribution (ITA s. 16C: 15 % of leviable income above Rs 12 m) is not modelled (PIT stacking)",
+   "accounting years covered (s. 53N (8)) not read"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.profitLevyFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "3000",
+  "tax": "Training levy (Human Resource Development Act, 1,5 % of the basic wage)",
+  "statute": "Human Resource Development Act 2003 (Act 27 of 2003) s. 18 (1)-(2), (5C) and First Schedule ('One and a half per cent'); MRA consolidation to Act 12 of 2023 (R4/fetch/p14/mu_hrd2003.txt); Finance Acts 2024-2026 held: no change to the rate",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "basic wage excludes overtime, bonuses and allowances: the model uses the whole payroll (flag)",
+   "household workers, private secondary schools, charitable institutions (unless they elect), non-resident non-citizens and premium-visa holders are excluded (s. 18 (6)): not distinguished"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "Portable Retirement Gratuity Fund, employer contribution (4,5 % of monthly remuneration; workers above Rs 200 000 a month not covered)",
+  "statute": "Workers' Rights Act 2019 s. 87, 90 (1) (e), 94 (1) (MRA consolidation to Act 13 of 2026, R4/fetch/p14/mu_wra2019.txt); Workers' Rights (Portable Retirement Gratuity Fund) Regulations 2020, GN 39 of 2020, reg. 3 (1) (a) and First Schedule Parts I-III ('4.5% of monthly remuneration', SMEs from 1 January 2023) (MRA download, R4/fetch/p14/mu_prgf_gn39.txt)",
+  "dated": "Social Contribution and Social Benefits Act 2021 (consolidated with Act 18 of 2025)",
+  "unsupported": [
+   "employers with a private pension scheme meeting the PRGF level, statutory bodies, public officers, job contractors, migrant workers and non-citizens are outside (s. 90, 94): not distinguished",
+   "the Rs 200 000 test is on the basic wage; the model tests the whole monthly wage (company: payroll / 12 / employees)",
+   "later amendments of GN 39/2020 not checked"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollNotchFamily"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Mauritius as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Mauritius for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C480&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/mu.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\"",
+   "lines left out (grade C): 22030011 (a preferential rate is specific or compound (not representable as a preference rate)); 271600 (no national line in the notification)",
+   "COMESA free trade area (origin SO, TN): internal preference not in the member's 2025 IDB notification, rate not read (grade C)"
+  ]
+ }
+]

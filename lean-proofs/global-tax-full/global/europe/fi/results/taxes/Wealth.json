@@ -1,0 +1,43 @@
+[
+ {
+  "oecd": "4200",
+  "tax": "Varallisuusvero (not levied)",
+  "statute": "PwC Worldwide Tax Summaries, Finland, Individual - Other taxes, accessed 2025-06-13 (Wayback capture; `law/pwc_indother_wb2025.txt`)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+  "grade": "B",
+  "status": "absent",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "unsupported": []
+ },
+ {
+  "oecd": "4300",
+  "tax": "Perintövero (veroluokka I)",
+  "statute": "Perintö- ja lahjaverolaki 14 § (veroluokka I scale)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "InheritanceTax",
+   "TaxClass"
+  ],
+  "unsupported": [
+   "veroluokka II (other relatives and unrelated persons: higher scale) is not in the B source: the class I scale is applied (understates)",
+   "the spouse's EUR 90 000 and minor child's EUR 60 000 deductions (PerVL 26 §) are not in the B source"
+  ]
+ },
+ {
+  "oecd": "4300",
+  "tax": "Lahjavero (veroluokka I)",
+  "statute": "Perintö- ja lahjaverolaki 14 § (veroluokka I gift scale)",
+  "dated": "PwC WWTS Individual - Other taxes, 2025-06-13 (Wayback capture)",
+  "grade": "B",
+  "kernel_parts": [
+   "InheritanceTax",
+   "TaxClass"
+  ],
+  "unsupported": [
+   "gift tax class II not in the B source: the class I scale is applied (understates)"
+  ]
+ }
+]

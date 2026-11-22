@@ -1,0 +1,194 @@
+{
+ "country": "IR",
+ "name": "Iran",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21)",
+ "year": "2025",
+ "status": "building (R3 Asia-Pacific)",
+ "pit": "1.x model vendored unchanged (ofCountry)",
+ "adapter": {
+  "A": true,
+  "B": [
+   56,
+   56
+  ],
+  "C": [
+   56,
+   56
+  ],
+  "time": "2026-11-21 22:08:24"
+ },
+ "taxes": [
+  {
+   "oecd": "5111",
+   "tax": "Value added tax (10 % in 1404)",
+   "statute": "VAT Law 1400; Budget Law 1404",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried (session 4): qavanin.ir answers with a bot-check page (not bypassed); rc.majlis.ir and intamedia.ir no answer; Wayback offline; would unlock: the permanent VAT Law (1400) and the Budget Law 1404 rate",
+    "session 6: faolex.fao.org ira167686 is the VAT Law of 1387 (dastour.ir print of 2016), not the VAT Law 1400; rc.majlis.ir and intamedia.ir no answer, dotic.ir 403 (not bypassed); qavanin.ir not tried (bot check). Would unlock: an official copy of the VAT Law 1400 (art. 7 rate) and the Budget Law 1404 rate clause"
+   ],
+   "family_file": "lean/IrGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "5121",
+   "tax": "Taxes on cigarettes, fuel and soft drinks under the VAT Law",
+   "statute": "VAT Law 1400",
+   "grade": "C",
+   "status": "unsupported",
+   "kernel_parts": [],
+   "unsupported": [
+    "tried (session 4): as above"
+   ],
+   "family_file": "lean/IrGlobal/Consumption.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200",
+   "tax": "Income tax on legal persons",
+   "statute": "Direct Taxes Act art. 105",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "text not reached"
+   ],
+   "family_file": "lean/IrGlobal/Corporate.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1200/1100",
+   "tax": "Withholding tax on payments to non-residents",
+   "statute": "Direct Taxes Act arts. 107-109",
+   "dated": "not reached",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "session 7: not retried: qavanin.ir bot check (not bypassed), dotic.ir 403, rc.majlis.ir / intamedia.ir no answer in sessions 4-6: grade C"
+   ],
+   "family_file": "lean/IrGlobal/Corporate.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "1100",
+   "tax": "Taxes on individuals' capital income and gains",
+   "statute": "قانون مالیات‌های مستقیم (Direct Taxes Act 1366, amended 1394 and later): rent (arts. 52-57), property transfer 5% (art. 59), business income (art. 131 rates via budget law); capital gains: قانون مالیات بر عایدی سرمایه (Capital Gains Tax Law, passed June 2025, promulgated Aug 2025; effective date not",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (none): "
+   ],
+   "family_file": "lean/IrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "3000",
+   "tax": "Payroll taxes: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4100",
+   "tax": "Recurrent taxes on immovable property",
+   "statute": "Direct Taxes Act art. 54 bis (vacant housing), luxury housing tax (budget laws/art. 2 of 1400 amendments)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (none): "
+   ],
+   "family_file": "lean/IrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4200",
+   "tax": "Net wealth tax: not levied",
+   "statute": "none",
+   "dated": "2025",
+   "grade": "B",
+   "kernel_parts": [
+    "Absent"
+   ],
+   "unsupported": [],
+   "family_file": "lean/IrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4300",
+   "tax": "Inheritance, estate and gift taxes",
+   "statute": "Direct Taxes Act arts. 17-25 (inheritance by asset class and heir class); gifts (art. 119)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (none): "
+   ],
+   "family_file": "lean/IrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Taxes on property transfers (stamp, registration, transfer duties)",
+   "statute": "Direct Taxes Act arts. 44-51 (stamp duty), art. 59 (5% on transfer value), art. 143 (0.5% on listed-share sales)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (none): "
+   ],
+   "family_file": "lean/IrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "4400",
+   "tax": "Securities transaction tax",
+   "statute": "Direct Taxes Act art. 143 (0.5% of listed-share sale value)",
+   "dated": "not modelled",
+   "grade": "C",
+   "kernel_parts": [],
+   "unsupported": [
+    "not modelled in this pass; registry grade C (none): "
+   ],
+   "family_file": "lean/IrGlobal/Other.lean",
+   "family_guards": 1
+  },
+  {
+   "oecd": "2200",
+   "tax": "Employer social security",
+   "statute": "Social Security Act 1354 art. 28 (1), تبصره ۱ (employer 20 %); Unemployment Insurance Act (3 %, registry)",
+   "dated": "2025 (1403 to 20 Mar, 1404 from 21 Mar): art. 28 consolidated text (last amendment 1394): 20 % in both years (no split); unemployment insurance 3 % from the registry; session 12 year in force",
+   "grade": "B",
+   "kernel_parts": [
+    "charge"
+   ],
+   "unsupported": [
+    "maximum insurable wage (yearly; differs between 1403 and 1404) not applied",
+    "unemployment insurance 3 % not read"
+   ],
+   "family_file": "lean/IrGlobal/Social.lean",
+   "family_guards": 1
+  }
+ ],
+ "grades": {
+  "A": 0,
+  "B": 3,
+  "C": 9
+ },
+ "guards": 4,
+ "sorry": 0,
+ "cases": null,
+ "testing": {
+  "software": [],
+  "datasets": []
+ }
+}

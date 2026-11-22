@@ -1,0 +1,133 @@
+{
+ "cc": "MR",
+ "name": "Mauritania",
+ "dated": "CGI 2023 (French text, DGI); LF 2025 held in Arabic only (not read): grade B",
+ "sources": "Sources: CGI 2023 French (`cmp20/world/B06-mena/mr/law/cgi2023fr.txt`).",
+ "vat": {
+  "name": "Taxe sur la valeur ajoutée",
+  "standard": 1600,
+  "classes": {},
+  "grade": "B",
+  "statute": "CGI art. 230 (16 %; 0 % exports)",
+  "doc": "art. 230: \"Les taux de la taxe sur la valeur ajoutée sont les suivants : 1) Taux normal : 16 %. 2) Taux zéro (0 %) : exportations de biens et services\". Exemptions not read; the Arabic LF 2025 not read.",
+  "notes": [
+   "Mauritania: CGI 2023 French text (LF 2025 Arabic not read); VAT exemptions not read"
+  ],
+  "unsupported": [
+   "exemptions",
+   "LF 2025"
+  ]
+ },
+ "excise": {
+  "name": "Taxe de consommation",
+  "grade": "B",
+  "statute": "CGI version officielle janvier 2023 art. 258 (LFI 2020), 262 (base), 263 (LFI 2020, LFR 2020: tariffs); LF 2024-2025 held only in Arabic, not checked",
+  "doc": "art. 258: production and import of petroleum products, alcohols, tobacco, mineral water, dairy products, ... are subject to a taxe de consommation; art. 262: base = customs value plus import duties, or the ex-factory selling price for local products, VAT and the tax itself excluded; art. 263: \"1) Produits pétroliers : essence auto ordinaire : 5,7 Ouguiya/l; super carburant : 5,8 Ouguiya/l; gazole (gas-oil) : 3,67 Ouguiya/l ... 2) Alcools : a) bière : 195 % b) vins ordinaires : 209 % c) vins mousseux et champagne : 229 % d) whisky, vodka, rhum, gin, eau de vie : 294 % 3) Tabac : 29 % 4) Eaux minérales importées : 80 %\".",
+  "items": [
+   {
+    "good": "beer",
+    "name": "Taxe de consommation bière",
+    "advBp": 19500,
+    "vatBp": 1600,
+    "statute": "CGI art. 263 2) a (195 %)"
+   },
+   {
+    "good": "wine",
+    "name": "Taxe de consommation vins ordinaires",
+    "advBp": 20900,
+    "vatBp": 1600,
+    "statute": "CGI art. 263 2) b (209 %)"
+   },
+   {
+    "good": "spirits",
+    "name": "Taxe de consommation whisky, vodka, rhum, gin, eau de vie",
+    "advBp": 29400,
+    "vatBp": 1600,
+    "statute": "CGI art. 263 2) d (294 %)"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Taxe de consommation tabac",
+    "advBp": 2900,
+    "vatBp": 1600,
+    "statute": "CGI art. 263 3) (29 %)"
+   },
+   {
+    "good": "petrol",
+    "name": "Taxe de consommation super carburant",
+    "perUnitNum": 5800,
+    "perUnitDen": 1000,
+    "vatBp": 1600,
+    "statute": "CGI art. 263 1) (5,8 MRU per litre)"
+   },
+   {
+    "good": "diesel",
+    "name": "Taxe de consommation gazole",
+    "perUnitNum": 3670,
+    "perUnitDen": 1000,
+    "vatBp": 1600,
+    "statute": "CGI art. 263 1) (3,67 MRU per litre)"
+   }
+  ],
+  "notes": [
+   "CGI art. 263: sparkling wine 229 %, ordinary petrol 5,7 MRU/l, imported mineral water 80 % and dairy products not separable from the basket lines (still wine, premium petrol taken)"
+  ],
+  "unsupported": [
+   "sparkling wine 229 %",
+   "imported mineral water 80 %",
+   "dairy, cement, steel, plastics, phone cards",
+   "LF 2024-2025 (Arabic) not checked"
+  ]
+ },
+ "cit": {
+  "name": "Impôt sur les sociétés",
+  "rate": 2500,
+  "step": 1,
+  "min": {
+   "bp": 200,
+   "floor": 100000
+  },
+  "grade": "B",
+  "statute": "CGI version officielle janvier 2023 art. 51 1) (LFI 2022): régime du bénéfice réel normal",
+  "doc": "art. 51 1): the IS due is 25 % of the net taxable profit or 2 % of the taxable products of art. 8 (excluding transfers and write-backs of charges) if higher; minimum collection 100 000 MRU (bénéfice réel normal). Turnover stands for the art. 8 products. LF 2024-2025 held only in Arabic, not checked.",
+  "unsupported": [
+   "2,5 % minimum under the intermediate regime (art. 51 2)",
+   "Mauritania Airlines 1 %, art. 225 commission-based minimum, fishing regimes (art. 51 3)"
+  ]
+ },
+ "wht": {
+  "name": "Retenues (non-résidents)",
+  "grade": "B",
+  "statute": "CGI version officielle janvier 2023 art. 132-133 (15 % on services paid to non-residents without a permanent establishment); art. 126 (IRCM 10 %; 20 % to privileged tax regimes); thirteenth pass: CGI version officielle janvier 2023 art. 132 1) ('prestations de toute nature fournies ou utilisées en Mauritanie') read with art. 210 4) j) (TVA: 'les cessions et concessions d'exploitation de brevet, de droits ou de marque' are prestations de services) and art. 214 1° (non-residents' services 'soumises à la retenue à la source prévue à l'article 132'); art. 133 1): 15 %",
+  "doc": "art. 132 1): \"une retenue à la source est opérée sur les sommes que les personnes physiques ou morales non-résidentes en Mauritanie et n'y disposant pas d'un établissement stable perçoivent en rémunération de prestations de toute nature fournies ou utilisées en Mauritanie\"; art. 133 1): \"Le taux de la retenue à la source est fixé à 15 % du montant des sommes dues aux personnes non-résidentes\". Art. 126: \"le taux de l'impôt est fixé à : 20 % pour les plus-values de cession de valeurs mobilières si le cédant est établi dans un État à fiscalité privilégiée ... ; 10 % dans tous les autres cas\" (IRCM on distributed income, art. 120, and on interest from claims, art. 121). Thirteenth pass (kernel 2.3.0 grade-C withholding): royalty 15 %: CGI version officielle janvier 2023 art. 132 1) ('prestations de toute nature fournies ou utilisées en Mauritanie') read with art. 210 4) j) (TVA: 'les cessions et concessions d'exploitation de brevet, de droits ou de marque' are prestations de services) and art. 214 1° (non-residents' services 'soumises à la retenue à la source prévue à l'article 132'); art. 133 1): 15 %",
+  "rules": [
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "CGI art. 133 1) (15 %)"
+   },
+   {
+    "kind": "dividend",
+    "rateBp": 1000,
+    "statute": "CGI art. 120, 126 (IRCM 10 %)"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1000,
+    "statute": "CGI art. 121, 126 (IRCM 10 %)"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "CGI version officielle janvier 2023 art. 132 1) ('prestations de toute nature fournies ou utilisées en Mauritanie') read with art. 210 4) j) (TVA: 'les cessions et concessions d'exploitation de brevet, de droits ou de marque' are prestations de services) and art. 214 1° (non-residents' services 'soumises à la retenue à la source prévue à l'article 132'); art. 133 1): 15 %"
+   }
+  ],
+  "notes": [
+   "thirteenth pass: royalties are prestations de services under the code's own definition (art. 210 4) j)): 15 % (art. 133)"
+  ],
+  "unsupported": [
+   "20 % IRCM to privileged tax regimes",
+   "LF 2024-2025 (Arabic) not checked"
+  ]
+ }
+}

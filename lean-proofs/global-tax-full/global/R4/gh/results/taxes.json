@@ -1,0 +1,224 @@
+[
+ {
+  "package": "P7",
+  "oecd": "4400",
+  "tax": "Stamp duty on conveyances or transfers on sale (rate of the value band on the whole consideration)",
+  "statute": "Stamp Duty Act 2005 (Act 689) Schedule 1, 'Conveyance or transfer on sale of a property'; amounts printed in old cedis, converted at 10 000 old cedis = GH₵ 1 (Currency Redenomination Act 2007, Act 724); later amendments not checked [text version: Act 689 as enacted (2005); later amendments not checked (flag)]",
+  "dated": "-",
+  "unsupported": [
+   "the redenomination conversion of the printed thresholds is applied by the builder (flagged)",
+   "voluntary dispositions at the same rates on the value; other transfers 1 %"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.transferBandFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "6000",
+  "tax": "Other notable taxes (communications service tax; energy sector levies)",
+  "statute": "Communications Service Tax Act 2008 (Act 754); Energy Sector Levies Act 2015 (Act 899)",
+  "dated": "-",
+  "unsupported": [
+   "communications service tax and energy sector levies: charging provisions not read (the Growth and Sustainability Levy is modelled separately, twelfth pass)"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "not reached",
+  "triage": "moderate"
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Final withholding tax on dividends paid by resident companies (8 %)",
+  "statute": "Income Tax Act 2015 (Act 896) s. 115, 119(1)(a), First Schedule para 8(1)(b)(i); s. 115 substituted by Act 1094 (2023) and Act 1134 (2025), para 8 amended by Act 1094 and Act 1134 (dividend rate unchanged); other amending Acts 2016-2020 not all held",
+  "dated": "-",
+  "unsupported": [],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Final withholding tax on rent paid to a resident individual for residential property (8 %)",
+  "statute": "Income Tax Act 2015 (Act 896) s. 115, 119(1)(b), First Schedule para 8(1)(b)(iv) (Acts 1094, 1134 checked) [text version: Act 896 as enacted (2015), checked against Act 1094 (2023) and Act 1134]",
+  "dated": "-",
+  "unsupported": [
+   "rent for non-residential property at its own para 8 rate",
+   "interest paid to individuals (1 %) is not a final withholding payment: not modelled here"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Capital.lean",
+  "kernel_parts": [
+   "R4.finalWhtFamily"
+  ]
+ },
+ {
+  "package": "P4",
+  "oecd": "2200",
+  "tax": "SSNIT first-tier contribution, employer's part (13 % less the 5 % second tier = 8 %)",
+  "statute": "National Pensions Act 2008 (Act 766) s. 3 (1)-(3), 63 as amended by Act 883 of 2014 (GhaLII consolidation at 2014-12-31, Wayback 2026-04-16, R4/fetch/gh11); SSNIT FAQ 'contribution rates' (2015)",
+  "dated": "-",
+  "unsupported": [
+   "the second-tier 5 % goes to privately managed occupational schemes (NPRA-licensed trustees): a compulsory payment to a private fund, not a tax (OECD), not modelled",
+   "maximum insurable earnings (s. 63 (3)): the 2025 figure is not held (SSNIT notices for 2024 and 2026 only partly archived): no ceiling applied",
+   "base is basic salary (SSNIT FAQ): applied to wages"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Social.lean",
+  "kernel_parts": [
+   "R4.payrollCapFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "1200",
+  "tax": "Growth and Sustainability Levy (category C: 2,5 % of profit before tax)",
+  "statute": "Growth and Sustainability Levy Act 2023 (Act 1095) s. 1, 2, 4 and Schedule category C (gazetted 3 April 2023; held gh/law/GROWTH-AND-SUSTAINABILITY-LEVY-ACT-2023-ACT-1095.txt, OCR) [text version: Act 1095 as gazetted on 3 April 2023 (held OCR); 2025 amending Act not held (flag)]",
+  "dated": "-",
+  "unsupported": [
+   "category A (5 % of profit before tax) and B (1 % of gross production) not distinguished: every company line gets category C",
+   "profit before tax read as the line's profit",
+   "later amendments (extension beyond 2025, mining rate) not read"
+  ],
+  "status": "modelled",
+  "grade": "A",
+  "module": "Other.lean",
+  "kernel_parts": [
+   "R4.profitLevyFamily"
+  ]
+ },
+ {
+  "package": "P7",
+  "oecd": "5200",
+  "tax": "Road use fee (annual road use certificate for private vehicles, by engine capacity)",
+  "statute": "Road (Vehicle Use) Fee Act, 1998 (Act 556) s. 1, 2, 6 and Schedule (GhaLII text via Wayback 20260419091236, R4/fetch/p17/gh_act556_ghalii_wb20260419.html; GhaLII marks it as the latest version of the Act)",
+  "dated": "-",
+  "unsupported": [
+   "the 2025 amounts are not established: the Schedule of 1998 gives private motor vehicles up to 2000 cc 20 000 cedis and above 2000 cc 30 000 cedis a year (old cedis, i.e. GH¢2 and GH¢3 after the 2007 redenomination), and s. 6 lets the Minister amend the Schedule by legislative instrument; no such instrument was located, so the 1998 amounts cannot be taken as the 2025 fee. The Energy Sector Levies Act, 2015 (Act 899) road fund levy is charged per litre of fuel (an excise on fuel, not a vehicle tax). Worked case under the 1998 Schedule (hand): a private car of 1 800 cc -> GH¢2 a year"
+  ],
+  "status": "unsupported",
+  "grade": "C",
+  "module": "",
+  "kernel_parts": [],
+  "tried": "GhaLII search API; Act 556 via Wayback; no L.I. amending the Schedule found by GhaLII search",
+  "triage": "moderate"
+ },
+ {
+  "package": "P3",
+  "oecd": "1100",
+  "tax": "Income tax on gains from the realisation of investment assets (individuals; 25 % election)",
+  "statute": "Income Tax Act 2015 (Act 896) s. 6 (1) (a) (ii), s. 35 (1), s. 133 'investment asset'; First Schedule para 1 (3) as substituted by Act 1094 (2023) s. 13 (a) [text version: Act 896 as enacted (gazetted OCR, world/B10-anglophone-africa/gh/law/act896_ocr.txt) with Act 1094 (2023), Act 1111 (assent 29 December 2023; para 1 (1) only) and Act 1134 (2025; withholding only); amending Acts 2016-2020 not all held (flag)]",
+  "dated": "-",
+  "unsupported": [
+   "primary private residence conditions (3 years owned, 2 of 3 lived in) not checked: mainHome is taken as meeting them",
+   "beneficial interests in trusts; bonds and securities not issued by a company",
+   "non-resident individuals (para 1 (2): 25 % on chargeable income)",
+   "amending Acts 2016-2020 not all held: an exemption for listed securities, if any was enacted, is not applied (none in the held texts)"
+  ],
+  "status": "modelled",
+  "grade": "B",
+  "module": "Stack.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Stack (GlobalModel.withStack, StackRule.electFlatBp)"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5111",
+  "tax": "Value Added Tax",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "VAT Act 2013 (Act 870) s. 3 (15 %) [text version: Act 870 (2013) and Act 896 (2015) as enacted (gazetted copies), Act 896 para 3 (1) as restated by Act 1094 (2023); later amending Acts not consolidated (flag)]",
+  "dated": "VAT Act 2013 (Act 870) and Income Tax Act 2015 (Act 896) as enacted (later amendments not consolidated in the local copies): grade B",
+  "module": "Consumption.lean",
+  "kernel_parts": [
+   "Vat",
+   "R4.vatFamily"
+  ],
+  "unsupported": [
+   "levies charged with VAT",
+   "exempt schedule",
+   "2025 VAT amendments"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5121",
+  "tax": "Excise duty (Act 878)",
+  "status": "unsupported",
+  "grade": "C",
+  "statute": "Excise Duty Act 2014 (Act 878)",
+  "dated": "-",
+  "module": "",
+  "kernel_parts": [],
+  "unsupported": [
+   "only an abridged guide of Act 878 is held (a secondary text) and the 2023-2025 amendments are not"
+  ],
+  "tried": "gh_excise_abridged.pdf.txt"
+ },
+ {
+  "package": "P2",
+  "oecd": "1200",
+  "tax": "Income tax (companies)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Income Tax Act 2015 (Act 896) First Schedule para 3 (1) (25 %) [text version: Act 870 (2013) and Act 896 (2015) as enacted (gazetted copies), Act 896 para 3 (1) as restated by Act 1094 (2023); later amending Acts not consolidated (flag)]",
+  "dated": "VAT Act 2013 (Act 870) and Income Tax Act 2015 (Act 896) as enacted (later amendments not consolidated in the local copies): grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "CorpRegime",
+   "R4.MinTax",
+   "SectorCorp (company.sector)"
+  ],
+  "unsupported": [
+   "export, manufacturing-location, free-zone and lottery rates"
+  ]
+ },
+ {
+  "package": "P2",
+  "oecd": "1200/1100",
+  "tax": "Withholding tax (non-residents)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "Act 896 First Schedule para 8 (b), (c) [text version: Act 870 (2013) and Act 896 (2015) as enacted (gazetted copies), Act 896 para 3 (1) as restated by Act 1094 (2023); later amending Acts not consolidated (flag)]",
+  "dated": "VAT Act 2013 (Act 870) and Income Tax Act 2015 (Act 896) as enacted (later amendments not consolidated in the local copies): grade B",
+  "module": "Corporate.lean",
+  "kernel_parts": [
+   "Wht"
+  ],
+  "unsupported": [
+   "treaties"
+  ]
+ },
+ {
+  "package": "P1",
+  "oecd": "5123",
+  "tax": "Customs import duty (applied tariff, WTO IDB 2025)",
+  "status": "modelled",
+  "grade": "B",
+  "statute": "customs tariff of Ghana as notified to the WTO IDB for 2025; WTO Integrated Database (IDB), applied tariff notified by Ghana for 2025 (HS 2022), read on the WTO Tariff & Trade Data browse pages (ttd.wto.org/en/data/idb/applied-duties?member=C288&product=<line>&year=2025, retrieved 2026-11-21; customs/packs/gh.json)",
+  "dated": "IDB notification for 2025 (HS 2022), retrieved 2026-11-21",
+  "module": "Customs.lean",
+  "kernel_parts": [
+   "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+  ],
+  "unsupported": [
+   "only the HS subheadings of customs/HS_MAP.md are modelled (any other code: grade C, no tariff line)",
+   "IDB notification year 2025: a change of the tariff during 2025 (budget measures, stays of application) is not dated",
+   "national import levies and charges outside the customs duty column (statistical, processing, ECOWAS/AU levies, import VAT advance) not modelled",
+   "the price is taken before VAT and duty only: an excise inside the price needs \"customsValue\""
+  ]
+ }
+]

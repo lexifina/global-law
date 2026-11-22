@@ -1,0 +1,47 @@
+[
+ {
+  "oecd": "6000",
+  "tax": "Other taxes recorded by the registry",
+  "statute": "Contribuição extraordinária sobre o setor energético; derrama estadual (recorded under CIT)",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: OECD Revenue Statistics detailed table (sdmx.oecd.org, OECD.CTP.TPS DSD_REV_OECD@DF_REVPRT v2.0, fetched 2026-11-22 with a plain research user-agent, copy `tools/in_gap2/oecd/PRT.csv`, SHA256SUMS; general government S13; 2025 not yet published) names what is booked under 6000: 6100 general services and licences granted to corporations 305,9, 6200 miscellaneous taxes 0,3 million EUR (2024); not modelled",
+  "unsupported": [
+   "the statutes of the items named by the OECD table"
+  ],
+  "triage": "minor here: CESE is an energy-sector levy; derrama estadual is under CIT (P2)",
+  "gap_note": true
+ },
+ {
+  "oecd": "5200",
+  "tax": "Other taxes on use of goods (rest)",
+  "statute": "not reached: pass 11: IUC category B (cars first registered from July 2007) modelled; category A (older cars), the diesel adicional de IUC, ISV (registration) and other categories not modelled",
+  "dated": "",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "pass 11: IUC category B (cars first registered from July 2007) modelled; category A (older cars), the diesel adicional de IUC, ISV (registration) and other categories not modelled",
+  "unsupported": [
+   "would unlock: Código do IUC art. 9 (category A table, an image on the portal); Lei 82-B/2014 art. 216 (adicional de IUC, diesel); Código do ISV art. 7 tables (images) with the cilindrada and CO2 of a new car"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Imposto único de circulação (categoria B)",
+  "statute": "Código do Imposto Único de Circulação (Lei 22-A/2007, anexo II) art. 2.º n.º 1 b), 5.º n.º 1 e), 10.º (redação da Lei 82/2023) [year in force 2025 (pass 16), unchanged-confirmed: pt/law/iuc2_portal.txt and iuc10_portal.txt: last redação Lei 82/2023; iuc5_portal.txt: DL 161/2026 changes n.º 4, 5, 10 with effect from 1.1.2027, n.º 1 e) unchanged]",
+  "dated": "Portal das Finanças, codigos tributarios, read 2026-11-21 (`pt/law/iuc2_portal.txt`, `iuc5_portal.txt`, `iuc10_portal.txt`; the art. 10 n.º 1 and 2 tables are images: `iuc10_oe2024_01.png`, `iuc10_oe2024_02.png`, read by OCR); OE 2025 (Lei 45-A/2024, `pt/law/Lei_45_A_2024.txt`) changes no IUC rate",
+  "grade": "A",
+  "kernel_parts": [
+   "VehicleTax (2.4.0)",
+   "QtyTable"
+  ],
+  "unsupported": [
+   "cars first registered before July 2007 (category A, art. 9), motorcycles, goods vehicles and other categories",
+   "5200 IUC: CO2 of a car first registered from 2020 is read in the WLTP column, earlier ones in the NEDC column (Lei 119/2019 note); a car of 2007 is taken as registered after 1 July 2007; amounts rounded down to whole euros",
+   "5200 adicional de IUC (Lei 82-B/2014 art. 216, kept by Lei 45-A/2024 art. 113) on diesel cars not modelled (grade C)",
+   "5200 ISV (Código do ISV) on a car registered in the year not modelled (grade C)"
+  ],
+  "yif16": "unchanged-confirmed"
+ }
+]

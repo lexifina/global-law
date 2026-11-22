@@ -1,0 +1,42 @@
+[
+ {
+  "oecd": "4100",
+  "tax": "固定資産税 and 都市計画税",
+  "statute": "地方税法 arts. 350, 702-4",
+  "dated": "e-Gov asof 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [
+   "PropertyTax"
+  ],
+  "unsupported": [
+   "residential land reductions",
+   "convention: base = `assessed` (台帳 price, art. 349), standard rate 1.4 % (art. 350 (1)); art. 351 免税点 not applied"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "不動産取得税 and 登録免許税",
+  "statute": "地方税法 art. 73-15, 附則 11-2; 登録免許税法 別表第一; 租特 72",
+  "dated": "e-Gov asof 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [
+   "TransferDuty"
+  ],
+  "unsupported": [
+   "印紙税"
+  ]
+ },
+ {
+  "oecd": "4400",
+  "tax": "印紙税 (不動産譲渡契約書)",
+  "statute": "印紙税法 別表第一 第一号; 租税特別措置法 art. 91 (1)",
+  "dated": "e-Gov asof 2025-07-01",
+  "grade": "A",
+  "kernel_parts": [
+   "charge"
+  ],
+  "unsupported": [
+   "one copy (the buyer's) per purchase"
+  ]
+ }
+]

@@ -1,0 +1,49 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Goods and services tax",
+  "statute": "GST Act 1993 s. 16, Second Schedule para. 1, Fourth Schedule Part 1",
+  "dated": "SSO historical version in force 1/7/2025 - 8/12/2025",
+  "grade": "A",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "overseas vendor and reverse-charge rules",
+   "Fourth Schedule items beyond paras. 1-2"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (motor spirit, diesel, liquor, tobacco)",
+  "statute": "Customs Act 1960; Customs (Duties) Order (rates per Singapore Customs' List of Dutiable Goods, HS 2203, 2204, 2208, 2402, 2710)",
+  "dated": "List of Dutiable Goods last updated 15 Jan 2025 and 4 Jul 2025 (Internet Archive), same rates",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRule"
+  ],
+  "unsupported": [
+   "the Customs (Duties) Order itself not read (SSO schedule not fetched)",
+   "customs duty on imported beer not modelled",
+   "cigarette sticks over 1 g"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Road tax on cars (engine capacity or EV power rating, × 0.782; EV flat component)",
+  "statute": "Road Traffic Act 1961; Road Traffic (Motor Vehicles, Registration and Licensing) Rules (rates per LTA Vehicle Tax Structure)",
+  "dated": "LTA OneMotoring Vehicle Tax Structure page, fetched 2026-11-21 (undated: applied to 2025)",
+  "grade": "B",
+  "kernel_parts": [
+   "VehicleTax"
+  ],
+  "unsupported": [
+   "the page is undated (2026 fetch applied to 2025)",
+   "EV power rating read in whole kW (the 7.5 kW limit taken as 7)",
+   "diesel special tax",
+   "petrol-electric higher-of rule",
+   "surcharge for cars over 10 years",
+   "motorcycles and goods vehicles"
+  ]
+ }
+]

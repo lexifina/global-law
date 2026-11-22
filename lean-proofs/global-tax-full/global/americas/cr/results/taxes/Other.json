@@ -1,0 +1,115 @@
+[
+ {
+  "oecd": "2300",
+  "tax": "self-employed social security (2300)",
+  "statute": "Ley Constitutiva de la CCSS; Ley de Protección al Trabajador",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: CCSS contributions of independents (scale set by the Junta Directiva) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment."
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: self-employed contributions are not computed anywhere (the 1.x model says: \"selfEmployment: CCSS contributions of independents (scale set by the Junta Directiva) not modelled\"); the earlier label 'covered' was wrong. Needs the statute's self-employed rate and base (and whether the regime is compulsory) read and a family on adults' selfEmployment.",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 2300 = 2021:na 2022:na 2023:na 2024:na"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4100",
+  "tax": "recurrent property (4100)",
+  "statute": "Ley 7509 impuesto sobre bienes inmuebles 0.25 % of the declared value (municipal)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 7509 impuesto sobre bienes inmuebles 0.25 % of the declared value (municipal); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: a real recurrent tax on immovable property (Guide §49): Ley 7509 impuesto sobre bienes inmuebles 0.25 % of the declared value (municipal); text not read. Needs the 2025 rate (or the municipality's) and a LocalTax/PropertyTax family",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4100 = 2021:150279.2 2022:154930.3 2023:160818.0 2024:172137.8; named lines: 4100 Immovable property tax (2024: 5490.9); 4100 Municipal immovable property tax (2024: 166646.9)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the OECD table books no revenue under 4200 (recurrent taxes on net wealth, Guide §51) in 2021-2024; 2025 not yet published, no 2025 wealth tax identified",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4200 = 2021:0.0 2022:0.0 2023:0.0 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "4500",
+  "tax": "other property (4500)",
+  "statute": "contribuciones especiales de mejoras (municipal)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: contribuciones especiales de mejoras (municipal); OECD CR 4520 9.8 in 2023, 0 in 2024. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: contribuciones especiales de mejoras (municipal); OECD CR 4520 9.8 in 2023, 0 in 2024. Betterment levies are 4520 taxes (Guide §54) charged on a public work or a development permission: needs an input the model lacks (the work and its apportionment)",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 4500 = 2021:45.7 2022:8.4 2023:9.8 2024:0.0"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5112",
+  "tax": "General sales tax (single stage)",
+  "statute": "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 5112 = ?",
+  "grade": "B",
+  "status": "not levied",
+  "package": "P7",
+  "unsupported": [],
+  "triage": "not levied (cited absence)",
+  "triage_note": "not levied (B): the general consumption tax is the VAT of the P1 entry (5111); the OECD table books no single-stage sales tax under 5112 in 2023-2024",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 5112 = ?"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ },
+ {
+  "oecd": "5120",
+  "tax": "other goods and services (5120)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "other taxes on specific services (insurance, gambling, customs duties) not read"
+  ],
+  "triage": "model-next",
+  "triage_note": "customs import duties (5123) and taxes on insurance/gambling: import duties are a main revenue source of the Caribbean states; the basket has no imported flag, needs a duty rate per good (kernel line field `imported`)",
+  "tariff_source": "Arancel Centroamericano de Importación (SAC, SIECA) with national annexes",
+  "customs_note": "customs import duties (5123): Arancel Centroamericano de Importación (SAC, SIECA) with national annexes; not modelled: the duty is per tariff line (HS) and depends on the good's origin and trade agreements; a household basket line carries no origin unless 'imported' is given (kernel 2.1 Global2 line field), and no honest per-good representative rate was derived from the schedule"
+ },
+ {
+  "oecd": "6000",
+  "tax": "other (6000)",
+  "statute": "not read",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P7",
+  "unsupported": [
+   "kept at C: OECD CR 6200 'Other' (203,827 in 2024) and 'Transfers of vehicles, aircraft and boats' (30,783; by nature a 4400 transfer tax, Guide §53): not read"
+  ],
+  "triage": "(e) kept at C",
+  "triage_note": "kept at C: OECD CR 6200 'Other' (203,827 in 2024) and 'Transfers of vehicles, aircraft and boats' (30,783; by nature a 4400 transfer tax, Guide §53): not read",
+  "evidence": [
+   "OECD Revenue Statistics detailed table (DSD_REV_LAC@DF_REVCRI, sdmx.oecd.org, fetched 2026-11-21, copy americas/p7t/oecd/CRI.csv): general government heading 6000 = 2021:83318.6 2022:394874.2 2023:222619.1 2024:234816.8; named lines: 6200 Other (2024: 203826.9); 6200 Transfers of vehicles, aircraft and boats (2024: 30783.1)"
+  ],
+  "p7_triage_pass": "2026-11-21"
+ }
+]

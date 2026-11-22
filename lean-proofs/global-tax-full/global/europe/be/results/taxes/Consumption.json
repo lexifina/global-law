@@ -1,0 +1,36 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "statute": "Code de la TVA art. 37 et AR n° 20 tableaux A (6 %) et B (12 %) as listed by PwC 2025 (21 %, 12 %: restaurant and catering services without drinks; 6 %: food, pharmaceuticals, piped water, printed and electronic publications, passenger transport, hotels, electricity and natural gas for non-business use); art. 56bis (régime de la franchise, 25 000 euros)",
+  "dated": "SPF Finances pages captured 2025-05-17 / 2025-07-08; rate lists: PwC Worldwide Tax Summaries, Belgium, Corporate - Other taxes, Internet Archive 2025-05-26 (`be/law/pwc_corpother_wb2025.*`), facts only",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "exempt supplies taken from the act's structure (EU/EEA standard exemptions), not quoted item by item",
+   "6 % and 12 % lists from PwC 2025 (B), not from the AR n° 20 tableaux themselves",
+   "restaurants at 12 %: the drinks served (21 %) are not separated",
+   "books and newspapers at 6 % (PwC: some printed and electronic publications)",
+   "non-alcoholic drinks, recreation, communication, clothing and heating oil at 21 % (not on the 6 % or 12 % lists given)"
+  ]
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Loi du 22 décembre 2009 (régime général d'accise); loi du 7 janvier 1998 (alcool); loi du 3 avril 1997 (tabacs); loi-programme du 27 décembre 2004 (énergie), rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "petrol taken as unleaded below 98 octane; gas oil with at most 10 mg/kg sulphur",
+   "heating gas oil at the non-business rate (Belgium's banded energy contribution not separated)",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ }
+]

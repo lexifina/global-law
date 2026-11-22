@@ -1,0 +1,38 @@
+[
+ {
+  "oecd": "1200",
+  "tax": "Corporation tax",
+  "statute": "Corporation Tax Act Cap. 81:03 (L.R.O. 1/2012) s. 10 (1): (a) telephone company 45 %, (b) commercial company 40 %, (c) any other company 25 % (30 % -> 27.5 % by Act No. 5 of 2017 s. 2, -> 25 % by Act No. 10 of 2019 s. 3, from the year of income 2019); s. 10 (2) (Act 5/2017, 10/2019): companies with commercial and non-commercial activities: 40 % / 25 %; s. 10A (Act 5/2017 s. 3): minimum tax 2 % of turnover for a commercial company",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P2",
+  "kernel_parts": [
+   "SectorCorp",
+   "CorpRule",
+   "Wht"
+  ],
+  "unsupported": [
+   "mixed-activity split, small-business rate",
+   "loss carry-forward rule not read",
+   "company type from company.sector (absent: 25 %)"
+  ],
+  "dated": "MOLA Cap. 81:03 L.R.O. 1/2012 (gy/law/corporation_tax_act_cap81-03_mola.*); Acts 5 of 2017, 10 of 2019, 3 of 2020 (s. 7 only) from parliament.gov.gy (gy/law/corporation_tax_amendment_act_*); Fiscal Enactments 2022-2026 change s. 7 only; pass 9, 2026-11-21"
+ },
+ {
+  "oecd": "1200",
+  "tax": "Withholding on payments to non-residents",
+  "statute": "ITA Cap. 81:01 s. 39 (1) (a), (b), Third Sched. Part I para 1 (4 of 2003): 20 % on gross distributions and payments to non-residents",
+  "dated": "L.R.O. 1/2012 consolidation held by the 1.x builder; Fiscal Enactments Acts 2012-2026 searched; pass 7, 2026-11-21",
+  "grade": "A",
+  "package": "P2",
+  "kernel_parts": [
+   "SectorCorp",
+   "CorpRule",
+   "Wht"
+  ],
+  "unsupported": [
+   "treaty rates (s. 39 (3)) not modelled",
+   "company type from company.sector (absent: 25 %)"
+  ]
+ }
+]

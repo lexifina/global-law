@@ -1,0 +1,22 @@
+name = "PeGlobal"
+version = "0.1.0"
+defaultTargets = ["PeGlobal", "peglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); PeTax = the 1.x model, vendored from cmp20/world/B12-latin-america/pe/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "PeTax"
+
+[[lean_lib]]
+name = "PeGlobal"
+
+[[lean_exe]]
+name = "peglobal"
+root = "PeGlobal.Main"
+
+[[require]]
+name = "AmerCommon"
+path = "../../common"

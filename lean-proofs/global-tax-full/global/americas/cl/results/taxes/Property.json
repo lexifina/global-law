@@ -1,0 +1,66 @@
+[
+ {
+  "oecd": "4400",
+  "tax": "Transfer, stamp and recurrent property taxes",
+  "statute": "DL 3.475 (timbres y estampillas); Ley 17.235 (impuesto territorial)",
+  "grade": "C",
+  "status": "unsupported",
+  "package": "P5",
+  "kernel_parts": [],
+  "tried": "not read in this pass (texts not local)",
+  "unsupported": [
+   "would unlock: the acts and the 2025 municipal rates"
+  ]
+ },
+ {
+  "oecd": "5200",
+  "tax": "Impuesto por permiso de circulación (automobiles, vans, pickups, motorcycles)",
+  "statute": "DL 3.063 (Ley de Rentas Municipales), texto refundido D. 2.385/1996 art. 12 a) (LeyChile idNorma 18967, version 2025-07-01): automobiles, station wagons, vans, pickups, motorcycles: progressive and cumulative scale on the precio corriente en plaza (SII list): to 60 UTM 1 %, to 120 UTM 2 %, to 250 UTM 3 %, to 400 UTM 4 %, above 4.5 %; at least half a UTM; art. 12 last paragraph and art. 15 N° 1: UTM of January 2025 (67.429, SII); first permits: art. 18 (months left, the invoice month included), art. 12 last paragraph (UTM of two months before), art. 17 (invoice price)",
+  "dated": "LeyChile get_norma_json idNorma 18967 idVersion=2025-07-01; pass 10, 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P1",
+  "kernel_parts": [
+   "VehicleTax",
+   "vehicleTaxFamily"
+  ],
+  "unsupported": [
+   "value taken as the SII precio corriente en plaza",
+   "art. 12 b) fixed amounts (taxis, buses, trucks) not computed",
+   "UTM of January 2025 for the March renewal (vehicles first registered up to 2024); first permits of 2025 by firstRegMonth (no month: grade C); a vehicle without firstRegYear: grade C"
+  ]
+ },
+ {
+  "oecd": "4200",
+  "tax": "Net wealth tax",
+  "statute": "Constitución art. 65 inc. 4 num. 1",
+  "dated": "lexifina repository text; pass 12, 2026-11-21",
+  "grade": "A",
+  "status": "not levied",
+  "package": "P6",
+  "kernel_parts": [
+   "Absent"
+  ],
+  "why": "Not levied (convention R5-3k-G, pass 12): Constitución art. 65 inc. 4 num. 1: \"Imponer, suprimir, reducir o condonar tributos de cualquier clase o naturaleza\" (`cl/law/const_art-065.md`). no law read in this build levies a recurrent tax on net wealth (laws read include: DL 3.063 (Ley de Rentas Municipales), texto refundido D. 2.385/1996 art. 12 a) (LeyChile idNorma 18967, version 2025-07-01): automobiles, station wagons, vans, pickups, motorcycles: progressive and cumulative scale on the precio corriente en plaza (SII list): to 60 UTM 1 %, to 120 UTM 2 %, to 250 UTM 3 %, to 400 UTM 4 %, above 4.5 %)."
+ },
+ {
+  "oecd": "5120",
+  "tax": "Derechos de aduana (import duties, 6 % general rate)",
+  "statute": "Ley 18.687 art. 1 inc. 1 (6 % ad valorem, Ley 19.589 art. 1 e)), inc. 2 (0 % for goods originating in least-developed countries, Ley 20.690), inc. 3 (0 % capital goods, Ley 18.634); DL 825 art. 16 a) (IVA on the duty-inclusive customs value)",
+  "dated": "cl/law/ley18687_leychile.{json,txt} (LeyChile get_norma_json?idLey=18687, versión vigente desde 2013-11-01 with no end date, i.e. in force throughout 2025); cl/law/ley19589_leychile.{json,txt}; gap pass 2026-11-21",
+  "grade": "A",
+  "status": "modelled",
+  "package": "P7",
+  "kernel_parts": [
+   "TariffRule",
+   "customsFamily",
+   "consumptionC"
+  ],
+  "unsupported": [
+   "trade-agreement preferences (Chile has agreements with most origins) not read: the 6 % MFN rate is booked and the line flagged (grade C)",
+   "0 % for least-developed-country origin (Ley 20.690; the decree listing the countries not read) and for capital goods (Ley 18.634) not applied",
+   "the price is taken before IVA and duty only: an excise inside the price needs \"customsValue\""
+  ],
+  "gap_pass": "2026-11-21 approach 1 (customs, kernel 2.8.0)"
+ }
+]

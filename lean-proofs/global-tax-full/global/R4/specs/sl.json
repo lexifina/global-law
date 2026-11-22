@@ -1,0 +1,167 @@
+{
+ "cc": "SL",
+ "name": "Sierra Leone",
+ "dated": "Income Tax Act 2000 as amended to the Finance Act 2017, with the Finance Acts 2018-2025 (FA 2025 in force 1 Jan 2025) read for the provisions modelled; FA 2026 changes (from 2026) not applied",
+ "sources": "Sources: Income Tax Act 2000 as amended to the Finance Act 2017 (`cmp20/world/B10-anglophone-africa/sl/law/Income_Tax_Act_2000_as_amended_to_Finance_Act_2017_1_83760e046c.txt`). Finance Acts 2020 (OCR), 2023, 2024 and 2025 (`cmp20/world/B10-anglophone-africa/sl/law/`). GST Act 2009 compilation to 2016 (nra.gov.sl/tax-laws, `cmp20/global/R4/fetch/sl8/`, SHA256SUMS); Finance Acts 2017-2025 checked for s. 14.",
+ "vat": {
+  "name": "Goods and Services Tax",
+  "standard": 1500,
+  "classes": {
+   "water": "exempt",
+   "books": "exempt",
+   "newspapers": "exempt",
+   "education": "exempt",
+   "health": "exempt",
+   "medicines": "exempt",
+   "transport": "exempt",
+   "petrol": "exempt",
+   "diesel": "exempt",
+   "financial": "exempt"
+  },
+  "grade": "A",
+  "statute": "Goods and Services Tax Act 2009 s. 14 (3) (b) (15 %), Second Schedule items 4-10 (exempt supplies), NRA compilation to 2016; s. 14 not amended by the Finance Acts 2017-2025",
+  "doc": "s. 14 (3): \"The rate of GST applicable to a taxable supply or import is (a) if the supply or import is zero-rated under the First Schedule, zero per cent; (b) in any other case, 15 per cent.\" Second Schedule: \"4. Supply: Water. 5. Supply: Printed matter (books and newspapers). 6. Supply: Education services 7. Supply: Medical services and pharmaceuticals. 8. Supply: Transportation of passengers 9. Supply: Crude oil and hydrocarbon products. 10. Supply: Financial services.\" The Finance Acts 2017-2025 amend ss. 2, 6, 8, 15, 19, 31, 34, 37, 58, 90, 99 and the Second Schedule (additions such as teaching materials and local vegetable oil), not s. 14.",
+  "notes": [
+   "Second Schedule descriptions limit some items (e.g. passenger transport, hydrocarbon products); the basket lines are taken as exempt in full",
+   "land and buildings (item 12) not separable from rent; later Second Schedule additions (FA 2021-2024) not applied"
+  ],
+  "unsupported": [
+   "item descriptions' limits",
+   "Second Schedule additions after 2016"
+  ]
+ },
+ "excise": {
+  "name": "Excise duty",
+  "grade": "B",
+  "statute": "Excise Act 1982 First Schedule as amended by the Finance Act 2024 s. 4 (headings 2204, 27.10, from 1 Jan 2024) and the Finance Act 2025 s. 6 (b) (24.02 cigarettes, from 1 Jan 2025)",
+  "doc": "FA 2024 s. 4 (b), heading 2204 (wine of fresh grapes), alcohol content '>10 but <20': \"Le6.30 per litre\" local, \"Le12 per litre\" import; '<10': Le4.20 / Le10. FA 2024 s. 4 (k), tariff item 27.10: \"B. Petrol Le 2.80 per litre C. Diesel Le 1.22 per litre effective 1st January 2024 Le 1.62 per litre effective 1st April 2024 Le 2.01 per litre effective 1st July 2024 Le 2.4 per litre effective 1st day of October 2024\". FA 2025 s. 6 (b): \"24.02 ... Cigarette containing tobacco NLe 2.0 per packet of 20 sticks\" (FA 2023 had NLe20 per packet: the printed 2025 figure is applied). Amounts in new Leones. Grade B: the FA 2024 beer line is internally inconsistent (\"Le0.01 per cl or Le10 per litre\"), and the spirits (2208) table is an image not in the text.",
+  "items": [
+   {
+    "good": "wine",
+    "name": "Excise wine 10-20 % (local)",
+    "minAbvBp": 1000,
+    "maxAbvBp": 1999,
+    "perUnitNum": 6300,
+    "perUnitDen": 1000,
+    "imported": false,
+    "vatBp": 1500,
+    "statute": "Excise Act First Schedule 2204 (FA 2024): Le6.30 per litre local"
+   },
+   {
+    "good": "wine",
+    "name": "Excise wine 10-20 % (import)",
+    "minAbvBp": 1000,
+    "maxAbvBp": 1999,
+    "perUnitNum": 12000,
+    "perUnitDen": 1000,
+    "imported": true,
+    "vatBp": 1500,
+    "statute": "Excise Act First Schedule 2204 (FA 2024): Le12 per litre import"
+   },
+   {
+    "good": "wine",
+    "name": "Excise wine < 10 % (local)",
+    "maxAbvBp": 999,
+    "perUnitNum": 4200,
+    "perUnitDen": 1000,
+    "imported": false,
+    "vatBp": 1500,
+    "statute": "Excise Act First Schedule 2204 (FA 2024): Le4.20 per litre local"
+   },
+   {
+    "good": "wine",
+    "name": "Excise wine < 10 % (import)",
+    "maxAbvBp": 999,
+    "perUnitNum": 10000,
+    "perUnitDen": 1000,
+    "imported": true,
+    "vatBp": 1500,
+    "statute": "Excise Act First Schedule 2204 (FA 2024): Le10 per litre import"
+   },
+   {
+    "good": "petrol",
+    "name": "Excise petrol",
+    "perUnitNum": 2800,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Excise Act First Schedule 27.10 B (FA 2024): Le2.80 per litre"
+   },
+   {
+    "good": "diesel",
+    "name": "Excise diesel",
+    "perUnitNum": 2400,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Excise Act First Schedule 27.10 C (FA 2024): Le2.4 per litre from 1 Oct 2024"
+   },
+   {
+    "good": "cigarettes",
+    "name": "Excise cigarettes",
+    "perUnitNum": 100,
+    "perUnitDen": 1000,
+    "vatBp": 1500,
+    "statute": "Excise Act First Schedule 24.02 (FA 2025 s. 6 (b)): NLe2.0 per packet of 20 sticks"
+   }
+  ],
+  "notes": [
+   "beer (2203): FA 2024 prints 'Le0.01 per cl or Le10 per litre' (the two figures differ tenfold): not applied; spirits (2208) and other drinks: the FA 2024 tables are images; local spirits by local content (FA 2025 tariff 22.09 D1-D4, 5-20 %) not separable",
+   "the GST rate (VAT 1500) used in the excise base split is the 15 % of the GST Act 2009 (not held)"
+  ],
+  "unsupported": [
+   "beer (conflicting print)",
+   "spirits (table not in the text)",
+   "local-content beverages (FA 2025 22.09)",
+   "other tobacco and e-cigarettes"
+  ]
+ },
+ "cit": {
+  "name": "Corporate income tax",
+  "rate": 2500,
+  "step": 1,
+  "grade": "A",
+  "statute": "Income Tax Act 2000 s. 5 (1) and First Schedule Part III as amended by the Finance Act 2020 (30 % replaced by 25 %); not amended by the Finance Acts 2021-2025 (FA 2026 restores 30 % from 2026)",
+  "doc": "ITA 2000 s. 5 (1): \"the chargeable income of a resident company shall be taxed at the rate or rates\" of the First Schedule Part III; Part III (to FA 2017): \"Rates of Tax 30%\". Finance Act 2020 (OCR): \"(b) In part III by deleting the figure 30 and substituting it with the following new figure (25%)\". Finance Act 2023 s. 6 and Finance Act 2024 s. 11 insert minimum alternate tax lines \"immediately after the line relating to the 25% rate of tax for companies\"; Finance Act 2026 s. 13 (a): \"Part III by repealing the 25% relating to the rate of tax applicable to resident companies ... and replacing it with 30%\" (2026 onwards). FA 2025 does not amend Part III.",
+  "notes": [
+   "ITA s. 7A as replaced by the Finance Act 2024 s. 8: a company with an allowable loss for the year pays a minimum alternate tax of 2 % of turnover (First Schedule Part III as amended by FA 2024 s. 11), creditable over ten years: not modelled (the region's minimum-tax part would also apply it to profitable companies)"
+  ],
+  "unsupported": [
+   "minimum alternate tax for loss companies (s. 7A, 2 % of turnover)",
+   "loss carry-forward limits",
+   "sector rates (s. 21)"
+  ]
+ },
+ "wht": {
+  "name": "Withholding on payments to non-residents",
+  "grade": "A",
+  "statute": "Income Tax Act 2000 Second Schedule Part II as replaced by the Finance Act 2024 s. 12 (b) (in force 1 Jan 2024; FA 2025 does not amend it): dividends, interest, management/professional fees, rents and royalties 15 %",
+  "doc": "Finance Act 2024 s. 12 (b): \"Part II by repealing and replacing that part with the following new Part II - PART II (Sections 116,117,118,119,120,121,122 and 123) Rates of tax to be withheld from payments made to non-residents: ... Dividends (section 118) 15% Interest (section 119) 15% Management/professional fees 15% Rents and royalties (section 120) 15%\".",
+  "rules": [
+   {
+    "kind": "dividend",
+    "rateBp": 1500,
+    "statute": "ITA 2000 Second Schedule Part II (FA 2024): dividends 15 %"
+   },
+   {
+    "kind": "interest",
+    "rateBp": 1500,
+    "statute": "ITA 2000 Second Schedule Part II (FA 2024): interest 15 %"
+   },
+   {
+    "kind": "services",
+    "rateBp": 1500,
+    "statute": "ITA 2000 Second Schedule Part II (FA 2024): management/professional fees 15 %"
+   },
+   {
+    "kind": "royalty",
+    "rateBp": 1500,
+    "statute": "ITA 2000 Second Schedule Part II (FA 2024): rents and royalties 15 %"
+   }
+  ],
+  "notes": [
+   "the earlier rates (dividends 10 %, royalties 25 %) of the 2017 consolidation were replaced by the Finance Act 2024"
+  ],
+  "unsupported": [
+   "minimum alternate tax 2 % of turnover for non-resident companies (Second Schedule Part I, FA 2024)"
+  ]
+ }
+}

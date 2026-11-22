@@ -1,0 +1,48 @@
+[
+ {
+  "oecd": "5111",
+  "tax": "Taxe sur la valeur ajoutée",
+  "statute": "CGI art. 278, 278-0 bis, 278 quater, 279, 281 octies, 293 B [year in force 2025 (pass 16), re-cited 2025: 279: version from 31.12.2023 (Loi 2023-1322; fr/law/y2024/279.md copied to fr/law/cgi279_v20231231.md), the article listed as LEGIARTI000048827223 in the Légifrance contents captured 2025-03-13, in force to 28.2.2026; 278-0 bis: version from 1.3.2025 read in its Légifrance capture 2025-04-04 (fr/law/cgi278-0bis_wb20250404.*) and version from 1.10.2025 (fr/law/y2024/278-0-bis.md, copied): food (A 1°) and books identical in both; electricity and gas subscriptions (≤ 36 kVA) at 5,5 % until 31.7.2025, then 20 % (not modelled: electricity and gas taken at 20 %); the January-February 2025 wordings of 278-0 bis and 293 B not read: B kept]",
+  "dated": "CGI copies: 279 version 2023-12-31; 278-0 bis versions 2025-03-01 (Légifrance capture 2025-04-04) and 2025-10-01; 293 B version 2025-03-01",
+  "grade": "B",
+  "kernel_parts": [
+   "Vat"
+  ],
+  "unsupported": [
+   "press 2,1 %",
+   "current-year franchise limit 93 500 €",
+   "January-February 2025 wordings of arts. 278-0 bis and 293 B not read"
+  ],
+  "yif16": "re-cited 2025"
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties (alcohol, tobacco, motor and heating fuel)",
+  "statute": "Code des impositions sur les biens et services (CIBS) L. 313-1 ff. (alcools), L. 314-1 ff. (tabacs), L. 312-1 ff. (énergies); CSS art. L. 245-7 (cotisation sur les boissons alcooliques), rates as reported to the TEDB",
+  "dated": "TEDB situation on 1.7.2025",
+  "grade": "B",
+  "kernel_parts": [
+   "ExciseRate (pure alcohol, minimum)"
+  ],
+  "unsupported": [
+   "beer at the normal rate (above 2.8 % vol); the cotisation on beers above 18 % vol not applied",
+   "petrol taken as SP95-E5 (E10 662.90 EUR per 1 000 l)",
+   "rates from the Commission's TEDB (grade B), the national act itself not read",
+   "electricity and natural gas excise, other tobacco products and intermediate products not modelled"
+  ],
+  "gap": 2
+ },
+ {
+  "oecd": "5121",
+  "tax": "Excise duties whose 2025 rate changed during the year (petrol, diesel, heatingOil)",
+  "statute": "Code des impositions sur les biens et services (CIBS) L. 313-1 ff. (alcools), L. 314-1 ff. (tabacs), L. 312-1 ff. (énergies); CSS art. L. 245-7 (cotisation sur les boissons alcooliques); TEDB situations 1.1, 1.7 and 31.12.2025",
+  "grade": "C",
+  "status": "unsupported",
+  "kernel_parts": [],
+  "tried": "gap pass 2: the TEDB 31.12.2025 figures (diesel 594 -> 670,5 EUR / 1 000 l) look like the 2026 rates; the CIBS article L. 312-35 wording for 2025 not read (lexifina/france-law not searched this pass)",
+  "unsupported": [
+   "would unlock: the day the rate changed, from the act or decree (then dated kernel 2.1 ExciseRule rules, validFrom / validTo, as IT fuel)"
+  ],
+  "gap_note": true
+ }
+]

@@ -1,0 +1,214 @@
+{
+ "country": "CG",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Taxe sur la valeur ajoutée (with centimes additionnels)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Loi n° 12-97 (TVA) as modified by Loi n° 39-2023 (LF 2024) art. 22 2) a) (18 %) and art. 38 A 4) (centimes additionnels 5 % of the VAT: 18 % x 1,05 = 18,9 %); art. 7 exemptions (LF 2025 amends only items 12 and 22)",
+   "dated": "Loi n° 47-2024 du 30 décembre 2024 portant loi de finances pour l'année 2025 (JO édition spéciale n° 15-2024 du 31 décembre 2024) and the VAT text as rewritten by Loi n° 39-2023 du 29 décembre 2023 (LF 2024, JO édition spéciale n° 6-2023); CGI tome 1 (edition date not established) for the withholding",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "5 % reduced rate (basket convention)",
+    "local mineral water and butane exemption"
+   ],
+   "guards": 9
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Droits d'accises",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "Excise text art. 8 1) as substituted by Loi n° 47-2024 (LF 2025) point 23 (CEMAC directive 03/19): tobacco 30 %, alcoholic drinks 25 %, sugary drinks 12,5 %",
+   "dated": "Loi n° 47-2024 du 30 décembre 2024 portant loi de finances pour l'année 2025 (JO édition spéciale n° 15-2024 du 31 décembre 2024) and the VAT text as rewritten by Loi n° 39-2023 du 29 décembre 2023 (LF 2024, JO édition spéciale n° 6-2023); CGI tome 1 (edition date not established) for the withholding",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "excise base article not read (convention used)",
+    "petroleum products"
+   ],
+   "guards": 9
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Impôt sur les sociétés",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "CGI tome 1 art. 122 as substituted by Loi n° 47-2024 (LF 2025) point 6 (30 %; fraction below 1 000 F disregarded); art. 122 A: 25 % microfinance and private education, 28 % mining/quarrying and property, 33 % foreign legal persons under art. 126 ter",
+   "dated": "Loi n° 47-2024 du 30 décembre 2024 portant loi de finances pour l'année 2025 (JO édition spéciale n° 15-2024 du 31 décembre 2024) and the VAT text as rewritten by Loi n° 39-2023 du 29 décembre 2023 (LF 2024, JO édition spéciale n° 6-2023); CGI tome 1 (edition date not established) for the withholding",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax",
+    "SectorCorp (company.sector)"
+   ],
+   "unsupported": [
+    "art. 122 A 33 % for foreign legal persons (art. 126 ter)",
+    "minimum tax (TSS) status in 2025 not established"
+   ],
+   "guards": 19
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Retenue à la source sur les non-résidents",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "CGI tome 1 art. 185 ter (Loi n°5/96, Loi n°17-2000): 20 % on income of non-residents from work or services of any kind performed, supplied or used in Congo, loan interest excluded — tome 1 edition date not established, flagged; thirteenth pass: CGI tome 2 (MinFin edition posted 2021) livre III (impôt sur le revenu des valeurs mobilières) art. 1er 1°, art. 3 1° (20 %); LF 2022-2025 held: no change to art. 3 found; CGI tome 1 art. 185 ter, 2nd sentence (the 20 % retenue 'n'est pas applicable aux intérêts d'emprunts payés à une personne physique ou morale étrangère'); CGI tome 2 livre III art. 1er 7° (IRVM on interest of negotiable bonds only); a foreign lender without an establishment is outside the IS: no tax on loan interest paid to a foreign company (cited 0)",
+   "dated": "Loi n° 47-2024 du 30 décembre 2024 portant loi de finances pour l'année 2025 (JO édition spéciale n° 15-2024 du 31 décembre 2024) and the VAT text as rewritten by Loi n° 39-2023 du 29 décembre 2023 (LF 2024, JO édition spéciale n° 6-2023); CGI tome 1 (edition date not established) for the withholding",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "tome 1 edition date",
+    "loan interest paid to a non-resident individual: no withholding (art. 185 ter), but the IRPP reaches non-residents on Congo-source income (tome 1 art. 1, art. 61 revenus des créances): assessed by return, not modelled (grade C)"
+   ],
+   "guards": 19
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty",
+   "statute": "Code général des impôts tome I (finances.gouv.cg) + finance laws in the Journal officiel (LF 2022-2025)",
+   "dated": "cgi_tome1.txt",
+   "unsupported": [
+    "triage minor: droit de timbre in the francophone codes = fixed stamps per sheet / instrument (dimension, receipts, passports, vehicle papers): no household base in the model; transfers of immovables are carried by the P5 registration (mutation) duties where modelled. listed by the registry (confirmed in reachable text); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://www.finances.gouv.cg ; https://www.sgg.cg/JO/)",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (patente / contribution des patentes or contribution des licences (CGI); provision not located by keyword in the reachable text)",
+   "statute": "Code général des impôts tome I (finances.gouv.cg) + finance laws in the Journal officiel (LF 2022-2025)",
+   "dated": "cgi_tome1.txt",
+   "unsupported": [
+    "triage moderate: patente: business licence on traders (tome 1 tableau A amounts not located, see seventh pass). listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "local copy (https://www.finances.gouv.cg ; https://www.sgg.cg/JO/)",
+   "triage": "moderate",
+   "guards": 0
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNSS family benefits 10,03 % and work accidents 2,25 % (employer, up to 600 000 F a month)",
+   "statute": "Loi n° 47-2024 (LF 2025) art. 9 (CNSS employer total 20,28 %, read); branch split and ceilings from CLEISS 'Les cotisations au Congo' (1 Jan 2023, R4/fetch/cleiss11/congo.html)",
+   "dated": "cgi_tome1.txt",
+   "unsupported": [
+    "branch split and ceilings from a secondary table dated 2023 (flag)",
+    "State takeover for newly declared informal employers (art. 9 al. 2)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CAMU (universal health insurance) employer contribution (4,55 %, up to 600 000 F a month)",
+   "statute": "Loi n° 47-2024 (LF 2025) art. 9 (rate); ceiling 600 000 FCFA a month from CLEISS (2023)",
+   "dated": "cgi_tome1.txt",
+   "unsupported": [
+    "the employee's 2,27 %"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "CNSS pensions, employer share (8 %, up to 1 200 000 F a month)",
+   "statute": "Loi n° 47-2024 (LF 2025) art. 9; ceiling from CLEISS 'Les cotisations au Congo' (2023)",
+   "dated": "cgi_tome1.txt",
+   "unsupported": [
+    "the employee's 4 % (LF 2025 prints 4,55 % for the employee: the 1.x PIT side is unchanged)"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P4",
+   "oecd": "3000",
+   "tax": "Fonds national de construction 2 % and ACPE/FONEA 0,5 % (employer, up to 1 200 000 F a month)",
+   "statute": "CLEISS 'Les cotisations au Congo' (1 Jan 2023); the instruments (CGI tome 1, ACPE texts) not read [text version: CLEISS edition 'au 1er janvier 2023', the latest edition held (no 2025 edition reached: flag)]",
+   "dated": "cgi_tome1.txt",
+   "unsupported": [
+    "taxe d'apprentissage 1 % (collected by the tax administration) not modelled: rate and base not read in the CGI",
+    "taxe unique sur les salaires: not checked"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 4
+  },
+  {
+   "package": "P7",
+   "oecd": "5200",
+   "tax": "Taxe sur les véhicules de tourisme des sociétés (annual: 200 000 F up to 9 CV, 500 000 F above)",
+   "statute": "CGI tome 1 (finances.gouv.cg edition; edition date not established), world/B08-central-africa-fr/cg/law/cgi_tome1.txt l. 5001-5050 art. 171-A to 171-G (art. 171-F: Loi n° 05/96 du 2 mars 1996). The finance laws held (Journal officiel special editions 2022-2025 incl. LF 2025, Loi n° 47-2024) contain no amendment of art. 171-A to 171-G (searched); B as the code edition is undated",
+   "dated": "cgi_tome1.txt",
+   "unsupported": [
+    "exemption of cars first put into circulation more than 10 years before (art. 171-D): age not read by this family (cars taken as younger)",
+    "communal taxe sur les véhicules à moteur (CGI art. 355-358): rate fixed by each municipal council, not modelled",
+    "commercial vehicles (voitures commerciales) outside the tax"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.vehicleFamily"
+   ],
+   "guards": 2
+  }
+ ],
+ "cases": 10,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}

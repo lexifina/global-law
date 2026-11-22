@@ -1,0 +1,18 @@
+name = "NlGlobal"
+version = "0.1.0"
+defaultTargets = ["NlGlobal", "nlglobal"]
+
+# kernel-2.0 project (cmp20/global/DESIGN.md §6); NLTax = the 1.x model, vendored from cmp20/continental/nl/lean
+[[require]]
+name = "TaxKernel"
+path = "../../../../kernel"
+
+[[lean_lib]]
+name = "NLTax"
+
+[[lean_lib]]
+name = "NlGlobal"
+
+[[lean_exe]]
+name = "nlglobal"
+root = "NlGlobal.Main"

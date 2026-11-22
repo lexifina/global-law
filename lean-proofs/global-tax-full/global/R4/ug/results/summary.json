@@ -1,0 +1,209 @@
+{
+ "country": "UG",
+ "kernel": "TaxKernel 2.0.0 (2026-11-21) + R4Common",
+ "year": "2025",
+ "region": "R4 Sub-Saharan Africa",
+ "status": "built",
+ "pit": "1.x model vendored unchanged (VENDORED.sha256); adapter A/B/C on the 56-household grid: A identical True, B [56, 56], C [56, 56]",
+ "taxes": [
+  {
+   "package": "P1",
+   "oecd": "5111",
+   "tax": "Value Added Tax",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Value Added Tax Act Cap. 349 s. 24 (standard rate 18 %), Second Schedule (exempt supplies), Third Schedule (zero-rated supplies), per the Uganda Revenue Authority guide (official secondary)",
+   "dated": "Income Tax Act Cap. 338, ULII consolidation at 2024-12-23 (the Income Tax (Amendment) Act 2025 of 1 July 2025 not checked)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "Vat",
+    "R4.vatFamily"
+   ],
+   "unsupported": [
+    "Second and Third Schedule items not listed in the URA guide"
+   ],
+   "guards": 12
+  },
+  {
+   "package": "P1",
+   "oecd": "5121",
+   "tax": "Excise duty",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "Excise Duty Act 2014 Schedule 2 Part I (ULII consolidation at 31 December 2023) as amended by the Excise Duty (Amendment) Act 2024 s. 3 (in force 1 July 2024); the 2025 amendment (from 1 July 2025) not held",
+   "dated": "Income Tax Act Cap. 338, ULII consolidation at 2024-12-23 (the Income Tax (Amendment) Act 2025 of 1 July 2025 not checked)",
+   "module": "Consumption.lean",
+   "kernel_parts": [
+    "R4.Exc"
+   ],
+   "unsupported": [
+    "Excise Duty (Amendment) Act 2025",
+    "local-content beer and wine rates",
+    "soft-cap cigarettes",
+    "bottled water 10 %"
+   ],
+   "guards": 12
+  },
+  {
+   "package": "P2",
+   "oecd": "1200",
+   "tax": "Income tax (companies)",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "ITA Cap. 338 Third Schedule Part III para 1 (30 %)",
+   "dated": "Income Tax Act Cap. 338, ULII consolidation at 2024-12-23 (the Income Tax (Amendment) Act 2025 of 1 July 2025 not checked)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "CorpRegime",
+    "R4.MinTax"
+   ],
+   "unsupported": [
+    "s. 25 interest cap for group members",
+    "mining formula"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P2",
+   "oecd": "1200/1100",
+   "tax": "Non-resident withholding tax",
+   "status": "modelled",
+   "grade": "A",
+   "statute": "ITA Cap. 338 Third Schedule Part IV para 1 (15 %)",
+   "dated": "Income Tax Act Cap. 338, ULII consolidation at 2024-12-23 (the Income Tax (Amendment) Act 2025 of 1 July 2025 not checked)",
+   "module": "Corporate.lean",
+   "kernel_parts": [
+    "Wht"
+   ],
+   "unsupported": [
+    "government securities 20 % / 10 %",
+    "treaties"
+   ],
+   "guards": 8
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Withholding tax on dividends (resident)",
+   "statute": "ITA s. 128 (1); Third Schedule Part IX para 1 (15 %)",
+   "dated": "Income Tax Act (ULII consolidation 2024-12-23); NSSF Act (2022-01-07)",
+   "unsupported": [
+    "listed-company dividends 10 %"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P3",
+   "oecd": "1100",
+   "tax": "Withholding tax on interest (resident)",
+   "statute": "ITA s. 127 (1); Third Schedule Part IX para 1 (15 %)",
+   "dated": "Income Tax Act (ULII consolidation 2024-12-23); NSSF Act (2022-01-07)",
+   "unsupported": [
+    "government securities"
+   ],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Capital.lean",
+   "kernel_parts": [
+    "R4.finalWhtFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P4",
+   "oecd": "2200",
+   "tax": "NSSF standard contribution (employer share)",
+   "statute": "NSSF Act s. 11 (1) (15 % of total wages), s. 12 (1) (employee share 5 %): employer 10 %",
+   "dated": "Income Tax Act (ULII consolidation 2024-12-23); NSSF Act (2022-01-07)",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "A",
+   "module": "Social.lean",
+   "kernel_parts": [
+    "R4.payrollCapFamily"
+   ],
+   "guards": 1
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on transfers (land, buildings, unlisted shares)",
+   "statute": "Stamp Duty Act 2014, Schedule 2 item 63 (a) (ULII consolidation eng@2023-12-31; amendments after 2023 not checked)",
+   "dated": "Income Tax Act (ULII consolidation 2024-12-23); NSSF Act (2022-01-07)",
+   "unsupported": [
+    "exempted transfers (item 63 (c)-(d): special purpose vehicles, Islamic finance) and Nil items for licensed investors"
+   ],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P7",
+   "oecd": "6000",
+   "tax": "Other notable taxes (local service tax; local hotel tax)",
+   "statute": "Local Governments Act Cap. 243 (local service tax on employees)",
+   "dated": "Income Tax Act (ULII consolidation 2024-12-23); NSSF Act (2022-01-07)",
+   "unsupported": [
+    "triage minor: local service tax (fixed by income band, local governments) and local hotel tax. listed by the registry (background (unverified)); charging provision not read/modelled in this pass"
+   ],
+   "status": "unsupported",
+   "grade": "C",
+   "module": "",
+   "kernel_parts": [],
+   "tried": "not reached",
+   "triage": "minor",
+   "guards": 0
+  },
+  {
+   "package": "P7",
+   "oecd": "4400",
+   "tax": "Stamp duty on transfers of listed shares traded on the stock exchange",
+   "statute": "Stamp Duty Act 2014, Schedule 2 item 63 (b) (ULII eng@2023-12-31)",
+   "dated": "Income Tax Act (ULII consolidation 2024-12-23); NSSF Act (2022-01-07)",
+   "unsupported": [],
+   "status": "modelled",
+   "grade": "B",
+   "module": "Other.lean",
+   "kernel_parts": [
+    "R4.transferDutyFamily"
+   ],
+   "guards": 2
+  },
+  {
+   "package": "P1",
+   "oecd": "5123",
+   "tax": "Customs import duty (EAC Common External Tariff)",
+   "status": "modelled",
+   "grade": "B",
+   "statute": "East African Community Customs Management Act 2004 (charging provisions not read) and the EAC CET; EAC Common External Tariff 2022 Version (Annex 1 to the Protocol on the Establishment of the East African Community Customs Union), edition 'CET 2022 VERSION updated June 2025' (eac.int, Wayback 20260303052110, R4/fetch/gap/eac_cet2022_upd_jun2025_wb20260303052110.pdf): Legal Notice No. EAC/117/2022 para 1 (four bands 0, 10, 25 and 35 per centum) and 2 (in force 1 July 2022); the amending Legal Notices printed at its end (EAC/129/2023, 81/2024, 147/2024, 298/2024, 32/2025, 171/2025) touch none of the lines below",
+   "dated": "CET 2022 version as updated to June 2025 (lines unchanged by the 2023-2025 amending notices): the whole of 2025",
+   "module": "Customs.lean",
+   "kernel_parts": [
+    "TaxKernel.Global2.Customs (TariffRule, withCustoms)"
+   ],
+   "unsupported": [
+    "stays of application and duty remissions by partner state (EAC Gazette notices for 2024/25 and 2025/26) not read",
+    "COMESA / AfCFTA / EPA preferences not applied (CET charged)",
+    "national import levies (KE Import Declaration Fee and Railway Development Levy, UG/TZ/RW/BI equivalents) not modelled",
+    "lines of other HS headings (grade C)"
+   ],
+   "guards": 6
+  }
+ ],
+ "cases": 5,
+ "testing": {
+  "software": [],
+  "datasets": []
+ },
+ "sorry": 0
+}
