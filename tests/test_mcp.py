@@ -4192,6 +4192,136 @@ class PhraseHistoryByIndex(unittest.TestCase):
         self.assertTrue(self.whole)  # a regular expression is git's
 
 
+class MessagesIndex:
+    """A stand-in for a host's index of commit messages (mcp_server.commit_index): for each corpus it holds, what git
+    itself names for the words and prints for a commit, read here so that the tool, asked, starts no git of its own."""
+
+    def __init__(self, corpora):
+        self.corpora, self.calls = set(corpora), []
+
+    def message_hits(self, corpus, query, at, folder=None):
+        self.calls.append(('message_hits', corpus, query, at, folder))
+        if corpus not in self.corpora:
+            return None
+        return subprocess.run(['git', 'log', '--format=%H', '-i', '--fixed-strings', f'--grep={query}', at, *(['--', folder] if folder else [])],
+                              cwd=ROOT / corpus, capture_output=True, encoding='utf-8', errors='replace', check=True).stdout.split()
+
+    def messages(self, corpus, commits, at):
+        self.calls.append(('messages', corpus, list(commits), at))
+        return {sha: subprocess.run(['git', 'show', '-s', '--format=%B', sha], cwd=ROOT / corpus, capture_output=True, encoding='utf-8',
+                                    errors='replace', check=True).stdout for sha in commits}
+
+
+class SearchChangesByIndex(unittest.TestCase):
+    """search_changes with a host's index of commit messages (commit_index): the index names the commits whose
+    message holds the words and gives the messages shown; the tool reads no history. Without one, with one that does
+    not hold the corpus, fails or answers oddly, git is asked, and the answer is the same."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        sys.dont_write_bytecode = True
+        import mcp_server
+        cls.m = mcp_server
+
+    def setUp(self):
+        from unittest import mock
+        self.mock = mock
+        self.gits = []  # every git log and git show the tool starts
+        m, git, split = self.m, self.m.law.git, self.m.split_log
+
+        def law_git(*a, **kw):
+            if a and a[0] in ('log', 'show'):
+                self.gits.append(a)
+            return git(*a, **kw)
+
+        def split_log(*a, **kw):
+            self.gits.append(('split_log', a[0]))
+            return split(*a, **kw)
+        for target, name, new in ((m.law, 'git', law_git), (m, 'split_log', split_log), (m, 'commit_index', None)):
+            patch = mock.patch.object(target, name, new)
+            patch.start()
+            self.addCleanup(patch.stop)
+        self.assertIsNone(m.commit_index)
+
+    def by(self, index, ask):
+        del self.gits[:]
+        with self.mock.patch.object(self.m, 'commit_index', index):
+            return self.m.t_search_changes(dict(ask))
+
+    def asks(self):
+        """Questions with answers, about the first body of law checked out: one over the whole corpus, one within a folder."""
+        m = self.m
+        corpus = next(c['path'] for c in m.law.manifest()['corpora'] if not m.law.is_caselaw(c) and _checked_out(c['path'])
+                      and m.law.corpus_events(c['path']))
+        folder = next((p for p in sorted((ROOT / corpus).iterdir()) if p.is_dir() and not p.name.startswith('.')), None)
+        asks = [{'query': q, 'jurisdiction': corpus, 'max_results': 25} for q in ('In-force: 2', 'IN-FORCE: 2', 'e', '(')]
+        if folder is not None:
+            asks.append({'query': 'in-force', 'jurisdiction': f'{corpus}/{folder.name}', 'max_results': 25})
+        return corpus, asks
+
+    @needs_any_corpus()
+    def test_the_index_names_the_commits_and_gives_their_messages(self):
+        corpus, asks = self.asks()
+        answered = 0
+        for ask in asks:
+            with self.subTest(ask=ask):
+                git = self.by(None, ask)
+                self.assertTrue(self.gits)
+                index = MessagesIndex([corpus])
+                self.assertEqual(self.by(index, ask), git)
+                self.assertEqual(self.gits, [])  # no history read, no commit shown
+                hits = [c for c in index.calls if c[0] == 'message_hits']
+                self.assertEqual([(c[1], c[2], c[4]) for c in hits], [(corpus, ask['query'], ask['jurisdiction'][len(corpus) + 1:] or None)])
+                self.assertEqual(hits[0][3], self.m.corpus_head(corpus))
+                answered += bool(git[1]['changes'])
+                if git[1]['changes']:
+                    shown = [c for c in index.calls if c[0] == 'messages']
+                    self.assertEqual([(c[1], sorted(c[2]), c[3]) for c in shown],
+                                     [(corpus, sorted(ch['commit'] for ch in git[1]['changes']), hits[0][3])])
+        self.assertTrue(answered)
+
+    @needs_any_corpus()
+    def test_git_is_asked_where_the_index_gives_no_answer(self):
+        corpus, asks = self.asks()
+
+        class NotHeld(MessagesIndex):
+            def message_hits(self, *a, **kw):
+                return None
+
+        class Failing(MessagesIndex):
+            def message_hits(self, *a, **kw):
+                raise OSError('no answer')
+
+        class Odd(MessagesIndex):
+            def message_hits(self, *a, **kw):
+                return ['not a commit']
+
+        class NoMessages(MessagesIndex):
+            def messages(self, *a, **kw):
+                return None
+
+        class FailingMessages(MessagesIndex):
+            def messages(self, *a, **kw):
+                raise OSError('no answer')
+
+        class SomeMessages(MessagesIndex):
+            def messages(self, corpus, commits, at):
+                return dict(list(super().messages(corpus, commits, at).items())[:1])
+        for ask in asks[:1] + asks[-1:]:
+            git = self.by(None, ask)
+            self.assertTrue(git[1]['changes'])
+            for kind in (NotHeld, Failing, Odd):
+                with self.subTest(kind=kind.__name__, ask=ask):
+                    self.assertEqual(self.by(kind([corpus]), ask), git)
+                    self.assertTrue(any(g[0] in ('log', 'split_log') for g in self.gits))
+            for kind in (NoMessages, FailingMessages, SomeMessages):
+                with self.subTest(kind=kind.__name__, ask=ask):
+                    self.assertEqual(self.by(kind([corpus]), ask), git)
+                    self.assertEqual({g[0] for g in self.gits}, {'show'})  # the commits are the index's; git shows them
+            self.assertEqual(self.by(MessagesIndex([]), ask), git)  # a corpus the index does not hold
+
+
 class ChangedBetweenDates(unittest.TestCase):
     """changes_between without the two trees (changed_files, 2026-11-12): for a corpus that is not in in-force order,
     the files that differ between two dates are read off its table of versions and corrections, and must be the

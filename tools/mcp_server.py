@@ -195,6 +195,29 @@ search_index = None
 # and counts the matching lines of the files the index names, as it does for those git log -G names: the pickaxe
 # search of a whole history took 34 s (Japan) to over 80 s (Romania, France), whatever the words.
 history_index = None
+# A host may keep an index of the commit messages, for search_changes: `commit_index`, an object with
+#   message_hits(corpus, query, at, folder) -> [commit, ...] | None
+#       The commits of the corpus's history up to the commit `at` whose message has a line that contains the query,
+#       letters compared whatever their case: exactly those, in the order, that
+#       `git log --format=%H -i --fixed-strings --grep=<query> <at> [-- <folder>]` prints (newest first). `folder`: a
+#       folder within the corpus, or None. None, an exception or anything else: git is asked, as ever (a corpus the
+#       index does not hold whole at exactly `at`, a query it is not asked).
+#   messages(corpus, commits, at) -> {commit: message} | None
+#       The message of each commit named, as `git show -s --format=%B` prints it. None, an exception, anything else
+#       or a commit left out: git shows it.
+#   pages(wanted, query, start, end, most) -> {corpus: (total, rows)} | None
+#       For each (corpus, at, folder) of `wanted` that the index holds whole at exactly `at`: how many of the commits
+#       message_hits would name are dated changes of the law in force from `start` to `end` (what search_changes
+#       counts: the corpus's events, documentation left out), and the first `most` of them by in-force day, the
+#       newer commit first within a day, each as {'commit', 'in_force', 'law', 'kind', 'message'}. A corpus left out
+#       is asked of git. With it a search that half the commits of a history match is as quick as one that few do:
+#       the index counts and sorts, and only a page of commits is read.
+#   by_author(corpus, at, forms, check, most) -> [commit, ...] | None
+#       The newest `most` commits of the corpus's history up to `at` whose author (git's %an) holds one of `forms`
+#       and for which check(author) is true, newest first: what law_details reads of
+#       `git log --author=<forms> -i`, whose walk of every commit of every corpus asked was 14 s and more.
+# With it search_changes starts no git: reading every commit's message was 36 to 67 s for the longest histories.
+commit_index = None
 HISTORY_GAP = 2000  # commits after the index's tip that git is asked about; more, and git reads the whole history
 HISTORY_ROUNDS = 24  # times the index is asked for a corpus's next changed files, the commits already seen left out
 HISTORY_SKIP = 50000  # commits left out of one question (a host's index may take 65,536)
@@ -1680,13 +1703,54 @@ def path_arg(value) -> str:
 
 # --- the index of provisions, for find_provision --------------------------------------------------------------------
 
+NAMES_KEEP_S = 0.5  # a listing git took this long to give is kept in the tree's cache, by the revision it is of
+NAMES_KEPT = 3  # listings kept for one corpus (its pin, today's tree, the ones before)
+_NAMES_END = '\x00names-v1\n'
+
+
+def _names_file(corpus: str, sha: str) -> Path | None:
+    if not re.fullmatch(r'[0-9a-f]{40,64}', sha or ''):
+        return None
+    rule = hashlib.sha1(NOT_LAW.pattern.encode('utf-8')).hexdigest()[:8]
+    return law._store() / f"names-v1-{corpus.replace('/', '~')}-{rule}-{sha[:16]}.txt"
+
+
 @lru_cache(maxsize=2048)  # every corpus (811 on a server of the world, some at a second revision), so list_jurisdictions does not list them all again
 def names_of(corpus: str, sha: str) -> tuple[str, ...]:
-    """Every law file in a corpus at one commit (names only: cheap even for a large corpus)."""
-    out = law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus).splitlines()
+    """Every law file in a corpus at one commit (names only). A listing git took a while to give is kept in the
+    tree's cache by its revision and read from there by the next process: git lists the 6 million files of
+    Germany's federal acts in 18 s, and the first list or read of a large corpus in each new copy of a server paid
+    it (13 to 14 s calls, and 120 to 180 s of a warm-up that then reached 6 of the 33 largest corpora;
+    23 November 2026)."""
+    kept = _names_file(corpus, sha)
+    names = None
+    if kept is not None:
+        try:
+            with open(kept, encoding='utf-8', errors='surrogateescape', newline='') as f:
+                data = f.read()
+            if data.endswith(_NAMES_END):
+                names = data[:-len(_NAMES_END)].split('\n') if len(data) > len(_NAMES_END) else []
+        except OSError:
+            names = None
+    if names is None:
+        began = time.monotonic()
+        out = law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus).splitlines()
+        names = [n for n in out if n.endswith('.md') and not NOT_LAW.search(n)]
+        if kept is not None and time.monotonic() - began >= NAMES_KEEP_S and not any('\n' in n or '\x00' in n for n in names):
+            try:
+                kept.parent.mkdir(parents=True, exist_ok=True)
+                tmp = kept.with_name(f'{kept.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+                with open(tmp, 'w', encoding='utf-8', errors='surrogateescape', newline='') as f:
+                    f.write('\n'.join(names) + _NAMES_END)
+                os.replace(tmp, kept)
+                same = sorted(kept.parent.glob(kept.name[:-21] + '*.txt'), key=lambda q: q.stat().st_mtime, reverse=True)
+                for old in same[NAMES_KEPT:]:
+                    old.unlink(missing_ok=True)
+            except OSError:
+                pass
     _NAMES_SEEN.add((corpus, sha))
     # (one string object per path, shared with the headings table's keys: _shared_index)
-    return tuple(sys.intern(n) for n in out if n.endswith('.md') and not NOT_LAW.search(n))
+    return tuple(sys.intern(n) for n in names)
 
 
 @lru_cache(maxsize=8)  # a few large corpora: France's acts are 812,000 names, about 130 MB as a dict
@@ -7545,6 +7609,42 @@ class _EventsByCommit:
         return key[1] in self._of(key[0])
 
 
+def indexed_message_hits(corpus: str, cwd: Path, query: str, sub: str) -> tuple[list[str], str] | None:
+    """(the commits whose message holds the query, the commit the history was read up to), from a host's index of
+    commit messages (commit_index); None when there is none or it gives no answer for this corpus: git is then asked."""
+    hook = commit_index
+    if hook is None:
+        return None
+    try:
+        at = corpus_head(corpus) or law.git('rev-parse', 'HEAD', cwd=cwd).strip()  # the corpus's pin: what is checked out
+        if not re.fullmatch(r'[0-9a-f]{40,64}', at):
+            return None
+        got = hook.message_hits(corpus, query, at, sub or None)
+        if isinstance(got, (list, tuple)) and all(isinstance(s, str) and re.fullmatch(r'[0-9a-f]{40,64}', s) for s in got):
+            return list(got), at
+    except (SystemExit, Exception):  # noqa: BLE001
+        pass
+    return None
+
+
+def indexed_messages(hits: list, read_at: dict) -> dict:
+    """{(corpus, commit): message} for the changes shown whose corpus the index of commit messages answered for
+    (read_at: corpus -> the commit it was read up to); a change left out is shown by git."""
+    hook, out = commit_index, {}
+    wanted: dict[str, list[str]] = {}
+    for _e, corpus, sha, _cwd in hits:
+        if corpus in read_at:
+            wanted.setdefault(corpus, []).append(sha)
+    for corpus, shas in wanted.items() if hook is not None else ():
+        try:
+            got = hook.messages(corpus, shas, read_at[corpus])
+            if isinstance(got, dict):
+                out.update({(corpus, sha): text for sha, text in got.items() if isinstance(sha, str) and isinstance(text, str)})
+        except (SystemExit, Exception):  # noqa: BLE001
+            pass
+    return out
+
+
 def t_search_changes(args: dict) -> tuple[str, dict]:
     """Search what each change says about itself: commit messages, which name the law, its dates and its effect."""
     query = text_arg(args, 'query')
@@ -7587,14 +7687,48 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
         with ThreadPoolExecutor(min(8, len(cases))) as pool:
             for got in pool_map(pool, case_hits, cases):
                 hits += got
+    read_at: dict[str, str] = {}  # the corpora a host's index of commit messages answered for, and at which commit
+    laws = [p for p in pairs if not law.is_caselaw(p[0])]
+    # Where a host's index counts and sorts (commit_index.pages): each corpus's count, and its first changes by day,
+    # as many as the page asked could need. The corpora it does not answer for are read as before.
+    paged, texts, more_total = {}, {}, 0
+    pages = getattr(commit_index, 'pages', None)
+    skip = args.get('offset') or 0
+    most = skip + limit if isinstance(skip, int) and not isinstance(skip, bool) and skip >= 0 else None
+    if callable(pages) and laws and most is not None and most <= 2000:
+        try:
+            wanted = []
+            for c, cwd in laws:
+                at = corpus_head(c['path'])
+                if at and re.fullmatch(r'[0-9a-f]{40,64}', at):
+                    wanted.append((c['path'], at, scoped(c['path'], scope) or None))
+            got = pages(wanted, query, start, end, most) if wanted else None
+            if isinstance(got, dict):
+                for corpus, answer in got.items():
+                    total, rows = answer
+                    if not (isinstance(total, int) and isinstance(rows, list) and total >= len(rows)):
+                        continue
+                    paged[corpus] = [(types.SimpleNamespace(in_force=str(r['in_force']), law=str(r['law']), kind=str(r['kind'])), corpus, str(r['commit']))
+                                     for r in rows]
+                    texts.update({(corpus, str(r['commit'])): str(r['message']) for r in rows})
+                    more_total += total - len(rows)
+        except (SystemExit, Exception):  # noqa: BLE001  (git is asked, as ever)
+            paged, texts, more_total = {}, {}, 0
+
     def law_hits(c_cwd):
         c, cwd = c_cwd
+        if c['path'] in paged:
+            return [(e, corpus, sha, cwd) for e, corpus, sha in paged[c['path']]]
         sub = scoped(c['path'], scope)
-        # (within a folder git walks the commits that touch it, by its index of changed paths: left to the one log)
-        noted = (law.git('log', '--format=%H', '-i', '--fixed-strings', f'--grep={query}', '--', sub, cwd=cwd) if sub else
-                 split_log(c['path'], cwd, ['--format=%H', '-i', '--fixed-strings', f'--grep={query}']))
+        named = indexed_message_hits(c['path'], cwd, query, sub)
+        if named is not None:
+            noted, read_at[c['path']] = named
+        else:
+            # (within a folder git walks the commits that touch it, by its index of changed paths: left to the one log)
+            noted = (law.git('log', '--format=%H', '-i', '--fixed-strings', f'--grep={query}', '--', sub, cwd=cwd) if sub else
+                     split_log(c['path'], cwd, ['--format=%H', '-i', '--fixed-strings', f'--grep={query}'])).split()
         got = []
-        for sha in noted.split():
+        for sha in noted:
             e = by_commit.get((c['path'], sha))
             if e is not None and e.kind != 'documentation' and start <= e.in_force <= end:
                 got.append((e, c['path'], sha, cwd))
@@ -7602,7 +7736,6 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
 
     # The bodies of law four at a time, in the manifest's order: with no jurisdiction they are 720, and one git log
     # after another were 15 to 18 s.
-    laws = [p for p in pairs if not law.is_caselaw(p[0])]
     if len(laws) > 1:
         with ThreadPoolExecutor(min(4, len(laws))) as pool:
             for got in pool_map(pool, law_hits, laws):
@@ -7615,14 +7748,20 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
         missing_note += (f'\nPartial: {len(unread)} case-law corpora were not read within the {int(CASELAW_SECONDS)} s this answer may '
                          f'spend on case law ({", ".join(sorted(unread)[:5])}{" ..." if len(unread) > 5 else ""}); give a jurisdiction to read them.')
     hits.sort(key=lambda h: h[0].in_force)  # a stable sort of hits gathered in one order: the same on every call
-    offset = offset_arg(args, len(hits))
-    place = page_of(len(hits), len(hits[offset:offset + limit]), offset)
+    count = len(hits) + more_total  # (the changes the index counted and did not send are past the page asked)
+    offset = offset_arg(args, count)
+    place = page_of(count, len(hits[offset:offset + limit]), offset)
+    part = hits[offset:offset + limit]
+    if read_at:
+        texts.update(indexed_messages(part, read_at))
+
     def shown(hit):  # only the changes shown are read in full
         e, corpus, sha, cwd = hit
-        body = law.git('show', '-s', '--format=%B', sha, cwd=cwd)
+        body = texts.get((corpus, sha))
+        if body is None:
+            body = law.git('show', '-s', '--format=%B', sha, cwd=cwd)
         line = next((l.strip() for l in body.splitlines() if query.lower() in l.lower()), '')
         return {'in_force': e.in_force, 'corpus': corpus, 'law': e.law, 'commit': sha, 'line': line[:300]}
-    part = hits[offset:offset + limit]
     if len(part) > 1:
         with ThreadPoolExecutor(min(8, len(part))) as pool:
             found = list(pool_map(pool, shown, part))
@@ -7633,13 +7772,13 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
         return f'No change in the record mentions {query!r}.' + missing_note, {'changes': [], 'total': 0, 'not_searched': missing,
                                                                              **caselaw_fields(caselaw), **partial}
     more = more_note(place, 'changes')
-    return (f'{len(hits)} change(s) mention {query!r}'
-            + (f'; the first {len(found)}' if len(hits) > len(found) and not offset else '') + ':\n'
+    return (f'{count} change(s) mention {query!r}'
+            + (f'; the first {len(found)}' if count > len(found) and not offset else '') + ':\n'
             + '\n'.join(f"{f['in_force']}  {f['corpus']}  {f['law']}: {f['line']}" for f in found)
             + (f'\n{more}' if more else '') + missing_note), \
-        {'summary': f'{len(hits)} change(s) mention {query!r}' + (f' in {scope}' if scope else '')
+        {'summary': f'{count} change(s) mention {query!r}' + (f' in {scope}' if scope else '')
                     + (f', in force from {start} to {end}' if args.get('start') or args.get('end') else '') + '.',
-         'changes': found, 'total': len(hits), 'page': place, 'not_searched': missing, **caselaw_fields(caselaw), **partial}
+         'changes': found, 'total': count, 'page': place, 'not_searched': missing, **caselaw_fields(caselaw), **partial}
 
 
 def t_phrase_history(args: dict) -> tuple[str, dict]:
@@ -11424,8 +11563,18 @@ def t_law_details(args: dict) -> tuple[str, dict]:
                 # the citation is written are looked for in the same reading, as one pattern)
                 how = ([f'--author={law_name}', '--fixed-strings'] if len(forms) == 1 else
                        ['--author=' + '|'.join(re.sub(r'([.^$*+?()\[\]{}|\\])', r'\\\1', form) for form in forms), '--extended-regexp'])
-                rows = split_log(c, cwd, ['--format=%H%x1f%an', *how, '-i'], rev=pin).splitlines()
-                shas = [r.split('\x1f', 1)[0] for r in rows if '\x1f' in r and whole.search(r.split('\x1f', 1)[1])]
+                shas = None
+                asked = getattr(commit_index, 'by_author', None)
+                if callable(asked):  # a host's index of commits names them, newest first (only the first ten are read)
+                    try:
+                        got = asked(c, pin, list(forms), lambda name: bool(whole.search(name)), 10)
+                        if isinstance(got, list) and all(isinstance(x, str) and re.fullmatch(r'[0-9a-f]{40,64}', x) for x in got):
+                            shas = got
+                    except (SystemExit, Exception):  # noqa: BLE001
+                        shas = None
+                if shas is None:
+                    rows = split_log(c, cwd, ['--format=%H%x1f%an', *how, '-i'], rev=pin).splitlines()
+                    shas = [r.split('\x1f', 1)[0] for r in rows if '\x1f' in r and whole.search(r.split('\x1f', 1)[1])]
                 if not shas and corpus and len(law_name.strip()) >= 8 and not law.is_caselaw(entry):
                     # A law's full title, which its message holds and its short name does not: "Gesetz zur Ergänzung
                     # des Grundgesetzes" is "7. Änderung (1956)" (and the 4th and 10th). Only when a corpus is named, so
