@@ -42,30 +42,30 @@
  "totals": {
   "corpora": 991,
   "by_status": {
-   "current": 604,
+   "current": 605,
    "pending-change": 7,
-   "stale": 364,
+   "stale": 363,
    "unverified": 16,
    "source-unavailable": 0
   },
   "verified_30d": 974,
-  "verified_7d": 1,
-  "pct_verified_7d": 0.1,
+  "verified_7d": 2,
+  "pct_verified_7d": 0.2,
   "pct_verified_30d": 98.3
  },
  "by_level": {
   "national": {
    "corpora": 383,
    "by_status": {
-    "current": 1,
+    "current": 2,
     "pending-change": 7,
-    "stale": 364,
+    "stale": 363,
     "unverified": 11,
     "source-unavailable": 0
    },
    "verified_30d": 371,
-   "verified_7d": 1,
-   "pct_verified_7d": 0.3,
+   "verified_7d": 2,
+   "pct_verified_7d": 0.5,
    "pct_verified_30d": 96.9
   },
   "subnational": {
@@ -99,7 +99,8 @@
    "czechia/national/acts",
    "kosovo/national/acts",
    "montenegro/national/acts",
-   "north-macedonia/national/acts"
+   "north-macedonia/national/acts",
+   "poland/national/acts"
   ],
   "note": "these corpora publish a freshness row for every act; for a provision in one, `python tools/freshness.py <provision path>` reads its act's row when the corpus is checked out"
  }
