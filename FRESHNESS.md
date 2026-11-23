@@ -4,7 +4,7 @@ Law changes after a corpus is built. Every corpus here records when it was last 
 so an answer about today's law can say how current it is.
 
 <!-- freshness-summary -->
-**604 of 991 corpora current** on 2026-11-22: 0.1% checked against their official source in the last 7 days, 98.3% in the last 30.
+**604 of 991 corpora current** on 2026-11-23: 0.1% checked against their official source in the last 7 days, 98.3% in the last 30.
 
 | | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
