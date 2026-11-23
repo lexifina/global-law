@@ -33,6 +33,7 @@ import warnings
 from array import array
 from collections import ChainMap, Counter, OrderedDict
 from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeout
 from functools import lru_cache
 from pathlib import Path
 
@@ -658,6 +659,18 @@ def law_search_time_up() -> bool:
     """Whether fewer than LAW_SEARCH_MARGIN seconds of this call are left (never, outside a call's deadline)."""
     deadline = getattr(_call, 'deadline', 0.0)
     return bool(deadline) and time.monotonic() > deadline - LAW_SEARCH_MARGIN
+
+
+# find_provision over many bodies of law scores their names for this long less than the call's time, then names the
+# bodies it did not read: "article 5" with no jurisdiction tested millions of names against the number, in a loop
+# that never looked at the clock (111 s on a thread whose caller had been answered "timed out" at 28 s).
+FIND_MARGIN = float(os.environ.get('GLOBAL_LAW_FIND_MARGIN', '8'))
+
+
+def find_time_up() -> bool:
+    """Whether fewer than FIND_MARGIN seconds of this call are left (never, outside a call's deadline)."""
+    deadline = getattr(_call, 'deadline', 0.0)
+    return bool(deadline) and time.monotonic() > deadline - FIND_MARGIN
 
 
 def caselaw_time_up() -> bool:
@@ -4484,8 +4497,12 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     cut_short: set[str] = set()
     act_rows: dict[str, tuple] = {}  # an act's folder shown as one row (act_ties) -> (corpus, commit, folder, a file of it)
     capped = False  # a corpus had more matches than were kept for this part: the count of matches is a floor
+    late: list[str] = []  # the bodies of law not read, or not read whole, in the time (find_time_up)
     for c in law.manifest()['corpora']:
         if not corpus_in_scope(c['path']):
+            continue
+        if find_time_up() and not law.is_caselaw(c):
+            late.append(c['path'])
             continue
         # Case law is searched by heading only when the scope names it ("united-states/caselaw", a court's corpus): its
         # decisions are found by reference above, and reading a million decisions' headings for "automatic stay" took
@@ -4554,6 +4571,9 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 last = len(starts) - 1
                 prefolded = [text[starts[i]:starts[i + 1] - 1] if i < last else text[starts[i]:] for i in held]
         for at, name in enumerate(scored):
+            if not at & 8191 and at and find_time_up():
+                late.append(c['path'])
+                break
             stem = None  # worked out (stem_of) only for a name that holds a number of the query
             score = 0
             headed = by_heading.get(name)
@@ -4793,6 +4813,12 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                f'{CASELAW_SECONDS:g} s this answer may spend on case law; decisions whose headings were not read are not '
                'listed. Narrow the scope to one court, or ask again.') if unread else ''
     extra = {'partial': {'parts_not_read': unread, 'corpora': sorted(cut_short), 'note': partial.strip()}} if unread else {}
+    if late:
+        note = (f'Partial: {len(late)} bodies of law were not read in the time this answer may take '
+                f'({", ".join(late[:5])}{" ..." if len(late) > 5 else ""}); give a jurisdiction to read them.')
+        partial += '\n' + note
+        extra = {**extra, 'partial': {**extra.get('partial', {}), 'law_not_read_for_time': late,
+                                      'note': (extra.get('partial', {}).get('note', '') + '\n' + note).strip()}}
     if not hits:
         tip = missing_act(number_forms(query)) + ' Try list_jurisdictions for the layout, or search_law for words in the text.'
         return f'No provision matches {query!r}.' + tip + partial, {'results': [], 'hint': tip.strip(), **extra}
@@ -5786,6 +5812,32 @@ def t_read_law(args: dict) -> tuple[str, dict]:
     return '\n'.join(head_lines) + '\n\n' + part, {**st, 'in_force': True, 'in_record': True, 'text': part, 'text_part': place, 'beyond_the_words': beyond}
 
 
+_TREE_JOBS: dict = {}  # (date, corpus) -> the tree being built for world_on_date, behind the calls
+_TREE_JOBS_LOCK = threading.Lock()
+_TREE_POOL: list = []
+TREE_JOBS_MOST = 4000  # trees waiting to be built; past it a call names the corpus as not worked out and starts none
+
+
+def _tree_job(named, date: str, corpus: str):
+    """The building of a corpus's tree for a date (law.corpus_tree_id), begun once however many calls ask, on a few
+    threads of the server's own that no call's time limit stops: a Future, or None when too many wait already."""
+    key = (date, corpus)
+
+    def build():
+        try:
+            return named(date, corpus)
+        finally:
+            with _TREE_JOBS_LOCK:
+                _TREE_JOBS.pop(key, None)
+    with _TREE_JOBS_LOCK:
+        job = _TREE_JOBS.get(key)
+        if job is None and len(_TREE_JOBS) < TREE_JOBS_MOST:
+            if not _TREE_POOL:
+                _TREE_POOL.append(ThreadPoolExecutor(2, thread_name_prefix='world-trees'))
+            job = _TREE_JOBS[key] = _TREE_POOL[0].submit(build)
+        return job
+
+
 def t_world_on_date(args: dict) -> tuple[str, dict]:
     date = date_arg(args.get('date'))
     scope = scope_arg(args)
@@ -5801,7 +5853,36 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
     by_corpus = law.by_corpus(events)  # once per timeline: a corpus of case law adds a commit per decision
     caselaw = [c['path'] for c in law.manifest()['corpora'] if law.is_caselaw(c) and wanted(c)]
     given = law.latest_decisions(date, caselaw) if caselaw else {}  # case law is not in the timeline: the case-law index, else a git log each
-    for c in law.manifest()['corpora']:
+    # Each body of law's commit or tree on the date is only named here: its id, kept once built (law.corpus_tree_id).
+    # A tree not yet built for this day is built behind the call (_tree_job), four side by side, and the call waits
+    # for them while it has time: a date asked for the first time needs one for every corpus not in in-force order
+    # (157 to 1,256 s one after another), and the call ran to its limit with no answer, as did the next, since a
+    # tree half built when the time ran out was thrown away (82 s, then 20 s, 23 November 2026). The corpora not
+    # ready in time are named without their commit and the answer says so; their trees go on being built, so the
+    # next call has them.
+    named = getattr(law, 'corpus_tree_id', None)
+    tree_of, late = {}, []
+    served = law.manifest()['corpora']  # (read before the trees: when they have taken the call's time, nothing more is asked of git)
+    if callable(named) and isinstance(root, law.Moment):
+        waited = []
+        for path in [c['path'] for c in served if wanted(c) and not law.is_caselaw(c)]:
+            try:
+                tree_of[path] = named(root.date, path, False)
+            except (LookupError, subprocess.TimeoutExpired):
+                waited.append((path, _tree_job(named, root.date, path)))
+        deadline = getattr(_call, 'deadline', 0.0)
+        for path, job in waited:
+            try:
+                if job is None:
+                    raise LookupError(path)
+                checkpoint()
+                tree_of[path] = job.result(max(0.0, deadline - FIND_MARGIN - time.monotonic()) if deadline else None)
+            except (LookupError, FutureTimeout, subprocess.TimeoutExpired, SystemExit):
+                tree_of[path] = LookupError
+        late = sorted(p for p, sha in tree_of.items() if sha is LookupError)
+        if deadline:  # (the answer is put together whatever the trees took of the call's time)
+            _call.deadline = max(deadline, time.monotonic() + FIND_MARGIN)
+    for c in served:
         if not wanted(c):
             continue
         own = by_corpus.get(c['path'], [])
@@ -5812,9 +5893,9 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
         # What a record does not hold beyond its text is said once for the answer, not on every corpus's row.
         limits += [n for n in notes if _EFFECTS_NOTE.fullmatch(n)]
         notes = short_caveats([n for n in notes if not _EFFECTS_NOTE.fullmatch(n)])
-        # (the corpus's commit or tree on the date is only named here: its id, kept once built, without the tree)
-        named = getattr(law, 'corpus_tree_id', None)
-        sha = None if decisions else (named(root.date, c['path']) if callable(named) and isinstance(root, law.Moment) else law.pinned(root, c['path']))
+        sha = None if decisions else (tree_of[c['path']] if c['path'] in tree_of else law.pinned(root, c['path']))
+        if sha is LookupError:
+            sha = None
         if decisions and given.get(c['path']):  # the latest decision; the next one is not read (a walk of its history)
             g = given[c['path']]
             last, sha = [types.SimpleNamespace(law=g[0], in_force=g[1])], g[2]
@@ -5828,11 +5909,18 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
     if not rows:
         raise UserError(f'No corpus under {scope!r}' + (f' of kind {kind}' if kind != 'all' else '') + '; see list_jurisdictions.')
     limits = short_caveats(limits)
+    partial = {}
+    if late:
+        note = (f'Partial: the commit of {len(late)} bodies of law as on {date} was not worked out in the time this answer '
+                f'may take ({", ".join(late[:5])}{" ..." if len(late) > 5 else ""}): their corpus_commit is empty here. '
+                'Ask again for the rest, or give a jurisdiction; read_law with the date reads any of them.')
+        limits = limits + [note]
+        partial = {'partial': {'commit_not_worked_out': late, 'note': note}}
     lead = (f'The law on {date}' + (f' in {scope}' if scope else '') + ('' if root else ' (before every record)')
             + f': {len(rows)} body/bodies of ' + {'laws': 'law', 'judgments': 'case law', 'all': 'law or case law'}[kind] + '.')
     return (f'The law on {date}' + (f' in {scope}' if scope else '') + ('' if root else ' (before every record)') + ':\n' + '\n'.join(rows)
             + ''.join(f'\nNote: {n}' for n in limits),
-            {'summary': lead, 'date': date, 'corpora': data, 'caveats': limits, **({'jurisdiction': scope} if scope else {})})
+            {'summary': lead, 'date': date, 'corpora': data, 'caveats': limits, **({'jurisdiction': scope} if scope else {}), **partial})
 
 
 WORDS_MAX = 100_000  # characters: a longer provision is credited by line (git blame), which is fast on any file
@@ -7048,7 +7136,7 @@ def t_list_provisions(args: dict) -> tuple[str, dict]:
                                  for p in shown]}
 
 
-def _changes_span(by_commit, commits, date: str) -> tuple:
+def _changes_span(by_commit, commits, date: str, later: bool = False) -> tuple:
     """(how many, the newest, the oldest) of these commits' events that are dated changes on or before `date`, by
     in-force day (a corpus can append an older act after its tip): what sorting them newest first gave as its
     length, first and last. One pass, each commit's event asked for once: where it is read through the corpus's
@@ -7056,23 +7144,95 @@ def _changes_span(by_commit, commits, date: str) -> tuple:
     take 367 s where it had taken 80 (21 November 2026)."""
     span = getattr(by_commit, 'span', None)
     if span is not None:
-        return span(commits, date)
-    get, n, last, first = by_commit.get, 0, None, None
+        return span(commits, date, True) if later else span(commits, date)
+    get, n, last, first, nxt = by_commit.get, 0, None, None, ''
     for c in commits:
         e = get(c)
-        if e is None or e.kind == 'documentation' or e.in_force > date:
+        if e is None or e.kind == 'documentation':
+            continue
+        if e.in_force > date:  # (`later`: the first day after `date` on which one of them takes force)
+            if not nxt or e.in_force < nxt:
+                nxt = e.in_force
             continue
         n += 1
         if last is None or e.in_force > last.in_force:  # (of one day's, the first met, as the sort kept it)
             last = e
         if first is None or e.in_force <= first.in_force:  # (and of the oldest day's, the last met)
             first = e
-    return n, last, first
+    return (n, last, first, nxt) if later else (n, last, first)
+
+
+_SPANS: dict[str, tuple] = {}  # corpus -> (what it was read at, the file, {folder: [day, next day, how many, newest, oldest]})
+_SPANS_LOCK = threading.Lock()
+
+
+def _spans_kept(corpus: str) -> tuple:
+    """(the file, {folder: [day, next day, how many, the newest change's commit, the oldest's]}) of a corpus as it
+    is read now: the spans folder_spans has worked out, in this process or one before it. Named by the corpus's tip
+    and what its index was read at (a commit's day and kind are its own, whatever the tree's commit)."""
+    try:
+        at = f'{law.reachable_tip(corpus)}@{law._at(law._index(corpus))}'
+    except (SystemExit, Exception):  # noqa: BLE001  (no index to read: nothing is kept)
+        return None, {}
+    got = _SPANS.get(corpus)
+    if got is None or got[0] != at:
+        path = law._store() / f"folder-spans-v1-{corpus.replace('/', '~')}-{hashlib.sha1(at.encode('utf-8')).hexdigest()[:16]}.json"
+        spans: dict = {}
+        try:
+            read = json.loads(path.read_text(encoding='utf-8'))
+            if isinstance(read, dict):
+                spans = {k: v for k, v in read.items() if isinstance(v, list) and len(v) == 5}
+        except (OSError, ValueError):
+            spans = {}
+        with _SPANS_LOCK:
+            if len(_SPANS) > 64:
+                _SPANS.clear()
+            got = _SPANS[corpus] = (at, path, spans)
+    return got[1], got[2]
+
+
+def folder_spans(corpus: str, folders: list[str], date: str) -> dict[str, tuple]:
+    """folder -> (how many, the newest, the oldest) of the dated changes under it on or before `date`
+    (_changes_span of folder_commits), kept in the tree's cache once worked out: with the first day after `date`
+    on which a change under the folder takes force, so the three are given again for any date from the day they
+    were worked out for up to the day before that one. A list of Germany's federal acts asked for the commits
+    under each of its eight folders and went through all 6.7 million of them on every call, 17 s of a call with
+    everything else in memory (23 November 2026); the commits under a folder are now asked for once."""
+    by_commit = _by_commit(corpus)
+    path, spans = _spans_kept(corpus)
+    out, todo = {}, []
+    for f in dict.fromkeys(folders):
+        kept = spans.get(f)
+        if kept is not None and kept[0] <= date and (not kept[1] or date < kept[1]):
+            last, first = (by_commit.get(kept[3]), by_commit.get(kept[4])) if kept[2] else (None, None)
+            if not kept[2] or (last is not None and first is not None):
+                out[f] = (kept[2], last, first)
+                continue
+        todo.append(f)
+    if todo:
+        changes_of, added = folder_commits_many(corpus, todo), False
+        for f in todo:
+            count, last, first, nxt = _changes_span(by_commit, changes_of[f], date, later=True)
+            out[f] = (count, last, first)
+            if path is not None and (not count or (last.corpus_commit and first.corpus_commit)):
+                with _SPANS_LOCK:
+                    spans[f] = [date, nxt, count, last.corpus_commit if count else '', first.corpus_commit if count else '']
+                added = True
+        if added:
+            try:
+                with _SPANS_LOCK:
+                    body = json.dumps(spans)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                tmp = path.with_name(f'{path.name}.{os.getpid()}.{threading.get_ident()}.part')
+                tmp.write_text(body, encoding='utf-8')
+                os.replace(tmp, path)
+            except OSError:
+                pass
+    return out
 
 
 def folder_span(corpus: str, date: str, inner: str) -> dict | None:
-    by_commit = _by_commit(corpus)
-    count, last, first = _changes_span(by_commit, folder_commits(corpus, inner), date)
+    count, last, first = folder_spans(corpus, [inner], date)[inner]
     if not count:
         return None
     start = (f'first version in the record {first.in_force} ({first.law})' if first.kind == 'baseline'
@@ -7464,15 +7624,14 @@ def list_folders(corpus: str, sha: str, base: str, items: list, folders: list[st
         first = firsts[where]
         return heads.get(first, '') if first and first.endswith('/title.md') else ''
     bodies = title_bodies(corpus, sha, [where for _, where in shown if f'{where}/title.md' in own_title and not headed(where)])
-    changes_of = folder_commits_many(corpus, [where for _, where in shown])
+    spans = folder_spans(corpus, [where for _, where in shown], date)
     for f, where in shown:
         mine, first = mine_of[where], firsts[where]
         is_title = bool(first) and first.endswith('/title.md')
         title = ((heads.get(first, '') if is_title else '')
                  or (folder_title(cwd, sha, where, bodies.get(where, '')) if f'{where}/title.md' in own_title else '')
                  or (heads.get(first, '') if first else ''))
-        changes = changes_of[where]
-        count, last, first = _changes_span(by_commit, changes, date)
+        count, last, first = spans[where]
         rows.append({'folder': f'{corpus}/{where}', 'title': title, 'files': len(mine), 'changes': count,
                      'first': first and {'law': first.law, 'in_force': first.in_force, 'kind': first.kind},
                      'last_change': last and {'law': last.law, 'in_force': last.in_force, 'kind': last.kind}})

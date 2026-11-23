@@ -1441,23 +1441,29 @@ class _CommitEvents:
     def __contains__(self, commit) -> bool:
         return self.get(commit) is not None
 
-    def span(self, commits, date: str) -> tuple:
+    def span(self, commits, date: str, later: bool = False) -> tuple:
         """(how many, the newest, the oldest) of these commits' events that are dated changes (not documentation)
         in force on or before `date`: of the newest day's the first met, of the oldest day's the last, as sorting
-        them newest first by day kept them. Read from the table's columns: an event is made for neither count."""
-        n, hi, lo, hi_e, lo_e = 0, None, None, None, None
+        them newest first by day kept them. Read from the table's columns: an event is made for neither count.
+        `later`: a fourth value, the first day after `date` on which one of them takes force ('' if none): the
+        three hold for every date from `date` up to the day before it."""
+        n, hi, lo, hi_e, lo_e, nxt = 0, None, None, None, None, ''
         if self._own:  # (commits added since the table was made: by their events)
             get = self.get
             for c in commits:
                 e = get(c)
-                if e is None or e.kind == 'documentation' or e.in_force > date:
+                if e is None or e.kind == 'documentation':
+                    continue
+                if e.in_force > date:
+                    if not nxt or e.in_force < nxt:
+                        nxt = e.in_force
                     continue
                 n += 1
                 if hi is None or e.in_force > hi:
                     hi, hi_e = e.in_force, e
                 if lo is None or e.in_force <= lo:
                     lo, lo_e = e.in_force, e
-            return n, hi_e, lo_e
+            return (n, hi_e, lo_e, nxt) if later else (n, hi_e, lo_e)
         rows, find, where = self._rows, self._find, self._where
         days, d_col, k_col = rows._pools[5], rows._cols[5], rows._cols[4]
         wanted = [bool(d) and d <= date for d in days]
@@ -1468,7 +1474,11 @@ class _CommitEvents:
             if o is None or not where[o]:
                 continue
             d = d_col[o]
-            if not wanted[d] or k_col[o] in doc:
+            if not wanted[d]:
+                if later and days[d] and k_col[o] not in doc and (not nxt or days[d] < nxt):
+                    nxt = days[d]
+                continue
+            if k_col[o] in doc:
                 continue
             n += 1
             day = days[d]
@@ -1477,7 +1487,8 @@ class _CommitEvents:
             if lo is None or day <= lo:
                 lo, lo_o = day, o
         events = self._events
-        return (n, events[where[hi_o] - 1], events[where[lo_o] - 1]) if n else (0, None, None)
+        got = (n, events[where[hi_o] - 1], events[where[lo_o] - 1]) if n else (0, None, None)
+        return (*got, nxt) if later else got
 
 
 def events_by_commit(corpus: str):
@@ -2457,13 +2468,14 @@ def _tree_ids(corpus: str, ix: dict) -> tuple[dict, Path | None]:
     return got  # type: ignore[return-value]
 
 
-def corpus_tree_id(date: str, corpus: str) -> str | None:
+def corpus_tree_id(date: str, corpus: str, build: bool = True) -> str | None:
     """What corpus_tree(date, corpus) returns, for a caller that only names it and reads nothing through it
     (world_on_date's corpus_commit): a tree's id is kept on disk once it has been built, by the day it is the tree
     of, and given from there without building the tree again. A built tree lives in the process that built it, so
     each new process built one for every corpus not in in-force order: 157 to 1,256 s of a server's start, and
     82 s (the call's limit) for the law of the world on a past date (23 November 2026). The tree itself may not be
-    in this process's store: whoever reads through it asks corpus_tree."""
+    in this process's store: whoever reads through it asks corpus_tree. `build` False: LookupError where the
+    tree would have to be built (a caller out of time names the corpus as not worked out)."""
     if in_order(corpus):
         return corpus_on(date, corpus)
     ix = _index(corpus)
@@ -2480,6 +2492,8 @@ def corpus_tree_id(date: str, corpus: str) -> str | None:
     ids, path = _tree_ids(corpus, ix)
     if date in ids:
         return ids[date]
+    if not build:
+        raise LookupError(corpus)
     sha = corpus_tree(date, corpus)
     if path is not None and not ix.get('focused'):
         import os
