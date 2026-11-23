@@ -18423,9 +18423,9 @@
       "coverage": "from 1918-10-28",
       "in_force_trailer": "In-force",
       "history_from": "1918-10-28",
-      "record_to": "2026-11-08",
+      "record_to": "2026-11-13",
       "checked_on": "2026-10-28",
-      "record_note": "every consolidated version checked against e-Sbírka's open datasets as published on 2026-11-08 (Last-Modified); the history to 2026-10-26 was built from those of 2026-10-28, later law and e-Sbírka's corrections were appended from those of 2026-11-02 and 2026-11-08",
+      "record_note": "every consolidated version checked against e-Sbírka's open datasets as published on 2026-11-13; the history to 2026-10-26 was built from those of 2026-10-28, later law and e-Sbírka's corrections were appended from those of 2026-11-02, 2026-11-08 and 2026-11-13",
       "has_future_branch": true,
       "tool": "tools/czlaw.py",
       "citation": {
@@ -18452,7 +18452,52 @@
       "derived": [
         "history"
       ],
-      "future_branch": "future"
+      "future_branch": "future",
+      "freshness": {
+        "schema": "cz-freshness/1",
+        "as_of": "2026-11-22",
+        "checked_against_official_source": "2026-11-22",
+        "totals": {
+          "acts": 51599,
+          "by_status": {
+            "current": 51599,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "e-sbirka",
+            "name": "e-Sbírka open data (Ministry of the Interior)",
+            "state": "available",
+            "last_successful_check": "2026-11-22",
+            "last_successful_contact": "2026-11-22"
+          },
+          {
+            "source": "e-sbirka-extra",
+            "name": "e-Sbírka: international treaties and the Official Journal",
+            "state": "available",
+            "last_successful_check": "2026-11-22",
+            "last_successful_contact": "2026-11-22"
+          },
+          {
+            "source": "sppsu",
+            "name": "Collection of Legal Regulations of Local and Regional Authorities",
+            "state": "available",
+            "last_successful_check": "2026-11-22",
+            "last_successful_contact": "2026-11-22"
+          },
+          {
+            "source": "legislative-process",
+            "name": "Chamber of Deputies (open data and prints) and e-Legislativa",
+            "state": "available",
+            "last_successful_check": "2026-11-22",
+            "last_successful_contact": "2026-11-22"
+          }
+        ]
+      }
     },
     {
       "path": "denmark/national/acts",
@@ -59444,7 +59489,31 @@
         "Dz.U. 2024 poz. 1967",
         "Dz.U. 2024 poz. 1968"
       ],
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-23",
+        "checked_against_official_source": "2026-11-23",
+        "totals": {
+          "acts": 164856,
+          "by_status": {
+            "current": 164723,
+            "pending-change": 133,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "eli-sejm",
+            "name": "Sejm ELI register (Dziennik Ustaw, Monitor Polski)",
+            "state": "available",
+            "last_successful_check": "2026-11-23",
+            "last_successful_contact": "2026-11-23"
+          }
+        ]
+      }
     },
     {
       "path": "poland/sad-najwyzszy/caselaw",
