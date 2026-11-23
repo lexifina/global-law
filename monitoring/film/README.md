@@ -75,8 +75,8 @@ does not show them.
 The 18 names on screen are the tools of `tools/mcp_server.py`, which answer the same questions for any corpus in the
 tree: `read_law`, `search_law`, `find_provision`, `list_provisions`, `list_jurisdictions`, `law_details`,
 `provision_history`, `who_wrote`, `phrase_history`, `compare_dates`, `changes_between`, `laws_between`,
-`search_changes`, `world_on_date`, `applies_to_case`, `check_precedent`, `resolve_citations`, `what_else_changes`.
-What a tool can answer for a corpus depends on what that corpus's record holds: `check_precedent`, for example,
+`search_changes`, `world_on_date`, `case_check`, `resolve_citations`, `what_else_changes`.
+What a tool can answer for a corpus depends on what that corpus's record holds: `case_check`, for example,
 needs case law that cites the provision.
 
 ## Scene 4: every commit always pins to a live official source

@@ -41,7 +41,7 @@ with no email address: the history is permanent and public.
 Judgments go in `judgments/<the provision's path, without .md>.jsonl`, one per line, with citation details only
 (court, date, citation, link to the official copy), never the judgment's text; see
 [judgments/README.md](judgments/README.md). `python -m unittest tests.test_judgments` checks every line; the MCP
-server reads only committed files, so commit before trying a judgment with `check_precedent`. To suggest a court's
+server reads only committed files, so commit before trying a judgment with `case_check`. To suggest a court's
 official source, open an issue naming it.
 
 ### Builders and scrapers

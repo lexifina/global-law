@@ -14,7 +14,7 @@ decision. A bankruptcy court, for example, usually applies the Code as it stood 
 Check a file with `python -m unittest tests.test_judgments`, which names any line the server would skip. The server
 reads these files as committed (`HEAD`), so commit a new judgment before trying it.
 
-The MCP server's `check_precedent` reads these and, for each judgment, says whether the text the court applied on the
+The MCP server's `case_check` reads these and, for each judgment, says whether the text the court applied on the
 day it decided is the text in force now, and if not, which laws changed it.
 
 How these were gathered: each judgment was found on Find Case Law (The National Archives) and read individually to

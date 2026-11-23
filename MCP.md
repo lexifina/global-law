@@ -526,6 +526,17 @@ Resources: `global-law://README.md`, `REPRODUCE.md`, `CHANGELOG.md` and `manifes
 Prompts (ready-made research tasks): `provision_on_a_date`, `case_timeline` and `what_changed`. A resource template
 `global-law://law/{path}?date={date}&offset={n}` gives any provision as in force on a date.
 
+### Tool names that changed
+
+A tool that takes over another keeps the earlier name answering as it did, argument for argument, over MCP and at
+`/v1/<name>`; the earlier name is no longer listed (`tools/list`, `GET /v1`). New prompts and code should use the name
+in the middle column.
+
+| Earlier name | Now | Since | Called as |
+| --- | --- | --- | --- |
+| `applies_to_case` | `case_check` | 22 November 2026 | `case_check` with `commenced` |
+| `check_precedent` | `case_check` | 22 November 2026 | `case_check` with `decided`, or with neither date for the recorded judgments |
+
 ### What an answer holds
 
 Each answer is a text (`content[0].text`) and the same facts as fields (`structuredContent`).
