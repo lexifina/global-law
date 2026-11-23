@@ -20253,7 +20253,45 @@
         "RKVS",
         "IKS"
       ],
-      "described_by": "corpus.json"
+      "described_by": "corpus.json",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-23",
+        "checked_against_official_source": "2026-11-23",
+        "totals": {
+          "acts": 13082,
+          "by_status": {
+            "current": 0,
+            "pending-change": 64,
+            "stale": 0,
+            "unverified": 13018,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "riigi-teataja",
+            "name": "Riigi Teataja (consolidated texts)",
+            "state": "available",
+            "last_successful_check": "2026-11-23",
+            "last_successful_contact": "2026-11-23"
+          },
+          {
+            "source": "riigikogu",
+            "name": "Riigikogu open data (drafts and adopted laws)",
+            "state": "available",
+            "last_successful_check": "2026-11-23",
+            "last_successful_contact": "2026-11-23"
+          },
+          {
+            "source": "eu-nim",
+            "name": "EU Publications Office (Estonia's measures transposing EU directives)",
+            "state": "available",
+            "last_successful_check": "2026-11-23",
+            "last_successful_contact": "2026-11-23"
+          }
+        ]
+      }
     },
     {
       "path": "eswatini/national/acts",
@@ -48581,7 +48619,38 @@
       "history": "in-force",
       "derived": [
         "history"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-23",
+        "checked_against_official_source": "2026-11-23",
+        "totals": {
+          "acts": 5053,
+          "by_status": {
+            "current": 5000,
+            "pending-change": 53,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "legislation-mt",
+            "name": "legislation.mt: Laws of Malta (Chapters and subsidiary legislation)",
+            "state": "available",
+            "last_successful_check": "2026-11-23",
+            "last_successful_contact": "2026-11-23"
+          },
+          {
+            "source": "gazette",
+            "name": "Government Gazette: Acts and Legal Notices (as listed on legislation.mt)",
+            "state": "available",
+            "last_successful_check": "2026-11-23",
+            "last_successful_contact": "2026-11-23"
+          }
+        ]
+      }
     },
     {
       "path": "marshall-islands/national/acts",
@@ -68515,12 +68584,12 @@
         "as_of": "2026-11-23",
         "checked_against_official_source": "2026-11-23",
         "totals": {
-          "acts": 26427,
+          "acts": 26993,
           "by_status": {
-            "current": 26311,
-            "pending-change": 116,
+            "current": 25785,
+            "pending-change": 103,
             "stale": 0,
-            "unverified": 0,
+            "unverified": 1105,
             "source-unavailable": 0
           }
         },
