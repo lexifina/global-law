@@ -6073,6 +6073,43 @@ def t_laws_between(args: dict) -> tuple[str, dict]:
          'not_laws': left_out, 'ends_not_listed': ends, **caselaw_fields(caselaw)}
 
 
+UPCOMING_DAYS, UPCOMING_MOST = 90, 3660
+UPCOMING_LIMIT = ('Only changes already published and recorded are listed: a law not yet passed or published, or one '
+                  'whose in-force day is still to be fixed by a commencement order, is not here, so an empty list does '
+                  'not mean nothing is coming.')
+
+
+def t_upcoming_changes(args: dict) -> tuple[str, dict]:
+    """The laws the record holds that take effect after today: from tomorrow to `days` ahead, the soonest first. The
+    same rows as laws_between over that window (the record keeps a change from the day it is published, under the day
+    it takes force), under a name and a description a model asked "what is coming into force" can find: until 23
+    November 2026 it had to know to give laws_between dates in the future."""
+    import datetime as dt
+    days = num(args, 'days', UPCOMING_DAYS, UPCOMING_MOST)
+    today = dt.date.fromisoformat(date_arg(None))
+    start, end = (today + dt.timedelta(days=1)).isoformat(), (today + dt.timedelta(days=days)).isoformat()
+    text, data = t_laws_between({'start': start, 'end': end, **{k: args[k] for k in ('jurisdiction', 'max_results', 'offset') if k in args}})
+    scope = scope_arg(args)
+    where = f' in {scope}' if scope else ''
+    rows = data.get('changes') or []
+    for r in rows:
+        r['days_until'] = (dt.date.fromisoformat(r['in_force']) - today).days
+    total = data.get('total', len(rows))
+    window = {'today': today.isoformat(), 'start': start, 'end': end, 'days': days}
+    if not rows:
+        lead = f'No law is recorded as taking effect{where} in the next {days} days ({start} to {end}).'
+        extra = text.split('\n', 1)[1] if '\n' in text else ''
+        return (lead + ' ' + UPCOMING_LIMIT + ('\n' + extra if extra else ''),
+                {**data, 'summary': lead, 'window': window, 'notes': [UPCOMING_LIMIT]})
+    first = rows[0]
+    lead = (f'{total} law(s) are recorded as taking effect{where} in the next {days} days ({start} to {end}); the soonest: '
+            f"{first['law']} on {first['in_force']} ({first['corpus']}).")
+    lines = text.split('\n')
+    head = [f"{l}  [in {r['days_until']} day(s)]" for l, r in zip(lines, rows)]
+    return ('\n'.join([lead] + head + lines[len(rows):] + [UPCOMING_LIMIT]),
+            {**data, 'summary': lead, 'window': window, 'notes': [UPCOMING_LIMIT]})
+
+
 # What law.py laws leaves out, named as it names them: a commit of these kinds is not a law taking effect that day.
 NOT_LAWS = {'baseline': 'starting texts (text as published, no law named)', 'correction': 'corrections',
             'printing': 'printings', 'court': 'court rulings', 'treaty': 'treaties', 'uncredited': 'changes no law is named for',
@@ -12052,6 +12089,10 @@ TOOLS = [
     ('laws_between', 'Every law that took effect between two dates, both days included, across all jurisdictions or one, in the order they took effect.',
      {'start': DAY, 'end': DAY, 'jurisdiction': SCOPE, 'kind': KIND, 'max_results': at_most(200, MAX_ITEMS), 'offset': OFFSET},
      ['start', 'end'], t_laws_between),
+    ('upcoming_changes', 'What is about to change: the laws already published and recorded that take effect after today, within the next days (90 unless given), in one jurisdiction or all, the soonest first, each with the day it takes effect, how many days away that is and how many provisions it changes. Use it for "what comes into force soon", "upcoming changes", "what do we need to prepare for". For what a law will change, call law_details with its corpus_commit; for a provision\'s text from that day, read_law with that date.',
+     {'jurisdiction': SCOPE,
+      'days': {'type': 'integer', 'description': f'How many days ahead to look, counted from tomorrow (default {UPCOMING_DAYS}, at most {UPCOMING_MOST}).'},
+      'max_results': at_most(100, MAX_ITEMS), 'offset': OFFSET}, [], t_upcoming_changes),
     ('search_law', 'Search the text of all the law in force on a date, across every jurisdiction or one, in the law\'s own language. Plain words are a phrase; when no provision holds the phrase, the provisions that hold all the words are given. Names the acts that match best.',
      {'query': {'type': 'string', 'description': 'Words or a phrase; a regular expression if regex is true.'}, 'date': DATE, 'jurisdiction': SCOPE,
       'kind': KIND, 'regex': REGEX, 'case_sensitive': {'type': 'boolean', 'description': 'Match upper and lower case as written (default false: either case matches).'},
@@ -12097,7 +12138,7 @@ TOOLS = [
 # takes `jurisdiction`.
 ALIASES = {'law_details': {'corpus': 'jurisdiction'}}
 # The list each tool gives in parts (offset, page): if the answer is cut to fit (fit_result), its page says so.
-PAGED = {'find_provision': ('results',), 'search_law': ('results',), 'laws_between': ('changes',), 'search_changes': ('changes',),
+PAGED = {'find_provision': ('results',), 'search_law': ('results',), 'laws_between': ('changes',), 'upcoming_changes': ('changes',), 'search_changes': ('changes',),
          'phrase_history': ('changes',), 'list_provisions': ('provisions', 'folders')}
 # Tools under the names they had before they became one (case_check, 22 November 2026): not listed, still answered
 # as they were, argument for argument, for the clients and saved prompts that call them.
@@ -12423,7 +12464,8 @@ INSTRUCTIONS = (
     'Questions with their own tool, ahead of a text search: what relies on, cites or uses the definitions of a provision '
     '(what_else_changes); which text applies to a case filed on a date, and whether the text a decision applied is '
     'still in force (case_check); who wrote the words (who_wrote); when words entered or left the law '
-    '(phrase_history); every citation in a brief (resolve_citations). '
+    '(phrase_history); every citation in a brief (resolve_citations); what takes effect in the days ahead '
+    '(upcoming_changes). '
     'Coverage is partial: each corpus holds only the law its description names (for example some acts of a country, or '
     'a court\'s decisions from a stated year), over a stated period, so "nothing found" means nothing in the record, not nothing in the '
     'law. Every answer states the limits of its record (where a record starts or ends); pass them on to the user. '

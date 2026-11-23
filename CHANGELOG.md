@@ -8,6 +8,11 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 23 November 2026
+- **Added (the tools), `upcoming_changes`.** The laws the record holds that take effect after today, within the next days (90 unless given), in one jurisdiction or all, the soonest first, with how many days away each is. The record has always kept a change from the day it is published under the day it takes force, and `laws_between` with dates in the future listed them; nothing was named for the question, so a model had to know to ask that way. 18 tools.
+- **Checked.** On the hosted tree, for twelve jurisdictions and windows the rows are those of `laws_between` over the same days, in order, each inside the window (22 checks): 9 laws in Germany in 90 days, 15 in Japan in a year, 30 in every jurisdiction in 14 days.
+- **Open (Germany), found by it.** The first rows for Germany are committee papers of the Landtag von Sachsen-Anhalt dated to their meeting day, recorded as laws in `germany/bund/acts`: not law taking effect.
+
 ## 22 November 2026
 - **Changed (the tools), one tool for a case: `case_check`.** `applies_to_case` and `check_precedent` are one tool. With `commenced` it says which later changes reach a case and the text that applies; with `decided`, whether the text a court applied is still in force; with neither, the judgments recorded for the provision; with both, both in one answer. In 30 days on the hosted server 7 and 12 of 681 clients had called the two, and a question about a case that has a decision needed both. The two names still answer as they did, argument for argument, and are no longer listed: 17 tools where there were 18.
 - **Fixed (the tools), a court decision's own path given to the check.** Clients asked `check_precedent` about a decision by its path ("is this case still good law?") and were told "No judgment is recorded", or with its day "same words as today", which is no answer about a decision. `case_check` says the path is a decision and asks for the provision it applied.

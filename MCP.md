@@ -512,6 +512,7 @@ its title and last change.
 | `compare_dates` | A word-level diff of a provision's text on `date_a` and on `date_b`, and the laws that took effect after `date_a`, up to and including `date_b`. |
 | `provision_history` | Every law that changed a provision, with its in-force, enacted or made, and published dates and its sources. |
 | `laws_between` | Every law that took effect in a window, `start` and `end` both included, with how many provisions each changed. |
+| `upcoming_changes` | What is about to change: the laws already published and recorded that take effect after today, within the next `days` (90 unless given), in one jurisdiction or all, the soonest first, each with `days_until` and how many provisions it changes. The rows are those of `laws_between` from tomorrow to that day. Only changes already recorded are listed: a law not yet published, or one waiting for a commencement order, is not there, so an empty list does not mean nothing is coming. |
 | `search_law` | Search the text of all the law in force on a date. |
 | `changes_between` | Every provision whose text on `date_b` differs from its text on `date_a`, with the laws that took effect after `date_a`, up to and including `date_b`. |
 | `search_changes` | Search the record of changes (the commit messages) rather than the text. `start` and `end` are both included; without them, every date, changes not yet in force included. |

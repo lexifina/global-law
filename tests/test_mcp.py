@@ -3040,6 +3040,9 @@ class TestToolSurface(unittest.TestCase):
             self.assertNotIn(earlier, tools)
             self.assertIn(earlier, self.m.HANDLERS)
         self.assertIn('paths', tools['read_law']['inputSchema']['properties'])
+        self.assertEqual(tools['upcoming_changes']['inputSchema'].get('required', []), [])
+        self.assertIn('days', tools['upcoming_changes']['inputSchema']['properties'])
+        self.assertIn('upcoming_changes', self.m.PAGED)
 
     def test_hosted_instructions(self):
         code = "import sys; sys.path.insert(0, 'tools'); sys.dont_write_bytecode = True; import mcp_server as M; print(M.INSTRUCTIONS)"
