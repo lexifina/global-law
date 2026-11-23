@@ -326,6 +326,53 @@ ministers' answers. Results: [FrTax/reports/RESULTS.md](FrTax/reports/RESULTS.md
 runs them with the US, French and UK models on the same households: checked against OECD Taxing Wages 2026, compared,
 and searched for loopholes in each country.
 
+## Tracing the spine of global tax legislation
+
+[![The spine of global tax legislation](global-tax-spine.png)](global-tax-spine.html)
+
+An interactive picture of how the machine-checked tax models in [`global-tax-full/`](global-tax-full/) are built from shared parts: 199 jurisdictions, 4,215 Lean files, 266,701 lines.
+
+- **Trunk:** the deepest chain of building blocks. It runs 35 import steps from the top (all jurisdictions), through Australia's model and the shared engine, down to `TaxKernel.Basic` (money and rates).
+- **Branches:** country tax models and the shared rules they use. 766 parts are drawn, a sample.
+- **Dust:** 762 Lean files (21,782 lines) that compile but that no country's `Main` reaches. Most are library root files and proof, check or test files.
+
+### Three versions
+
+| File | What it adds |
+|---|---|
+| [`global-tax-spine-v1.html`](global-tax-spine-v1.html) ([preview](global-tax-spine-v1.png)) | The first picture: Lean module names, dust, thin cross-threads between imports, a legend. |
+| [`global-tax-spine-v2.html`](global-tax-spine-v2.html) | Plain-English names for every file and statute citation (Lean names behind a toggle), plain tooltips and a "What am I looking at?" panel. |
+| [`global-tax-spine.html`](global-tax-spine.html) ([preview](global-tax-spine.png)) | The current version. A calmer picture (dust hidden, no cross-threads) and a card for every file, with links to what it is built on, what uses it, the rest of its country and its path to the top. Back and forward retrace the clicks. |
+
+GitHub shows HTML as source. Download a file and open it in a browser, or use a raw-HTML preview. Each file is self-contained and needs no network.
+
+### How to read it
+
+- Height is the number of import steps down to the foundations. Each part sits one step above the deepest part it imports.
+- From the bottom, the layers are: foundations, proofs, the income-tax toolkit, world-expansion parts, the shared engine, country models, then the top.
+- Hover over a part to see its country, taxes, size and the laws it cites. In the current version, click it to open its card and follow the links. Search by country, tax, law or module name.
+
+### Stats
+
+| | |
+|---|---|
+| Jurisdictions | 199 |
+| Lean files | 4,215 |
+| Lean lines | 266,701 |
+| Definitions / references between them | 32,598 / 85,676 |
+| Import edges | 7,989 |
+| Trunk | 35 steps |
+| Longest chain of definitions | 30 steps (Slovenia's `main` to `TaxKernel.Band`) |
+| Dust | 762 files, 21,782 lines |
+
+### Caveats
+
+- The graph is read from the source text, without a Lean build. Module links are `import` lines and are exact. Links between definitions come from a text scan: a name in a definition's body that resolves to a visible definition. The scan misses field and dot-notation uses, and a local name can match a definition by accident.
+- Dust means "not reached from any country's `Main` through imports". It is not always dead code: `lake build` still compiles library root files and proof files.
+- Branches are a fixed sample: two importers per jurisdiction and ten names per trunk part. The trunk and the dust are complete.
+- Plain names come from file names, OECD codes in docstrings and each country's `results/summary.json`. Statute names come from a table of common abbreviations; any other citation is shown as written, with "act not named" where the comment names no act. Card texts quote the docstrings, `kernel/API.md`, the summary grades and the 2026 research as recorded.
+- File paths in the pages follow the `global-tax-full/` layout. 3,170 of the 4,215 files are in the published tree so far.
+
 ## What a proof here does and does not show
 
 Lean checks that each conclusion follows from the dated facts and the rule as defined. It does not check the facts or
