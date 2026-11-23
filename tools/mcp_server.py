@@ -11670,6 +11670,51 @@ def law_name_forms(name: str) -> list[str]:
     return list(dict.fromkeys(forms))
 
 
+AUTHOR_SCAN = 8 << 20  # bytes of a corpus's authors read at a time, from the newest back
+
+
+def authors_in_rows(corpus: str, pin: str, forms: list[str], check, most: int) -> list[str] | None:
+    """The newest `most` commits of a corpus, up to its pin, whose author `check` accepts, newest first, read from the
+    corpus index's own table of commits (law._Rows: every commit's author, one after another, in history order):
+    the authors are searched for the forms as bytes, from the newest back, and each one found is checked. For a name
+    a host's index of commits cannot narrow: "BGB" is in the author of every commit of Germany's federal acts (its
+    gazette, BGBl.), so the index gave up and git read all 6.7 million commits (20 s, the call's limit, 23 November
+    2026). None ("ask git"): the commits are not read in place, the index is not of this pin or has merges, or a
+    form is not plain ASCII (bytes are compared without case only for ASCII letters)."""
+    try:
+        ix = law._index(corpus)
+        rows = ix.get('rows')
+        if (not isinstance(rows, getattr(law, '_Rows', ())) or ix.get('focused') or ix.get('pin') != pin or not forms
+                or any(not f or not f.isascii() for f in forms) or not _no_merges(corpus, pin)):
+            return None
+        mm, off, at, n = rows._mm, rows._toff[1], rows._tat[1], rows._n
+        find = re.compile(b'|'.join(re.escape(f.encode('ascii')) for f in forms), re.I)
+        out, hi = [], n
+        while hi > 0 and len(out) < most:
+            checkpoint()
+            lo = max(0, bisect.bisect_left(off, max(0, off[hi] - AUTHOR_SCAN), 0, hi))
+            if lo >= hi:
+                lo = hi - 1
+            held, last = [], -1
+            for m in find.finditer(mm, at + off[lo], at + off[hi]):
+                i = bisect.bisect_right(off, m.start() - at, lo, hi + 1) - 1
+                if i != last and lo <= i < hi:
+                    held.append(i)
+                    last = i
+            for i in reversed(held):
+                name = rows._text(1, i)
+                if name is not None and check(name):
+                    out.append(rows.commit(i))
+                    if len(out) >= most:
+                        break
+            hi = lo
+        return out
+    except subprocess.TimeoutExpired:
+        raise
+    except (SystemExit, Exception):  # noqa: BLE001  (git is asked, as ever)
+        return None
+
+
 def t_law_details(args: dict) -> tuple[str, dict]:
     """The full record of one law's change: its commit message with every trailer, and the provisions it changed."""
     corpus = scope_arg(args, 'jurisdiction')  # (`corpus`, its name before, is read as jurisdiction: ALIASES)
@@ -11770,6 +11815,8 @@ def t_law_details(args: dict) -> tuple[str, dict]:
                             shas = got
                     except (SystemExit, Exception):  # noqa: BLE001
                         shas = None
+                if shas is None:
+                    shas = authors_in_rows(c, pin, list(forms), lambda name: bool(whole.search(name)), 10)
                 if shas is None:
                     rows = split_log(c, cwd, ['--format=%H%x1f%an', *how, '-i'], rev=pin).splitlines()
                     shas = [r.split('\x1f', 1)[0] for r in rows if '\x1f' in r and whole.search(r.split('\x1f', 1)[1])]
