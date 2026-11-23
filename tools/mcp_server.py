@@ -5812,7 +5812,9 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
         # What a record does not hold beyond its text is said once for the answer, not on every corpus's row.
         limits += [n for n in notes if _EFFECTS_NOTE.fullmatch(n)]
         notes = short_caveats([n for n in notes if not _EFFECTS_NOTE.fullmatch(n)])
-        sha = law.pinned(root, c['path']) if not decisions else None
+        # (the corpus's commit or tree on the date is only named here: its id, kept once built, without the tree)
+        named = getattr(law, 'corpus_tree_id', None)
+        sha = None if decisions else (named(root.date, c['path']) if callable(named) and isinstance(root, law.Moment) else law.pinned(root, c['path']))
         if decisions and given.get(c['path']):  # the latest decision; the next one is not read (a walk of its history)
             g = given[c['path']]
             last, sha = [types.SimpleNamespace(law=g[0], in_force=g[1])], g[2]

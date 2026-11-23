@@ -2434,6 +2434,65 @@ def corpus_tree(date: str, corpus: str) -> str | None:
 
 
 _TREE_LOCKS = tuple(threading.Lock() for _ in range(64))
+_TREE_IDS_LOCK = threading.Lock()
+
+
+def _tree_ids(corpus: str, ix: dict) -> tuple[dict, Path | None]:
+    """({day: the id of the corpus's tree for that day, or None}, the file they are kept in) for one reading of the
+    index: the ids corpus_tree_id has worked out, in this process or one before it."""
+    key = ('tree-ids', f'{corpus}@{_at(ix)}')
+    got = _CACHE.get(key)
+    if got is None:
+        kept = _file_index_kept(corpus, ix)
+        path = kept.with_name(kept.name.replace('file-index-v2-', 'tree-ids-v1-', 1)).with_suffix('.json') if kept is not None else None
+        ids: dict = {}
+        if path is not None:
+            try:
+                read = json.loads(path.read_text(encoding='utf-8'))
+                if isinstance(read, dict):
+                    ids = {str(k): (v if isinstance(v, str) else None) for k, v in read.items()}
+            except (OSError, ValueError):
+                ids = {}
+        got = _CACHE[key] = (ids, path)
+    return got  # type: ignore[return-value]
+
+
+def corpus_tree_id(date: str, corpus: str) -> str | None:
+    """What corpus_tree(date, corpus) returns, for a caller that only names it and reads nothing through it
+    (world_on_date's corpus_commit): a tree's id is kept on disk once it has been built, by the day it is the tree
+    of, and given from there without building the tree again. A built tree lives in the process that built it, so
+    each new process built one for every corpus not in in-force order: 157 to 1,256 s of a server's start, and
+    82 s (the call's limit) for the law of the world on a past date (23 November 2026). The tree itself may not be
+    in this process's store: whoever reads through it asks corpus_tree."""
+    if in_order(corpus):
+        return corpus_on(date, corpus)
+    ix = _index(corpus)
+    days = _tree_days(corpus, ix)
+    if days is not None:
+        import bisect
+        i = bisect.bisect_right(days, date)
+        if not i:
+            return None
+        date = days[i - 1]
+    got = _CACHE.get(('tree', f'{corpus}@{_at(ix)}@{date}'), _MISSING)
+    if got is not _MISSING:
+        return got  # type: ignore[return-value]
+    ids, path = _tree_ids(corpus, ix)
+    if date in ids:
+        return ids[date]
+    sha = corpus_tree(date, corpus)
+    if path is not None and not ix.get('focused'):
+        import os
+        with _TREE_IDS_LOCK:
+            ids[date] = sha
+            try:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                tmp = path.with_name(f'{path.name}.{os.getpid()}.{threading.get_ident()}.tmp')
+                tmp.write_text(json.dumps(ids), encoding='utf-8')
+                os.replace(tmp, path)
+            except OSError:
+                pass
+    return sha
 
 
 def _tree_days(corpus: str, ix: dict) -> tuple | None:
