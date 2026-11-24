@@ -53,6 +53,31 @@ META = 'io.modelcontextprotocol/'
 CACHEABLE = {'tools/list', 'prompts/list', 'resources/list', 'resources/read', 'resources/templates/list', 'server/discover'}
 NOT_LAW = re.compile(r'(^|/)(README|LICENSE|REPRODUCE|KORREKTUREN|CHANGELOG|RESEARCH)[^/]*$|(^|/)(tools|tests|data|build|\.github)/'
                      r'|^(AGENTS|CLAUDE|ACTS|SOURCES|CONTRIBUTING|SECURITY|NOTICE|CITATION)\.md$')  # a corpus's own docs at its root (Romania's ACTS.md lists every act)
+# Every text NOT_LAW can match holds one of these (its own words, with no anchors): a listing none of them is in has
+# no such file, and in any other only the lines that hold one are asked (law_names).
+NOT_LAW_HINT = re.compile(r'README|LICENSE|REPRODUCE|KORREKTUREN|CHANGELOG|RESEARCH|tools/|tests/|data/|build/|\.github/'
+                          r'|AGENTS|CLAUDE|ACTS|SOURCES|CONTRIBUTING|SECURITY|NOTICE|CITATION')
+
+
+def law_names(listing: str) -> list[str]:
+    """The law files of a listing of paths, one a line: those that end in .md and NOT_LAW does not match. The
+    pattern was searched in every name, 4 s of a list of France's 1.44 million files on a past date (24 November
+    2026); the listing is searched once for the words it can match, and only the lines that hold one are asked."""
+    out = listing.splitlines()
+    if '\r' in listing or '\x0b' in listing or '\x0c' in listing or '\x1c' in listing or '\x1d' in listing or '\x1e' in listing \
+            or '\x85' in listing or '\u2028' in listing or '\u2029' in listing:  # (lines are not cut at "\n" alone: each is asked)
+        return [n for n in out if n.endswith('.md') and not NOT_LAW.search(n)]
+    doubt, at = set(), 0
+    for m in NOT_LAW_HINT.finditer(listing):
+        if m.start() >= at:  # (the line this word is in, counted from the last one found)
+            doubt.add(listing.count('\n', 0, m.start()) if not doubt else None)
+            at = m.start()
+    if not doubt:
+        return [n for n in out if n.endswith('.md')]
+    if None in doubt or len(doubt) > 1:  # (more than one line in doubt: the lines that hold a word, by one pass)
+        return [n for n in out if n.endswith('.md') and not (NOT_LAW_HINT.search(n) and NOT_LAW.search(n))]
+    i = next(iter(doubt))
+    return [n for k, n in enumerate(out) if n.endswith('.md') and not (k == i and NOT_LAW.search(n))]
 
 
 class UserError(Exception):
@@ -1747,8 +1772,7 @@ def names_of(corpus: str, sha: str) -> tuple[str, ...]:
             names = None
     if names is None:
         began = time.monotonic()
-        out = law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus).splitlines()
-        names = [n for n in out if n.endswith('.md') and not NOT_LAW.search(n)]
+        names = law_names(law.git('ls-tree', '-r', '--name-only', sha, cwd=ROOT / corpus))
         if kept is not None and time.monotonic() - began >= NAMES_KEEP_S and not any('\n' in n or '\x00' in n for n in names):
             try:
                 kept.parent.mkdir(parents=True, exist_ok=True)
