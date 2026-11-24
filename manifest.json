@@ -446,7 +446,6 @@
     "russia/rostov/acts",
     "russia/smolensk/acts",
     "russia/sverdlovsk/acts",
-    "russia/tuva/acts",
     "russia/yamalo-nenets/acts",
     "russia/zabaykalsky/acts",
     "saint-kitts-and-nevis/national/acts",
@@ -64046,18 +64045,18 @@
       "path": "russia/tuva/acts",
       "url": "https://github.com/lexifina/russia-tuva-law.git",
       "name": "Tuva Republic",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-TY",
-      "iso_path": "ru-ty/acts",
+      "iso_path": "ru/tuva/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-04-13",
-      "coverage": "12 acts, 307 dated versions from 2015-04-13 to 2026-10-13; catalogue entries only, no law text",
+      "coverage": "12 acts of Tuva Republic with every dated version the source gives (308 versions), in force from 2015-04-13 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -64065,7 +64064,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1287,
+          "by_status": {
+            "current": 1275,
+            "pending-change": 12,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-tuva",
+            "name": "Tuva Republic: Official Internet Portal of Legal Information (region17)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/tver/acts",
@@ -73660,7 +73685,7 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-23",
+        "as_of": "2026-11-24",
         "checked_against_official_source": "2026-11-23",
         "totals": {
           "acts": 184,
@@ -76423,7 +76448,31 @@
         "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
         "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
       },
-      "scope": "selected-acts"
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 317,
+          "by_status": {
+            "current": 46,
+            "pending-change": 60,
+            "stale": 0,
+            "unverified": 211,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-uri",
+            "name": "Uri: systematic collection (rechtsbuch.ur.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/uri/caselaw",
