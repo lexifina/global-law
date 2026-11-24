@@ -11802,6 +11802,8 @@ def authors_in_rows(corpus: str, pin: str, forms: list[str], check, most: int) -
         out, hi = [], n
         while hi > 0 and len(out) < most:
             checkpoint()
+            if find_time_up():  # (the caller names the corpus as not read: law_details)
+                raise LookupError(corpus)
             lo = max(0, bisect.bisect_left(off, max(0, off[hi] - AUTHOR_SCAN), 0, hi))
             if lo >= hi:
                 lo = hi - 1
@@ -11819,7 +11821,7 @@ def authors_in_rows(corpus: str, pin: str, forms: list[str], check, most: int) -
                         break
             hi = lo
         return out
-    except subprocess.TimeoutExpired:
+    except (subprocess.TimeoutExpired, LookupError):
         raise
     except (SystemExit, Exception):  # noqa: BLE001  (git is asked, as ever)
         return None
@@ -11960,10 +11962,36 @@ def t_law_details(args: dict) -> tuple[str, dict]:
     # Each corpus is its own git processes: read eight at a time, in the manifest's order (the five decisions of a
     # shared docket in five CAP corpora took 5.9 s one after another, 2026-11-08).
     todo = list(checked_out([{'path': c} for c in corpora], missing))
-    with ThreadPoolExecutor(min(8, len(todo) or 1)) as pool:
-        found = [f for part in pool_map(pool, one, todo) for f in part]
+    # A law named with no jurisdiction is looked for in every body of law, and a name of two letters ("AO") is in
+    # an author of most of them: every corpus's authors were read for it, past the call's time, and there was no
+    # answer (20 s, 24 November 2026). No body of law is begun once fewer than FIND_MARGIN seconds are left, one
+    # being read then is left, and the answer names those not read.
+    late: list[str] = []
+
+    def one_in_time(entry_cwd) -> list[dict]:
+        if not commit and len(todo) > 1 and find_time_up():
+            late.append(entry_cwd[0]['path'])
+            return []
+        try:
+            return one(entry_cwd)
+        except (LookupError, subprocess.TimeoutExpired):
+            if commit or len(todo) < 2:
+                raise
+            late.append(entry_cwd[0]['path'])
+            return []
+    deadline = getattr(_call, 'deadline', 0.0)
+    if deadline and not commit and len(todo) > 1:  # (a body of law still being read half a margin before the end is left)
+        _call.deadline = deadline - FIND_MARGIN / 2
+    try:
+        with ThreadPoolExecutor(min(8, len(todo) or 1)) as pool:
+            found = [f for part in pool_map(pool, one_in_time, todo) for f in part]
+    finally:
+        if deadline:  # (the answer is put together whatever the reading took of the call's time)
+            _call.deadline = max(deadline, time.monotonic() + FIND_MARGIN) if late else deadline
+    late_note = (f' Partial: {len(late)} of {len(todo)} bodies of law were not read in the time this answer may take '
+                 f'({", ".join(sorted(late)[:5])}{" ..." if len(late) > 5 else ""}); give a jurisdiction to read them.') if late else ''
     if not found:
-        hint = ''
+        hint = late_note
         if law_name and not corpus and re.search(r'\bCourt\b|\bCir(?:cuit)?\b|\bTribunal\b|Gericht|\bCour\b|\bHof\b', law_name, re.I):
             hint = (' Court decisions are not searched by author across every corpus: give the decision\'s citation or docket, '
                     'or name its case-law corpus (jurisdiction, e.g. "united-states/alabama/caselaw").')
@@ -12008,7 +12036,11 @@ def t_law_details(args: dict) -> tuple[str, dict]:
             + '; '.join(f"{f['law']} ({f['corpus']}, commit {f['commit'][:10]}, in force {(f.get('trailers') or {}).get('In-force', 'not said')}, "
                         f"{len(f['provisions'])} provisions)" for f in found[:3]) + ('; ...' if len(found) > 3 else '') + '.'
             + (f' {len(more_decided)} more decisions have this reference, not read here.' if more_decided else ''))
-    return text, {'summary': lead, 'changes': found, **({'more_decisions': more_decided[:MAX_ITEMS]} if more_decided else {})}
+    if late:
+        text += '\n\n' + late_note.strip()
+        lead += late_note
+    return text, {'summary': lead, 'changes': found, **({'more_decisions': more_decided[:MAX_ITEMS]} if more_decided else {}),
+                  **({'partial': {'law_not_read_for_time': sorted(late), 'note': late_note.strip()}} if late else {})}
 
 
 DIFF_PROVISIONS, DIFF_CHARS = 60, 700  # provisions law_details diffs per law, and characters of diff per provision
