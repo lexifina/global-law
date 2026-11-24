@@ -42,15 +42,15 @@
  "totals": {
   "corpora": 991,
   "by_status": {
-   "current": 612,
-   "pending-change": 9,
+   "current": 608,
+   "pending-change": 13,
    "stale": 354,
    "unverified": 16,
    "source-unavailable": 0
   },
   "verified_30d": 974,
-  "verified_7d": 45,
-  "pct_verified_7d": 4.5,
+  "verified_7d": 51,
+  "pct_verified_7d": 5.1,
   "pct_verified_30d": 98.3
  },
  "by_level": {
@@ -71,15 +71,15 @@
   "subnational": {
    "corpora": 608,
    "by_status": {
-    "current": 601,
-    "pending-change": 2,
+    "current": 597,
+    "pending-change": 6,
     "stale": 0,
     "unverified": 5,
     "source-unavailable": 0
    },
    "verified_30d": 603,
-   "verified_7d": 34,
-   "pct_verified_7d": 5.6,
+   "verified_7d": 40,
+   "pct_verified_7d": 6.6,
    "pct_verified_30d": 99.2
   }
  },
@@ -143,8 +143,14 @@
    "spain/national/acts",
    "spain/navarre/acts",
    "spain/valencia/acts",
+   "switzerland/basel-landschaft/acts",
    "switzerland/basel-landschaft/arlesheim/acts",
-   "switzerland/st-gallen/bad-ragaz/acts"
+   "switzerland/basel-landschaft/ettingen/acts",
+   "switzerland/fribourg/acts",
+   "switzerland/graubunden/bonaduz/acts",
+   "switzerland/graubunden/ilanz-glion/acts",
+   "switzerland/st-gallen/bad-ragaz/acts",
+   "switzerland/st-gallen/rapperswil-jona/acts"
   ],
   "note": "these corpora publish a freshness row for every act; for a provision in one, `python tools/freshness.py <provision path>` reads its act's row when the corpus is checked out"
  }
