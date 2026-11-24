@@ -33,7 +33,7 @@ import warnings
 from array import array
 from collections import ChainMap, Counter, OrderedDict
 from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import TimeoutError as FutureTimeout
+from concurrent.futures import CancelledError as FutureCancelled, TimeoutError as FutureTimeout
 from functools import lru_cache
 from pathlib import Path
 
@@ -5940,9 +5940,17 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
                 continue
             got = job.result(max(0.0, min(deadline - FIND_MARGIN / 4, began + TREES_WAIT) - time.monotonic()) if deadline else None)
             tree_of[path] = data[at_row[path]]['corpus_commit'] = got
-        except (LookupError, FutureTimeout, subprocess.TimeoutExpired, SystemExit):
+        except (LookupError, FutureTimeout, FutureCancelled, subprocess.TimeoutExpired, SystemExit):  # (cancelled: by another call for the date, done first)
             pass
     late = sorted(p for p, sha in tree_of.items() if sha is LookupError)
+    # The trees not yet begun are not built once the call has its answer (the one or two being built are finished):
+    # left to themselves they were built behind the server for minutes, and every other call ran two to five times
+    # slower meanwhile (a search 0.7 s, then 5.5; 24 November 2026). The next call for the date goes on from there.
+    for path, job in waited:
+        if job is not None and job.cancel():
+            with _TREE_JOBS_LOCK:
+                if _TREE_JOBS.get((root.date, path)) is job:
+                    _TREE_JOBS.pop((root.date, path), None)
     if deadline:  # (the answer is put together whatever the trees took of the call's time)
         _call.deadline = max(deadline, time.monotonic() + FIND_MARGIN)
     limits = short_caveats(limits)
