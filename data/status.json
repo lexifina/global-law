@@ -1,13 +1,13 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-24T06:40:24Z",
+ "generated": "2026-11-24T07:12:52Z",
  "updates": "running",
- "last_pass": "2026-11-24T06:40:24Z",
+ "last_pass": "2026-11-24T07:12:52Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-24T06:40:24Z",
- "last_published": "2026-11-24T06:40:24Z",
+ "last_successful_pass": "2026-11-24T07:12:52Z",
+ "last_published": "2026-11-24T07:12:52Z",
  "published_last_24h": {
-  "commits": 99,
+  "commits": 100,
   "corpora_moved": 1,
   "corpora_added": 0
  },
@@ -70,7 +70,7 @@
   },
   {
    "corpus": "germany-law",
-   "reason": "check-failed",
+   "reason": "check-running",
    "since": "2026-11-24"
   },
   {
@@ -106,6 +106,14 @@
   "unverified": 16,
   "source-unavailable": 0
  },
- "official_sources_unavailable": [],
+ "official_sources_unavailable": [
+  {
+   "corpus": "lithuania/national/acts",
+   "name": "Seimas: the Constitution (lrs.lt)",
+   "state": "unavailable",
+   "unavailable_since": "2026-11-24",
+   "last_successful_contact": "2026-11-23"
+  }
+ ],
  "note": "As seen from Lexifina's pipeline. `updates` is running while the pointer loop completes a pass at least every 45 minutes. `held_back` lists every corpus whose newest commit is not pinned yet; `holds` gives each one's reason (HOLD_REASONS in tools/freshness.py) and the day it was first held. An official source marked unavailable did not answer that corpus's pipeline; it may be up for others."
 }
