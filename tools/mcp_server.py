@@ -5815,6 +5815,7 @@ def t_read_law(args: dict) -> tuple[str, dict]:
 _TREE_JOBS: dict = {}  # (date, corpus) -> the tree being built for world_on_date, behind the calls
 _TREE_JOBS_LOCK = threading.Lock()
 _TREE_POOL: list = []
+TREES_WAIT = 12.0  # seconds of a call world_on_date gives to a new date's notes and trees, whatever the call's limit
 TREE_JOBS_MOST = 4000  # trees waiting to be built; past it a call names the corpus as not worked out and starts none
 
 
@@ -5863,7 +5864,7 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
     named = getattr(law, 'corpus_tree_id', None)
     tree_of, late = {}, []
     served = law.manifest()['corpora']  # (read before the trees: when they have taken the call's time, nothing more is asked of git)
-    waited, at_row, unnoted = [], {}, []
+    waited, at_row, unnoted, began = [], {}, [], time.monotonic()
     deadline = getattr(_call, 'deadline', 0.0)
     if callable(named) and isinstance(root, law.Moment):
         for path in [c['path'] for c in served if wanted(c) and not law.is_caselaw(c)]:
@@ -5883,7 +5884,7 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
         decisions = law.is_caselaw(c)
         notes = []
         if not decisions:
-            if deadline and time.monotonic() > deadline - FIND_MARGIN / 2:
+            if deadline and time.monotonic() > min(deadline - FIND_MARGIN / 2, began + TREES_WAIT):
                 unnoted.append(c['path'])  # (the call's time is nearly spent: the row is given without its notes)
             else:
                 try:
@@ -5913,7 +5914,7 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
         try:
             if job is None or path not in at_row:
                 continue
-            got = job.result(max(0.0, deadline - FIND_MARGIN / 4 - time.monotonic()) if deadline else None)
+            got = job.result(max(0.0, min(deadline - FIND_MARGIN / 4, began + TREES_WAIT) - time.monotonic()) if deadline else None)
             tree_of[path] = data[at_row[path]]['corpus_commit'] = got
         except (LookupError, FutureTimeout, subprocess.TimeoutExpired, SystemExit):
             pass
