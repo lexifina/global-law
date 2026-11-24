@@ -42,15 +42,15 @@
  "totals": {
   "corpora": 991,
   "by_status": {
-   "current": 596,
-   "pending-change": 25,
+   "current": 592,
+   "pending-change": 29,
    "stale": 354,
    "unverified": 16,
    "source-unavailable": 0
   },
   "verified_30d": 974,
-  "verified_7d": 70,
-  "pct_verified_7d": 7.1,
+  "verified_7d": 81,
+  "pct_verified_7d": 8.2,
   "pct_verified_30d": 98.3
  },
  "by_level": {
@@ -71,15 +71,15 @@
   "subnational": {
    "corpora": 608,
    "by_status": {
-    "current": 585,
-    "pending-change": 18,
+    "current": 581,
+    "pending-change": 22,
     "stale": 0,
     "unverified": 5,
     "source-unavailable": 0
    },
    "verified_30d": 603,
-   "verified_7d": 59,
-   "pct_verified_7d": 9.7,
+   "verified_7d": 70,
+   "pct_verified_7d": 11.5,
    "pct_verified_30d": 99.2
   }
  },
@@ -125,9 +125,16 @@
    "russia/altai-krai/acts",
    "russia/altai-republic/acts",
    "russia/amur/acts",
+   "russia/arkhangelsk/acts",
    "russia/astrakhan/acts",
    "russia/bashkortostan/acts",
    "russia/bryansk/acts",
+   "russia/chechnya/acts",
+   "russia/chukotka/acts",
+   "russia/dagestan/acts",
+   "russia/ivanovo/acts",
+   "russia/jewish-autonomous-oblast/acts",
+   "russia/kamchatka/acts",
    "slovakia/national/acts",
    "slovenia/national/acts",
    "spain/andalusia/acts",
@@ -169,6 +176,8 @@
    "switzerland/zug/baar/acts",
    "switzerland/zug/huenenberg/acts",
    "switzerland/zug/steinhausen/acts",
+   "switzerland/zug/zug/acts",
+   "switzerland/zurich/oberrieden/acts",
    "switzerland/zurich/winterthur/acts"
   ],
   "note": "these corpora publish a freshness row for every act; for a provision in one, `python tools/freshness.py <provision path>` reads its act's row when the corpus is checked out"
