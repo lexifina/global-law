@@ -7181,26 +7181,28 @@ def _changes_span(by_commit, commits, date: str, later: bool = False) -> tuple:
     return (n, last, first, nxt) if later else (n, last, first)
 
 
-_SPANS: dict[str, tuple] = {}  # corpus -> (what it was read at, the file, {folder: [day, next day, how many, newest, oldest]})
+_SPANS: dict[str, tuple] = {}  # corpus -> (what it was read at, the file, {folder: its table of days (_span_days)})
 _SPANS_LOCK = threading.Lock()
+SPAN_DAYS_MOST = 50000  # a folder whose changes take force on more days than this is worked out for each date asked
 
 
 def _spans_kept(corpus: str) -> tuple:
-    """(the file, {folder: [day, next day, how many, the newest change's commit, the oldest's]}) of a corpus as it
-    is read now: the spans folder_spans has worked out, in this process or one before it. Named by the corpus's tip
-    and what its index was read at (a commit's day and kind are its own, whatever the tree's commit)."""
+    """(the file, {folder: its table of days}) of a corpus as it is read now: the tables folder_spans has worked
+    out, in this process or one before it. Named by the corpus's tip and what its index was read at (a commit's day
+    and kind are its own, whatever the tree's commit)."""
     try:
         at = f'{law.reachable_tip(corpus)}@{law._at(law._index(corpus))}'
     except (SystemExit, Exception):  # noqa: BLE001  (no index to read: nothing is kept)
         return None, {}
     got = _SPANS.get(corpus)
     if got is None or got[0] != at:
-        path = law._store() / f"folder-spans-v1-{corpus.replace('/', '~')}-{hashlib.sha1(at.encode('utf-8')).hexdigest()[:16]}.json"
+        path = law._store() / f"folder-spans-v2-{corpus.replace('/', '~')}-{hashlib.sha1(at.encode('utf-8')).hexdigest()[:16]}.json"
         spans: dict = {}
         try:
             read = json.loads(path.read_text(encoding='utf-8'))
             if isinstance(read, dict):
-                spans = {k: v for k, v in read.items() if isinstance(v, list) and len(v) == 5}
+                spans = {k: v for k, v in read.items() if isinstance(v, dict) and isinstance(v.get('d'), list)
+                         and isinstance(v.get('c'), list) and isinstance(v.get('h'), list) and len(v['d']) == len(v['c']) == len(v['h'])}
         except (OSError, ValueError):
             spans = {}
         with _SPANS_LOCK:
@@ -7210,37 +7212,102 @@ def _spans_kept(corpus: str) -> tuple:
     return got[1], got[2]
 
 
+def _span_days(by_commit, commits) -> dict | None:
+    """A folder's dated changes by the day they take force: {'d': the days in order, 'c': how many changes up to and
+    with each day, 'h': of each day's changes the commit met first, 'l': of the oldest day's the commit met last}.
+    From it _changes_span's answer for any date is a bisect (_span_at). None when the days are too many to keep."""
+    count: dict = {}
+    first_met: dict = {}
+    last_met: dict = {}
+    rows = getattr(by_commit, '_rows', None)
+    if rows is not None and not getattr(by_commit, '_own', True) and hasattr(rows, '_pools'):
+        find, where = by_commit._find, by_commit._where
+        days, d_col, k_col = rows._pools[5], rows._cols[5], rows._cols[4]
+        doc = {k for k, kind in enumerate(rows._pools[4]) if kind == 'documentation'}
+        for at, c in enumerate(commits):
+            o = find(c)
+            if o is None or not where[o]:
+                continue
+            d = d_col[o]
+            if k_col[o] in doc:
+                continue
+            if d in count:
+                count[d] += 1
+            else:
+                count[d] = 1
+                first_met[d] = (at, c)
+            last_met[d] = (at, c)
+        by_day: dict = {}
+        for d, n in count.items():  # (two numbers of one day, should the table hold a day twice, are one day)
+            day = days[d]
+            if not day:
+                continue
+            got = by_day.get(day)
+            by_day[day] = ((n, first_met[d], last_met[d]) if got is None else
+                           (got[0] + n, min(got[1], first_met[d]), max(got[2], last_met[d])))
+    else:
+        get, by_day = by_commit.get, {}
+        for at, c in enumerate(commits):
+            e = get(c)
+            if e is None or e.kind == 'documentation' or not e.in_force:
+                continue
+            got = by_day.get(e.in_force)
+            by_day[e.in_force] = (1, (at, c), (at, c)) if got is None else (got[0] + 1, got[1], (at, c))
+    if len(by_day) > SPAN_DAYS_MOST:
+        return None
+    ordered, total, cum = sorted(by_day), 0, []
+    for day in ordered:
+        total += by_day[day][0]
+        cum.append(total)
+    return {'d': ordered, 'c': cum, 'h': [by_day[day][1][1] for day in ordered], 'l': by_day[ordered[0]][2][1] if ordered else ''}
+
+
+def _span_at(by_commit, table: dict, date: str) -> tuple | None:
+    """(how many, the newest, the oldest) of a folder's dated changes on or before `date`, from its table of days;
+    None when a commit of the table is not among the corpus's events (the folder is worked out again)."""
+    i = bisect.bisect_right(table['d'], date)
+    if not i:
+        return 0, None, None
+    last, first = by_commit.get(table['h'][i - 1]), by_commit.get(table.get('l') or '')
+    if last is None or first is None:
+        return None
+    return table['c'][i - 1], last, first
+
+
 def folder_spans(corpus: str, folders: list[str], date: str) -> dict[str, tuple]:
     """folder -> (how many, the newest, the oldest) of the dated changes under it on or before `date`
-    (_changes_span of folder_commits), kept in the tree's cache once worked out: with the first day after `date`
-    on which a change under the folder takes force, so the three are given again for any date from the day they
-    were worked out for up to the day before that one. A list of Germany's federal acts asked for the commits
-    under each of its eight folders and went through all 6.7 million of them on every call, 17 s of a call with
-    everything else in memory (23 November 2026); the commits under a folder are now asked for once."""
+    (_changes_span of folder_commits), from a table of the folder's changes by the day they take force, kept in the
+    tree's cache once worked out: any date is then read off it. A list of Germany's federal acts asked for the
+    commits under each of its eight folders and went through all 6.7 million of them on every call, 17 s of a call
+    with everything else in memory (23 November 2026); and a list on a past date went through them again for each
+    new date (India's acts: 15 s of 19, 24 November). The commits under a folder are now asked for once."""
     by_commit = _by_commit(corpus)
     path, spans = _spans_kept(corpus)
     out, todo = {}, []
     for f in dict.fromkeys(folders):
         kept = spans.get(f)
-        if kept is not None and kept[0] <= date and (not kept[1] or date < kept[1]):
-            last, first = (by_commit.get(kept[3]), by_commit.get(kept[4])) if kept[2] else (None, None)
-            if not kept[2] or (last is not None and first is not None):
-                out[f] = (kept[2], last, first)
-                continue
-        todo.append(f)
+        got = _span_at(by_commit, kept, date) if kept is not None else None
+        if got is not None:
+            out[f] = got
+        else:
+            todo.append(f)
     if todo:
         changes_of, added = folder_commits_many(corpus, todo), False
         for f in todo:
-            count, last, first, nxt = _changes_span(by_commit, changes_of[f], date, later=True)
-            out[f] = (count, last, first)
-            if path is not None and (not count or (last.corpus_commit and first.corpus_commit)):
+            table = _span_days(by_commit, changes_of[f])
+            got = _span_at(by_commit, table, date) if table is not None else None
+            if got is None:
+                out[f] = _changes_span(by_commit, changes_of[f], date)
+                continue
+            out[f] = got
+            if path is not None:
                 with _SPANS_LOCK:
-                    spans[f] = [date, nxt, count, last.corpus_commit if count else '', first.corpus_commit if count else '']
+                    spans[f] = table
                 added = True
         if added:
             try:
                 with _SPANS_LOCK:
-                    body = json.dumps(spans)
+                    body = json.dumps(spans, separators=(',', ':'))
                 path.parent.mkdir(parents=True, exist_ok=True)
                 tmp = path.with_name(f'{path.name}.{os.getpid()}.{threading.get_ident()}.part')
                 tmp.write_text(body, encoding='utf-8')
