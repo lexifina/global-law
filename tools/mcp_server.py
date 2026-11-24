@@ -12342,9 +12342,25 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
     ra, rb = law.root_on(a, events), law.root_on(b, events)
     rows = []
     corpora, caselaw = by_kind(law.manifest()['corpora'], scope, args)
+    # Where a host's index holds every version of every file with its days (search_index.unchanged_between), the
+    # bodies of law in which no version begins or ends in the window are told in one question and not read at all:
+    # each of 700 was asked of git (a diff of two commits, or its table of days), 23 s and no answer for a window
+    # with no jurisdiction (24 November 2026). And a body of law is not begun once the call's time is nearly spent:
+    # the answer names those not read.
+    quiet, late = set(), []
+    asked = getattr(search_index, 'unchanged_between', None)
+    if callable(asked) and len(corpora) > 1:
+        try:
+            got = asked(a, b, [c['path'] for c in corpora if scoped(c['path'], scope) == '' and not law.is_caselaw(c)])
+            quiet = {x for x in got if isinstance(x, str)} if isinstance(got, (set, frozenset, list, tuple)) else set()
+        except Exception:  # noqa: BLE001 (a host's index must not fail what git can answer)
+            quiet = set()
     for c in corpora:
         sub = scoped(c['path'], scope)
-        if sub is None:
+        if sub is None or c['path'] in quiet:
+            continue
+        if len(corpora) > 1 and find_time_up():
+            late.append(c['path'])
             continue
         names = changed_files(c['path'], ra.date, rb.date, sub) if isinstance(ra, law.Moment) and isinstance(rb, law.Moment) else None
         if names is None:
@@ -12367,9 +12383,16 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
         kinds = {'A': 'added', 'M': 'changed', 'D': 'removed'}
         rows.append({'corpus': c['path'], 'laws': laws[:MAX_ITEMS], 'not_laws': not_laws, 'provision_count': len(changed), 'truncated': len(changed) > MAX_ITEMS,
                      'provisions': [{'path': f"{c['path']}/{p}", 'change': kinds.get(s[0], s)} for s, p in changed[:MAX_ITEMS]]})
+    late_note = (f'\nPartial: {len(late)} bodies of law were not read in the time this answer may take '
+                 f'({", ".join(late[:5])}{" ..." if len(late) > 5 else ""}); give a jurisdiction to read them.') if late else ''
+    partial = {'partial': {'law_not_read_for_time': late, 'note': late_note.strip()}} if late else {}
+    if late:
+        deadline = getattr(_call, 'deadline', 0.0)
+        if deadline:  # (the answer is put together whatever the reading took of the call's time)
+            _call.deadline = max(deadline, time.monotonic() + FIND_MARGIN)
     if not rows:
-        return f'Nothing changed between {a} and {b}' + (f' in {scope}' if scope else '') + '.' + caselaw_note(caselaw), \
-            {'corpora': [], **caselaw_fields(caselaw)}
+        return f'Nothing changed between {a} and {b}' + (f' in {scope}' if scope else '') + '.' + late_note + caselaw_note(caselaw), \
+            {'corpora': [], **partial, **caselaw_fields(caselaw)}
     # Dozens of corpora can each change thousands of files in a window: every corpus stays listed, with its count,
     # and the provisions shown share one budget (a whole list would run to hundreds of kilobytes).
     per = MAX_ITEMS if len(rows) == 1 else max(5, CHANGES_SHOWN // len(rows))
@@ -12392,8 +12415,8 @@ def t_changes_between(args: dict) -> tuple[str, dict]:
             + (f' in {scope}' if scope else '') + f", by {sum(r['law_count'] for r in rows)} law(s) that took effect after {a}, "
             f'up to and including {b}.' + (' Not every provision is listed: see each corpus\'s provision_count.'
                                            if any(r['truncated'] for r in rows) else ''))
-    return f'Changes after {a}, up to and including {b}:\n' + '\n'.join(out) + caselaw_note(caselaw), \
-        {'summary': lead, 'date_a': a, 'date_b': b, 'corpora': rows, **caselaw_fields(caselaw)}
+    return f'Changes after {a}, up to and including {b}:\n' + '\n'.join(out) + late_note + caselaw_note(caselaw), \
+        {'summary': lead, 'date_a': a, 'date_b': b, 'corpora': rows, **partial, **caselaw_fields(caselaw)}
 
 
 CHANGES_SHOWN = 300  # provisions changes_between lists across all corpora when several changed
