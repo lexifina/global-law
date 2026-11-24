@@ -442,12 +442,9 @@
     "russia/moscow-oblast/acts",
     "russia/national/acts",
     "russia/novgorod/acts",
-    "russia/novosibirsk/acts",
     "russia/omsk/acts",
     "russia/rostov/acts",
-    "russia/saint-petersburg/acts",
     "russia/smolensk/acts",
-    "russia/stavropol/acts",
     "russia/sverdlovsk/acts",
     "russia/tuva/acts",
     "russia/yamalo-nenets/acts",
@@ -62935,18 +62932,18 @@
       "path": "russia/novosibirsk/acts",
       "url": "https://github.com/lexifina/russia-novosibirsk-law.git",
       "name": "Novosibirsk Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-NVS",
-      "iso_path": "ru-nvs/acts",
+      "iso_path": "ru/novosibirsk/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-12-22",
-      "coverage": "13 acts, 195 dated versions from 2014-12-22 to 2026-10-30; catalogue entries only, no law text",
+      "coverage": "13 acts of Novosibirsk Oblast with every dated version the source gives (197 versions), in force from 2014-12-22 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62954,7 +62951,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1331,
+          "by_status": {
+            "current": 1314,
+            "pending-change": 17,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-novosibirsk",
+            "name": "Novosibirsk Oblast: Official Internet Portal of Legal Information (region54)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/omsk/acts",
@@ -63415,18 +63438,18 @@
       "path": "russia/saint-petersburg/acts",
       "url": "https://github.com/lexifina/russia-saint-petersburg-law.git",
       "name": "Saint Petersburg",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-SPE",
-      "iso_path": "ru-spe/acts",
+      "iso_path": "ru/saint-petersburg/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-04-13",
-      "coverage": "12 acts, 467 dated versions from 2015-04-13 to 2026-10-30; catalogue entries only, no law text",
+      "coverage": "12 acts of Saint Petersburg with every dated version the source gives (471 versions), in force from 2015-04-13 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63434,7 +63457,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1701,
+          "by_status": {
+            "current": 1685,
+            "pending-change": 16,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-saint-petersburg",
+            "name": "Saint Petersburg: Official Internet Portal of Legal Information (region78)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/sakha/acts",
@@ -63663,24 +63712,48 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 2214,
+          "by_status": {
+            "current": 2214,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-smolensk",
+            "name": "Smolensk Oblast: Official Internet Portal of Legal Information (region67)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/stavropol/acts",
       "url": "https://github.com/lexifina/russia-stavropol-law.git",
       "name": "Stavropol Krai",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-STA",
-      "iso_path": "ru-sta/acts",
+      "iso_path": "ru/stavropol/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-10-01",
-      "coverage": "13 acts, 447 dated versions from 2014-10-01 to 2026-10-29; catalogue entries only, no law text",
+      "coverage": "13 acts of Stavropol Krai with every dated version the source gives (448 versions), in force from 2014-10-01 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63688,7 +63761,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1691,
+          "by_status": {
+            "current": 1684,
+            "pending-change": 7,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-stavropol",
+            "name": "Stavropol Krai: Official Internet Portal of Legal Information (region26)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/sverdlovsk/acts",
@@ -64499,7 +64598,31 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1638,
+          "by_status": {
+            "current": 1638,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-zabaykalsky",
+            "name": "Zabaykalsky Krai: Official Internet Portal of Legal Information (region75)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "rwanda/national/acts",
@@ -73243,7 +73366,7 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-23",
+        "as_of": "2026-11-24",
         "checked_against_official_source": "2026-11-23",
         "totals": {
           "acts": 198,
