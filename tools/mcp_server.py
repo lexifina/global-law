@@ -5863,25 +5863,17 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
     named = getattr(law, 'corpus_tree_id', None)
     tree_of, late = {}, []
     served = law.manifest()['corpora']  # (read before the trees: when they have taken the call's time, nothing more is asked of git)
+    waited, at_row, unnoted = [], {}, []
+    deadline = getattr(_call, 'deadline', 0.0)
     if callable(named) and isinstance(root, law.Moment):
-        waited = []
         for path in [c['path'] for c in served if wanted(c) and not law.is_caselaw(c)]:
             try:
                 tree_of[path] = named(root.date, path, False)
             except (LookupError, subprocess.TimeoutExpired):
-                waited.append((path, _tree_job(named, root.date, path)))
-        deadline = getattr(_call, 'deadline', 0.0)
-        for path, job in waited:
-            try:
-                if job is None:
-                    raise LookupError(path)
-                checkpoint()
-                tree_of[path] = job.result(max(0.0, deadline - FIND_MARGIN - time.monotonic()) if deadline else None)
-            except (LookupError, FutureTimeout, subprocess.TimeoutExpired, SystemExit):
                 tree_of[path] = LookupError
-        late = sorted(p for p, sha in tree_of.items() if sha is LookupError)
-        if deadline:  # (the answer is put together whatever the trees took of the call's time)
-            _call.deadline = max(deadline, time.monotonic() + FIND_MARGIN)
+                waited.append((path, _tree_job(named, root.date, path)))
+    # (the rows are made while the trees are built, and the trees waited for with what is left of the call's time:
+    # a far date's notes, read from each corpus's description, took 16 s after the wait and the call 28)
     for c in served:
         if not wanted(c):
             continue
@@ -5889,7 +5881,15 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
         last = [e for e in own if e.in_force <= date]
         nxt = next((e for e in own if e.in_force > date), None)
         decisions = law.is_caselaw(c)
-        notes = [] if decisions else law.caveats(date, c['path'], own)  # its own events: not every corpus's, per corpus
+        notes = []
+        if not decisions:
+            if deadline and time.monotonic() > deadline - FIND_MARGIN / 2:
+                unnoted.append(c['path'])  # (the call's time is nearly spent: the row is given without its notes)
+            else:
+                try:
+                    notes = law.caveats(date, c['path'], own)  # its own events: not every corpus's, per corpus
+                except subprocess.TimeoutExpired:
+                    unnoted.append(c['path'])
         # What a record does not hold beyond its text is said once for the answer, not on every corpus's row.
         limits += [n for n in notes if _EFFECTS_NOTE.fullmatch(n)]
         notes = short_caveats([n for n in notes if not _EFFECTS_NOTE.fullmatch(n)])
@@ -5899,6 +5899,7 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
         if decisions and given.get(c['path']):  # the latest decision; the next one is not read (a walk of its history)
             g = given[c['path']]
             last, sha = [types.SimpleNamespace(law=g[0], in_force=g[1])], g[2]
+        at_row[c['path']] = len(data)
         data.append({'corpus': c['path'], 'name': c['name'], 'last_change': last[-1].law if last else None,
                      'last_change_in_force': last[-1].in_force if last else None,
                      'next_change': nxt.law if nxt else None, 'next_change_in_force': nxt.in_force if nxt else None,
@@ -5908,14 +5909,31 @@ def t_world_on_date(args: dict) -> tuple[str, dict]:
                     + (f'; next: {nxt.law} on {nxt.in_force}' if nxt else '') + ''.join(f' [{n}]' for n in notes))
     if not rows:
         raise UserError(f'No corpus under {scope!r}' + (f' of kind {kind}' if kind != 'all' else '') + '; see list_jurisdictions.')
+    for path, job in waited:
+        try:
+            if job is None or path not in at_row:
+                continue
+            got = job.result(max(0.0, deadline - FIND_MARGIN / 4 - time.monotonic()) if deadline else None)
+            tree_of[path] = data[at_row[path]]['corpus_commit'] = got
+        except (LookupError, FutureTimeout, subprocess.TimeoutExpired, SystemExit):
+            pass
+    late = sorted(p for p, sha in tree_of.items() if sha is LookupError)
+    if deadline:  # (the answer is put together whatever the trees took of the call's time)
+        _call.deadline = max(deadline, time.monotonic() + FIND_MARGIN)
     limits = short_caveats(limits)
     partial = {}
+    if unnoted:
+        note = (f'Partial: the notes on {len(unnoted)} bodies of law were not read in the time this answer may take '
+                f'({", ".join(unnoted[:5])}{" ..." if len(unnoted) > 5 else ""}); ask again, or give a jurisdiction.')
+        limits = limits + [note]
+        partial = {'partial': {'notes_not_read': unnoted, 'note': note}}
     if late:
         note = (f'Partial: the commit of {len(late)} bodies of law as on {date} was not worked out in the time this answer '
                 f'may take ({", ".join(late[:5])}{" ..." if len(late) > 5 else ""}): their corpus_commit is empty here. '
                 'Ask again for the rest, or give a jurisdiction; read_law with the date reads any of them.')
         limits = limits + [note]
-        partial = {'partial': {'commit_not_worked_out': late, 'note': note}}
+        partial = {'partial': {**partial.get('partial', {}), 'commit_not_worked_out': late,
+                               'note': ' '.join(x for x in (partial.get('partial', {}).get('note', ''), note) if x)}}
     lead = (f'The law on {date}' + (f' in {scope}' if scope else '') + ('' if root else ' (before every record)')
             + f': {len(rows)} body/bodies of ' + {'laws': 'law', 'judgments': 'case law', 'all': 'law or case law'}[kind] + '.')
     return (f'The law on {date}' + (f' in {scope}' if scope else '') + ('' if root else ' (before every record)') + ':\n' + '\n'.join(rows)
