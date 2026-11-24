@@ -433,61 +433,34 @@
     "russia/buryatia/acts",
     "russia/chuvashia/acts",
     "russia/ingushetia/acts",
-    "russia/irkutsk/acts",
-    "russia/kabardino-balkaria/acts",
-    "russia/kalmykia/acts",
     "russia/kaluga/acts",
     "russia/kamchatka/acts",
-    "russia/karelia/acts",
-    "russia/kemerovo/acts",
     "russia/khanty-mansi/acts",
-    "russia/kirov/acts",
-    "russia/komi/acts",
     "russia/kostroma/acts",
-    "russia/krasnodar/acts",
     "russia/kurgan/acts",
     "russia/kursk/acts",
-    "russia/leningrad-oblast/acts",
     "russia/magadan/acts",
     "russia/mari-el/acts",
-    "russia/mordovia/acts",
     "russia/moscow-oblast/acts",
-    "russia/murmansk/acts",
     "russia/national/acts",
-    "russia/nizhny-novgorod/acts",
-    "russia/north-ossetia/acts",
     "russia/novgorod/acts",
     "russia/novosibirsk/acts",
     "russia/omsk/acts",
     "russia/orenburg/acts",
     "russia/oryol/acts",
     "russia/penza/acts",
-    "russia/perm/acts",
-    "russia/primorsky/acts",
-    "russia/pskov/acts",
     "russia/rostov/acts",
-    "russia/ryazan/acts",
     "russia/saint-petersburg/acts",
     "russia/sakha/acts",
-    "russia/sakhalin/acts",
-    "russia/samara/acts",
-    "russia/saratov/acts",
     "russia/smolensk/acts",
     "russia/stavropol/acts",
     "russia/sverdlovsk/acts",
     "russia/tambov/acts",
-    "russia/tatarstan/acts",
-    "russia/tomsk/acts",
     "russia/tula/acts",
     "russia/tuva/acts",
-    "russia/tver/acts",
     "russia/tyumen/acts",
     "russia/udmurtia/acts",
-    "russia/ulyanovsk/acts",
-    "russia/vladimir/acts",
     "russia/volgograd/acts",
-    "russia/vologda/acts",
-    "russia/voronezh/acts",
     "russia/yamalo-nenets/acts",
     "russia/yaroslavl/acts",
     "russia/zabaykalsky/acts",
@@ -61227,7 +61200,31 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1234,
+          "by_status": {
+            "current": 1234,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-chuvashia",
+            "name": "Chuvash Republic: Official Internet Portal of Legal Information (region21)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/dagestan/acts",
@@ -61333,18 +61330,18 @@
       "path": "russia/irkutsk/acts",
       "url": "https://github.com/lexifina/russia-irkutsk-law.git",
       "name": "Irkutsk Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-IRK",
-      "iso_path": "ru-irk/acts",
+      "iso_path": "ru/irkutsk/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-03-10",
-      "coverage": "12 acts, 429 dated versions from 2015-03-10 to 2026-10-27; catalogue entries only, no law text",
+      "coverage": "12 acts of Irkutsk Oblast with every dated version the source gives (431 versions), in force from 2015-03-10 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -61352,7 +61349,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1621,
+          "by_status": {
+            "current": 1607,
+            "pending-change": 14,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-irkutsk",
+            "name": "Irkutsk Oblast: Official Internet Portal of Legal Information (region38)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/ivanovo/acts",
@@ -61460,18 +61483,18 @@
       "path": "russia/kabardino-balkaria/acts",
       "url": "https://github.com/lexifina/russia-kabardino-balkaria-law.git",
       "name": "Kabardino-Balkarian Republic",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-KB",
-      "iso_path": "ru-kb/acts",
+      "iso_path": "ru/kabardino-balkaria/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-02-11",
-      "coverage": "12 acts, 238 dated versions from 2015-02-11 to 2026-10-15; catalogue entries only, no law text",
+      "coverage": "12 acts of Kabardino-Balkarian Republic with every dated version the source gives (239 versions), in force from 2015-02-11 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -61479,7 +61502,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 643,
+          "by_status": {
+            "current": 638,
+            "pending-change": 5,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-kabardino-balkaria",
+            "name": "Kabardino-Balkarian Republic: Official Internet Portal of Legal Information (region07)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/kaliningrad/acts",
@@ -61536,18 +61585,18 @@
       "path": "russia/kalmykia/acts",
       "url": "https://github.com/lexifina/russia-kalmykia-law.git",
       "name": "Republic of Kalmykia",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-KL",
-      "iso_path": "ru-kl/acts",
+      "iso_path": "ru/kalmykia/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-11-27",
-      "coverage": "13 acts, 99 dated versions from 2014-11-27 to 2026-10-17; catalogue entries only, no law text",
+      "coverage": "13 acts of Republic of Kalmykia with every dated version the source gives (100 versions), in force from 2014-11-27 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -61555,7 +61604,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 647,
+          "by_status": {
+            "current": 633,
+            "pending-change": 14,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-kalmykia",
+            "name": "Republic of Kalmykia: Official Internet Portal of Legal Information (region08)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/kaluga/acts",
@@ -61710,18 +61785,18 @@
       "path": "russia/karelia/acts",
       "url": "https://github.com/lexifina/russia-karelia-law.git",
       "name": "Republic of Karelia",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-KR",
-      "iso_path": "ru-kr/acts",
+      "iso_path": "ru/karelia/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-09-29",
-      "coverage": "13 acts, 350 dated versions from 2014-09-29 to 2026-10-26; catalogue entries only, no law text",
+      "coverage": "13 acts of Republic of Karelia with every dated version the source gives (354 versions), in force from 2014-09-29 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -61729,24 +61804,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1383,
+          "by_status": {
+            "current": 1368,
+            "pending-change": 15,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-karelia",
+            "name": "Republic of Karelia: Official Internet Portal of Legal Information (region10)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/kemerovo/acts",
       "url": "https://github.com/lexifina/russia-kemerovo-law.git",
       "name": "Kemerovo Oblast (Kuzbass)",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-KEM",
-      "iso_path": "ru-kem/acts",
+      "iso_path": "ru/kemerovo/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-02-12",
-      "coverage": "12 acts, 427 dated versions from 2015-02-12 to 2026-10-06; catalogue entries only, no law text",
+      "coverage": "12 acts of Kemerovo Oblast (Kuzbass) with every dated version the source gives (430 versions), in force from 2015-02-12 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -61754,7 +61855,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1776,
+          "by_status": {
+            "current": 1759,
+            "pending-change": 17,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-kemerovo",
+            "name": "Kemerovo Oblast (Kuzbass): Official Internet Portal of Legal Information (region42)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/khabarovsk/acts",
@@ -61911,18 +62038,18 @@
       "path": "russia/kirov/acts",
       "url": "https://github.com/lexifina/russia-kirov-law.git",
       "name": "Kirov Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-KIR",
-      "iso_path": "ru-kir/acts",
+      "iso_path": "ru/kirov/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-10-31",
-      "coverage": "13 acts, 251 dated versions from 2014-10-31 to 2026-10-30; catalogue entries only, no law text",
+      "coverage": "13 acts of Kirov Oblast with every dated version the source gives (252 versions), in force from 2014-10-31 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -61930,24 +62057,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1286,
+          "by_status": {
+            "current": 1285,
+            "pending-change": 1,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-kirov",
+            "name": "Kirov Oblast: Official Internet Portal of Legal Information (region43)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/komi/acts",
       "url": "https://github.com/lexifina/russia-komi-law.git",
       "name": "Komi Republic",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-KO",
-      "iso_path": "ru-ko/acts",
+      "iso_path": "ru/komi/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-02-24",
-      "coverage": "12 acts, 183 dated versions from 2015-02-24 to 2026-10-07; catalogue entries only, no law text",
+      "coverage": "12 acts of Komi Republic with every dated version the source gives (185 versions), in force from 2015-02-24 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -61955,7 +62108,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1296,
+          "by_status": {
+            "current": 1282,
+            "pending-change": 14,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-komi",
+            "name": "Komi Republic: Official Internet Portal of Legal Information (region11)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/kostroma/acts",
@@ -62010,18 +62189,18 @@
       "path": "russia/krasnodar/acts",
       "url": "https://github.com/lexifina/russia-krasnodar-law.git",
       "name": "Krasnodar Krai",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-KDA",
-      "iso_path": "ru-kda/acts",
+      "iso_path": "ru/krasnodar/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-02-09",
-      "coverage": "12 acts, 267 dated versions from 2015-02-09 to 2026-10-19; catalogue entries only, no law text",
+      "coverage": "12 acts of Krasnodar Krai with every dated version the source gives (270 versions), in force from 2015-02-09 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62029,7 +62208,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 2484,
+          "by_status": {
+            "current": 2463,
+            "pending-change": 21,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-krasnodar",
+            "name": "Krasnodar Krai: Official Internet Portal of Legal Information (region23)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/krasnoyarsk/acts",
@@ -62160,18 +62365,18 @@
       "path": "russia/leningrad-oblast/acts",
       "url": "https://github.com/lexifina/russia-leningrad-oblast-law.git",
       "name": "Leningrad Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-LEN",
-      "iso_path": "ru-len/acts",
+      "iso_path": "ru/leningrad-oblast/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-10-10",
-      "coverage": "13 acts, 392 dated versions from 2014-10-10 to 2026-10-23; catalogue entries only, no law text",
+      "coverage": "13 acts of Leningrad Oblast with every dated version the source gives (393 versions), in force from 2014-10-10 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62179,7 +62384,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1770,
+          "by_status": {
+            "current": 1752,
+            "pending-change": 18,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-leningrad-oblast",
+            "name": "Leningrad Oblast: Official Internet Portal of Legal Information (region47)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/lipetsk/acts",
@@ -62286,18 +62517,18 @@
       "path": "russia/mordovia/acts",
       "url": "https://github.com/lexifina/russia-mordovia-law.git",
       "name": "Republic of Mordovia",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-MO",
-      "iso_path": "ru-mo/acts",
+      "iso_path": "ru/mordovia/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-11-17",
-      "coverage": "13 acts, 224 dated versions from 2014-11-17 to 2026-10-21; catalogue entries only, no law text",
+      "coverage": "13 acts of Republic of Mordovia with every dated version the source gives (225 versions), in force from 2014-11-17 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62305,7 +62536,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1308,
+          "by_status": {
+            "current": 1298,
+            "pending-change": 10,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-mordovia",
+            "name": "Republic of Mordovia: Official Internet Portal of Legal Information (region13)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/moscow-oblast/acts",
@@ -62336,18 +62593,18 @@
       "path": "russia/murmansk/acts",
       "url": "https://github.com/lexifina/russia-murmansk-law.git",
       "name": "Murmansk Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-MUR",
-      "iso_path": "ru-mur/acts",
+      "iso_path": "ru/murmansk/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-03-06",
-      "coverage": "12 acts, 132 dated versions from 2015-03-06 to 2026-07-03; catalogue entries only, no law text",
+      "coverage": "12 acts of Murmansk Oblast with every dated version the source gives (133 versions), in force from 2015-03-06 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62355,7 +62612,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 932,
+          "by_status": {
+            "current": 923,
+            "pending-change": 9,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-murmansk",
+            "name": "Murmansk Oblast: Official Internet Portal of Legal Information (region51)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/national/acts",
@@ -62437,18 +62720,18 @@
       "path": "russia/nizhny-novgorod/acts",
       "url": "https://github.com/lexifina/russia-nizhny-novgorod-law.git",
       "name": "Nizhny Novgorod Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-NIZ",
-      "iso_path": "ru-niz/acts",
+      "iso_path": "ru/nizhny-novgorod/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-04-02",
-      "coverage": "12 acts, 340 dated versions from 2015-04-02 to 2026-10-30; catalogue entries only, no law text",
+      "coverage": "12 acts of Nizhny Novgorod Oblast with every dated version the source gives (341 versions), in force from 2015-04-02 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62456,24 +62739,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 2179,
+          "by_status": {
+            "current": 2152,
+            "pending-change": 27,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-nizhny-novgorod",
+            "name": "Nizhny Novgorod Oblast: Official Internet Portal of Legal Information (region52)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/north-ossetia/acts",
       "url": "https://github.com/lexifina/russia-north-ossetia-law.git",
       "name": "Republic of North Ossetia-Alania",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-SE",
-      "iso_path": "ru-se/acts",
+      "iso_path": "ru/north-ossetia/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-10-05",
-      "coverage": "12 acts, 229 dated versions from 2015-10-05 to 2026-10-14; catalogue entries only, no law text",
+      "coverage": "12 acts of Republic of North Ossetia-Alania with every dated version the source gives (230 versions), in force from 2015-10-05 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62481,7 +62790,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1095,
+          "by_status": {
+            "current": 1079,
+            "pending-change": 16,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-north-ossetia",
+            "name": "Republic of North Ossetia-Alania: Official Internet Portal of Legal Information (region15)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/novgorod/acts",
@@ -62506,7 +62841,31 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 2049,
+          "by_status": {
+            "current": 2049,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-novgorod",
+            "name": "Novgorod Oblast: Official Internet Portal of Legal Information (region53)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/novosibirsk/acts",
@@ -62556,7 +62915,31 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1322,
+          "by_status": {
+            "current": 1322,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-omsk",
+            "name": "Omsk Oblast: Official Internet Portal of Legal Information (region55)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/orenburg/acts",
@@ -62637,18 +63020,18 @@
       "path": "russia/perm/acts",
       "url": "https://github.com/lexifina/russia-perm-law.git",
       "name": "Perm Krai",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-PER",
-      "iso_path": "ru-per/acts",
+      "iso_path": "ru/perm/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-12-15",
-      "coverage": "13 acts, 357 dated versions from 2014-12-15 to 2026-09-15; catalogue entries only, no law text",
+      "coverage": "13 acts of Perm Krai with every dated version the source gives (360 versions), in force from 2014-12-15 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62656,24 +63039,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1545,
+          "by_status": {
+            "current": 1522,
+            "pending-change": 23,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-perm",
+            "name": "Perm Krai: Official Internet Portal of Legal Information (region59)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/primorsky/acts",
       "url": "https://github.com/lexifina/russia-primorsky-law.git",
       "name": "Primorsky Krai",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-PRI",
-      "iso_path": "ru-pri/acts",
+      "iso_path": "ru/primorsky/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-02-09",
-      "coverage": "12 acts, 400 dated versions from 2015-02-09 to 2026-10-22; catalogue entries only, no law text",
+      "coverage": "12 acts of Primorsky Krai with every dated version the source gives (401 versions), in force from 2015-02-09 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62681,24 +63090,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 2536,
+          "by_status": {
+            "current": 2508,
+            "pending-change": 28,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-primorsky",
+            "name": "Primorsky Krai: Official Internet Portal of Legal Information (region25)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/pskov/acts",
       "url": "https://github.com/lexifina/russia-pskov-law.git",
       "name": "Pskov Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-PSK",
-      "iso_path": "ru-psk/acts",
+      "iso_path": "ru/pskov/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-02-09",
-      "coverage": "12 acts, 241 dated versions from 2015-02-09 to 2026-10-30; catalogue entries only, no law text",
+      "coverage": "12 acts of Pskov Oblast with every dated version the source gives (243 versions), in force from 2015-02-09 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62706,7 +63141,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1251,
+          "by_status": {
+            "current": 1236,
+            "pending-change": 15,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-pskov",
+            "name": "Pskov Oblast: Official Internet Portal of Legal Information (region60)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/rostov/acts",
@@ -62737,18 +63198,18 @@
       "path": "russia/ryazan/acts",
       "url": "https://github.com/lexifina/russia-ryazan-law.git",
       "name": "Ryazan Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-RYA",
-      "iso_path": "ru-rya/acts",
+      "iso_path": "ru/ryazan/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-10-10",
-      "coverage": "13 acts, 404 dated versions from 2014-10-10 to 2026-10-27; catalogue entries only, no law text",
+      "coverage": "13 acts of Ryazan Oblast with every dated version the source gives (406 versions), in force from 2014-10-10 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62756,7 +63217,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1366,
+          "by_status": {
+            "current": 1362,
+            "pending-change": 4,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-ryazan",
+            "name": "Ryazan Oblast: Official Internet Portal of Legal Information (region62)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/saint-petersburg/acts",
@@ -62812,18 +63299,18 @@
       "path": "russia/sakhalin/acts",
       "url": "https://github.com/lexifina/russia-sakhalin-law.git",
       "name": "Sakhalin Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-SAK",
-      "iso_path": "ru-sak/acts",
+      "iso_path": "ru/sakhalin/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 11,
       "history_from": "2016-01-15",
-      "coverage": "11 acts, 442 dated versions from 2016-01-15 to 2026-10-29; catalogue entries only, no law text",
+      "coverage": "11 acts of Sakhalin Oblast with every dated version the source gives (443 versions), in force from 2016-01-15 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62831,24 +63318,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1366,
+          "by_status": {
+            "current": 1364,
+            "pending-change": 2,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-sakhalin",
+            "name": "Sakhalin Oblast: Official Internet Portal of Legal Information (region65)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/samara/acts",
       "url": "https://github.com/lexifina/russia-samara-law.git",
       "name": "Samara Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-SAM",
-      "iso_path": "ru-sam/acts",
+      "iso_path": "ru/samara/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-12-10",
-      "coverage": "13 acts, 484 dated versions from 2014-12-10 to 2026-10-08; catalogue entries only, no law text",
+      "coverage": "13 acts of Samara Oblast with every dated version the source gives (487 versions), in force from 2014-12-10 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62856,24 +63369,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1633,
+          "by_status": {
+            "current": 1624,
+            "pending-change": 9,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-samara",
+            "name": "Samara Oblast: Official Internet Portal of Legal Information (region63)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/saratov/acts",
       "url": "https://github.com/lexifina/russia-saratov-law.git",
       "name": "Saratov Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-SAR",
-      "iso_path": "ru-sar/acts",
+      "iso_path": "ru/saratov/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-03-06",
-      "coverage": "12 acts, 299 dated versions from 2015-03-06 to 2026-10-21; catalogue entries only, no law text",
+      "coverage": "12 acts of Saratov Oblast with every dated version the source gives (302 versions), in force from 2015-03-06 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -62881,7 +63420,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1522,
+          "by_status": {
+            "current": 1508,
+            "pending-change": 14,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-saratov",
+            "name": "Saratov Oblast: Official Internet Portal of Legal Information (region64)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/smolensk/acts",
@@ -62987,18 +63552,18 @@
       "path": "russia/tatarstan/acts",
       "url": "https://github.com/lexifina/russia-tatarstan-law.git",
       "name": "Republic of Tatarstan",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-TA",
-      "iso_path": "ru-ta/acts",
+      "iso_path": "ru/tatarstan/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-06-15",
-      "coverage": "12 acts, 309 dated versions from 2015-06-15 to 2026-10-22; catalogue entries only, no law text",
+      "coverage": "12 acts of Republic of Tatarstan with every dated version the source gives (310 versions), in force from 2015-06-15 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63006,24 +63571,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1240,
+          "by_status": {
+            "current": 1230,
+            "pending-change": 10,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-tatarstan",
+            "name": "Republic of Tatarstan: Official Internet Portal of Legal Information (region16)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/tomsk/acts",
       "url": "https://github.com/lexifina/russia-tomsk-law.git",
       "name": "Tomsk Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-TOM",
-      "iso_path": "ru-tom/acts",
+      "iso_path": "ru/tomsk/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-03-02",
-      "coverage": "12 acts, 284 dated versions from 2015-03-02 to 2026-09-11; catalogue entries only, no law text",
+      "coverage": "12 acts of Tomsk Oblast with every dated version the source gives (287 versions), in force from 2015-03-02 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63031,7 +63622,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1977,
+          "by_status": {
+            "current": 1960,
+            "pending-change": 17,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-tomsk",
+            "name": "Tomsk Oblast: Official Internet Portal of Legal Information (region70)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/tula/acts",
@@ -63087,18 +63704,18 @@
       "path": "russia/tver/acts",
       "url": "https://github.com/lexifina/russia-tver-law.git",
       "name": "Tver Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-TVE",
-      "iso_path": "ru-tve/acts",
+      "iso_path": "ru/tver/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-10-02",
-      "coverage": "13 acts, 270 dated versions from 2014-10-02 to 2026-10-07; catalogue entries only, no law text",
+      "coverage": "13 acts of Tver Oblast with every dated version the source gives (272 versions), in force from 2014-10-02 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63106,7 +63723,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1173,
+          "by_status": {
+            "current": 1161,
+            "pending-change": 12,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-tver",
+            "name": "Tver Oblast: Official Internet Portal of Legal Information (region69)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/tyumen/acts",
@@ -63162,18 +63805,18 @@
       "path": "russia/ulyanovsk/acts",
       "url": "https://github.com/lexifina/russia-ulyanovsk-law.git",
       "name": "Ulyanovsk Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-ULY",
-      "iso_path": "ru-uly/acts",
+      "iso_path": "ru/ulyanovsk/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-04-27",
-      "coverage": "12 acts, 240 dated versions from 2015-04-27 to 2026-10-30; catalogue entries only, no law text",
+      "coverage": "12 acts of Ulyanovsk Oblast with every dated version the source gives (242 versions), in force from 2015-04-27 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63181,24 +63824,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1993,
+          "by_status": {
+            "current": 1982,
+            "pending-change": 11,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-ulyanovsk",
+            "name": "Ulyanovsk Oblast: Official Internet Portal of Legal Information (region73)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/vladimir/acts",
       "url": "https://github.com/lexifina/russia-vladimir-law.git",
       "name": "Vladimir Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-VLA",
-      "iso_path": "ru-vla/acts",
+      "iso_path": "ru/vladimir/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-10-16",
-      "coverage": "13 acts, 455 dated versions from 2014-10-16 to 2026-10-30; catalogue entries only, no law text",
+      "coverage": "13 acts of Vladimir Oblast with every dated version the source gives (457 versions), in force from 2014-10-16 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63206,7 +63875,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 1988,
+          "by_status": {
+            "current": 1969,
+            "pending-change": 19,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-vladimir",
+            "name": "Vladimir Oblast: Official Internet Portal of Legal Information (region33)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/volgograd/acts",
@@ -63237,18 +63932,18 @@
       "path": "russia/vologda/acts",
       "url": "https://github.com/lexifina/russia-vologda-law.git",
       "name": "Vologda Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-VLG",
-      "iso_path": "ru-vlg/acts",
+      "iso_path": "ru/vologda/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 12,
       "history_from": "2015-03-02",
-      "coverage": "12 acts, 379 dated versions from 2015-03-02 to 2026-07-02; catalogue entries only, no law text",
+      "coverage": "12 acts of Vologda Oblast with every dated version the source gives (382 versions), in force from 2015-03-02 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63256,24 +63951,50 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 2599,
+          "by_status": {
+            "current": 2567,
+            "pending-change": 32,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-vologda",
+            "name": "Vologda Oblast: Official Internet Portal of Legal Information (region35)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/voronezh/acts",
       "url": "https://github.com/lexifina/russia-voronezh-law.git",
       "name": "Voronezh Oblast",
-      "record_note": "Publisher: Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
+      "record_note": "Texts from Официальный интернет-портал правовой информации (publication.pravo.gov.ru).",
       "publisher": "Официальный интернет-портал правовой информации (publication.pravo.gov.ru)",
       "code": "RU-VOR",
-      "iso_path": "ru-vor/acts",
+      "iso_path": "ru/voronezh/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "history": "metadata-only",
+      "described_by": "corpus.json",
+      "history": "in-force",
       "acts": 13,
       "history_from": "2014-12-02",
-      "coverage": "13 acts, 196 dated versions from 2014-12-02 to 2026-10-28; catalogue entries only, no law text",
+      "coverage": "13 acts of Voronezh Oblast with every dated version the source gives (197 versions), in force from 2014-12-02 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -63281,7 +64002,33 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "ru",
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 2089,
+          "by_status": {
+            "current": 2073,
+            "pending-change": 16,
+            "stale": 0,
+            "unverified": 0,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "pravo-voronezh",
+            "name": "Voronezh Oblast: Official Internet Portal of Legal Information (region36)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "russia/yamalo-nenets/acts",
@@ -72050,7 +72797,7 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-23",
+        "as_of": "2026-11-24",
         "checked_against_official_source": "2026-11-23",
         "totals": {
           "acts": 200,
@@ -72247,7 +72994,7 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-23",
+        "as_of": "2026-11-24",
         "checked_against_official_source": "2026-11-23",
         "totals": {
           "acts": 161,
@@ -72798,7 +73545,7 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-23",
+        "as_of": "2026-11-24",
         "checked_against_official_source": "2026-11-23",
         "totals": {
           "acts": 263,
@@ -73526,7 +74273,31 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 102,
+          "by_status": {
+            "current": 15,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 87,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-muttenz-city",
+            "name": "Muttenz: systematic collection (muttenz.tlex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/basel-stadt/acts",
@@ -75575,7 +76346,31 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 51,
+          "by_status": {
+            "current": 7,
+            "pending-change": 1,
+            "stale": 0,
+            "unverified": 43,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-oberaegeri-city",
+            "name": "Oberaegeri: systematic collection (oberaegeri.tlex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/zug/steinhausen/acts",
@@ -75784,7 +76579,31 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-24",
+        "checked_against_official_source": "2026-11-24",
+        "totals": {
+          "acts": 92,
+          "by_status": {
+            "current": 14,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 78,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-kloten-city",
+            "name": "Kloten: systematic collection (kloten.tlex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-24",
+            "last_successful_contact": "2026-11-24"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/zurich/oberrieden/acts",
