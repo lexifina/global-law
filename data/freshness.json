@@ -42,15 +42,15 @@
  "totals": {
   "corpora": 991,
   "by_status": {
-   "current": 606,
-   "pending-change": 15,
+   "current": 594,
+   "pending-change": 27,
    "stale": 354,
    "unverified": 16,
    "source-unavailable": 0
   },
   "verified_30d": 974,
-  "verified_7d": 55,
-  "pct_verified_7d": 5.5,
+  "verified_7d": 65,
+  "pct_verified_7d": 6.6,
   "pct_verified_30d": 98.3
  },
  "by_level": {
@@ -71,15 +71,15 @@
   "subnational": {
    "corpora": 608,
    "by_status": {
-    "current": 595,
-    "pending-change": 8,
+    "current": 583,
+    "pending-change": 20,
     "stale": 0,
     "unverified": 5,
     "source-unavailable": 0
    },
    "verified_30d": 603,
-   "verified_7d": 44,
-   "pct_verified_7d": 7.2,
+   "verified_7d": 54,
+   "pct_verified_7d": 8.9,
    "pct_verified_30d": 99.2
   }
  },
@@ -121,7 +121,11 @@
    "montenegro/national/acts",
    "north-macedonia/national/acts",
    "poland/national/acts",
+   "russia/altai-krai/acts",
    "russia/altai-republic/acts",
+   "russia/amur/acts",
+   "russia/astrakhan/acts",
+   "russia/bashkortostan/acts",
    "slovakia/national/acts",
    "slovenia/national/acts",
    "spain/andalusia/acts",
@@ -152,9 +156,15 @@
    "switzerland/fribourg/acts",
    "switzerland/graubunden/bonaduz/acts",
    "switzerland/graubunden/ilanz-glion/acts",
+   "switzerland/obwalden/acts",
+   "switzerland/solothurn/solothurn/acts",
    "switzerland/st-gallen/acts",
    "switzerland/st-gallen/bad-ragaz/acts",
-   "switzerland/st-gallen/rapperswil-jona/acts"
+   "switzerland/st-gallen/rapperswil-jona/acts",
+   "switzerland/valais/acts",
+   "switzerland/zug/baar/acts",
+   "switzerland/zug/steinhausen/acts",
+   "switzerland/zurich/winterthur/acts"
   ],
   "note": "these corpora publish a freshness row for every act; for a provision in one, `python tools/freshness.py <provision path>` reads its act's row when the corpus is checked out"
  }
