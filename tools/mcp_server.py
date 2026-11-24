@@ -264,9 +264,25 @@ def indexed_file(corpus: str, rel: str) -> bool:
     return not (NOT_LAW.search(path) or not path.endswith('.md') or path.count('/') < 3 or rel.startswith(':'))
 
 
+def _index_hook():
+    """search_index, or for a search of a past date its view of that date (search_index.on_date(date): the same
+    counts, paths, lines and ranked, of the law as in force that day, from a host's index of every version of
+    every file); None where there is neither. The date is the call's (_call.index_date, set by search_law and
+    carried to its worker threads)."""
+    hook = search_index
+    date = getattr(_call, 'index_date', None)
+    if hook is None or not date:
+        return hook
+    view = getattr(hook, 'on_date', None)
+    try:
+        return view(date) if callable(view) else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def index_counts(query: str, corpora: list, case_law: bool) -> dict:
     """search_index.counts for the corpora asked, as {corpus: files}; {} when there is no index or it does not answer."""
-    hook = search_index
+    hook = _index_hook()
     if hook is None or not corpora:
         return {}
     try:
@@ -282,7 +298,7 @@ def index_counts(query: str, corpora: list, case_law: bool) -> dict:
 def index_paths(query: str, corpus: str, after: str | None, size: int) -> list | None:
     """search_index.paths, checked: at most `size` paths in ascending order after `after`; None when the index does
     not answer or answers anything else."""
-    hook = search_index
+    hook = _index_hook()
     if hook is None:
         return None
     try:
@@ -494,7 +510,7 @@ def index_candidate_counts(spec: dict, corpora: list, case_law: bool) -> dict:
 def index_ranked(query: str, corpus: str, skip: int, size: int) -> list | None:
     """search_index.ranked, checked: at most `size` different paths; None when the index cannot rank, does not answer,
     or answers anything else."""
-    rank = getattr(search_index, 'ranked', None)
+    rank = getattr(_index_hook(), 'ranked', None)
     if rank is None:
         return None
     try:
@@ -583,7 +599,7 @@ def _index_paths_checked(got, after: str | None, size: int) -> list | None:
 def index_paths_many(query: str, wanted: list) -> dict | None:
     """search_index.paths_many for (corpus, size) pairs, checked as index_paths checks: {corpus: its first paths} for
     the corpora asked whose paths are as asked. None when the index has no such method or it does not answer."""
-    many = getattr(search_index, 'paths_many', None)
+    many = getattr(_index_hook(), 'paths_many', None)
     if not callable(many) or not wanted:
         return None
     try:
@@ -636,7 +652,7 @@ def index_lines(query: str, corpus: str, rev: str, names: list, most: int | None
     ascending order. `most`: only a file's first so many lines are wanted (an index whose lines() takes a fifth
     argument stops reading there; one that does not is asked as ever). None when the index has no such method, does
     not answer, or answers anything else."""
-    fn = getattr(search_index, 'lines', None)
+    fn = getattr(_index_hook(), 'lines', None)
     if not callable(fn) or not names:
         return None
     try:
@@ -714,14 +730,17 @@ def caselaw_skipped(n: int = 1) -> None:
 def _carried_call(fn):
     """fn run in a worker thread with this call's deadline, cancel event and left-out count."""
     deadline, cancel, box = getattr(_call, 'deadline', 0.0), getattr(_call, 'cancel', None), getattr(_call, 'skipped', None)
+    index_date = getattr(_call, 'index_date', None)  # (a search of a past date: _index_hook)
 
     def run(*a, **k):
         old = getattr(_call, 'deadline', 0.0), getattr(_call, 'cancel', None), getattr(_call, 'skipped', None)
-        _call.deadline, _call.cancel, _call.skipped = deadline, cancel, box
+        old_date = getattr(_call, 'index_date', None)
+        _call.deadline, _call.cancel, _call.skipped, _call.index_date = deadline, cancel, box, index_date
         try:
             return fn(*a, **k)
         finally:
             _call.deadline, _call.cancel, _call.skipped = old
+            _call.index_date = old_date
     return run
 
 
@@ -6382,6 +6401,17 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # search on a past date by the files that ever held it. None: nothing to narrow by (a plain search of today's
     # text is the index's own; a pattern with no fixed run of three letters is no one's).
     today = date == law.day('today')
+    # A plain search of a past date, where a host's index holds every version of every file with the days it is in
+    # force (search_index.on_date): its counts, paths and lines are asked for that date as they are for today, body
+    # of law by body of law; one it does not hold is read as before (narrowed by the files that ever held the
+    # words, each candidate's version of the day read from git: 8 to 30 s for a common word over Germany's federal
+    # acts, and "at least" for a count; 24 November 2026).
+    _call.index_date = None
+    if not today and not args.get('regex') and not args.get('case_sensitive') and search_index is not None:
+        _call.index_date = date
+        if _index_hook() is None:
+            _call.index_date = None
+    by_day = bool(_call.index_date)
     spec = None
     if callable(getattr(search_index, 'candidates', None)):
         if args.get('regex'):
@@ -6758,6 +6788,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 checkpoint()
                 # (in the order of relevance a provision shows RANKED_LINES lines: one more says there are more)
                 found = index_lines(query, corpus, sha, part, RANKED_LINES + 1 if best_first else None)
+                if found is None and by_day:
+                    return None
                 if found is None:
                     if corpus not in judged:
                         done = git_run(['git', 'grep', '--threads=1', '-n', '-I', *flags, '-e', pattern, sha, '--', *part],
@@ -6807,11 +6839,11 @@ def t_search_law(args: dict) -> tuple[str, dict]:
     # is left to grep: the index folds case, and its count would be of more files than match.
     known: dict[str, int] = {}
     acts_found = None  # the acts that match best, where a host's index groups by act (index_acts)
-    if search_index is not None and not args.get('regex') and not args.get('case_sensitive') and date == law.day('today'):
+    if search_index is not None and not args.get('regex') and not args.get('case_sensitive') and (today or by_day):
         able = [c for c, _ in pins if scoped(c, scope) == '' and not placed_elsewhere(c)]
         known = {**index_counts(query, [c for c in able if c not in judged], False),
                  **index_counts(query, [c for c in able if c in judged], True)}
-        if order == 'relevance':
+        if order == 'relevance' and today:
             acts_found = index_acts(query, [c for c in able if c not in judged], any(n for c, n in known.items() if c not in judged))
             if acts_found and acts_found['acts']:
                 # The bodies of law in the order of their best act (one sort, the same for every part of the answer);
@@ -6893,7 +6925,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 elif corpus not in judged and law_read[0] and law_search_time_up():
                     yield corpus, None, [], [], 0, None
                 else:
-                    yield indexed(pin, total, offset + limit + 1 - n_lines) or searched(pin)
+                    yield indexed(pin, total, offset + limit + 1 - n_lines) or (one_corpus(pin) if by_day else searched(pin))
         finally:
             grepped.close()
 
