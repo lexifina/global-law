@@ -1,14 +1,14 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-24T12:34:59Z",
+ "generated": "2026-11-24T12:52:20Z",
  "updates": "running",
- "last_pass": "2026-11-24T12:34:59Z",
+ "last_pass": "2026-11-24T12:52:20Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-24T12:34:59Z",
- "last_published": "2026-11-24T12:34:59Z",
+ "last_successful_pass": "2026-11-24T12:52:20Z",
+ "last_published": "2026-11-24T12:52:20Z",
  "published_last_24h": {
-  "commits": 120,
-  "corpora_moved": 14,
+  "commits": 136,
+  "corpora_moved": 9,
   "corpora_added": 0
  },
  "held_back": [
@@ -24,12 +24,14 @@
   "greece-law",
   "india-law",
   "romania-law",
+  "russia-adygea-law",
+  "russia-altai-krai-law",
   "switzerland-bern-law",
-  "switzerland-ehrendingen-city-law",
-  "switzerland-lucerne-law",
   "switzerland-muttenz-city-law",
   "switzerland-obwalden-law",
-  "switzerland-rheinfelden-city-law",
+  "switzerland-solothurn-city-law",
+  "switzerland-st-gallen-city-law",
+  "switzerland-thurgau-law",
   "turkey-law",
   "united-states-law"
  ],
@@ -95,17 +97,17 @@
    "since": "2026-11-04"
   },
   {
+   "corpus": "russia-adygea-law",
+   "reason": "check-running",
+   "since": "2026-11-24"
+  },
+  {
+   "corpus": "russia-altai-krai-law",
+   "reason": "check-running",
+   "since": "2026-11-24"
+  },
+  {
    "corpus": "switzerland-bern-law",
-   "reason": "check-running",
-   "since": "2026-11-24"
-  },
-  {
-   "corpus": "switzerland-ehrendingen-city-law",
-   "reason": "check-running",
-   "since": "2026-11-24"
-  },
-  {
-   "corpus": "switzerland-lucerne-law",
    "reason": "check-running",
    "since": "2026-11-24"
   },
@@ -120,7 +122,17 @@
    "since": "2026-11-24"
   },
   {
-   "corpus": "switzerland-rheinfelden-city-law",
+   "corpus": "switzerland-solothurn-city-law",
+   "reason": "check-running",
+   "since": "2026-11-24"
+  },
+  {
+   "corpus": "switzerland-st-gallen-city-law",
+   "reason": "check-running",
+   "since": "2026-11-24"
+  },
+  {
+   "corpus": "switzerland-thurgau-law",
    "reason": "check-running",
    "since": "2026-11-24"
   },
@@ -136,20 +148,12 @@
   }
  ],
  "freshness": {
-  "current": 608,
-  "pending-change": 13,
+  "current": 606,
+  "pending-change": 15,
   "stale": 354,
   "unverified": 16,
   "source-unavailable": 0
  },
- "official_sources_unavailable": [
-  {
-   "corpus": "lithuania/national/acts",
-   "name": "Seimas: the Constitution (lrs.lt)",
-   "state": "unavailable",
-   "unavailable_since": "2026-11-24",
-   "last_successful_contact": "2026-11-23"
-  }
- ],
+ "official_sources_unavailable": [],
  "note": "As seen from Lexifina's pipeline. `updates` is running while the pointer loop completes a pass at least every 45 minutes. `held_back` lists every corpus whose newest commit is not pinned yet; `holds` gives each one's reason (HOLD_REASONS in tools/freshness.py) and the day it was first held. An official source marked unavailable did not answer that corpus's pipeline; it may be up for others."
 }
