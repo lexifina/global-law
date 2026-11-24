@@ -1,14 +1,14 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-24T11:27:36Z",
+ "generated": "2026-11-24T12:13:45Z",
  "updates": "running",
- "last_pass": "2026-11-24T11:27:36Z",
+ "last_pass": "2026-11-24T12:13:45Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-24T11:27:36Z",
- "last_published": "2026-11-24T11:27:36Z",
+ "last_successful_pass": "2026-11-24T12:13:45Z",
+ "last_published": "2026-11-24T12:13:45Z",
  "published_last_24h": {
-  "commits": 116,
-  "corpora_moved": 0,
+  "commits": 118,
+  "corpora_moved": 3,
   "corpora_added": 0
  },
  "held_back": [
@@ -24,6 +24,8 @@
   "greece-law",
   "india-law",
   "romania-law",
+  "switzerland-appenzell-ausserrhoden-law",
+  "switzerland-appenzell-innerrhoden-law",
   "turkey-law",
   "united-states-law"
  ],
@@ -70,7 +72,7 @@
   },
   {
    "corpus": "germany-law",
-   "reason": "check-running",
+   "reason": "check-failed",
    "since": "2026-11-24"
   },
   {
@@ -89,6 +91,16 @@
    "since": "2026-11-04"
   },
   {
+   "corpus": "switzerland-appenzell-ausserrhoden-law",
+   "reason": "check-running",
+   "since": "2026-11-24"
+  },
+  {
+   "corpus": "switzerland-appenzell-innerrhoden-law",
+   "reason": "check-running",
+   "since": "2026-11-24"
+  },
+  {
    "corpus": "turkey-law",
    "reason": "check-failed",
    "since": "2026-11-24"
@@ -100,8 +112,8 @@
   }
  ],
  "freshness": {
-  "current": 614,
-  "pending-change": 7,
+  "current": 612,
+  "pending-change": 9,
   "stale": 354,
   "unverified": 16,
   "source-unavailable": 0

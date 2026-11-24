@@ -42,15 +42,15 @@
  "totals": {
   "corpora": 991,
   "by_status": {
-   "current": 614,
-   "pending-change": 7,
+   "current": 612,
+   "pending-change": 9,
    "stale": 354,
    "unverified": 16,
    "source-unavailable": 0
   },
   "verified_30d": 974,
-  "verified_7d": 43,
-  "pct_verified_7d": 4.3,
+  "verified_7d": 45,
+  "pct_verified_7d": 4.5,
   "pct_verified_30d": 98.3
  },
  "by_level": {
@@ -71,15 +71,15 @@
   "subnational": {
    "corpora": 608,
    "by_status": {
-    "current": 603,
-    "pending-change": 0,
+    "current": 601,
+    "pending-change": 2,
     "stale": 0,
     "unverified": 5,
     "source-unavailable": 0
    },
    "verified_30d": 603,
-   "verified_7d": 32,
-   "pct_verified_7d": 5.3,
+   "verified_7d": 34,
+   "pct_verified_7d": 5.6,
    "pct_verified_30d": 99.2
   }
  },
@@ -142,7 +142,9 @@
    "spain/murcia/acts",
    "spain/national/acts",
    "spain/navarre/acts",
-   "spain/valencia/acts"
+   "spain/valencia/acts",
+   "switzerland/basel-landschaft/arlesheim/acts",
+   "switzerland/st-gallen/bad-ragaz/acts"
   ],
   "note": "these corpora publish a freshness row for every act; for a provision in one, `python tools/freshness.py <provision path>` reads its act's row when the corpus is checked out"
  }
