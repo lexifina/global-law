@@ -6588,6 +6588,10 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             moved = law.moves(corpus)
         paths, rows, count, after, seen, whole = [], [], 0, None, 0, False
         began = time.monotonic()
+        # On a past date the candidates are read from git by their blobs, far slower than the index gives today's
+        # text, and the time is looked at between pages: a page of 5,000 of Germany's files ran a search 9 s past
+        # the point it should have stopped at (21.8 s, 24 November 2026). A fifth of a page there.
+        page = CANDIDATES_PAGE // 5 if dated else CANDIDATES_PAGE
         extra = list(extra)  # files changed after the index of changes' tip, by name: candidates too, in their places
         as_git = lambda n: n.encode('utf-8', 'surrogateescape')  # noqa: E731
         # The next page is asked for while git reads this one (a page of a pattern's candidates takes the index one to
@@ -6599,10 +6603,10 @@ def t_search_law(args: dict) -> tuple[str, dict]:
                 return False
             if ahead is not None:
                 return ahead.done() and ahead.result() == []
-            return drained or (not spec.get('ever') and last < CANDIDATES_PAGE)
+            return drained or (not spec.get('ever') and last < page)
         while True:
             checkpoint()
-            names = ahead.result() if ahead is not None else index_candidates(spec, corpus, after, CANDIDATES_PAGE)
+            names = ahead.result() if ahead is not None else index_candidates(spec, corpus, after, page)
             ahead = None
             if names is None:
                 asker.shutdown(wait=False)
@@ -6610,8 +6614,8 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             last, drained = len(names), not names
             if names:
                 after = names[-1]
-                if last >= CANDIDATES_PAGE // 5:
-                    ahead = asker.submit(index_candidates, spec, corpus, after, CANDIDATES_PAGE)
+                if last >= page // 5:
+                    ahead = asker.submit(index_candidates, spec, corpus, after, page)
                 early = [n for n in extra if as_git(n) <= as_git(after)]
                 if early:
                     names, extra = sorted(set(names) | set(early), key=as_git), extra[len(early):]
@@ -6697,7 +6701,7 @@ def t_search_law(args: dict) -> tuple[str, dict]:
             # SCAN_SECONDS. What was not read makes the counts floors, and the answer says so.
             spent, full = time.monotonic() - began, count >= need
             if ((full and (spent > CANDIDATES_SECONDS or seen >= CANDIDATES_MOST)) or spent > SCAN_SECONDS
-                    or (corpus not in judged and law_search_time_up() and (full or seen >= CANDIDATES_PAGE))):
+                    or (corpus not in judged and law_search_time_up() and (full or seen >= page))):
                 whole = read_all()
                 break
         asker.shutdown(wait=False)
