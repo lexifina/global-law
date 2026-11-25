@@ -499,7 +499,6 @@
     "switzerland/graubunden/bonaduz/acts",
     "switzerland/graubunden/ilanz-glion/acts",
     "switzerland/jura/acts",
-    "switzerland/lucerne/acts",
     "switzerland/neuchatel/acts",
     "switzerland/solothurn/solothurn/acts",
     "switzerland/st-gallen/bad-ragaz/acts",
@@ -75741,19 +75740,19 @@
       "path": "switzerland/lucerne/acts",
       "url": "https://github.com/lexifina/switzerland-lucerne-law.git",
       "name": "Lucerne",
-      "record_note": "Publisher: Kanton Luzern, SRL Nr. (srl.lu.ch).",
+      "record_note": "Texts from Kanton Luzern, SRL Nr. (srl.lu.ch).",
       "publisher": "Kanton Luzern, SRL Nr. (srl.lu.ch)",
       "future_branch": "zukunft",
       "code": "CH-LU",
-      "iso_path": "ch-lu/acts",
+      "iso_path": "ch/lucerne/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "acts": 466,
+      "described_by": "corpus.json",
+      "acts": 588,
       "history_from": "1867-11-22",
       "history": "in-force",
-      "coverage": "466 acts, 1128 dated versions from 1867-11-22 to 2026-10-01",
+      "coverage": "588 acts of Lucerne with every dated version the source gives (1633 versions), in force from 1867-11-22 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -75761,7 +75760,37 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
+        "totals": {
+          "acts": 466,
+          "by_status": {
+            "current": 62,
+            "pending-change": 127,
+            "stale": 0,
+            "unverified": 277,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-lucerne",
+            "name": "Lucerne: systematic collection (srl.lu.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/lucerne/caselaw",
@@ -75957,12 +75986,12 @@
       "iso_path": "ch/obwalden/acts",
       "in_force_trailer": "In-force",
       "described_by": "corpus.json",
-      "acts": 323,
+      "acts": 378,
       "history_from": "1953-01-17",
       "history": "in-force",
-      "coverage": "323 acts of Obwalden with every dated version the source gives (802 versions), in force from 1953-01-17 to 2026-10-30",
+      "coverage": "378 acts of Obwalden with every dated version the source gives (911 versions), in force from 1953-01-17 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-11-24",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -75979,15 +76008,15 @@
       "scope": "selected-acts",
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
-          "acts": 255,
+          "acts": 323,
           "by_status": {
-            "current": -125,
-            "pending-change": 230,
+            "current": 22,
+            "pending-change": 80,
             "stale": 0,
-            "unverified": 150,
+            "unverified": 221,
             "source-unavailable": 0
           }
         },
@@ -75996,8 +76025,8 @@
             "source": "lexwork-obwalden",
             "name": "Obwalden: systematic collection (gdb.ow.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -76327,15 +76356,15 @@
       "scope": "selected-acts",
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
           "acts": 731,
           "by_status": {
-            "current": 102,
-            "pending-change": 3,
+            "current": 114,
+            "pending-change": 0,
             "stale": 0,
-            "unverified": 626,
+            "unverified": 617,
             "source-unavailable": 0
           }
         },
@@ -76344,8 +76373,8 @@
             "source": "lexwork-st-gallen",
             "name": "St Gallen: systematic collection (www.gesetzessammlung.sg.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -76534,8 +76563,8 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
           "acts": 65,
           "by_status": {
@@ -76551,8 +76580,8 @@
             "source": "lexwork-weesen-city",
             "name": "Weesen: systematic collection (weesen.tlex.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -77437,8 +77466,8 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
           "acts": 92,
           "by_status": {
@@ -77454,8 +77483,8 @@
             "source": "lexwork-kloten-city",
             "name": "Kloten: systematic collection (kloten.tlex.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
