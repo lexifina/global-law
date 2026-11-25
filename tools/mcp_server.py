@@ -708,6 +708,14 @@ def law_search_time_up() -> bool:
 FIND_MARGIN = float(os.environ.get('GLOBAL_LAW_FIND_MARGIN', '8'))
 
 
+# find_provision over several bodies of law (a query with no jurisdiction, or a country of many): seconds from the
+# call's start after which no further body of law is begun, the answer naming those not read. The call's own margin
+# (FIND_MARGIN before its deadline) let "article 24" with no jurisdiction run for 12 s of a hosted call's 20, and a
+# body of law begun just before that (India's 15 million names: 2 s to look through) put the answer at 14 s.
+# 0 (a clone's own server, whose calls have two minutes): no such limit; a host with short calls sets it.
+FIND_SECONDS = float(os.environ.get('GLOBAL_LAW_FIND_SECONDS', '0'))
+FIND_LARGE = 2_000_000  # names: a body of law this large is not begun in the last FIND_LARGE_SECONDS of that time
+FIND_LARGE_SECONDS = 2.5
 TEXT_FALLBACK_SECONDS = 6.0  # find_provision: seconds for the words of the text, when no heading or name has them, over several bodies of law
 
 
@@ -2706,7 +2714,9 @@ def index_served() -> bool:
     # every corpus's folder and pin (a fifth of a second for 720 corpora).
     now, head = time.monotonic(), law._head()
     kept = _index_served
-    if kept and kept[0] == head and now - kept[1] < 60:
+    # (A hosted server's corpora change only with the tree's HEAD: the answer stays while that does. Counted again
+    # every minute, it was 3 s of one find_provision a minute with India's 15 million names among them.)
+    if kept and kept[0] == head and now - kept[1] < (86400 if HOSTED else 60):
         return kept[2]
     corpora = [c['path'] for c in law.manifest()['corpora'] if (ROOT / c['path'] / '.git').exists() and not law.is_caselaw(c)]
     served = sum(len(names_of(c, s)) for c in corpora if (s := corpus_head(c))) <= INDEX_FILES
@@ -4258,6 +4268,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     query = text_arg(args, 'query')
     if not query:
         raise UserError('Give a query: a section or article number ("1182", "16a", "reg 13") or words from a heading.')
+    find_began = time.monotonic()
     scope = scope_arg(args)
     limit = num(args, 'max_results', 15, 100)
     offset = offset_arg(args)
@@ -4583,11 +4594,17 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     cut_short: set[str] = set()
     act_rows: dict[str, tuple] = {}  # an act's folder shown as one row (act_ties) -> (corpus, commit, folder, a file of it)
     capped = False  # a corpus had more matches than were kept for this part: the count of matches is a floor
-    late: list[str] = []  # the bodies of law not read, or not read whole, in the time (find_time_up)
+    late: list[str] = []  # the bodies of law not read, or not read whole, in the time (find_time_up, FIND_SECONDS)
+    several = sum(1 for c in law.manifest()['corpora'] if corpus_in_scope(c['path']) and not law.is_caselaw(c)) > 1
+    # (not where the query names its acts: only their bodies of law are read, and finding them took the time)
+    find_stop = find_began + FIND_SECONDS if several and not acts and FIND_SECONDS > 0 and getattr(_call, 'deadline', 0.0) else float('inf')
+
+    def find_late() -> bool:
+        return find_time_up() or time.monotonic() > find_stop
     for c in law.manifest()['corpora']:
         if not corpus_in_scope(c['path']):
             continue
-        if find_time_up() and not law.is_caselaw(c):
+        if find_late() and not law.is_caselaw(c):
             late.append(c['path'])
             continue
         # Case law is searched by heading only when the scope names it ("united-states/caselaw", a court's corpus): its
@@ -4621,6 +4638,9 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             if names is None:
                 names = [n for n in names_of(c['path'], sha) if in_scope(f"{c['path']}/{n}")]
         if not names:
+            continue
+        if len(names) > FIND_LARGE and time.monotonic() > find_stop - FIND_LARGE_SECONDS and not law.is_caselaw(c):
+            late.append(c['path'])  # (too large to go through in what is left of the time)
             continue
         scores: dict[str, int] = {}
         # Numbers against the article a heading gives as well as the file name: Spain names a fifth of its article
@@ -4660,7 +4680,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 last = len(starts) - 1
                 prefolded = [text[starts[i]:starts[i + 1] - 1] if i < last else text[starts[i]:] for i in held]
         for at, name in enumerate(scored):
-            if not at & 8191 and at and find_time_up():
+            if not at & 8191 and at and find_late():
                 late.append(c['path'])
                 break
             stem = None  # worked out (stem_of) only for a name that holds a number of the query
@@ -4872,8 +4892,7 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # The corpora in scope side by side, eight at a time, in the manifest's order: with no jurisdiction they are
         # every body of law served (720), and one after another the index's answer for each, and git's count of the
         # lines of the files it named, were 40 to 80 s (a call that found no heading ran out of time).
-        several = sum(1 for c in law.manifest()['corpora'] if corpus_in_scope(c['path']) and not law.is_caselaw(c)) > 1
-        text_stop = time.monotonic() + TEXT_FALLBACK_SECONDS
+        text_stop = min(time.monotonic() + TEXT_FALLBACK_SECONDS, max(find_stop, time.monotonic() + 1.5))
         with ThreadPoolExecutor(8) as pool:
             for rows, more in pool_map(pool, in_text, law.manifest()['corpora']):
                 found += rows
