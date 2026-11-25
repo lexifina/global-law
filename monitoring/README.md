@@ -9,15 +9,15 @@ change as a commit dated the day it takes effect. Then, every 15 minutes, a pass
 and publishes the result below.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-25 08:22 UTC; status refreshed 2026-11-25 08:22 UTC.
+**Updates: running**: last published 2026-11-25 08:43 UTC; status refreshed 2026-11-25 08:43 UTC.
 
 | | |
 | --- | --- |
-| Last 24 hours | 230 commits: 26 corpus updates, 0 corpora added |
-| Last successful pass | 2026-11-25 08:22 UTC |
-| Not pinned yet | `romania-law` (held by the maintainers, since 2026-11-04), `austria-bundesverwaltungsgericht-caselaw` (held by the maintainers, since 2026-11-07), `austria-justiz-caselaw` (held by the maintainers, since 2026-11-07), `austria-landesverwaltungsgerichte-caselaw` (held by the maintainers, since 2026-11-07), `austria-oberster-gerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verfassungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verwaltungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `united-states-law` (its history was rewritten: the new commit does not follow the pinned one, since 2026-11-22) and 72 more |
+| Last 24 hours | 255 commits: 20 corpus updates, 0 corpora added |
+| Last successful pass | 2026-11-25 08:43 UTC |
+| Not pinned yet | `romania-law` (held by the maintainers, since 2026-11-04), `austria-bundesverwaltungsgericht-caselaw` (held by the maintainers, since 2026-11-07), `austria-justiz-caselaw` (held by the maintainers, since 2026-11-07), `austria-landesverwaltungsgerichte-caselaw` (held by the maintainers, since 2026-11-07), `austria-oberster-gerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verfassungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verwaltungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `united-states-law` (its history was rewritten: the new commit does not follow the pinned one, since 2026-11-22) and 53 more |
 | Official sources not answering | none |
-| Freshness | 549 of 991 corpora current, 353 stale, 16 unverified ([FRESHNESS.md](../FRESHNESS.md)) |
+| Freshness | 568 of 991 corpora current, 353 stale, 16 unverified ([FRESHNESS.md](../FRESHNESS.md)) |
 <!-- /status-summary -->
 
 ## What each pass does
