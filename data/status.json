@@ -1,14 +1,14 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-25T07:59:34Z",
+ "generated": "2026-11-25T08:22:23Z",
  "updates": "running",
- "last_pass": "2026-11-25T07:59:34Z",
+ "last_pass": "2026-11-25T08:22:23Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-25T07:59:34Z",
- "last_published": "2026-11-25T07:59:34Z",
+ "last_successful_pass": "2026-11-25T08:22:23Z",
+ "last_published": "2026-11-25T08:22:23Z",
  "published_last_24h": {
-  "commits": 214,
-  "corpora_moved": 22,
+  "commits": 230,
+  "corpora_moved": 26,
   "corpora_added": 0
  },
  "held_back": [
@@ -21,24 +21,20 @@
   "brazil-law",
   "china-law",
   "france-law",
+  "germany-bavaria-law",
+  "germany-brandenburg-law",
   "germany-law",
+  "germany-north-rhine-westphalia-law",
+  "germany-saxony-law",
   "greece-law",
   "india-law",
   "romania-law",
-  "russia-amur-law",
-  "russia-arkhangelsk-law",
-  "russia-astrakhan-law",
-  "russia-bashkortostan-law",
   "russia-belgorod-law",
-  "russia-buryatia-law",
   "russia-chechnya-law",
   "russia-chukotka-law",
-  "russia-chuvashia-law",
   "russia-dagestan-law",
-  "russia-irkutsk-law",
   "russia-ivanovo-law",
   "russia-jewish-autonomous-oblast-law",
-  "russia-kabardino-balkaria-law",
   "russia-kaliningrad-law",
   "russia-kaluga-law",
   "russia-kamchatka-law",
@@ -46,57 +42,40 @@
   "russia-karelia-law",
   "russia-khabarovsk-law",
   "russia-khakassia-law",
-  "russia-khanty-mansi-law",
   "russia-kirov-law",
   "russia-komi-law",
-  "russia-kostroma-law",
   "russia-krasnoyarsk-law",
   "russia-kurgan-law",
-  "russia-kursk-law",
   "russia-leningrad-oblast-law",
   "russia-magadan-law",
-  "russia-mari-el-law",
   "russia-mordovia-law",
   "russia-murmansk-law",
-  "russia-nizhny-novgorod-law",
   "russia-north-ossetia-law",
   "russia-novgorod-law",
-  "russia-omsk-law",
   "russia-orenburg-law",
   "russia-oryol-law",
   "russia-penza-law",
-  "russia-primorsky-law",
   "russia-pskov-law",
   "russia-rostov-law",
-  "russia-saint-petersburg-law",
   "russia-sakha-law",
   "russia-sakhalin-law",
-  "russia-saratov-law",
   "russia-smolensk-law",
-  "russia-stavropol-law",
   "russia-sverdlovsk-law",
   "russia-tatarstan-law",
   "russia-tomsk-law",
-  "russia-tula-law",
   "russia-tuva-law",
   "russia-tver-law",
-  "russia-udmurtia-law",
   "russia-ulyanovsk-law",
   "russia-vladimir-law",
-  "russia-vologda-law",
   "russia-voronezh-law",
   "russia-yamalo-nenets-law",
-  "russia-yaroslavl-law",
   "spain-andalusia-law",
   "spain-asturias-law",
-  "spain-balearic-islands-law",
   "spain-castile-and-leon-law",
   "spain-ceuta-law",
   "spain-galicia-law",
-  "spain-melilla-law",
   "spain-murcia-law",
   "spain-navarre-law",
-  "switzerland-aargau-law",
   "switzerland-basel-stadt-law",
   "switzerland-bern-law",
   "switzerland-birsfelden-city-law",
@@ -108,6 +87,7 @@
   "switzerland-nidau-city-law",
   "switzerland-nidwalden-law",
   "switzerland-obwalden-law",
+  "switzerland-solothurn-law",
   "switzerland-st-gallen-city-law",
   "switzerland-unteraegeri-city-law",
   "turkey-law",
@@ -160,7 +140,27 @@
    "since": "2026-11-23"
   },
   {
+   "corpus": "germany-bavaria-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
+   "corpus": "germany-brandenburg-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
    "corpus": "germany-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
+   "corpus": "germany-north-rhine-westphalia-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
+   "corpus": "germany-saxony-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -180,32 +180,7 @@
    "since": "2026-11-04"
   },
   {
-   "corpus": "russia-amur-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-arkhangelsk-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-astrakhan-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-bashkortostan-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-belgorod-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-buryatia-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -220,17 +195,7 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-chuvashia-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-dagestan-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-irkutsk-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -241,11 +206,6 @@
   },
   {
    "corpus": "russia-jewish-autonomous-oblast-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-kabardino-balkaria-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -285,22 +245,12 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-khanty-mansi-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-kirov-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "russia-komi-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-kostroma-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -315,22 +265,12 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-kursk-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-leningrad-oblast-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "russia-magadan-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-mari-el-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -345,22 +285,12 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-nizhny-novgorod-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-north-ossetia-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "russia-novgorod-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-omsk-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -380,22 +310,12 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-primorsky-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-pskov-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "russia-rostov-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-saint-petersburg-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -410,17 +330,7 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-saratov-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-smolensk-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-stavropol-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -440,22 +350,12 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-tula-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-tuva-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "russia-tver-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "russia-udmurtia-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -470,11 +370,6 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-vologda-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "russia-voronezh-law",
    "reason": "check-running",
    "since": "2026-11-25"
@@ -485,22 +380,12 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "russia-yaroslavl-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "spain-andalusia-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "spain-asturias-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "spain-balearic-islands-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -520,22 +405,12 @@
    "since": "2026-11-25"
   },
   {
-   "corpus": "spain-melilla-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
    "corpus": "spain-murcia-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "spain-navarre-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "switzerland-aargau-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -595,6 +470,11 @@
    "since": "2026-11-25"
   },
   {
+   "corpus": "switzerland-solothurn-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
    "corpus": "switzerland-st-gallen-city-law",
    "reason": "check-failed",
    "since": "2026-11-25"
@@ -616,8 +496,8 @@
   }
  ],
  "freshness": {
-  "current": 529,
-  "pending-change": 93,
+  "current": 549,
+  "pending-change": 73,
   "stale": 353,
   "unverified": 16,
   "source-unavailable": 0

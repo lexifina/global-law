@@ -4,13 +4,13 @@ Law changes after a corpus is built. Every corpus here records when it was last 
 so an answer about today's law can say how current it is.
 
 <!-- freshness-summary -->
-**529 of 991 corpora current** on 2026-11-25: 15.4% checked against their official source in the last 7 days, 98.3% in the last 30.
+**549 of 991 corpora current** on 2026-11-25: 15.4% checked against their official source in the last 7 days, 98.3% in the last 30.
 
 | | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| All | 991 | 529 | 93 | 353 | 16 | 15.4% |
+| All | 991 | 549 | 73 | 353 | 16 | 15.4% |
 | National | 383 | 11 | 8 | 353 | 11 | 2.9% |
-| Subnational | 608 | 518 | 85 | 0 | 5 | 23.4% |
+| Subnational | 608 | 538 | 65 | 0 | 5 | 23.4% |
 
 National law longest since a check: `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `dominican-republic/national/acts` (2026-10-28).
 
