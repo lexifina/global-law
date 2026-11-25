@@ -708,6 +708,9 @@ def law_search_time_up() -> bool:
 FIND_MARGIN = float(os.environ.get('GLOBAL_LAW_FIND_MARGIN', '8'))
 
 
+TEXT_FALLBACK_SECONDS = 6.0  # find_provision: seconds for the words of the text, when no heading or name has them, over several bodies of law
+
+
 def find_time_up() -> bool:
     """Whether fewer than FIND_MARGIN seconds of this call are left (never, outside a call's deadline)."""
     deadline = getattr(_call, 'deadline', 0.0)
@@ -2098,6 +2101,35 @@ def _headings_file(disk: Path, index=None):
         return _HeadingsFile(target)
     except (OSError, ValueError, OverflowError):
         return None
+
+
+def lines_with_number(text: str, starts: array, numbers: list[str]) -> list[int]:
+    """The lines of a text (_lines_text) that hold one of `numbers` (digits, a letter after them or not) as a number
+    of its own: no digit after it, and before it nothing but zeros back to a character that is not a digit ("24" in
+    art-024.md and a24.md, not in 2024 or 124 or 240). Line numbers in order. Each number is looked for by str.find
+    and the characters around a hit are looked at; a line that has one is not read further. (As one regular
+    expression with a look-behind it was 12 to 30 s over every body of law: no literal start to search by.)"""
+    found: set[int] = set()
+    lines, size, find = len(starts), len(text), text.find
+    for number in numbers:
+        if not number:
+            continue
+        width, pos = len(number), find(number)
+        while pos >= 0:
+            end = pos + width
+            if end >= size or not text[end].isdecimal():
+                k = pos - 1
+                while k >= 0 and text[k] == '0':
+                    k -= 1
+                if k < 0 or not text[k].isdecimal():
+                    i = bisect.bisect_right(starts, pos) - 1
+                    found.add(i)
+                    if i + 1 >= lines:
+                        break
+                    pos = find(number, starts[i + 1])
+                    continue
+            pos = find(number, pos + 1)
+    return sorted(found)
 
 
 def lines_holding_each(text: str, starts: array, needles: list[str]) -> list[list[int]] | None:
@@ -4439,6 +4471,11 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 # stays, ranked after the one in force.
                 best = [t for t in titled if t[0] >= titled[0][0] - 5] if re.search(r'\d', rest) else titled
                 if re.search(r'\d', rest):
+                    # Of acts that fit the name alike, those whose title or folder holds a number of the query come
+                    # first: "Finance Act 2020" took the first six Finance Acts of any year, found no "2020" in
+                    # them, and went on to read the text of every body of law (no answer in 20 s, 25 November 2026).
+                    year = [re.compile(rf'(?<!\d){n}(?!\d)') for n in re.findall(r'\d+', rest)]
+                    best = sorted(best, key=lambda t: not all(y.search(f'{t[1]} {t[2]}') for y in year))
                     acts = [f for _, f, _ in best][:6]
                     folded_title = {fold(t) for t in title_words}
                     rest = ' '.join(w for w in rest.split() if fold(w.strip(',.()')) not in folded_title)
@@ -4530,6 +4567,12 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
     plain_folded = [fold(w) for w in plain]
     # Compiled once for the call, not once for each file in scope.
     number_rx = [(n, n.lstrip('0'), re.compile(rf'(^|[^0-9a-z]){re.escape(n)}([^0-9a-z]|$)')) for n in numbers]
+    # A query of numbers alone ("article 24"): a name can score only where the number stands by itself in it (its
+    # stem, or between other characters), zeros before it or not. Looked for so in the names' text (lines_with_number); as
+    # letters anywhere, "24" was in every name with 2024, 124 or 240 in it, each then asked one by one, in every
+    # body of law (7 to 14 s with no jurisdiction, 25 November 2026).
+    numbers_alone = ([b for _, b, _ in number_rx]
+                     if number_rx and all(re.fullmatch(r'[0-9]+[a-z]?', b) for _, b, _ in number_rx) else None)
     matched_line: dict[str, dict[str, str]] = {}
     head_best: dict[tuple[str, str], int] = {}
     indexed = index_served()
@@ -4603,7 +4646,10 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
             # Words only (no number, no "art."): a name's score is the number of the words it holds (hits_per_line).
             # Nothing is asked of a name one by one.
             tally = hits_per_line(text, starts, plain_folded) if words_only else None
-            each = None if words_only else lines_holding_each(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded)
+            if numbers_alone is not None and not plain_folded:
+                each = [lines_with_number(text, starts, numbers_alone)]
+            else:
+                each = None if words_only else lines_holding_each(text, starts, [n_bare for _, n_bare, _ in number_rx] + plain_folded)
             if tally is not None:
                 for i in sorted(tally):  # (in the names' own order, as they were gone through)
                     scores[names[i]] = tally[i]
@@ -4779,6 +4825,14 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
                 return [], more
             if c['path'] in cut_short:  # its time is spent: any word of the query in any decision is no hit (N4)
                 return [], more
+            # Acts were named: the words are looked for in them, as the headings were, not in every body of law.
+            if acts and not any(a.startswith(c['path'] + '/') for a in acts):
+                return [], more
+            # With several bodies of law in scope, none is begun once the time for this is spent: the answer
+            # names those not read (720 of them, each asked of the index and then of git, was no answer in 20 s).
+            if several and (find_time_up() or time.monotonic() > text_stop):
+                late.append(c['path'])
+                return [], more
             sha = corpus_head(c['path'])
             if not sha or not (ROOT / c['path'] / '.git').exists():
                 return [], more
@@ -4818,10 +4872,16 @@ def t_find_provision(args: dict) -> tuple[str, dict]:
         # The corpora in scope side by side, eight at a time, in the manifest's order: with no jurisdiction they are
         # every body of law served (720), and one after another the index's answer for each, and git's count of the
         # lines of the files it named, were 40 to 80 s (a call that found no heading ran out of time).
+        several = sum(1 for c in law.manifest()['corpora'] if corpus_in_scope(c['path']) and not law.is_caselaw(c)) > 1
+        text_stop = time.monotonic() + TEXT_FALLBACK_SECONDS
         with ThreadPoolExecutor(8) as pool:
             for rows, more in pool_map(pool, in_text, law.manifest()['corpora']):
                 found += rows
                 capped = capped or more
+        late = list(dict.fromkeys(late))
+        deadline = getattr(_call, 'deadline', 0.0)
+        if late and deadline:  # (the answer is put together whatever the reading took of the call's time)
+            _call.deadline = max(deadline, time.monotonic() + FIND_MARGIN)
     found.sort(key=lambda r: (-r[0], natural(r[1])))
     seen: set[str] = set()
     found = [r for r in found if not (r[1] in seen or seen.add(r[1]))]
@@ -11985,8 +12045,25 @@ def t_law_details(args: dict) -> tuple[str, dict]:
 
                     def grep(*how):
                         return law.git('log', pin, '-n', '10', '--format=%H', '-i', *how, cwd=cwd).split()
-                    shas = ((grep('--perl-regexp', f'--grep=^\\Q{title}\\E\\s*$') if '\\E' not in title else [])
-                            or grep(f'--grep={title}', '--fixed-strings'))
+                    # Where a host's index of commit messages holds this history: the commits with the title on a
+                    # line are its answer (newest first), and their messages say which have it as a whole line. Git
+                    # read every message of the history twice for a title no law has: Portugal's national acts took
+                    # past 20 s to say "no change in the record" (25 November 2026).
+                    shas = None
+                    named = indexed_message_hits(c, cwd, title, '')
+                    if named is not None and named[1] == pin:
+                        # (the newest 400 are read for the whole line: "Código Civil" is on a line of 7,131 of
+                        # Portugal's messages; a whole line only in an older one is then not preferred)
+                        hits = named[0][:400]
+                        texts = indexed_messages([(None, c, h, cwd) for h in hits], {c: pin}) if hits else {}
+                        if all((c, h) in texts for h in hits):
+                            line = re.compile(re.escape(title) + r'\s*', re.I)
+                            whole_line = [h for h in hits if any(line.fullmatch(l) for l in texts[(c, h)].split('\n'))] \
+                                if '\\E' not in title else []
+                            shas = (whole_line or hits)[:10]
+                    if shas is None:
+                        shas = ((grep('--perl-regexp', f'--grep=^\\Q{title}\\E\\s*$') if '\\E' not in title else [])
+                                or grep(f'--grep={title}', '--fixed-strings'))
         def read(sha):
             msg = law.git('show', '-s', '--format=%an%x1f%B', sha, cwd=cwd)
             author, _, body = msg.partition('\x1f')
