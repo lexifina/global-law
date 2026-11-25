@@ -492,12 +492,10 @@
     "switzerland/basel-landschaft/birsfelden/acts",
     "switzerland/basel-landschaft/ettingen/acts",
     "switzerland/basel-landschaft/muttenz/acts",
-    "switzerland/basel-stadt/acts",
     "switzerland/bern/nidau/acts",
     "switzerland/fribourg/acts",
     "switzerland/geneva/acts",
     "switzerland/geneva/geneva/acts",
-    "switzerland/glarus/acts",
     "switzerland/graubunden/bonaduz/acts",
     "switzerland/graubunden/ilanz-glion/acts",
     "switzerland/jura/acts",
@@ -61759,13 +61757,13 @@
       "scope": "selected-acts",
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
-          "acts": 1152,
+          "acts": 1163,
           "by_status": {
-            "current": 1141,
-            "pending-change": 11,
+            "current": 1163,
+            "pending-change": 0,
             "stale": 0,
             "unverified": 0,
             "source-unavailable": 0
@@ -61776,8 +61774,8 @@
             "source": "pravo-karachay-cherkessia",
             "name": "Karachay-Cherkess Republic: Official Internet Portal of Legal Information (region09)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -62618,13 +62616,13 @@
       "scope": "selected-acts",
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
-          "acts": 1308,
+          "acts": 1318,
           "by_status": {
-            "current": 1298,
-            "pending-change": 10,
+            "current": 1318,
+            "pending-change": 0,
             "stale": 0,
             "unverified": 0,
             "source-unavailable": 0
@@ -62635,8 +62633,8 @@
             "source": "pravo-mordovia",
             "name": "Republic of Mordovia: Official Internet Portal of Legal Information (region13)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -74059,15 +74057,15 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
           "acts": 231,
           "by_status": {
-            "current": 7,
+            "current": 8,
             "pending-change": 0,
             "stale": 0,
-            "unverified": 224,
+            "unverified": 223,
             "source-unavailable": 0
           }
         },
@@ -74076,8 +74074,8 @@
             "source": "boe-autonomico",
             "name": "BOE consolidated legislation, autonomous communities (open data)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -74546,7 +74544,31 @@
         "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
         "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
       },
-      "scope": "selected-acts"
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
+        "totals": {
+          "acts": 231,
+          "by_status": {
+            "current": 33,
+            "pending-change": 27,
+            "stale": 0,
+            "unverified": 171,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-appenzell-ausserrhoden",
+            "name": "Appenzell Ausserrhoden: systematic collection (ar.clex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/appenzell-ausserrhoden/caselaw",
@@ -74932,19 +74954,19 @@
       "path": "switzerland/basel-stadt/acts",
       "url": "https://github.com/lexifina/switzerland-basel-stadt-law.git",
       "name": "Basel-Stadt",
-      "record_note": "Publisher: Kanton Basel-Stadt, SG (www.gesetzessammlung.bs.ch).",
+      "record_note": "Texts from Kanton Basel-Stadt, SG (www.gesetzessammlung.bs.ch).",
       "publisher": "Kanton Basel-Stadt, SG (www.gesetzessammlung.bs.ch)",
       "future_branch": "zukunft",
       "code": "CH-BS",
-      "iso_path": "ch-bs/acts",
+      "iso_path": "ch/basel-stadt/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "acts": 643,
-      "history_from": "1876-12-04",
+      "described_by": "corpus.json",
+      "acts": 793,
+      "history_from": "1826-05-13",
       "history": "in-force",
-      "coverage": "643 acts, 1408 dated versions from 1876-12-04 to 2026-11-03",
+      "coverage": "793 acts of Basel-Stadt with every dated version the source gives (1905 versions), in force from 1826-05-13 to 2026-11-05",
       "record_to": "2026-11-05",
-      "checked_on": "2026-11-05",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -74952,7 +74974,37 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
+        "totals": {
+          "acts": 643,
+          "by_status": {
+            "current": -18,
+            "pending-change": 260,
+            "stale": 0,
+            "unverified": 401,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-basel-stadt",
+            "name": "Basel Stadt: systematic collection (www.gesetzessammlung.bs.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/basel-stadt/caselaw",
@@ -75351,19 +75403,19 @@
       "path": "switzerland/glarus/acts",
       "url": "https://github.com/lexifina/switzerland-glarus-law.git",
       "name": "Glarus",
-      "record_note": "Publisher: Kanton Glarus, GS (gesetze.gl.ch).",
+      "record_note": "Texts from Kanton Glarus, GS (gesetze.gl.ch).",
       "publisher": "Kanton Glarus, GS (gesetze.gl.ch)",
       "future_branch": "zukunft",
       "code": "CH-GL",
-      "iso_path": "ch-gl/acts",
+      "iso_path": "ch/glarus/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "acts": 319,
-      "history_from": "1835-05-24",
+      "described_by": "corpus.json",
+      "acts": 448,
+      "history_from": "1807-12-07",
       "history": "in-force",
-      "coverage": "319 acts, 751 dated versions from 1835-05-24 to 2026-09-01",
+      "coverage": "448 acts of Glarus with every dated version the source gives (1144 versions), in force from 1807-12-07 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-10-30",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -75371,7 +75423,37 @@
         "history",
         "history_from",
         "record_to"
-      ]
+      ],
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "scope": "selected-acts",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
+        "totals": {
+          "acts": 319,
+          "by_status": {
+            "current": 46,
+            "pending-change": 129,
+            "stale": 0,
+            "unverified": 144,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-glarus",
+            "name": "Glarus: systematic collection (gesetze.gl.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
+          }
+        ]
+      }
     },
     {
       "path": "switzerland/glarus/caselaw",
@@ -76088,12 +76170,12 @@
       "iso_path": "ch/solothurn/acts",
       "in_force_trailer": "In-force",
       "described_by": "corpus.json",
-      "acts": 349,
+      "acts": 385,
       "history_from": "1803-10-29",
       "history": "in-force",
-      "coverage": "349 acts of Solothurn with every dated version the source gives (1045 versions), in force from 1803-10-29 to 2026-10-30",
+      "coverage": "385 acts of Solothurn with every dated version the source gives (1119 versions), in force from 1803-10-29 to 2026-10-30",
       "record_to": "2026-10-30",
-      "checked_on": "2026-11-24",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -76110,15 +76192,15 @@
       "scope": "selected-acts",
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
-          "acts": 291,
+          "acts": 349,
           "by_status": {
-            "current": -142,
-            "pending-change": 242,
+            "current": -7,
+            "pending-change": 93,
             "stale": 0,
-            "unverified": 191,
+            "unverified": 263,
             "source-unavailable": 0
           }
         },
@@ -76127,8 +76209,8 @@
             "source": "lexwork-solothurn",
             "name": "Solothurn: systematic collection (bgs.so.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -76193,8 +76275,8 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
           "acts": 96,
           "by_status": {
@@ -76210,8 +76292,8 @@
             "source": "lexwork-solothurn-city",
             "name": "Solothurn: systematic collection (reglemente.stadt-solothurn.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -76378,15 +76460,15 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
           "acts": 90,
           "by_status": {
-            "current": 8,
-            "pending-change": 5,
+            "current": 16,
+            "pending-change": 0,
             "stale": 0,
-            "unverified": 77,
+            "unverified": 74,
             "source-unavailable": 0
           }
         },
@@ -76395,8 +76477,8 @@
             "source": "lexwork-rapperswil-jona-city",
             "name": "Rapperswil Jona: systematic collection (rapperswil-jona.tlex.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
@@ -76915,15 +76997,15 @@
       "scope": "selected-acts",
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
         "totals": {
-          "acts": 323,
+          "acts": 443,
           "by_status": {
-            "current": -188,
-            "pending-change": 355,
+            "current": -17,
+            "pending-change": 205,
             "stale": 0,
-            "unverified": 156,
+            "unverified": 255,
             "source-unavailable": 0
           }
         },
@@ -76932,8 +77014,8 @@
             "source": "lexwork-zug",
             "name": "Zug: systematic collection (bgs.zg.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
           }
         ]
       }
