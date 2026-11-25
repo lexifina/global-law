@@ -1,14 +1,14 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-25T06:57:00Z",
+ "generated": "2026-11-25T07:18:56Z",
  "updates": "running",
- "last_pass": "2026-11-25T06:57:00Z",
+ "last_pass": "2026-11-25T07:18:56Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-25T06:57:00Z",
- "last_published": "2026-11-25T06:57:00Z",
+ "last_successful_pass": "2026-11-25T07:18:56Z",
+ "last_published": "2026-11-25T07:18:56Z",
  "published_last_24h": {
-  "commits": 212,
-  "corpora_moved": 3,
+  "commits": 214,
+  "corpora_moved": 7,
   "corpora_added": 0
  },
  "held_back": [
@@ -20,14 +20,15 @@
   "austria-verwaltungsgerichtshof-caselaw",
   "brazil-law",
   "china-law",
+  "czechia-law",
   "france-law",
   "germany-law",
   "greece-law",
   "india-law",
   "romania-law",
-  "russia-lipetsk-law",
+  "russia-altai-krai-law",
+  "russia-amur-law",
   "spain-andalusia-law",
-  "spain-aragon-law",
   "spain-asturias-law",
   "spain-balearic-islands-law",
   "spain-cantabria-law",
@@ -35,8 +36,6 @@
   "spain-ceuta-law",
   "spain-galicia-law",
   "spain-la-rioja-law",
-  "spain-law",
-  "spain-madrid-law",
   "spain-melilla-law",
   "spain-murcia-law",
   "spain-navarre-law",
@@ -46,6 +45,8 @@
   "switzerland-bern-law",
   "switzerland-birsfelden-city-law",
   "switzerland-ettingen-city-law",
+  "switzerland-glarus-law",
+  "switzerland-graubunden-law",
   "switzerland-menzingen-city-law",
   "switzerland-nidau-city-law",
   "switzerland-st-gallen-city-law",
@@ -95,13 +96,18 @@
    "since": "2026-11-25"
   },
   {
+   "corpus": "czechia-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
    "corpus": "france-law",
    "reason": "check-failed",
    "since": "2026-11-23"
   },
   {
    "corpus": "germany-law",
-   "reason": "check-failed",
+   "reason": "check-running",
    "since": "2026-11-25"
   },
   {
@@ -120,17 +126,17 @@
    "since": "2026-11-04"
   },
   {
-   "corpus": "russia-lipetsk-law",
+   "corpus": "russia-altai-krai-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
+   "corpus": "russia-amur-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
   {
    "corpus": "spain-andalusia-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "spain-aragon-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -166,16 +172,6 @@
   },
   {
    "corpus": "spain-la-rioja-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "spain-law",
-   "reason": "check-running",
-   "since": "2026-11-25"
-  },
-  {
-   "corpus": "spain-madrid-law",
    "reason": "check-running",
    "since": "2026-11-25"
   },
@@ -225,6 +221,16 @@
    "since": "2026-11-25"
   },
   {
+   "corpus": "switzerland-glarus-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
+   "corpus": "switzerland-graubunden-law",
+   "reason": "check-running",
+   "since": "2026-11-25"
+  },
+  {
    "corpus": "switzerland-menzingen-city-law",
    "reason": "check-failed",
    "since": "2026-11-24"
@@ -256,8 +262,8 @@
   }
  ],
  "freshness": {
-  "current": 589,
-  "pending-change": 33,
+  "current": 588,
+  "pending-change": 34,
   "stale": 353,
   "unverified": 16,
   "source-unavailable": 0
