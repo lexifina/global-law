@@ -1,26 +1,53 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-26T10:44:23Z",
+ "generated": "2026-11-26T12:56:47Z",
  "updates": "running",
- "last_pass": "2026-11-26T10:44:23Z",
+ "last_pass": "2026-11-26T12:56:47Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-26T10:44:23Z",
- "last_published": "2026-11-26T10:44:23Z",
+ "last_successful_pass": "2026-11-26T12:56:47Z",
+ "last_published": "2026-11-26T12:56:47Z",
  "published_last_24h": {
-  "commits": 219,
-  "corpora_moved": 1,
+  "commits": 208,
+  "corpora_moved": 0,
   "corpora_added": 0
  },
  "held_back": [
+  "aland-caselaw",
+  "aland-law",
   "austria-bundesverwaltungsgericht-caselaw",
   "austria-justiz-caselaw",
   "austria-landesverwaltungsgerichte-caselaw",
   "austria-oberster-gerichtshof-caselaw",
   "austria-verfassungsgerichtshof-caselaw",
   "austria-verwaltungsgerichtshof-caselaw",
-  "united-states-law"
+  "bahrain-law",
+  "brazil-law",
+  "egypt-law",
+  "germany-law",
+  "iran-law",
+  "iraq-law",
+  "israel-law",
+  "jordan-law",
+  "oman-law",
+  "palestine-law",
+  "portugal-law",
+  "saudi-arabia-law",
+  "syria-law",
+  "united-arab-emirates-law",
+  "united-states-law",
+  "yemen-law"
  ],
  "holds": [
+  {
+   "corpus": "aland-caselaw",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "aland-law",
+   "reason": "check-running",
+   "since": "2026-11-26"
+  },
   {
    "corpus": "austria-bundesverwaltungsgericht-caselaw",
    "reason": "held-by-maintainers",
@@ -52,18 +79,101 @@
    "since": "2026-11-07"
   },
   {
+   "corpus": "bahrain-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "brazil-law",
+   "reason": "check-running",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "egypt-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "germany-law",
+   "reason": "check-running",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "iran-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "iraq-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "israel-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "jordan-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "oman-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "palestine-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "portugal-law",
+   "reason": "check-running",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "saudi-arabia-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "syria-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
+   "corpus": "united-arab-emirates-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
+  },
+  {
    "corpus": "united-states-law",
    "reason": "not-fast-forward",
    "since": "2026-11-22"
+  },
+  {
+   "corpus": "yemen-law",
+   "reason": "check-failed",
+   "since": "2026-11-26"
   }
  ],
  "freshness": {
-  "current": 616,
-  "pending-change": 0,
-  "stale": 358,
+  "current": 615,
+  "pending-change": 16,
+  "stale": 343,
   "unverified": 16,
   "source-unavailable": 1
  },
- "official_sources_unavailable": [],
+ "official_sources_unavailable": [
+  {
+   "corpus": "romania/national/acts",
+   "name": "Portalul legislativ (legislatie.just.ro), Ministerul Justiției",
+   "state": "unavailable",
+   "unavailable_since": "2026-11-08",
+   "last_successful_contact": "2026-11-08"
+  }
+ ],
  "note": "As seen from Lexifina's pipeline. `updates` is running while the pointer loop completes a pass at least every 45 minutes. `held_back` lists every corpus whose newest commit is not pinned yet; `holds` gives each one's reason (HOLD_REASONS in tools/freshness.py) and the day it was first held. An official source marked unavailable did not answer that corpus's pipeline; it may be up for others."
 }
