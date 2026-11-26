@@ -594,20 +594,20 @@
     {
       "path": "aland/national/acts",
       "url": "https://github.com/lexifina/aland-law.git",
-      "name": "Åland law: Landskapslag (2015:68) om hemvårdsstöd",
+      "name": "Åland law: the texts in Ålex",
       "label": "Åland",
       "language": "sv",
-      "coverage": "from 2016-01-01",
+      "coverage": "mixed",
       "in_force_trailer": "In-force",
-      "history_from": "2016-01-01",
-      "record_to": "2026-05-01",
-      "checked_on": "2026-10-28",
-      "record_note": "2015:68 from its original text (in force 2016-01-01) with the 7 amending acts replayed to the Ålex consolidation (updated to ÅFS 2026/31); data retrieved 2026-10-28.",
+      "history_from": "1969-08-01",
+      "record_to": "2026-07-01",
+      "checked_on": "2026-11-26",
+      "record_note": "660 acts from Ålex, retrieved 2026-11-26: 496 texts in force and 164 obsolete ones (<type>/foraldrade/). Hemvårdsstöd (2015:68) and the Lagtingsordning (2011:97) carry replayed histories; every other act is its current Ålex consolidation, dated the in-force day of the newest act it shows.",
       "history": "replayed",
-      "verification": "Verified against official text: the original act ÅFS 2015:68 (first commit) and the current Ålex consolidation (end state, 30/30 sections). The 6 intermediate states between are replays of the ÅFS amending acts and are not independently verified.",
+      "verification": "Verified against official text: the original act ÅFS 2015:68 (first commit) and the current Ålex consolidation (end state, 30/30 sections). The 6 intermediate states between are replays of the ÅFS amending acts and are not independently verified. The 657 other acts: each file set equals its Ålex page word for word, in order (tools/current.py --verify).",
       "tool": "tools/alex.py",
       "citation": {
-        "file": "([a-z]+)/paragraf-0*([0-9]+[a-z]*)\\.md",
+        "file": "((?:[a-z-]+/)+[0-9]{4}-[0-9]+-[0-9a-z-]+|grundlag/[a-z]+)/(?:(?:del-[0-9]+-)?kap-[0-9a-z]+-)?paragraf-0*([0-9]+[a-z]*)(?:-[0-9a-z]+)?\\.md",
         "cites": "([^0-9]|^){n} ?§"
       },
       "scope": {
@@ -622,7 +622,7 @@
       },
       "code": "AX",
       "iso_path": "ax/national/acts",
-      "acts": 1,
+      "acts": 660,
       "described_by": "corpus.json",
       "kind": "legislation"
     },

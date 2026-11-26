@@ -52,11 +52,12 @@ CAPABILITIES = {'tools': {'listChanged': False}, 'resources': {}, 'prompts': {'l
 META = 'io.modelcontextprotocol/'
 CACHEABLE = {'tools/list', 'prompts/list', 'resources/list', 'resources/read', 'resources/templates/list', 'server/discover'}
 NOT_LAW = re.compile(r'(^|/)(README|LICENSE|REPRODUCE|KORREKTUREN|CHANGELOG|RESEARCH)[^/]*$|(^|/)(tools|tests|data|build|\.github)/'
-                     r'|^(AGENTS|CLAUDE|ACTS|SOURCES|CONTRIBUTING|SECURITY|NOTICE|CITATION)\.md$')  # a corpus's own docs at its root (Romania's ACTS.md lists every act)
+                     r'|^(AGENTS|CLAUDE|ACTS|SOURCES|CONTRIBUTING|SECURITY|NOTICE|CITATION)\.md$'  # a corpus's own docs at its root (Romania's ACTS.md lists every act)
+                     r'|(^|/)acts/tribunais/|^tribunais/')  # brazil-law's 4.8 million court decisions (Kind: acordao): not acts
 # Every text NOT_LAW can match holds one of these (its own words, with no anchors): a listing none of them is in has
 # no such file, and in any other only the lines that hold one are asked (law_names).
 NOT_LAW_HINT = re.compile(r'README|LICENSE|REPRODUCE|KORREKTUREN|CHANGELOG|RESEARCH|tools/|tests/|data/|build/|\.github/'
-                          r'|AGENTS|CLAUDE|ACTS|SOURCES|CONTRIBUTING|SECURITY|NOTICE|CITATION')
+                          r'|AGENTS|CLAUDE|ACTS|SOURCES|CONTRIBUTING|SECURITY|NOTICE|CITATION|tribunais/')
 
 
 def law_names(listing: str) -> list[str]:
@@ -8146,10 +8147,14 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
         except (SystemExit, Exception):  # noqa: BLE001  (git is asked, as ever)
             paged, texts, more_total = {}, {}, 0
 
+    # A court decision a body of law holds itself (brazil-law's tribunais/, Kind: acordao) is case law, read as the
+    # case-law corpora are: only when kind "all" asks for both.
+    courts_too = kind_arg(args) == 'all'
+
     def law_hits(c_cwd):
         c, cwd = c_cwd
         if c['path'] in paged:
-            return [(e, corpus, sha, cwd) for e, corpus, sha in paged[c['path']]]
+            return [(e, corpus, sha, cwd) for e, corpus, sha in paged[c['path']] if courts_too or e.kind != 'court']
         sub = scoped(c['path'], scope)
         named = indexed_message_hits(c['path'], cwd, query, sub)
         if named is not None:
@@ -8161,7 +8166,7 @@ def t_search_changes(args: dict) -> tuple[str, dict]:
         got = []
         for sha in noted:
             e = by_commit.get((c['path'], sha))
-            if e is not None and e.kind != 'documentation' and start <= e.in_force <= end:
+            if e is not None and e.kind != 'documentation' and (courts_too or e.kind != 'court') and start <= e.in_force <= end:
                 got.append((e, c['path'], sha, cwd))
         return got
 
@@ -9431,12 +9436,29 @@ def judgments_for(corpus: str, sha: str, rel: str) -> list[dict]:
     return judgment_rows(judgment_texts(corpus, sha, rel))
 
 
+def overlay_rels(corpus: str, rel: str) -> list[str]:
+    """A provision's path in its corpus now, then every path a layout move took it from: an overlay built before the
+    move is filed under the old one (brazil-law's move of 2026-11-24: the STJ overlays name codigo-civil/art-0186,
+    the file is federal/codigos-e-estatutos/codigo-civil/art-0186.md)."""
+    try:
+        earlier = law._earlier_names(corpus, rel)
+    except (SystemExit, Exception):  # no index of the corpus: its path now alone
+        earlier = {rel}
+    return [rel] + sorted(earlier - {rel})
+
+
+def overlay_keys(corpus: str, rel: str) -> list[str]:
+    """The case-law index keys of a provision's overlays: each corpus path by each path of the file (overlay_rels)."""
+    return [f"{n}/{r.removesuffix('.md')}" for r in overlay_rels(corpus, rel) for n in names_for(corpus)]
+
+
 def judgment_own_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
     """('', text) of the overlay files the law's own corpus and the tree hold for a provision (filed under the corpus's
-    current or any earlier path)."""
-    name = f"{rel.removesuffix('.md')}.jsonl"
+    current or any earlier path, and the file's current or any earlier path)."""
+    names = [f"{r.removesuffix('.md')}.jsonl" for r in overlay_rels(corpus, rel)]
     texts: list[tuple[str, str]] = []
-    specs = [(ROOT / corpus, f'{sha}:judgments/{name}')] + [(ROOT, f'HEAD:judgments/{c}/{name}') for c in names_for(corpus)]
+    specs = ([(ROOT / corpus, f'{sha}:judgments/{name}') for name in names]
+             + [(ROOT, f'HEAD:judgments/{c}/{name}') for name in names for c in names_for(corpus)])
     for cwd, spec in specs:  # the corpus's, then the tree's (filed under the corpus's current or any earlier path)
         done = git_run(['git', 'show', spec], cwd=cwd, capture_output=True, encoding='utf-8', timeout=GIT_TIMEOUT)
         if done.returncode == 0:
@@ -9446,21 +9468,19 @@ def judgment_own_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]
 
 def judgment_texts(corpus: str, sha: str, rel: str) -> list[tuple[str, str]]:
     """(case-law corpus or '', text) of every overlay file judgments_for reads for a provision."""
-    name = f"{rel.removesuffix('.md')}.jsonl"
     texts = judgment_own_texts(corpus, sha, rel)
     # The case-law overlays: from the case-law index when it is built (one sorted file names the corpora that hold a
     # file for this provision, and one git process reads them all); else one git process per corpus.
-    rows = law.caselaw_overlay_rows([f"{n}/{rel.removesuffix('.md')}" for n in names_for(corpus)])
+    keys = overlay_keys(corpus, rel)
+    rows = law.caselaw_overlay_rows(keys)
     pins = caselaw_pins() if rows is None else []
     if rows:
         texts += law.read_blobs_of(rows)
     if pins:
-        names = names_for(corpus)
         with ThreadPoolExecutor(max_workers=8) as pool:
             for c, got in zip([c for c, _ in pins], pool_map(
-                    pool, lambda cp: read_blobs(ROOT / cp[0], [f'{cp[1]}:judgments/{n}/{name}' for n in names]
-                                                + [f"{cp[1]}:judgments/{n}/{name.removesuffix('.jsonl')}.{y}.jsonl" for n in names
-                                                   for y in INDEX_YEARS]), pins)):
+                    pool, lambda cp: read_blobs(ROOT / cp[0], [f'{cp[1]}:judgments/{k}.jsonl' for k in keys]
+                                                + [f"{cp[1]}:judgments/{k}.{y}.jsonl" for k in keys for y in INDEX_YEARS]), pins)):
                 texts += [(c, t) for t in got]
     return texts
 
@@ -9497,7 +9517,7 @@ def judgments_counted(corpus: str, sha: str, rel: str, date: str, latest: int) -
     decision filed twice, which the small overlays, read whole, count once). With the case-law index built, a long
     overlay file (SUM_ROWS rows or more) is counted from its summary there and its latest rows taken from it, unless
     the date asks for older rows than the summary keeps: it is then read as before."""
-    entries = law.caselaw_overlay_entries([f"{n}/{rel.removesuffix('.md')}" for n in names_for(corpus)])
+    entries = law.caselaw_overlay_entries(overlay_keys(corpus, rel))
     summed: list[dict] = []
     if entries is None:
         texts = judgment_texts(corpus, sha, rel)
@@ -9569,15 +9589,16 @@ def overlays_before(corpus: str, rel: str) -> list[str]:
         if re.fullmatch(r'[0-9a-f]{7,40}', built):
             if built not in held:  # a commit this clone of the record does not hold says nothing either way
                 known = not git_run(['git', 'cat-file', '-e', f'{built}^{{commit}}'], cwd=ROOT / corpus, capture_output=True).returncode
-                held[built] = not known or not git_run(['git', 'cat-file', '-e', f'{built}:{rel}'], cwd=ROOT / corpus,
-                                                       capture_output=True).returncode
+                held[built] = not known or any(  # under its name now or, before a layout move, an earlier one
+                    not git_run(['git', 'cat-file', '-e', f'{built}:{r}'], cwd=ROOT / corpus, capture_output=True).returncode
+                    for r in overlay_rels(corpus, rel))
             if not held[built]:
                 out.append(c)
             continue
         older.append(c)
     # An overlay that names no law commit (built before 2026-11-09): when no case-law corpus served files a single row
     # under the provision's folder (title-26/) in the case-law index, its links were not built.
-    if older and not overlay_folder_rows(f"{corpus}/{rel.rsplit('/', 1)[0]}/"):
+    if older and not any(overlay_folder_rows(f"{corpus}/{r.rsplit('/', 1)[0]}/") for r in overlay_rels(corpus, rel)):
         out += older
     return out
 
@@ -10836,7 +10857,8 @@ def at_para_paths(m) -> list[str]:
 
 # Brazil ---------------------------------------------------------------------------------------------------------------
 BR_ACTS = 'brazil/national/acts'
-# The short names Brazilian courts write, to brazil-law's act folders (kept only where the folder exists). A bare "CPC"
+# The short names Brazilian courts write, to brazil-law's act names (data/versions.json slugs; br_act_folders gives the
+# folder each is in now, kept only where the folder exists). A bare "CPC"
 # or "CC" is the code in force today; "CPC/73", "CC/16" name the old ones.
 BR_ABBR = {'CF': 'constituicao', 'CF/88': 'constituicao', 'CRFB': 'constituicao', 'CRFB/88': 'constituicao',
            'CC': 'codigo-civil', 'CC/02': 'codigo-civil', 'CC/16': 'codigo-civil-de-1916',
@@ -10903,6 +10925,30 @@ def br_law_numbers(corpus: str, sha: str) -> dict[str, str]:
     return out
 
 
+@lru_cache(maxsize=8)
+def br_act_folders(corpus: str, sha: str) -> dict[str, str]:
+    """An act's name -> its folder at the pin, from brazil-law's data/paths.json: the layout commit of 2026-11-24 moved
+    every federal act folder from the root (codigo-civil, lei-11343-de-2006) to federal/<kind>/[<year>/] (federal/
+    codigos-e-estatutos/codigo-civil, federal/leis/2006/lei-11343-de-2006). Empty at a pin from before the move."""
+    try:
+        got = json.loads(law.git('show', f'{sha}:data/paths.json', cwd=ROOT / corpus, check=False) or '{}').get('paths')
+    except ValueError:
+        got = None
+    return got if isinstance(got, dict) else {}
+
+
+def br_folder_now(slug: str) -> str:
+    """Where brazil-law files an act named `slug` when its data/paths.json cannot be read (the corpus not served): as the
+    layout commit of 2026-11-24 placed them; the Constitution stays at the root."""
+    if slug == 'constituicao':
+        return slug
+    m = re.fullmatch(r'(decreto-lei|lei-complementar|lei)-\d+-de-(\d{4})', slug)
+    if not m:
+        return f'federal/codigos-e-estatutos/{slug}'
+    return {'decreto-lei': f'federal/decretos-leis/{m.group(2)}/{slug}', 'lei-complementar': f'federal/leis-complementares/{slug}',
+            'lei': f'federal/leis/{m.group(2)}/{slug}'}[m.group(1)]
+
+
 @lru_cache(maxsize=256)
 def br_act_files(corpus: str, sha: str, folder: str) -> dict[str, str]:
     """An act folder's article files by number: art-0186.md -> '186', art-028-a.md -> '28-a', adct-art-010.md -> 'adct:10'."""
@@ -10936,12 +10982,14 @@ def br_folder(m) -> str | None:
 
 def br_article_paths(m) -> list[str]:
     """The files a Brazilian article citation names: the act by its short name, its name or its number and year, each
-    article by number and letter (art. 1.022 do CPC is codigo-de-processo-civil/art-1022.md, art. 28-A do CPP
-    codigo-de-processo-penal/art-028-a.md); [] where the record lacks the act."""
+    article by number and letter (art. 1.022 do CPC is federal/codigos-e-estatutos/codigo-de-processo-civil/art-1022.md,
+    art. 28-A do CPP federal/codigos-e-estatutos/codigo-de-processo-penal/art-028-a.md); [] where the record lacks the act.
+    Acts are named as brazil-law's data/versions.json names them, and found where data/paths.json puts them now."""
     folder = br_folder(m)
     if not folder:
         return []
     corpus, sha = br_corpus()
+    slug, folder = folder, (br_act_folders(corpus, sha).get(folder, folder) if sha else br_folder_now(folder))
     files = br_act_files(corpus, sha, folder) if sha else {}
     adct = re.sub(r'\s', '', m.groupdict().get('abbr') or '').upper() == 'ADCT'
     out = []
@@ -10950,7 +10998,7 @@ def br_article_paths(m) -> list[str]:
         if key in files:
             out.append(f'{corpus}/{files[key]}')
         elif not sha:
-            width = 4 if folder in ('codigo-civil', 'codigo-de-processo-civil', 'codigo-civil-de-1916', 'codigo-de-processo-civil-de-1973') else 3
+            width = 4 if slug in ('codigo-civil', 'codigo-de-processo-civil', 'codigo-civil-de-1916', 'codigo-de-processo-civil-de-1973') else 3
             out.append(f"{corpus}/{folder}/{'adct-' if adct else ''}art-{int(a.group(1).replace('.', '')):0{width}d}"
                        + (f'-{a.group(2).lower()}' if a.group(2) else '') + '.md')
     return out

@@ -8,6 +8,12 @@ Status words:
 - **Open:** found and reported, not yet fixed.
 - **Checked:** a test that passed.
 
+## 26 November 2026
+- **Fixed (Brazil, `brazil/national/acts`), the layout of 24 November.** brazil-law moved its federal acts from the root to `federal/<kind>/[<year>/]` (`codigo-civil/` is `federal/codigos-e-estatutos/codigo-civil/`) and added `tribunais/`, `estados/`, `reguladores/` and `federal/textos-originais/`. Brazilian citations ("art. 186 do CC", "art. 33 da Lei 11.343/2006") named the old folders and found nothing; they are now read through the corpus's `data/paths.json`. The STJ case-law overlays were built for the old paths, and `check_precedent` found no judgment for a moved article: an overlay is now read under every path a layout move gave the file (in any corpus with a layout move).
+- **Fixed (Brazil), its own court decisions.** The 4.8 million decisions under `tribunais/` (Kind: acordao, decisao) are court rulings, not acts: left out of lists and searches of law, credited as court rulings, and left out of `search_changes` unless kind "all" is asked.
+- **Fixed (Åland, `aland/national/acts`).** Its manifest entry described the corpus of one act; it now describes the 660 acts at the pin (b720296, the layout of 26 November: `grundlag/`, `landskapslagar/<year>/`, `landskapsforordningar/<year>/`, `presidentens-forordningar/`; `data/paths.json` maps the old folders, which law.py follows as a layout move).
+- **Open (Åland).** The citation rule aland-law's corpus.json gives at that pin matches 265 of its 10,728 section files (`grundlag/` only): it leaves out the `<year>/` folder of the other acts, so `what_else_changes` finds no citation of them. To be fixed in aland-law's corpus.json.
+
 ## 23 November 2026
 - **Added (the tools), `upcoming_changes`.** The laws the record holds that take effect after today, within the next days (90 unless given), in one jurisdiction or all, the soonest first, with how many days away each is. The record has always kept a change from the day it is published under the day it takes force, and `laws_between` with dates in the future listed them; nothing was named for the question, so a model had to know to ask that way. 18 tools.
 - **Checked.** On the hosted tree, for twelve jurisdictions and windows the rows are those of `laws_between` over the same days, in order, each inside the window (22 checks): 9 laws in Germany in 90 days, 15 in Japan in a year, 30 in every jurisdiction in 14 days.

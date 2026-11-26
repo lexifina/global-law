@@ -4536,7 +4536,8 @@ _START_KINDS = {'baseline', 'consolidated', 'current', 'current-only', 'current-
                 'first published version (publisher)', 'tekst jednolity (current text)',
                 'start'}  # start: Liechtenstein's oldest version available of an act, the history before it to come
 _UNCREDITED_KINDS = {'unexplained', 'change no law explains', 'republication', 'obwieszczenie'}
-_COURT_KINDS = {'orzeczenie', 'nález'}  # rulings of the Polish and Slovak constitutional courts
+_COURT_KINDS = {'orzeczenie', 'nález',  # rulings of the Polish and Slovak constitutional courts
+                'acordao', 'acórdão', 'decisao', 'decisão'}  # brazil-law's court decisions (tribunais/)
 # An end of validity no law is named for: as a Kind:, or as the author and subject of a commit with no Kind (france-law's
 # "Fin de vigueur": "These versions end on this day and LEGI gives no successor; no text is credited").
 _END_KINDS = {'end', 'end of validity', 'fin de vigueur'}

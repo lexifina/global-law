@@ -28,7 +28,12 @@ LAW = 'brazil/national/acts'
 CASES = 'brazil/stj-segunda-secao/caselaw'
 MONO = 'brazil/stj-monocraticas-segunda-secao-2024-2026/caselaw'
 M1 = 'decisions/2024/05/06/AREsp-2500001-200001.md'
-ART = f'{LAW}/codigo-civil/art-0186.md'
+CC = 'federal/codigos-e-estatutos/codigo-civil'  # brazil-law's layout commit of 2026-11-24 moved the acts here
+ART = f'{LAW}/{CC}/art-0186.md'
+OLD_ART = f'{LAW}/codigo-civil/art-0186.md'  # the path the case-law overlays were built for, before the move
+MOVES = {'codigo-civil': CC, 'codigo-de-processo-civil': 'federal/codigos-e-estatutos/codigo-de-processo-civil',
+         'lei-de-drogas': 'federal/codigos-e-estatutos/lei-de-drogas'}
+T1 = 'tribunais/stj/2021/05/05/resp-1772086-acordao.md'  # a decision brazil-law holds itself: a court ruling, not an act
 MOVED = 'Também comete ato ilícito o titular de um direito que, ao exercê-lo, excede manifestamente os limites.'
 D1 = 'decisions/2021/resp/REsp-1772086-100001.md'
 D2 = 'decisions/2023/aresp/AREsp-2123456-100002.md'
@@ -90,21 +95,33 @@ class BrazilianCaseLaw(unittest.TestCase):
             'codigo-civil/art-0187.md': 'Art. 187. (Revogado).\n',
             'codigo-civil/art-0188.md': f'Art. 188. Não constituem atos ilícitos os praticados em legítima defesa. {MOVED}\n'},
             In_force='2022-01-01', Kind='law')
+        # The layout commit: every act folder but the Constitution's moved under federal/, unchanged (data/paths.json
+        # maps old to new); then a court decision under tribunais/, as brazil-law's courts lanes commit them.
+        moved = {}
+        for old, new in MOVES.items():
+            for f in sorted((law.path / old).glob('*.md')):
+                moved[f'{old}/{f.name}'] = None
+                moved[f'{new}/{f.name}'] = f.read_text(encoding='utf-8')
+        moved['data/paths.json'] = json.dumps({'paths': MOVES})
+        law.commit('Lexifina', moved, Kind='documentation')
+        law.commit('STJ, Terceira Turma', {T1: acordao('STJ, REsp 1.772.086: acórdão de 05/05/2021',
+                                                                               'ACÓRDÃO\nAto ilícito: recurso especial não provido.')},
+                   In_force='2021-05-05', Kind='acordao')
         c = t.corpus(CASES)
         c.commit('STJ REsp 1.772.086', {D1: acordao('STJ, 3ª Turma, Acórdão, REsp 1.772.086, 2021-05-05',
                                                     'ACÓRDÃO\nRecurso especial não provido.\nO dano está demonstrado.')},
                  Kind='court', In_force='2021-05-05', Decided='2021-05-05', Published='2021-05-10', Court='Superior Tribunal de Justiça (3ª Turma)',
-                 Docket='REsp 1.772.086', Cites=f'{ART} (art. 186 do CC)')
+                 Docket='REsp 1.772.086', Cites=f'{OLD_ART} (art. 186 do CC)')
         c.commit('STJ REsp 1.772.086', {D1: acordao('STJ, 3ª Turma, Acórdão, REsp 1.772.086, 2021-05-05',
                                                     'ACÓRDÃO\nRecurso especial não provido.\nO dano está comprovado.')},
                  Kind='correction', In_force='2021-09-01', Corrected='2021-09-01', Docket='REsp 1.772.086')
         c.commit('STJ AgInt no AREsp 2.123.456', {D2: acordao('STJ, 4ª Turma, Acórdão, AgInt no AREsp 2.123.456, 2023-06-01',
                                                               'ACÓRDÃO\nAgravo interno não provido. Ato ilícito e dano moral.')},
                  Kind='court', In_force='2023-06-01', Decided='2023-06-01', Published='2023-06-06', Court='Superior Tribunal de Justiça (4ª Turma)',
-                 Docket='AREsp 2.123.456', Title='AgInt no AREsp 2.123.456', Cites=f'{ART} (art. 186 do CC)')
+                 Docket='AREsp 2.123.456', Title='AgInt no AREsp 2.123.456', Cites=f'{OLD_ART} (art. 186 do CC)')
         c.commit('STJ REsp 1.999.999', {D3: acordao('STJ, 3ª Turma, Acórdão, REsp 1.999.999, 2025-03-03', 'ACÓRDÃO\nRecurso provido.')},
                  Kind='court', In_force='2025-03-03', Published='2025-03-03', Court='Superior Tribunal de Justiça (3ª Turma)',
-                 Docket='REsp 1.999.999', Cites=f'{ART} (art. 186 do Código Civil)')
+                 Docket='REsp 1.999.999', Cites=f'{OLD_ART} (art. 186 do Código Civil)')
         rows = [{'decided': '2021-05-05', 'name': 'STJ REsp 1.772.086', 'court': 'Superior Tribunal de Justiça, 3ª Turma',
                  'citation': 'REsp 1.772.086', 'url': 'https://processo.stj.jus.br/1', 'how': 'art. 186 do CC', 'mentions': 1, 'decision': D1},
                 {'decided': '2023-06-01', 'name': 'STJ AgInt no AREsp 2.123.456', 'court': 'Superior Tribunal de Justiça, 4ª Turma',
@@ -202,11 +219,11 @@ class BrazilianCaseLaw(unittest.TestCase):
         self.assertIn('court decision(s) cite it', else_['text'])
 
     def test_check_precedent_finds_where_the_applied_words_went(self):
-        prec = self.calls(('check_precedent', {'path': f'{LAW}/codigo-civil/art-0187.md', 'date': '2026-01-01'}))[0]
+        prec = self.calls(('check_precedent', {'path': f'{LAW}/{CC}/art-0187.md', 'date': '2026-01-01'}))[0]
         self.assertFalse(prec['error'], prec['text'])
         check = prec['data']['checks'][0]
         self.assertFalse(check['same_words'])
-        self.assertEqual([m['now_in'] for m in check['removed_words_now_elsewhere']][:1], [[f'{LAW}/codigo-civil/art-0188.md']])
+        self.assertEqual([m['now_in'] for m in check['removed_words_now_elsewhere']][:1], [[f'{LAW}/{CC}/art-0188.md']])
 
     def test_an_acordao_is_read_like_a_provision(self):
         path = f'{CASES}/{D1}'
@@ -270,10 +287,27 @@ class BrazilianCaseLaw(unittest.TestCase):
         self.assertIn(f'{CASES}/{D2}', by_appeal['text'])
         self.assertIn(f'{CASES}/{D1}', details['text'])
         paths = [h.get('path') for h in cites['data'].get('citations', [])]
-        for want in (ART, f'{LAW}/codigo-de-processo-civil/art-1022.md', f'{LAW}/constituicao/art-005.md', f'{LAW}/lei-de-drogas/art-33.md',
+        for want in (ART, f"{LAW}/{MOVES['codigo-de-processo-civil']}/art-1022.md", f'{LAW}/constituicao/art-005.md',
+                     f"{LAW}/{MOVES['lei-de-drogas']}/art-33.md",
                      f'{CASES}/{D1}'):
             self.assertIn(want, paths)
         self.assertFalse([p for p in paths if p and '9999' in p], paths)  # a law brazil-law does not hold
+
+    def test_the_layout_move_and_the_courts_folder(self):
+        """brazil-law's layout commit of 2026-11-24: an act is read at its new folder with the history it had before the
+        move, a path by its old name still reads, and the decisions under tribunais/ are court rulings, not acts."""
+        hist, old, listed, found, court = self.calls(('provision_history', {'path': ART}), ('read_law', {'path': OLD_ART, 'date': '2026-01-01'}),
+                                                     ('list_provisions', {'path': LAW}), ('search_law', {'query': 'recurso especial', 'date': '2026-01-01'}),
+                                                     ('laws_between', {'start': '2021-01-01', 'end': '2021-12-31'}))
+        for a in (hist, old, listed, found, court):
+            self.assertFalse(a['error'], a['text'])
+        self.assertIn('2016-03-18', hist['text'])
+        self.assertIn('2022-01-01', hist['text'])
+        self.assertIn('ainda que exclusivamente moral', old['text'])
+        self.assertNotIn('tribunais', listed['text'])
+        self.assertNotIn(T1, found['text'])
+        self.assertNotIn('Terceira Turma', court['text'].split('Not read')[0])
+        self.assertIn('court ruling, not a law', self.cli('blame', '2022-01-01', f'{LAW}/{T1}'))
 
     def test_a_corpus_split_by_year(self):
         """decision-index-<year>.tsv and judgments/<law>/<article>.<year>.jsonl are read as the single files are."""
@@ -308,7 +342,11 @@ class BrazilianCaseLaw(unittest.TestCase):
                            ('art. 489, § 1º, IV, do CPC/2015', ['codigo-de-processo-civil/art-0489.md']),
                            ('art. 85, §§ 2º e 11, do CPC', ['codigo-de-processo-civil/art-0085.md'])):
             got = [h['path'] for h in m.citations_in(text) if h['country'] == 'br' and h.get('path')]
-            self.assertEqual(got, [f'{LAW}/{w}' for w in want], text)
+            self.assertEqual(got, [f'{LAW}/{w if w.startswith("constituicao/") else "federal/codigos-e-estatutos/" + w}' for w in want], text)
+        self.assertEqual([m.br_folder_now(s) for s in ('constituicao', 'clt', 'decreto-lei-1001-de-1969', 'lei-11343-de-2006',
+                                                        'lei-complementar-123-de-2006')],
+                         ['constituicao', 'federal/codigos-e-estatutos/clt', 'federal/decretos-leis/1969/decreto-lei-1001-de-1969',
+                          'federal/leis/2006/lei-11343-de-2006', 'federal/leis-complementares/lei-complementar-123-de-2006'])
         for other in ('§ 823 Abs. 1 BGB', 'art. 1240 du code civil', 'Art. 336 OR', 'artikel 6:162 BW', 'art. 415 k.c.',
                       'artículo 1902 del Código Civil', 'VI ZR 123/20'):
             self.assertFalse([h for h in m.citations_in(other) if h['country'] == 'br'], other)
