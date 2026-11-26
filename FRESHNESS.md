@@ -4,17 +4,17 @@ Law changes after a corpus is built. Every corpus here records when it was last 
 so an answer about today's law can say how current it is.
 
 <!-- freshness-summary -->
-**607 of 991 corpora current** on 2026-11-26: 17.1% checked against their official source in the last 7 days, 98.4% in the last 30.
+**609 of 991 corpora current** on 2026-11-26: 17.1% checked against their official source in the last 7 days, 98.4% in the last 30.
 
 | | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| All | 991 | 607 | 35 | 336 | 12 | 17.1% |
-| National | 383 | 10 | 29 | 336 | 7 | 3.4% |
-| Subnational | 608 | 597 | 6 | 0 | 5 | 25.7% |
+| All | 991 | 609 | 30 | 338 | 13 | 17.1% |
+| National | 383 | 10 | 26 | 338 | 8 | 3.4% |
+| Subnational | 608 | 599 | 4 | 0 | 5 | 25.7% |
 
 National law longest since a check: `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `china/national/acts` (2026-10-28).
 
-Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `pakistan/national/acts`, `san-marino/national/acts`, `switzerland/bund/acts`, `tuvalu/national/acts`, `united-states/arizona/acts`, `united-states/district-of-columbia/statutes` and 4 more.
+Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `pakistan/national/acts`, `san-marino/national/acts`, `singapore/national/acts`, `switzerland/bund/acts`, `tuvalu/national/acts`, `united-states/arizona/acts` and 5 more.
 <!-- /freshness-summary -->
 
 ## Check one

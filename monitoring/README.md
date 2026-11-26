@@ -9,15 +9,15 @@ change as a commit dated the day it takes effect. Then, every 15 minutes, a pass
 and publishes the result below.
 
 <!-- status-summary -->
-**Updates: running**: last published 2026-11-26 16:57 UTC; status refreshed 2026-11-26 16:57 UTC.
+**Updates: running**: last published 2026-11-26 17:11 UTC; status refreshed 2026-11-26 17:11 UTC.
 
 | | |
 | --- | --- |
-| Last 24 hours | 199 commits: 2 corpus updates, 8 corpora added |
-| Last successful pass | 2026-11-26 16:57 UTC |
-| Not pinned yet | `austria-bundesverwaltungsgericht-caselaw` (held by the maintainers, since 2026-11-07), `austria-justiz-caselaw` (held by the maintainers, since 2026-11-07), `austria-landesverwaltungsgerichte-caselaw` (held by the maintainers, since 2026-11-07), `austria-oberster-gerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verfassungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verwaltungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `aland-caselaw` (it failed a check, since 2026-11-26), `bahrain-law` (it failed a check, since 2026-11-26) and 35 more |
+| Last 24 hours | 200 commits: 6 corpus updates, 8 corpora added |
+| Last successful pass | 2026-11-26 17:11 UTC |
+| Not pinned yet | `austria-bundesverwaltungsgericht-caselaw` (held by the maintainers, since 2026-11-07), `austria-justiz-caselaw` (held by the maintainers, since 2026-11-07), `austria-landesverwaltungsgerichte-caselaw` (held by the maintainers, since 2026-11-07), `austria-oberster-gerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verfassungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `austria-verwaltungsgerichtshof-caselaw` (held by the maintainers, since 2026-11-07), `aland-caselaw` (it failed a check, since 2026-11-26), `bahrain-law` (it failed a check, since 2026-11-26) and 32 more |
 | Official sources not answering | Portalul legislativ (legislatie.just.ro), Ministerul Justiției (`romania/national/acts`, since 2026-11-08) |
-| Freshness | 607 of 991 corpora current, 336 stale, 12 unverified ([FRESHNESS.md](../FRESHNESS.md)) |
+| Freshness | 609 of 991 corpora current, 338 stale, 13 unverified ([FRESHNESS.md](../FRESHNESS.md)) |
 <!-- /status-summary -->
 
 ## What each pass does
