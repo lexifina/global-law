@@ -305,6 +305,35 @@ def describe(path: str, sha: str, repo: str) -> tuple[dict, dict]:
     return entry, jj
 
 
+CASELAW_KINDS = {'judgments', 'decisions', 'caselaw', 'case law', 'case-law', 'court', 'courts'}  # as tools/law.py
+LEFTOVER_KEYS = ('has_future_branch',)  # an early build's flag: future_branch / future_branch_unread say it now
+
+
+def normalise(entry: dict) -> dict:
+    """One shape for every corpus entry, the one manifest.schema.json describes (tests/test_manifest_schema.py):
+    - `acts` is a count. A corpus.json that names its acts keeps the list itself; copied here it made manifest.json
+      2 MB larger (Japan's list alone was 822 KB) for a field every reader only counts.
+    - `kind` is always there: judgments for a body of case law, else what the corpus says, else legislation.
+    - `scope` is the object describing a corpus's Applies: trailers; a corpus.json's plain "all-acts" or
+      "selected-acts" says which acts the corpus took, and is `selection`.
+    - keys an early build wrote that nothing writes or reads any more are dropped."""
+    acts = entry.get('acts')
+    if isinstance(acts, (list, dict)):
+        entry['acts'] = len(acts)
+    elif acts is not None and (isinstance(acts, bool) or not isinstance(acts, int)):
+        entry.pop('acts')
+    if isinstance(entry.get('scope'), str):
+        entry['selection'] = entry.pop('scope')
+    for key in LEFTOVER_KEYS:
+        entry.pop(key, None)
+    kind = str(entry.get('kind') or '').strip().lower()
+    if kind in CASELAW_KINDS or (not kind and entry['path'].endswith('/caselaw')):
+        entry['kind'] = 'judgments'
+    else:
+        entry['kind'] = kind or 'legislation'
+    return entry
+
+
 def subdivision_code(code: str | None, country: str, depth: int) -> str:
     """A code below the country as ISO 3166-2 writes it (US-CO, not CO): a bare two-letter code of a subdivision gets
     its country's prefix, so it cannot be read as another country's code (CO is Colombia, AS American Samoa)."""
@@ -371,7 +400,7 @@ def main(argv: list[str]) -> int:
                 merged['future_branch_unread'] = unread
             else:
                 merged.pop('future_branch_unread', None)
-        corpora.append(merged)
+        corpora.append(normalise(merged))
 
     # jurisdiction.json for every folder that holds a corpus or a folder that does
     files = set(git('ls-tree', '-r', '--name-only', 'HEAD').splitlines())
@@ -397,7 +426,9 @@ def main(argv: list[str]) -> int:
         _, jj = found[path]
         parent = (jj or {}).get('parent') or ''
         container = path.rsplit('/', 2)[0] if path.count('/') >= 3 else None
-        if container and '-' in parent and not folders[container].get('iso_path'):
+        # an ISO 3166-2 code (us-ny), never a path (a city's corpus once gave "united-states/new-york", and New York's
+        # folder and case law were coded UNITED-STATES/NEW-YORK)
+        if container and re.fullmatch(r'[a-z]{2}-[a-z0-9]{1,3}', parent) and not folders[container].get('iso_path'):
             folders[container].update({'iso_path': parent, 'code': parent.upper(), 'level': 'subdivision'})
     def country_code(folder: str) -> str:
         return str(folders.get(folder.split('/')[0], {}).get('code') or '').upper()
