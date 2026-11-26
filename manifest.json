@@ -485,10 +485,7 @@
     "switzerland/aargau/rheinfelden/acts",
     "switzerland/basel-landschaft/acts",
     "switzerland/basel-landschaft/arlesheim/acts",
-    "switzerland/basel-landschaft/birsfelden/acts",
-    "switzerland/basel-landschaft/ettingen/acts",
     "switzerland/basel-landschaft/muttenz/acts",
-    "switzerland/bern/nidau/acts",
     "switzerland/fribourg/acts",
     "switzerland/geneva/acts",
     "switzerland/geneva/geneva/acts",
@@ -499,7 +496,6 @@
     "switzerland/solothurn/solothurn/acts",
     "switzerland/st-gallen/bad-ragaz/acts",
     "switzerland/st-gallen/rapperswil-jona/acts",
-    "switzerland/st-gallen/st-gallen/acts",
     "switzerland/st-gallen/weesen/acts",
     "switzerland/ticino/acts",
     "switzerland/valais/acts",
@@ -507,10 +503,8 @@
     "switzerland/vaud/lausanne/acts",
     "switzerland/zug/baar/acts",
     "switzerland/zug/huenenberg/acts",
-    "switzerland/zug/menzingen/acts",
     "switzerland/zug/oberaegeri/acts",
     "switzerland/zug/steinhausen/acts",
-    "switzerland/zug/unteraegeri/acts",
     "switzerland/zug/zug/acts",
     "switzerland/zurich/acts",
     "switzerland/zurich/kloten/acts",
@@ -8991,7 +8985,31 @@
         "url": "https://echanges.dila.gouv.fr/OPENDATA/LEGI/",
         "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)"
       },
-      "kind": "legislation"
+      "kind": "legislation",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-25",
+        "checked_against_official_source": "2026-11-25",
+        "totals": {
+          "acts": 119384,
+          "by_status": {
+            "current": 0,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 119384,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "legi",
+            "name": "LEGI, DILA's open data of consolidated law (the data behind Légifrance)",
+            "state": "available",
+            "last_successful_check": "2026-11-25",
+            "last_successful_contact": "2026-11-25"
+          }
+        ]
+      }
     },
     {
       "path": "france/tribunaux-administratifs/caselaw",
@@ -9307,8 +9325,8 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-25",
-        "checked_against_official_source": "2026-11-25",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
         "totals": {
           "acts": 1123,
           "by_status": {
@@ -9324,8 +9342,8 @@
             "source": "bravors",
             "name": "BRAVORS (Brandenburg state government)",
             "state": "available",
-            "last_successful_check": "2026-11-25",
-            "last_successful_contact": "2026-11-25"
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
           }
         ]
       },
@@ -9418,7 +9436,31 @@
       "derived": [
         "history"
       ],
-      "kind": "legislation"
+      "kind": "legislation",
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
+        "totals": {
+          "acts": 6154,
+          "by_status": {
+            "current": 871,
+            "pending-change": 9,
+            "stale": 0,
+            "unverified": 5274,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "gii",
+            "name": "Gesetze im Internet (Federal Ministry of Justice)",
+            "state": "available",
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
+          }
+        ]
+      }
     },
     {
       "path": "germany/bverfg/caselaw",
@@ -9690,9 +9732,9 @@
       "name": "Greece",
       "label": "Greece",
       "language": "",
-      "coverage": "689 acts, 782 dated versions from 2001-04-17 to 2026-10-26",
+      "coverage": "624 acts, 717 dated versions from 2001-04-17 to 2026-10-26",
       "in_force_trailer": "In-force",
-      "record_to": "2026-11-11",
+      "record_to": "2026-11-04",
       "record_note": "Publisher: Εθνικό Τυπογραφείο (National Printing Office).",
       "contract": "gitlaw_common",
       "warnings": [
@@ -9702,10 +9744,10 @@
       "iso_path": "gr/acts",
       "publisher": "Εθνικό Τυπογραφείο (National Printing Office)",
       "described_by": "data/repo.json",
-      "acts": 689,
+      "acts": 624,
       "history_from": "2001-04-17",
       "history": "in-force",
-      "checked_on": "2026-11-11",
+      "checked_on": "2026-11-04",
       "derived": [
         "acts",
         "checked_on",
@@ -16626,9 +16668,9 @@
       "name": "Romania",
       "label": "Romania",
       "language": "",
-      "coverage": "31674 acts, 50158 dated versions from 1865-12-01 to 2026-11-03",
+      "coverage": "539414 acts, 602287 dated versions from 1002-02-02 to 2026-11-06",
       "in_force_trailer": "In-force",
-      "record_to": "2026-11-04",
+      "record_to": "2026-11-08",
       "record_note": "Publisher: Portalul legislativ (Ministerul Justiției).",
       "contract": "gitlaw_common",
       "warnings": [
@@ -16638,10 +16680,10 @@
       "iso_path": "ro/acts",
       "publisher": "Portalul legislativ (Ministerul Justiției)",
       "described_by": "data/repo.json",
-      "acts": 31674,
-      "history_from": "1865-12-01",
+      "acts": 539414,
+      "history_from": "1002-02-02",
       "history": "in-force",
-      "checked_on": "2026-11-04",
+      "checked_on": "2026-11-08",
       "derived": [
         "acts",
         "checked_on",
@@ -16650,7 +16692,45 @@
         "history_from",
         "record_to"
       ],
-      "kind": "legislation"
+      "kind": "legislation",
+      "freshness": {
+        "schema": "ro-freshness/1",
+        "as_of": "2026-11-08",
+        "checked_against_official_source": "2026-11-08",
+        "totals": {
+          "acts": 526787,
+          "by_status": {
+            "current": 455563,
+            "pending-change": 29438,
+            "stale": 4595,
+            "unverified": 37191,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "Portalul legislativ (legislatie.just.ro), Ministerul Justiției",
+            "last_successful_check": "2026-11-08",
+            "unavailable_since": "2026-11-08"
+          },
+          {
+            "source": "EU Publications Office (CELLAR)",
+            "last_successful_check": "2026-11-06"
+          },
+          {
+            "source": "Authorities' and professional bodies' official sites",
+            "last_successful_check": "2026-11-08"
+          },
+          {
+            "source": "Local council registers (official sites)",
+            "last_successful_check": "2026-11-08"
+          },
+          {
+            "source": "Court decisions (Portalul legislativ)",
+            "last_successful_check": "2026-11-06"
+          }
+        ]
+      }
     },
     {
       "path": "russia/adygea/acts",
@@ -23225,14 +23305,14 @@
       "path": "switzerland/basel-landschaft/birsfelden/acts",
       "url": "https://github.com/lexifina/switzerland-birsfelden-city-law.git",
       "name": "Birsfelden (city)",
-      "record_note": "Publisher: Gemeinde Birsfelden, SRS (lex.birsfelden.ch).",
+      "record_note": "Texts from Gemeinde Birsfelden, SRS (lex.birsfelden.ch).",
       "publisher": "Gemeinde Birsfelden, SRS (lex.birsfelden.ch)",
-      "acts": 68,
+      "acts": 139,
       "history_from": "1989-02-01",
-      "history": "current-only",
-      "coverage": "68 acts, 68 dated versions from 1989-02-01 to 2026-10-20; current text only, as the publisher gave it",
+      "history": "in-force",
+      "coverage": "139 acts of Birsfelden (city) with every dated version the source gives (162 versions), in force from 1989-02-01 to 2026-11-04",
       "record_to": "2026-11-04",
-      "checked_on": "2026-11-04",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -23242,10 +23322,40 @@
         "record_to"
       ],
       "code": "CH-BL-BIRSFELDEN",
-      "iso_path": "ch-bl-birsfelden/acts",
+      "iso_path": "ch/bl-birsfelden/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "kind": "legislation"
+      "described_by": "corpus.json",
+      "kind": "legislation",
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
+        "totals": {
+          "acts": 72,
+          "by_status": {
+            "current": 10,
+            "pending-change": 2,
+            "stale": 0,
+            "unverified": 60,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-birsfelden-city",
+            "name": "Birsfelden: systematic collection (lex.birsfelden.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
+          }
+        ]
+      },
+      "selection": "selected-acts"
     },
     {
       "path": "switzerland/basel-landschaft/caselaw",
@@ -23285,18 +23395,18 @@
       "path": "switzerland/basel-landschaft/ettingen/acts",
       "url": "https://github.com/lexifina/switzerland-ettingen-city-law.git",
       "name": "Ettingen (city)",
-      "record_note": "Publisher: Gemeinde Ettingen, SRS (ettingen.tlex.ch).",
+      "record_note": "Texts from Gemeinde Ettingen, SRS (ettingen.tlex.ch).",
       "publisher": "Gemeinde Ettingen, SRS (ettingen.tlex.ch)",
       "code": "CH-BL-ETTINGEN",
-      "iso_path": "ch-bl-ettingen/acts",
+      "iso_path": "ch/bl-ettingen/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
+      "described_by": "corpus.json",
       "acts": 51,
       "history_from": "1992-09-22",
-      "history": "current-only",
-      "coverage": "51 acts, 51 dated versions from 1992-09-22 to 2025-08-29; current text only, as the publisher gave it",
+      "history": "in-force",
+      "coverage": "51 acts of Ettingen (city) with every dated version the source gives (52 versions), in force from 1992-09-22 to 2026-11-04",
       "record_to": "2026-11-04",
-      "checked_on": "2026-11-04",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -23307,13 +23417,13 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-24",
-        "checked_against_official_source": "2026-11-24",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
         "totals": {
           "acts": 51,
           "by_status": {
-            "current": -1,
-            "pending-change": 9,
+            "current": 8,
+            "pending-change": 0,
             "stale": 0,
             "unverified": 43,
             "source-unavailable": 0
@@ -23324,12 +23434,18 @@
             "source": "lexwork-ettingen-city",
             "name": "Ettingen: systematic collection (ettingen.tlex.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-24",
-            "last_successful_contact": "2026-11-24"
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
           }
         ]
       },
-      "kind": "legislation"
+      "kind": "legislation",
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "selection": "selected-acts"
     },
     {
       "path": "switzerland/basel-landschaft/muttenz/acts",
@@ -23567,15 +23683,15 @@
       "path": "switzerland/bern/nidau/acts",
       "url": "https://github.com/lexifina/switzerland-nidau-city-law.git",
       "name": "Nidau (city)",
-      "record_note": "Publisher: Stadt Nidau, SRS (nidau.tlex.ch).",
+      "record_note": "Texts from Stadt Nidau, SRS (nidau.tlex.ch).",
       "publisher": "Stadt Nidau, SRS (nidau.tlex.ch)",
       "future_branch": "zukunft",
-      "acts": 39,
+      "acts": 58,
       "history_from": "1969-02-25",
       "history": "in-force",
-      "coverage": "39 acts, 53 dated versions from 1969-02-25 to 2026-01-01",
+      "coverage": "58 acts of Nidau (city) with every dated version the source gives (86 versions), in force from 1969-02-25 to 2026-11-03",
       "record_to": "2026-11-03",
-      "checked_on": "2026-11-03",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -23585,10 +23701,40 @@
         "record_to"
       ],
       "code": "CH-BE-NIDAU",
-      "iso_path": "ch-be-nidau/acts",
+      "iso_path": "ch/be-nidau/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "kind": "legislation"
+      "described_by": "corpus.json",
+      "kind": "legislation",
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
+        "totals": {
+          "acts": 58,
+          "by_status": {
+            "current": 9,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 49,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-nidau-city",
+            "name": "Nidau: systematic collection (nidau.tlex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
+          }
+        ]
+      },
+      "selection": "selected-acts"
     },
     {
       "path": "switzerland/bund/acts",
@@ -24095,8 +24241,8 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-25",
-        "checked_against_official_source": "2026-11-25",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
         "totals": {
           "acts": 62,
           "by_status": {
@@ -24112,8 +24258,8 @@
             "source": "lexwork-ilanz-glion-city",
             "name": "Ilanz Glion: systematic collection (ilanz-glion.tlex.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-25",
-            "last_successful_contact": "2026-11-25"
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
           }
         ]
       },
@@ -24668,15 +24814,15 @@
       },
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-25",
-        "checked_against_official_source": "2026-11-25",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
         "totals": {
-          "acts": 349,
+          "acts": 385,
           "by_status": {
-            "current": -7,
-            "pending-change": 93,
+            "current": 53,
+            "pending-change": 2,
             "stale": 0,
-            "unverified": 263,
+            "unverified": 330,
             "source-unavailable": 0
           }
         },
@@ -24685,8 +24831,8 @@
             "source": "lexwork-solothurn",
             "name": "Solothurn: systematic collection (bgs.so.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-25",
-            "last_successful_contact": "2026-11-25"
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
           }
         ]
       },
@@ -24856,8 +25002,8 @@
       ],
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-25",
-        "checked_against_official_source": "2026-11-25",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
         "totals": {
           "acts": 70,
           "by_status": {
@@ -24873,8 +25019,8 @@
             "source": "lexwork-bad-ragaz-city",
             "name": "Bad Ragaz: systematic collection (badragaz.tlex.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-25",
-            "last_successful_contact": "2026-11-25"
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
           }
         ]
       },
@@ -24969,14 +25115,14 @@
       "path": "switzerland/st-gallen/st-gallen/acts",
       "url": "https://github.com/lexifina/switzerland-st-gallen-city-law.git",
       "name": "St. Gallen (city)",
-      "record_note": "Publisher: Stadt St.Gallen, SRS (st.gallen.tlex.ch).",
+      "record_note": "Texts from Stadt St.Gallen, SRS (st.gallen.tlex.ch).",
       "publisher": "Stadt St.Gallen, SRS (st.gallen.tlex.ch)",
-      "acts": 101,
-      "history_from": "1992-12-31",
+      "acts": 247,
+      "history_from": "1980-02-12",
       "history": "in-force",
-      "coverage": "101 acts, 189 dated versions from 1992-12-31 to 2026-09-01",
-      "record_to": "2026-11-03",
-      "checked_on": "2026-11-03",
+      "coverage": "247 acts of St. Gallen (city) with every dated version the source gives (431 versions), in force from 1980-02-12 to 2026-11-04",
+      "record_to": "2026-11-04",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -24986,10 +25132,40 @@
         "record_to"
       ],
       "code": "CH-SG-ST-GALLEN",
-      "iso_path": "ch-sg-st-gallen/acts",
+      "iso_path": "ch/sg-st-gallen/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "kind": "legislation"
+      "described_by": "corpus.json",
+      "kind": "legislation",
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
+        "totals": {
+          "acts": 173,
+          "by_status": {
+            "current": 45,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 128,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-st-gallen-city",
+            "name": "St Gallen: systematic collection (st.gallen.tlex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
+          }
+        ]
+      },
+      "selection": "selected-acts"
     },
     {
       "path": "switzerland/st-gallen/weesen/acts",
@@ -25223,8 +25399,8 @@
       },
       "freshness": {
         "schema": "lexifina-trail-freshness/1",
-        "as_of": "2026-11-25",
-        "checked_against_official_source": "2026-11-25",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
         "totals": {
           "acts": 377,
           "by_status": {
@@ -25240,8 +25416,8 @@
             "source": "lexwork-uri",
             "name": "Uri: systematic collection (rechtsbuch.ur.ch)",
             "state": "available",
-            "last_successful_check": "2026-11-25",
-            "last_successful_contact": "2026-11-25"
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
           }
         ]
       },
@@ -25650,18 +25826,18 @@
       "path": "switzerland/zug/menzingen/acts",
       "url": "https://github.com/lexifina/switzerland-menzingen-city-law.git",
       "name": "Menzingen (city)",
-      "record_note": "Publisher: Gemeinde Menzingen, SRS (menzingen.tlex.ch).",
+      "record_note": "Texts from Gemeinde Menzingen, SRS (menzingen.tlex.ch).",
       "publisher": "Gemeinde Menzingen, SRS (menzingen.tlex.ch)",
       "code": "CH-ZG-MENZINGEN",
-      "iso_path": "ch-zg-menzingen/acts",
+      "iso_path": "ch/zg-menzingen/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "acts": 41,
+      "described_by": "corpus.json",
+      "acts": 42,
       "history_from": "1972-06-29",
-      "history": "as-enacted",
-      "coverage": "41 acts, 41 dated versions from 1972-06-29 to 2026-08-01; each act as enacted, later changes not applied",
+      "history": "in-force",
+      "coverage": "42 acts of Menzingen (city) with every dated version the source gives (43 versions), in force from 1972-06-29 to 2026-11-01",
       "record_to": "2026-11-01",
-      "checked_on": "2026-11-01",
+      "checked_on": "2026-11-25",
       "derived": [
         "acts",
         "checked_on",
@@ -25670,7 +25846,37 @@
         "history_from",
         "record_to"
       ],
-      "kind": "legislation"
+      "kind": "legislation",
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
+        "totals": {
+          "acts": 42,
+          "by_status": {
+            "current": 6,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 36,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-menzingen-city",
+            "name": "Menzingen: systematic collection (menzingen.tlex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
+          }
+        ]
+      },
+      "selection": "selected-acts"
     },
     {
       "path": "switzerland/zug/oberaegeri/acts",
@@ -25777,19 +25983,19 @@
       "path": "switzerland/zug/unteraegeri/acts",
       "url": "https://github.com/lexifina/switzerland-unteraegeri-city-law.git",
       "name": "Unterägeri (city)",
-      "record_note": "Publisher: Gemeinde Unterägeri, SRS (unteraegeri.tlex.ch).",
+      "record_note": "Texts from Gemeinde Unterägeri, SRS (unteraegeri.tlex.ch).",
       "publisher": "Gemeinde Unterägeri, SRS (unteraegeri.tlex.ch)",
       "future_branch": "zukunft",
       "code": "CH-ZG-UNTERAEGERI",
-      "iso_path": "ch-zg-unteraegeri/acts",
+      "iso_path": "ch/zg-unteraegeri/acts",
       "in_force_trailer": "In-force",
-      "described_by": "data/repo.json",
-      "acts": 49,
+      "described_by": "corpus.json",
+      "acts": 51,
       "history_from": "1997-01-01",
       "history": "in-force",
-      "coverage": "49 acts, 60 dated versions from 1997-01-01 to 2026-09-01",
+      "coverage": "51 acts of Unterägeri (city) with every dated version the source gives (62 versions), in force from 1997-01-01 to 2026-11-01",
       "record_to": "2026-11-01",
-      "checked_on": "2026-11-01",
+      "checked_on": "2026-11-24",
       "derived": [
         "acts",
         "checked_on",
@@ -25798,7 +26004,37 @@
         "history_from",
         "record_to"
       ],
-      "kind": "legislation"
+      "kind": "legislation",
+      "language": "de",
+      "citation": {
+        "file": "([^/]+)/art-0*([0-9]+[a-z]?)\\.md",
+        "cites": "Art(ikel|\\.) ?{n}([^0-9a-z]|$)"
+      },
+      "freshness": {
+        "schema": "lexifina-trail-freshness/1",
+        "as_of": "2026-11-26",
+        "checked_against_official_source": "2026-11-26",
+        "totals": {
+          "acts": 51,
+          "by_status": {
+            "current": 9,
+            "pending-change": 0,
+            "stale": 0,
+            "unverified": 42,
+            "source-unavailable": 0
+          }
+        },
+        "sources": [
+          {
+            "source": "lexwork-unteraegeri-city",
+            "name": "Unteraegeri: systematic collection (unteraegeri.tlex.ch)",
+            "state": "available",
+            "last_successful_check": "2026-11-26",
+            "last_successful_contact": "2026-11-26"
+          }
+        ]
+      },
+      "selection": "selected-acts"
     },
     {
       "path": "switzerland/zug/zug/acts",
