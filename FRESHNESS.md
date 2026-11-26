@@ -8,13 +8,13 @@ so an answer about today's law can say how current it is.
 
 | | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| All | 991 | 615 | 16 | 343 | 16 | 17.1% |
-| National | 383 | 12 | 16 | 343 | 11 | 3.4% |
+| All | 991 | 615 | 16 | 344 | 15 | 17.1% |
+| National | 383 | 12 | 16 | 344 | 10 | 3.4% |
 | Subnational | 608 | 603 | 0 | 0 | 5 | 25.7% |
 
-National law longest since a check: `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `china/national/acts` (2026-10-28), `dominican-republic/national/acts` (2026-10-28).
+National law longest since a check: `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `china/national/acts` (2026-10-28).
 
-Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `belarus/national/acts`, `costa-rica/national/acts`, `hungary/national/acts`, `pakistan/national/acts`, `san-marino/national/acts`, `singapore/national/acts` and 8 more.
+Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `belarus/national/acts`, `costa-rica/national/acts`, `pakistan/national/acts`, `san-marino/national/acts`, `singapore/national/acts`, `switzerland/bund/acts` and 7 more.
 <!-- /freshness-summary -->
 
 ## Check one
