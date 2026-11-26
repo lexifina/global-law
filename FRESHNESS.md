@@ -8,8 +8,8 @@ so an answer about today's law can say how current it is.
 
 | | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| All | 991 | 607 | 36 | 335 | 12 | 17.1% |
-| National | 383 | 10 | 30 | 335 | 7 | 3.4% |
+| All | 991 | 607 | 35 | 336 | 12 | 17.1% |
+| National | 383 | 10 | 29 | 336 | 7 | 3.4% |
 | Subnational | 608 | 597 | 6 | 0 | 5 | 25.7% |
 
 National law longest since a check: `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `china/national/acts` (2026-10-28).
