@@ -4,15 +4,15 @@ Law changes after a corpus is built. Every corpus here records when it was last 
 so an answer about today's law can say how current it is.
 
 <!-- freshness-summary -->
-**610 of 991 corpora current** on 2026-11-26: 16.5% checked against their official source in the last 7 days, 98.4% in the last 30.
+**616 of 991 corpora current** on 2026-11-26: 17.1% checked against their official source in the last 7 days, 98.4% in the last 30.
 
 | | Corpora | Current | Pending a change | Stale | Unverified | Checked in 7 days |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| All | 991 | 610 | 9 | 356 | 16 | 16.5% |
-| National | 383 | 13 | 3 | 356 | 11 | 3.4% |
-| Subnational | 608 | 597 | 6 | 0 | 5 | 24.8% |
+| All | 991 | 616 | 1 | 358 | 16 | 17.1% |
+| National | 383 | 13 | 1 | 358 | 11 | 3.4% |
+| Subnational | 608 | 603 | 0 | 0 | 5 | 25.7% |
 
-National law longest since a check: `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `dominican-republic/national/acts` (2026-10-28).
+National law longest since a check: `aland/national/acts` (2026-10-28), `angola/national/acts` (2026-10-28), `armenia/national/acts` (2026-10-28), `azerbaijan/national/acts` (2026-10-28), `bermuda/national/acts` (2026-10-28), `china/national/acts` (2026-10-28).
 
 Never checked: `andorra/national/acts`, `bangladesh/national/acts`, `belarus/national/acts`, `costa-rica/national/acts`, `hungary/national/acts`, `pakistan/national/acts`, `san-marino/national/acts`, `singapore/national/acts` and 8 more.
 <!-- /freshness-summary -->
