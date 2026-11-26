@@ -1,14 +1,14 @@
 {
  "schema": "global-law-status/1",
- "generated": "2026-11-26T10:32:38Z",
+ "generated": "2026-11-26T10:44:23Z",
  "updates": "running",
- "last_pass": "2026-11-26T10:32:38Z",
+ "last_pass": "2026-11-26T10:44:23Z",
  "last_pass_ok": true,
- "last_successful_pass": "2026-11-26T10:32:38Z",
- "last_published": "2026-11-26T10:32:38Z",
+ "last_successful_pass": "2026-11-26T10:44:23Z",
+ "last_published": "2026-11-26T10:44:23Z",
  "published_last_24h": {
-  "commits": 213,
-  "corpora_moved": 10,
+  "commits": 219,
+  "corpora_moved": 1,
   "corpora_added": 0
  },
  "held_back": [
@@ -18,7 +18,6 @@
   "austria-oberster-gerichtshof-caselaw",
   "austria-verfassungsgerichtshof-caselaw",
   "austria-verwaltungsgerichtshof-caselaw",
-  "romania-law",
   "united-states-law"
  ],
  "holds": [
@@ -53,11 +52,6 @@
    "since": "2026-11-07"
   },
   {
-   "corpus": "romania-law",
-   "reason": "ancestry-unknown",
-   "since": "2026-11-26"
-  },
-  {
    "corpus": "united-states-law",
    "reason": "not-fast-forward",
    "since": "2026-11-22"
@@ -65,10 +59,10 @@
  ],
  "freshness": {
   "current": 616,
-  "pending-change": 1,
+  "pending-change": 0,
   "stale": 358,
   "unverified": 16,
-  "source-unavailable": 0
+  "source-unavailable": 1
  },
  "official_sources_unavailable": [],
  "note": "As seen from Lexifina's pipeline. `updates` is running while the pointer loop completes a pass at least every 45 minutes. `held_back` lists every corpus whose newest commit is not pinned yet; `holds` gives each one's reason (HOLD_REASONS in tools/freshness.py) and the day it was first held. An official source marked unavailable did not answer that corpus's pipeline; it may be up for others."
